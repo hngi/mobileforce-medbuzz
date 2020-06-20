@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 
-
 class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,7 @@ class Signup extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 24.0, right: 27.0),
                 child: TextField(
                 decoration: InputDecoration(
-                hintText: 'Jay'
+                hintText: 'Mark'
                 ),
               ),
             ),
