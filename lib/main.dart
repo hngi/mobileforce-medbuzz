@@ -3,6 +3,7 @@ import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:MedBuzz/ui/views/splash_screen.dart';
+import 'package:MedBuzz/ui/views/signup_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
