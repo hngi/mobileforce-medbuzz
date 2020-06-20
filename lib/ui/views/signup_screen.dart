@@ -10,7 +10,7 @@ class Signup extends StatelessWidget {
     EdgeInsets safe = MediaQuery.of(context).viewPadding;
 
     return SafeArea(
-          child: Scaffold(
+        child: Scaffold(
         backgroundColor: Color(0xffE5E5E5),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,7 +52,7 @@ class Signup extends StatelessWidget {
                 ),
               ),
             ),
-                      Padding(
+            Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 10.0),
               child: Text(
                 'Email',
@@ -94,7 +94,6 @@ class Signup extends StatelessWidget {
             ),
 
             Container(
-
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)), 
@@ -115,8 +114,8 @@ class Signup extends StatelessWidget {
 
             SizedBox(height: screenSize.height * 0.025,),
             Padding(
-              padding: EdgeInsets.only(bottom: screenSize.height * 0.05),
-                          child: Row(
+                padding: EdgeInsets.only(bottom: screenSize.height * 0.05),
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                 Text(
