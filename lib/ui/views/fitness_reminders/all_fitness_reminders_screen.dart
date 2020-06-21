@@ -201,6 +201,7 @@ class FitnessCard extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
          children: [
+           
            Divider(
              thickness: 0.7,
              color: Theme.of(context).primaryColorDark.withOpacity(.4),

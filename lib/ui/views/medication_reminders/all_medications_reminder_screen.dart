@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'all_medications_reminder_model.dart';
-
 class MedicationScreen extends StatefulWidget {
   @override
   _MedicationScreenState createState() => _MedicationScreenState();
@@ -206,6 +205,7 @@ class FitnessCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text("8:00 AM", style: TextStyle(fontWeight: FontWeight.bold, fontSize: Config.textSize(context, 6)),),
               Divider(
                   thickness: 0.7,
                   color: Theme.of(context).primaryColorDark.withOpacity(.4),
@@ -224,13 +224,13 @@ class FitnessCard extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, right: 10, left: 20),
+                      padding: const EdgeInsets.only(top: 5.0, right: 10, left: 20),
                       child: Row(
                         
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Image.asset("images/syringe.png",color:Theme.of(context).primaryColorLight),
+                          Image.asset("images/syringe.png", color:Theme.of(context).primaryColorLight, width: 40, height: 40,),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
