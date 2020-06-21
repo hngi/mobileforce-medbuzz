@@ -230,12 +230,12 @@ class FitnessCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Image.asset("images/syringe.png",color:Colors.white),
+                          Image.asset("images/syringe.png",color:Theme.of(context).primaryColorLight),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text("Chloroquine Injection", style: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),),
-                              Text("1 shots once daily", style:TextStyle( color: Colors.white),),
+                              Text("Chloroquine Injection", style: TextStyle(fontSize: 16.0, color: Theme.of(context).primaryColorLight, fontWeight: FontWeight.bold),),
+                              Text("1 shots once daily", style:TextStyle( color: Theme.of(context).primaryColorLight),),
                             ],
                           ),
                         ],
@@ -245,7 +245,7 @@ class FitnessCard extends StatelessWidget {
                       child: Divider(
                         height: 200,
                           thickness: 1,
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColorLight,
                           indent: Config.xMargin(context, 2.5),
                           endIndent: Config.xMargin(context, 2.5)),
                     ),
@@ -257,23 +257,23 @@ class FitnessCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          FlatButton(onPressed: null, child: Text("View", style:TextStyle( color: Colors.white, fontWeight: FontWeight.bold),)),
+                          FlatButton(onPressed: null, child: Text("View", style:TextStyle( color: Theme.of(context).primaryColorLight, fontWeight: FontWeight.bold),)),
                           FlatButton.icon(
                               onPressed: () {},
                               icon: Icon(
                                 Icons.cancel,
-                                color: Colors.white,
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               label: Text("Skip",
-                                  style: TextStyle(color: Colors.white))),
+                                  style: TextStyle(color: Theme.of(context).primaryColorLight))),
                           FlatButton.icon(
                               onPressed: () {},
                               icon: Icon(
-                                Icons.cancel,
-                                color: Colors.white,
+                                Icons.check,
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               label: Text("Done",
-                                  style: TextStyle(color: Colors.white)))
+                                  style: TextStyle(color: Theme.of(context).primaryColorLight)))
                         ],
                       ),
                     )
