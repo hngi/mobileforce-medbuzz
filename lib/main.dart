@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
         theme: appThemeLight,
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginPage(),
+          '/': (context) => SplashScreen(),
           'home': (context) => HomeScreen(),
-          'login': (context) => SplashScreen(),
+          'login': (context) => LoginPage(),
           'profile': (context) => ProfilePage(),
           'onboarding': (context) => Onboard(),
           'homepage': (context) => HomePage(),
