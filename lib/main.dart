@@ -14,7 +14,6 @@ import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/views/signup_page/signup_screen.dart';
 import 'ui/views/water_reminders/water_reminders_view.dart';
 
 void main() {
@@ -33,9 +32,9 @@ class MyApp extends StatelessWidget {
         theme: appThemeLight,
         initialRoute: '/',
         routes: {
-          '/': (context) => SplashScreen(),
+          '/': (context) => LoginPage(),
           'home': (context) => HomeScreen(),
-          'login': (context) => LoginPage(),
+          'login': (context) => SplashScreen(),
           'profile': (context) => ProfilePage(),
           'onboarding': (context) => Onboard(),
           'homepage': (context) => HomePage(),
