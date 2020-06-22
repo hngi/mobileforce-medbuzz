@@ -1,8 +1,6 @@
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/Home.dart';
-import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 // TODO: In other to stop thunder from firing yolu change the routes before you push
 // TODO: Fix the orientation of this page to POTRAIT
@@ -64,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 10,
                   ),
                   Text('julianamonday@gmail.com',
-                      style: TextStyle(fontSize: 16))
+                      style: TextStyle(fontSize: 18))
                 ],
               ),
             ),
@@ -147,10 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: Config.xMargin(context, 30),
                   child: Row(
                     children: <Widget>[
-                      FaIcon(
-                        FontAwesomeIcons.signOutAlt,
-                        color: Colors.red,
-                      ),
+                      ImageIcon(AssetImage('images/logout.png'), color: Colors.red,),
                       SizedBox(
                         width: 20,
                       ),

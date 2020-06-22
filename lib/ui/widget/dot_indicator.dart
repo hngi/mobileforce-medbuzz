@@ -9,18 +9,21 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-          height: Config.yMargin(context, 1.8),
-          width: Config.xMargin(context, 4.2),
-          decoration: BoxDecoration(
-              border: Border.all(color: appThemeLight.primaryColor),
+      width: positionIndex == currentIndex
+          ? Config.xMargin(context, 4.2)
+          : Config.xMargin(context, 3.3),
+      height: positionIndex == currentIndex
+          ? Config.yMargin(context, 1.8)
+          : Config.yMargin(context, 1.3),
+      decoration: BoxDecoration(
+          border: Border.all(
               color: positionIndex == currentIndex
                   ? appThemeLight.primaryColor
-                  : appThemeLight.primaryColorLight,
-              borderRadius: BorderRadius.circular(100)),
-        );
-
+                  : appThemeLight.hintColor),
+          color: positionIndex == currentIndex
+              ? appThemeLight.primaryColor
+              : appThemeLight.hintColor,
+          borderRadius: BorderRadius.circular(100)),
+    );
   }
 }
-
-      
-      

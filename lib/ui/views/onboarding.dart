@@ -33,15 +33,20 @@ class _OnboardState extends State<Onboard> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: appThemeLight.primaryColorLight,
+          backgroundColor: appThemeLight.backgroundColor,
           actions: <Widget>[
-            FlatButton(
-              onPressed: () {}, //navigate to the sign up page
-              child: Text(
-                "skip",
-                style: TextStyle(color: appThemeLight.primaryColorDark),
+            Container(
+              padding: const EdgeInsetsDirectional.only(top: 30),
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, 'signup');
+                }, //navigate to the sign up page
+                child: Text(
+                  "Skip",
+                  style: TextStyle(color: appThemeLight.primaryColorDark),
+                ),
+                color: Colors.transparent,
               ),
-              color: Colors.transparent,
             ),
           ],
         ),
@@ -98,7 +103,7 @@ class _OnboardState extends State<Onboard> {
               ),
             ),
             Positioned(
-              bottom: Config.yMargin(context, 12),
+              bottom: Config.yMargin(context, 8.7),
               left: Config.xMargin(context, 14),
               child: Container(
                 child: Flex(
@@ -112,11 +117,12 @@ class _OnboardState extends State<Onboard> {
                       width: Config.xMargin(context, 27),
                       decoration: BoxDecoration(
                           color: appThemeLight.primaryColor,
-                          border:
-                              Border.all(color: appThemeLight.primaryColorDark),
+                          border: Border.all(color: appThemeLight.primaryColor),
                           borderRadius: BorderRadius.circular(10)),
                       child: FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, 'signup');
+                          },
                           child: Text(
                             "Sign Up",
                             style: TextStyle(
@@ -131,14 +137,17 @@ class _OnboardState extends State<Onboard> {
                       width: Config.xMargin(context, 27),
                       decoration: BoxDecoration(
                           color: appThemeLight.primaryColorLight,
-                          border:
-                              Border.all(color: appThemeLight.primaryColorDark),
+                          border: Border.all(color: appThemeLight.primaryColor),
                           borderRadius: BorderRadius.circular(10)),
                       child: FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, 'login');
+                          },
                           child: Text(
                             "Login",
-                            style: TextStyle(color: appThemeLight.primaryColor),
+                            style: TextStyle(
+                              color: appThemeLight.primaryColor,
+                            ),
                           )),
                     ),
                   ],
@@ -186,17 +195,17 @@ class FirstScreen extends StatelessWidget {
                         image: DecorationImage(
                             image: AssetImage(image), fit: BoxFit.contain)),
                   ),
-                  SizedBox(height: Config.yMargin(context, 4.3)),
-                  Expanded(
+                  SizedBox(height: Config.yMargin(context, 3.4)),
+                  Container(
                     child: ForwardAnimation(
                       milliseconds: 500,
                       child: Text(description,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.textSize(context, 7),
-                            //fontWeight: FontWeight.w600
-                          )),
+                              fontFamily: 'Segoe-Bold',
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: Config.textSize(context, 3.7),
+                              fontWeight: FontWeight.w500)),
                     ),
                   ),
                 ],

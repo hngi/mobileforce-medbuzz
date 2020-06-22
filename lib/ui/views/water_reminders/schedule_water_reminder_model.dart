@@ -27,7 +27,7 @@ List<MonthCount> monthValues = [
   MonthCount(month: 'December'),
 ];
 
-class WaterReminderViewModel with ChangeNotifier {
+class WaterReminderViewModel extends ChangeNotifier {
   List<int> _mls = [150, 250, 350, 500, 750, 1000];
   DateTime _today = DateTime.now();
   int _selectedMl;
@@ -62,7 +62,7 @@ class WaterReminderViewModel with ChangeNotifier {
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
         ? Theme.of(context).primaryColor
-        : Theme.of(context).primaryColorLight;
+        : Theme.of(context).primaryColorDark.withOpacity(0.05);
   }
 
   Color getGridItemColor(BuildContext context, ml) {
@@ -73,7 +73,7 @@ class WaterReminderViewModel with ChangeNotifier {
 
   TextStyle calendarTextStyle(BuildContext context, index) {
     return TextStyle(
-      color: isActive(index) ? Colors.white : Colors.black,
+      color: Colors.white,
       fontSize: Config.textSize(context, 6),
       fontWeight: FontWeight.bold,
     );
@@ -81,7 +81,7 @@ class WaterReminderViewModel with ChangeNotifier {
 
   TextStyle calendarSubTextStyle(BuildContext context, index) {
     return TextStyle(
-      color: isActive(index) ? Colors.white : Colors.black,
+      color: Colors.white,
       fontSize: Config.textSize(context, 5),
       fontWeight: FontWeight.normal,
     );
@@ -90,6 +90,7 @@ class WaterReminderViewModel with ChangeNotifier {
   TextStyle gridItemTextStyle(BuildContext context, ml) {
     return TextStyle(
         fontSize: Config.textSize(context, 5),
+        fontWeight: FontWeight.w500,
         color: isSelectedMl(ml) ? Colors.white : Colors.black);
   }
 
@@ -100,19 +101,17 @@ class WaterReminderViewModel with ChangeNotifier {
   }
 
   void createSchedule() {
-    var selectedTimeValue = DateFormat.Hms().format(selectedTime);
     var dayValue =
         selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
     var monthValue = selectedMonth.toString().length < 2
         ? '0$selectedMonth'
         : '$selectedMonth';
-    var selectedDateTime =
-        "${_today.year}-$monthValue-$dayValue $selectedTimeValue";
+    var selectedDateTime = "${_today.year}-$monthValue-$dayValue $selectedTime";
 
     WaterReminder newReminder = WaterReminder(
         ml: selectedMl, dateTime: DateTime.parse(selectedDateTime));
 
-    // print(newReminder);
+    print(newReminder.dateTime);
   }
 
   void updateSelectedDay(int dayIndex) {
@@ -122,7 +121,7 @@ class WaterReminderViewModel with ChangeNotifier {
 
   void updateSelectedTime(dynamic time) {
     _selectedTime = time;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void updateSelectedMl(ml) {
