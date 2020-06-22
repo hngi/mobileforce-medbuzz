@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           'onboarding': (context) => Onboard(),
           'homepage': (context) => HomePage(),
           'signup': (context) => Signup(),
-          'tips' : (context) => HealthTips(),
+          'tips': (context) => HealthTips(),
           'FitnessSchedulesScreen': (context) => FitnessSchedulesScreen(),
           'ScheduleAppointmentScreen': (context) => ScheduleAppointmentScreen(),
           WaterScheduleScreen.routeName: (context) => WaterScheduleScreen(),
