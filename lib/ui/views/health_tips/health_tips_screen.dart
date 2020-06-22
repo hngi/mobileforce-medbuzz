@@ -1,3 +1,4 @@
+import 'package:MedBuzz/ui/views/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
@@ -6,6 +7,7 @@ class HealthTips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -18,9 +20,18 @@ class HealthTips extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Icon(
-                          Icons.close,
-                          size: Config.textSize(context, 7.8),
+                        IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            size: Config.textSize(context, 7.8),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ));
+                          },
                         ),
                       ],
                     ),

@@ -2,6 +2,7 @@ import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/health_tips/health_tips_screen.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           'onboarding': (context) => Onboard(),
           'homepage': (context) => HomePage(),
           'signup': (context) => Signup(),
+          'tips' : (context) => HealthTips(),
           'FitnessSchedulesScreen': (context) => FitnessSchedulesScreen(),
           'ScheduleAppointmentScreen': (context) => ScheduleAppointmentScreen(),
           WaterScheduleScreen.routeName: (context) => WaterScheduleScreen(),
