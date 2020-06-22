@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 
 class MedicationsSchedulesModel extends ChangeNotifier {
   bool isVisible = true;
+  bool isExpanded = false;
   DateTime _selectedDay = DateTime.now();
 
   //functionality for making the FAB appear and disappear when user scrolls
   void updateVisibility(bool visible) {
     this.isVisible = visible;
+    notifyListeners();
+  }
+
+  //Functinoality for making expansionTile
+  void expandTile(bool changed){
+    this.isExpanded = !isExpanded;
     notifyListeners();
   }
 

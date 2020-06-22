@@ -26,6 +26,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   }
 
   bool isVisible = true;
+  bool isExpanded = false;
   ScrollController controller = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -119,7 +120,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         'JUN 2020',
                         style: TextStyle(
                             letterSpacing: 2,
-                            fontSize: Config.textSize(context, 6)),
+                            fontSize: Config.textSize(context, 4)),
                       ),
                     ],
                   ),
@@ -194,6 +195,7 @@ class CustomDateButton extends StatelessWidget {
 class FitnessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var model = Provider.of<MedicationsSchedulesModel>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -223,63 +225,84 @@ class FitnessCard extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(Config.xMargin(context, 8)),
                 ),
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0, right: 10, left: 20),
-                      child: Row(
-                        
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Image.asset("images/syringe.png", color:Theme.of(context).primaryColorLight, width: 40, height: 40,),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: ExpansionTile(
+                      title: Text(
+                        "Chloroquine Injection",
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold,
+                            color: model.isExpanded
+                                ? Theme.of(context).primaryColorLight
+                                : Theme.of(context).primaryColorDark),
+                      ),
+                      leading: Image.asset(
+                        "images/injection.png",
+                        color: Theme.of(context).primaryColorLight,
+                        width: 50,
+                        height: 50,
+                      ),
+                      subtitle: Text("1 shots once daily",
+                          style: TextStyle(
+                              fontSize: Config.textSize(context, 5),
+                              color: model.isExpanded
+                                  ? Theme.of(context).primaryColorLight
+                                  : Theme.of(context).primaryColorDark)),
+                      backgroundColor: model.isExpanded
+                          ? Theme.of(context).hintColor
+                          : Theme.of(context).primaryColor,
+                      children: <Widget>[
+                        Divider(
+                            thickness: 1,
+                            color: Theme.of(context).primaryColorLight,
+                            indent: Config.xMargin(context, 2.0),
+                            endIndent: Config.xMargin(context, 2.0)),
+                        Padding(
+                          padding: EdgeInsets.all(3),
+                          child: Row(
                             children: <Widget>[
-                              Text("Chloroquine Injection", style: TextStyle(fontSize: 16.0, color: Theme.of(context).primaryColorLight, fontWeight: FontWeight.bold),),
-                              Text("1 shots once daily", style:TextStyle( color: Theme.of(context).primaryColorLight),),
+                              FlatButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "View",
+                                  style: TextStyle(
+                                      fontSize: Config.textSize(context, 5),
+                                      color: Theme.of(context).primaryColorLight),
+                                ),
+                              ),
+                              FlatButton.icon(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.cancel,
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                                label: Text(
+                                  "Skip",
+                                  style: TextStyle(
+                                      fontSize: Config.textSize(context, 5),
+                                      color: Theme.of(context).primaryColorLight),
+                                ),
+                              ),
+                              FlatButton.icon(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.check,
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                                label: Text(
+                                  "Done",
+                                  style: TextStyle(
+                                      fontSize: Config.textSize(context, 5),
+                                      color: Theme.of(context).primaryColorLight),
+                                ),
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      child: Divider(
-                        height: 200,
-                          thickness: 1,
-                          color: Theme.of(context).primaryColorLight,
-                          indent: Config.xMargin(context, 2.5),
-                          endIndent: Config.xMargin(context, 2.5)),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 5,
-                      left: 5,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          FlatButton(onPressed: null, child: Text("View", style:TextStyle( color: Theme.of(context).primaryColorLight, fontWeight: FontWeight.bold),)),
-                          FlatButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.cancel,
-                                color: Theme.of(context).primaryColorLight,
-                              ),
-                              label: Text("Skip",
-                                  style: TextStyle(color: Theme.of(context).primaryColorLight))),
-                          FlatButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.check,
-                                color: Theme.of(context).primaryColorLight,
-                              ),
-                              label: Text("Done",
-                                  style: TextStyle(color: Theme.of(context).primaryColorLight)))
-                        ],
-                      ),
-                    )
-                  ],
+                        ),
+                      ],
+                      onExpansionChanged: (changed){ model.expandTile(changed); }
+                  ),
                 ),
               ),
               
