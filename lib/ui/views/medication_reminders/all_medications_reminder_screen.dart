@@ -200,7 +200,7 @@ class FitnessCard extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Container(
       width: width,
-      height: height * .35,
+      height: height * .36,
       child: InkWell(
         //Navigate to screen with single reminder i.e the on user clicked on
         onTap: () {},
@@ -209,7 +209,7 @@ class FitnessCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("8:00 AM", style: TextStyle(fontWeight: FontWeight.bold, fontSize: Config.textSize(context, 6)),),
+              Text("8:00 AM", style: TextStyle(fontWeight: FontWeight.bold, fontSize: Config.textSize(context, 5)),),
               Divider(
                   thickness: 0.7,
                   color: Theme.of(context).primaryColorDark.withOpacity(.4),
