@@ -18,34 +18,33 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-    sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-    flutter:
-        sdk: flutter
-    font_awesome_flutter: ^8.8.1
+  flutter:
+    sdk: flutter
+  font_awesome_flutter: ^8.8.1
 
-    # The following adds the Cupertino Icons font to your application.
-    # Use with the CupertinoIcons class for iOS style icons.
-    cupertino_icons: ^0.1.3
-    bubbled_navigation_bar: ^0.0.3
-    provider: ^3.0.1
-    scrollable_positioned_list: ^0.1.6
-    table_calendar: ^2.2.3
-    intl:
-    date_util:
-    google_fonts: ^1.1.0
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+  bubbled_navigation_bar: ^0.0.3
+  provider: ^3.0.1
+  scrollable_positioned_list: ^0.1.6
+  table_calendar: ^2.2.3
+  intl:
+  date_util:
+  google_fonts: ^1.1.0
 
 dev_dependencies:
-    flutter_test:
-        sdk: flutter
+  flutter_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -53,20 +52,20 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/
+    - images/.
   fonts:
-     - family: Segoe
-       fonts:
-          - asset: fonts/Segoe.ttf
+    - family: Segoe
+      fonts:
+        - asset: fonts/Segoe.ttf
 
-     - family: Segoe-Bold
-       fonts:
-          - asset: fonts/Segoe-Bold.ttf
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+    - family: Segoe UI
+      fonts:
+        - asset: fonts/Segoe-Bold.ttf
+    # An image asset can refer to one or more resolution-specific "variants", see
+    # https://flutter.dev/assets-and-images/#resolution-aware.
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+    # For details regarding adding assets from package dependencies, see
+    # https://flutter.dev/assets-and-images/#from-packages
+    #
+    # For details regarding fonts from package dependencies,
+    # see https://flutter.dev/custom-fonts/#from-packages
