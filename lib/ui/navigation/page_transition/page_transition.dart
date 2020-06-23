@@ -1,40 +1,36 @@
-
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-
-
 
 class ForwardAnimation extends StatefulWidget {
   final Widget child;
 
-  ForwardAnimation({this.child});
+  ForwardAnimation({this.child, int milliseconds});
   @override
   _ForwardAnimationState createState() => _ForwardAnimationState();
 }
 
-class _ForwardAnimationState extends State<ForwardAnimation> with SingleTickerProviderStateMixin{
-
+class _ForwardAnimationState extends State<ForwardAnimation>
+    with SingleTickerProviderStateMixin {
   Animation animation;
   AnimationController animationController;
 
-  start(){
+  start() {
     animationController =
         AnimationController(duration: Duration(milliseconds: 450), vsync: this);
-    animation = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.easeIn));
+    animation = Tween(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn));
 
     animationController.forward();
   }
-  
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     start();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     animationController.dispose();
   }
@@ -43,18 +39,19 @@ class _ForwardAnimationState extends State<ForwardAnimation> with SingleTickerPr
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child){
-        return Material(
-        //  color: appThemeLight.primaryColorLight,
-          child: Transform(
-            transform: Matrix4.translationValues(animation.value*width, 0, 0),
-            child: widget.child),
-        );
-      }
-      );
+        animation: animationController,
+        builder: (context, child) {
+          return Material(
+            //  color: appThemeLight.primaryColorLight,
+            child: Transform(
+                transform:
+                    Matrix4.translationValues(animation.value * width, 0, 0),
+                child: widget.child),
+          );
+        });
   }
 }
+
 class ImageAnimation extends StatefulWidget {
   final Widget child;
 
@@ -63,29 +60,28 @@ class ImageAnimation extends StatefulWidget {
   _ImageAnimationState createState() => _ImageAnimationState();
 }
 
-class _ImageAnimationState extends State<ImageAnimation> with SingleTickerProviderStateMixin{
-
+class _ImageAnimationState extends State<ImageAnimation>
+    with SingleTickerProviderStateMixin {
   Animation animation;
   AnimationController animationController;
 
-  start(){
+  start() {
     animationController =
         AnimationController(duration: Duration(milliseconds: 450), vsync: this);
-    animation = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.easeIn));
+    animation = Tween(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn));
 
     animationController.forward();
   }
-  
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     start();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     animationController.dispose();
   }
@@ -94,16 +90,16 @@ class _ImageAnimationState extends State<ImageAnimation> with SingleTickerProvid
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child){
-        return Material(
-        //  color: appThemeLight.primaryColor,
-          child: Transform(
-            transform: Matrix4.translationValues(0, animation.value*width, 0),
-            child: widget.child),
-        );
-      }
-      );
+        animation: animationController,
+        builder: (context, child) {
+          return Material(
+            //  color: appThemeLight.primaryColor,
+            child: Transform(
+                transform:
+                    Matrix4.translationValues(0, animation.value * width, 0),
+                child: widget.child),
+          );
+        });
   }
 }
 
@@ -115,44 +111,44 @@ class BackwardAnimation extends StatefulWidget {
   _BackwardAnimationState createState() => _BackwardAnimationState();
 }
 
-class _BackwardAnimationState extends State<BackwardAnimation> with SingleTickerProviderStateMixin{
-
-   Animation animation;
+class _BackwardAnimationState extends State<BackwardAnimation>
+    with SingleTickerProviderStateMixin {
+  Animation animation;
   AnimationController animationController;
 
-  start(){
+  start() {
     animationController =
         AnimationController(duration: Duration(milliseconds: 450), vsync: this);
-    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.easeIn));
+    animation = Tween(begin: -1.0, end: 0.0).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn));
 
     animationController.forward();
   }
-  
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     start();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     animationController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
       animation: animationController,
-      builder: (context, child){
+      builder: (context, child) {
         return Material(
-        //  color: appThemeLight.primaryColorLight,
+          //  color: appThemeLight.primaryColorLight,
           child: Transform(
-            transform: Matrix4.translationValues(animation.value * width, 0, 0),
-            child: widget.child
-            ),
+              transform:
+                  Matrix4.translationValues(animation.value * width, 0, 0),
+              child: widget.child),
         );
       },
     );
