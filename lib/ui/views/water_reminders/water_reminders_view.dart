@@ -38,6 +38,9 @@ class WaterScheduleViewScreen extends StatelessWidget {
 }
 
 class WaterScheduleView extends StatefulWidget {
+  WaterScheduleView({this.payload});
+
+  final String payload;
   @override
   _WaterScheduleViewState createState() => _WaterScheduleViewState();
 }

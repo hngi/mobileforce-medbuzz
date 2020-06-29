@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 
 class DrugDescription extends StatelessWidget {
+  DrugDescription({this.payload});
   final Color boldTextColor = Color(0xff333333);
+  final String payload;
   //yMargin constant: 7.76
   //xMargin constant: 4.5
   @override
@@ -11,15 +13,15 @@ class DrugDescription extends StatelessWidget {
       child: Scaffold(
         //backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          title: Text(
-            'Description', 
-            style: TextStyle(
-              fontFamily: 'Segoe',
-              fontWeight: FontWeight.normal,
-              color: boldTextColor,
-              )
-            ),
-          leading: BackButton(color: boldTextColor,),
+          title: Text('Description',
+              style: TextStyle(
+                fontFamily: 'Segoe',
+                fontWeight: FontWeight.normal,
+                color: boldTextColor,
+              )),
+          leading: BackButton(
+            color: boldTextColor,
+          ),
           elevation: 0,
           backgroundColor: Theme.of(context).backgroundColor,
         ),
@@ -30,7 +32,8 @@ class DrugDescription extends StatelessWidget {
               height: Config.yMargin(context, 5.15), //40px
             ),
             Padding(
-              padding: EdgeInsets.only(left: Config.xMargin(context, 5.33)), //24px
+              padding:
+                  EdgeInsets.only(left: Config.xMargin(context, 5.33)), //24px
               child: Text(
                 'Aspirin',
                 style: TextStyle(
@@ -45,17 +48,19 @@ class DrugDescription extends StatelessWidget {
               height: Config.yMargin(context, 2.06), //16px
             ),
             Padding(
-              padding: EdgeInsets.only(left: Config.xMargin(context, 5.33), right: Config.xMargin(context, 6.5)), //24px , 27px
+              padding: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.33),
+                  right: Config.xMargin(context, 6.5)), //24px , 27px
               child: RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    color: Color(0xff4F4F4F),
-                    fontWeight: FontWeight.w400,
-                    height: 1.5,
-                    fontSize: Config.textSize(context, 3.56), //16px
-                  ),
-                  text: 'This is a medication for pain relief. It is great any pain you have experiend so far especially during this internship.'
-                  ),
+                    style: TextStyle(
+                      color: Color(0xff4F4F4F),
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                      fontSize: Config.textSize(context, 3.56), //16px
+                    ),
+                    text:
+                        'This is a medication for pain relief. It is great any pain you have experiend so far especially during this internship.'),
               ),
             ),
             SizedBox(
@@ -65,16 +70,28 @@ class DrugDescription extends StatelessWidget {
             Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Config.yMargin(context, 2.57)), //20
-                ),
-              margin: EdgeInsets.only(left: Config.xMargin(context, 5.5), right: Config.xMargin(context, 5.8), top: Config.yMargin(context, 2.2)), //26, 16
+                borderRadius:
+                    BorderRadius.circular(Config.yMargin(context, 2.57)), //20
+              ),
+              margin: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.5),
+                  right: Config.xMargin(context, 5.8),
+                  top: Config.yMargin(context, 2.2)), //26, 16
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5.33), vertical: Config.yMargin(context, 2.31)), //24, 16
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33),
+                    vertical: Config.yMargin(context, 2.31)), //24, 16
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("How to use", style: TextStyle(color: boldTextColor, fontWeight: FontWeight.w600, fontSize: Config.textSize(context, 3.7))),
-                  Icon(Icons.expand_more, ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("How to use",
+                        style: TextStyle(
+                            color: boldTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Config.textSize(context, 3.7))),
+                    Icon(
+                      Icons.expand_more,
+                    ),
                   ],
                 ),
               ),
@@ -84,16 +101,28 @@ class DrugDescription extends StatelessWidget {
             Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Config.yMargin(context, 2.57)), //20
-                ),
-              margin: EdgeInsets.only(left: Config.xMargin(context, 5.5), right: Config.xMargin(context, 5.8), top: Config.yMargin(context, 2.2)), //26, 16
+                borderRadius:
+                    BorderRadius.circular(Config.yMargin(context, 2.57)), //20
+              ),
+              margin: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.5),
+                  right: Config.xMargin(context, 5.8),
+                  top: Config.yMargin(context, 2.2)), //26, 16
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5.33), vertical: Config.yMargin(context, 2.31)), //24, 16
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33),
+                    vertical: Config.yMargin(context, 2.31)), //24, 16
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Side Effects", style: TextStyle(color: boldTextColor, fontWeight: FontWeight.w600, fontSize: Config.textSize(context, 3.7))),
-                  Icon(Icons.expand_more, ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Side Effects",
+                        style: TextStyle(
+                            color: boldTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Config.textSize(context, 3.7))),
+                    Icon(
+                      Icons.expand_more,
+                    ),
                   ],
                 ),
               ),
@@ -103,16 +132,28 @@ class DrugDescription extends StatelessWidget {
             Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Config.yMargin(context, 2.57)), //20
-                ),
-              margin: EdgeInsets.only(left: Config.xMargin(context, 5.5), right: Config.xMargin(context, 5.8), top: Config.yMargin(context, 2.2)), //26, 16
+                borderRadius:
+                    BorderRadius.circular(Config.yMargin(context, 2.57)), //20
+              ),
+              margin: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.5),
+                  right: Config.xMargin(context, 5.8),
+                  top: Config.yMargin(context, 2.2)), //26, 16
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5.33), vertical: Config.yMargin(context, 2.31)), //24, 16
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33),
+                    vertical: Config.yMargin(context, 2.31)), //24, 16
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Precautions", style: TextStyle(color: boldTextColor, fontWeight: FontWeight.w600, fontSize: Config.textSize(context, 3.7))),
-                  Icon(Icons.expand_more, ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Precautions",
+                        style: TextStyle(
+                            color: boldTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Config.textSize(context, 3.7))),
+                    Icon(
+                      Icons.expand_more,
+                    ),
                   ],
                 ),
               ),
@@ -122,16 +163,28 @@ class DrugDescription extends StatelessWidget {
             Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Config.yMargin(context, 2.57)), //20
-                ),
-              margin: EdgeInsets.only(left: Config.xMargin(context, 5.5), right: Config.xMargin(context, 5.8), top: Config.yMargin(context, 2.2)), //26, 16
+                borderRadius:
+                    BorderRadius.circular(Config.yMargin(context, 2.57)), //20
+              ),
+              margin: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.5),
+                  right: Config.xMargin(context, 5.8),
+                  top: Config.yMargin(context, 2.2)), //26, 16
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5.33), vertical: Config.yMargin(context, 2.31)), //24, 16
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33),
+                    vertical: Config.yMargin(context, 2.31)), //24, 16
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Interations", style: TextStyle(color: boldTextColor, fontWeight: FontWeight.w600, fontSize: Config.textSize(context, 3.7))),
-                  Icon(Icons.expand_more, ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Interations",
+                        style: TextStyle(
+                            color: boldTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Config.textSize(context, 3.7))),
+                    Icon(
+                      Icons.expand_more,
+                    ),
                   ],
                 ),
               ),
@@ -141,23 +194,35 @@ class DrugDescription extends StatelessWidget {
             Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Config.yMargin(context, 2.57)), //20
-                ),
-              margin: EdgeInsets.only(left: Config.xMargin(context, 5.5), right: Config.xMargin(context, 5.8), top: Config.yMargin(context, 2.2)), //26, 16
+                borderRadius:
+                    BorderRadius.circular(Config.yMargin(context, 2.57)), //20
+              ),
+              margin: EdgeInsets.only(
+                  left: Config.xMargin(context, 5.5),
+                  right: Config.xMargin(context, 5.8),
+                  top: Config.yMargin(context, 2.2)), //26, 16
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5.33), vertical: Config.yMargin(context, 2.31)), //24, 16
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33),
+                    vertical: Config.yMargin(context, 2.31)), //24, 16
                 child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Overdose", style: TextStyle(color: boldTextColor, fontWeight: FontWeight.w600, fontSize: Config.textSize(context, 3.7))),
-                  Icon(Icons.expand_more, ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Overdose",
+                        style: TextStyle(
+                            color: boldTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Config.textSize(context, 3.7))),
+                    Icon(
+                      Icons.expand_more,
+                    ),
                   ],
                 ),
               ),
             ),
           ],
         ),
-        ),
+      ),
     );
   }
 }

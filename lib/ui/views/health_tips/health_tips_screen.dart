@@ -2,8 +2,31 @@ import 'package:MedBuzz/ui/views/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:MedBuzz/ui/views/health_tips/health_tips_bank.dart';
 
-class HealthTips extends StatelessWidget {
+import 'package:MedBuzz/ui/notifications/healthtips_notification_manager.dart';
+
+class HealthTips extends StatefulWidget {
+  HealthTips({this.payload});
+  final String payload;
+  @override
+  _HealthTipsState createState() => _HealthTipsState();
+}
+
+class _HealthTipsState extends State<HealthTips> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  HealthTipsManager healthTipsManager = HealthTipsManager();
+
+  HealthTipsBank healthTipsBank = HealthTipsBank();
+
+  @override
+  void initState() {
+    super.initState();
+    healthTipsManager.initNotifications();
+    healthTipsManager.showNotification();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +60,7 @@ class HealthTips extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Eat Healthy!',
+                    healthTipsBank.getTipsTitle(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: Config.textSize(context, 6),
@@ -48,7 +71,7 @@ class HealthTips extends StatelessWidget {
               ),
               children: <Widget>[
                 Text(
-                  'Eat good food and fruits to keep you healthy. Drink a lot of water too.',
+                  healthTipsBank.getTip(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: Config.textSize(context, 4.85),

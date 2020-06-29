@@ -3,16 +3,32 @@ import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_model.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:MedBuzz/ui/notifications/fitness_notification_manager.dart';
 
+class FitnessSchedulesScreen extends StatefulWidget {
+  FitnessSchedulesScreen({this.payload});
+  final String payload;
 
+  @override
+  _FitnessSchedulesScreenState createState() => _FitnessSchedulesScreenState();
+}
 
-class FitnessSchedulesScreen extends StatelessWidget {
- 
- final ScrollController controller = ScrollController();
- final ItemScrollController itemScrollController = ItemScrollController();
+class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
+  final ScrollController controller = ScrollController();
+
+  final ItemScrollController itemScrollController = ItemScrollController();
+
+  final FitnessNotificationManager notificationManager =
+      FitnessNotificationManager();
+
+  @override
+  void initState() {
+    notificationManager.initNotifications();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     //Some sweet magic to animate FAB
     //This makes the FAB disappear as you scroll down
     controller.addListener(() {
@@ -34,7 +50,7 @@ class FitnessSchedulesScreen extends StatelessWidget {
         opacity: model.isVisible ? 1 : 0,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 800),
-          height: model.isVisible ? Config.yMargin(context, 10): 0,
+          height: model.isVisible ? Config.yMargin(context, 10) : 0,
           child: FloatingActionButton(
               child: Icon(
                 Icons.add,
@@ -50,14 +66,13 @@ class FitnessSchedulesScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Theme.of(context).backgroundColor,
-        title: Text(
-          'Fitness',
-          style: TextStyle(color: Theme.of(context).primaryColorDark)
-          // Theme.of(context)
-          //     .textTheme
-          //     .headline6
-          //     .copyWith(color: Theme.of(context).primaryColorDark),
-        ),
+        title: Text('Fitness',
+            style: TextStyle(color: Theme.of(context).primaryColorDark)
+            // Theme.of(context)
+            //     .textTheme
+            //     .headline6
+            //     .copyWith(color: Theme.of(context).primaryColorDark),
+            ),
         leading: IconButton(
             icon: Icon(Icons.keyboard_backspace,
                 color: Theme.of(context).primaryColorDark),
@@ -69,8 +84,9 @@ class FitnessSchedulesScreen extends StatelessWidget {
         controller: controller,
         physics: BouncingScrollPhysics(),
         child: Container(
-            margin: EdgeInsets.symmetric(horizontal:Config.xMargin(context, 3),
-                vertical:Config.yMargin(context, 2)),
+            margin: EdgeInsets.symmetric(
+                horizontal: Config.xMargin(context, 3),
+                vertical: Config.yMargin(context, 2)),
             child: Column(
               children: <Widget>[
                 Container(
@@ -123,11 +139,11 @@ class FitnessSchedulesScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                          '08:00',
-                          style: TextStyle(
-                              letterSpacing: 1.5,
-                              fontSize: Config.textSize(context, 6)),
-                        ),
+                    '08:00',
+                    style: TextStyle(
+                        letterSpacing: 1.5,
+                        fontSize: Config.textSize(context, 6)),
+                  ),
                 ),
                 FitnessCard(),
                 FitnessCard(),

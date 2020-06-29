@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 
 class DietScheduleScreen extends StatefulWidget {
+  DietScheduleScreen({this.payload});
+
+  final String payload;
   @override
   _DietScheduleScreenState createState() => _DietScheduleScreenState();
 }
@@ -15,15 +18,6 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: 2);
-
-    //This makes the FAB disappear as you scroll down
-    controller.addListener(() {
-      if (controller.offset < 150) {
-        Provider.of<DietReminderModel>(context).updateVisibility(true);
-      } else {
-        Provider.of<DietReminderModel>(context).updateVisibility(false);
-      }
-    });
   }
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
@@ -57,6 +51,15 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
+    //This makes the FAB disappear as you scroll down
+    controller.addListener(() {
+      if (controller.offset < 120) {
+        Provider.of<DietReminderModel>(context).updateVisibility(true);
+      } else {
+        Provider.of<DietReminderModel>(context).updateVisibility(false);
+      }
+    });
+
     var model = Provider.of<DietReminderModel>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

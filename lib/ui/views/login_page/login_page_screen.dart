@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                         onTap: () {
                           Navigator.pushReplacementNamed(
-                              context, RouteNames.forgotPasswordSubmit);
+                              context, RouteNames.forgotPassword);
                         },
                         child: Text(
                           'Forgot Password?',

@@ -1,5 +1,3 @@
-import 'package:MedBuzz/core/widgets/medication_card.dart';
-import 'package:MedBuzz/core/widgets/water_card.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +39,7 @@ class AllRemindersScreen extends StatelessWidget {
               height: height * 0.03,
               child: ScrollablePositionedList.builder(
                 //sets default selected day to the index of Date.now() date
-                initialScrollIndex: allReminders.selectedMonth - 1,
+                initialScrollIndex: allReminders.selectedDay - 1,
                 itemScrollController: _monthScrollController,
                 //dynamically sets the itemCount to the number of days in the currently selected month
                 itemCount: monthValues.length,
@@ -200,7 +198,146 @@ class AllRemindersScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.02),
-                  MedicationCard(height: height, width: width),
+                  Container(
+                    width: double.infinity,
+                    child: InkWell(
+                      //Navigate to screen with single reminder i.e the on user clicked on
+                      onTap: () {},
+                      splashColor: Colors.transparent,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "8:00 AM",
+                            ),
+                            SizedBox(height: height * 0.02),
+                            Container(
+                                width: width,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Config.xMargin(context, 3),
+                                    vertical: Config.yMargin(context, 1)),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(
+                                      Config.xMargin(context, 5)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white,
+                                      spreadRadius: 5,
+//blurRadius: 2,
+//offset: Offset(0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Image.asset(
+                                          "images/injection.png",
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          width: width * 0.2,
+                                          height: height * 0.1,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Chloroquine Injection',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: height * 0.005),
+                                            Text(
+                                              '1 shots once daily',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Config.yMargin(context, 1),
+                                      width: double.infinity,
+                                    ),
+                                    Divider(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      height: height * 0.02,
+//indent: 50.0,
+                                      endIndent: 10.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        FlatButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'View',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        FlatButton(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                                size:
+                                                    Config.textSize(context, 3),
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                    Config.xMargin(context, 2),
+                                              ),
+                                              Text(
+                                                'Skip',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          ),
+                                          onPressed: () {},
+                                        ),
+                                        FlatButton(
+                                          onPressed: () {},
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.done,
+                                                color: Colors.white,
+                                                size:
+                                                    Config.textSize(context, 3),
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                    Config.xMargin(context, 2),
+                                              ),
+                                              Text(
+                                                'Done',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )),
+                          ]),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -220,7 +357,149 @@ class AllRemindersScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.02),
-                  WaterCard(height: height, width: width),
+                  Container(
+                    width: double.infinity,
+                    child: InkWell(
+                      //Navigate to screen with single reminder i.e the on user clicked on
+                      onTap: () {},
+                      splashColor: Colors.transparent,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "10:00 AM",
+                            ),
+                            SizedBox(height: height * 0.02),
+                            Container(
+                                width: width,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Config.xMargin(context, 3),
+                                    vertical: Config.yMargin(context, 1)),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColorLight,
+                                  borderRadius: BorderRadius.circular(
+                                      Config.xMargin(context, 5)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white,
+                                      spreadRadius: 5,
+//blurRadius: 2,
+//offset: Offset(0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Image.asset(
+                                          "images/drops.png",
+                                          width: width * 0.2,
+                                          height: height * 0.1,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Drink 250ml of water',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorDark,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: height * 0.005),
+                                            Text(
+                                              'Upcoming',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorDark),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Config.yMargin(context, 1),
+                                      width: double.infinity,
+                                    ),
+                                    Divider(
+                                      color: Theme.of(context).primaryColorDark,
+                                      height: height * 0.02,
+                                      endIndent: 10.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        FlatButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'View',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .primaryColorDark),
+                                          ),
+                                        ),
+                                        FlatButton(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.close,
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                size:
+                                                    Config.textSize(context, 3),
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                    Config.xMargin(context, 2),
+                                              ),
+                                              Text(
+                                                'Skip',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .primaryColorDark),
+                                              )
+                                            ],
+                                          ),
+                                          onPressed: () {},
+                                        ),
+                                        FlatButton(
+                                          onPressed: () {},
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.done,
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                size:
+                                                    Config.textSize(context, 3),
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                    Config.xMargin(context, 2),
+                                              ),
+                                              Text(
+                                                'Done',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .primaryColorDark),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )),
+                          ]),
+                    ),
+                  ),
                 ],
               ),
             ),
