@@ -32,15 +32,15 @@ class DeleteSuccess extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Successfully Deleted',
+                  Text('Successfully deleted',
                   style: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: Config.textSize(context, 3.9),
                     fontFamily: 'Segoe',
                   ),
                   ),
-                  Text('"Running"',
+                  Text(' "Running"',
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: Config.textSize(context, 3.9),
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Segoe',
                     ),),

@@ -154,7 +154,7 @@ class Signup extends StatelessWidget {
                   height: Config.yMargin(context, 3.09),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(bottom: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -165,7 +165,11 @@ class Signup extends StatelessWidget {
                           fontSize: Config.textSize(context, 3.9), //16
                         ),
                       ),
-                      GestureDetector(
+                      FlatButton(
+                        highlightColor: Theme.of(context).backgroundColor,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, 'login');
+                        },
                         child: Text(
                           'Login',
                           style: TextStyle(
@@ -174,9 +178,6 @@ class Signup extends StatelessWidget {
                             fontSize: Config.textSize(context, 3.9), //16
                           ),
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, 'login');
-                        },
                       )
                     ],
                   ),

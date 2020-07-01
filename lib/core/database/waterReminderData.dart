@@ -17,7 +17,7 @@ class WaterReminderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  WaterReminder getWaterReminder(index){
+  WaterReminder getWaterReminder(index) {
     return _waterReminders[index];
   }
 
@@ -26,7 +26,10 @@ class WaterReminderData extends ChangeNotifier {
 
     await box.add(waterReminder);
 
+    //reinitialise water reminders after write operation
     _waterReminders = box.values.toList();
+
+    box.close();
 
     notifyListeners();
   }
@@ -34,19 +37,27 @@ class WaterReminderData extends ChangeNotifier {
   void deleteWaterReminder(key) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
 
+    //delete the water reminder
+    await box.delete(key);
+
+    // then reinitialise the water reminders
     _waterReminders = box.values.toList();
+
+    box.close();
 
     notifyListeners();
   }
 
-  void editWaterReminder({WaterReminder waterReminder, int waterReminderKey}) async {
+  void editWaterReminder(
+      {WaterReminder waterReminder, int waterReminderKey}) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
 
-    await box.put(waterReminderKey, waterReminder);
+    await box.putAt(waterReminderKey, waterReminder);
 
     _waterReminders = box.values.toList();
+    box.close();
 
-    _activeWaterReminder = box.get(waterReminderKey);
+    // _activeWaterReminder = box.get(waterReminderKey);
 
     notifyListeners();
   }
@@ -59,12 +70,11 @@ class WaterReminderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  WaterReminder getActiveAppointment(){
+  WaterReminder getActiveAppointment() {
     return _activeWaterReminder;
   }
 
-  int get waterRemindersCount{
+  int get waterRemindersCount {
     return _waterReminders.length;
   }
-
 }
