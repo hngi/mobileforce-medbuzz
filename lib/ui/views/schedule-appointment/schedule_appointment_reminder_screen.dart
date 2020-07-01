@@ -7,6 +7,7 @@ import '../../size_config/config.dart';
 
 class ScheduleAppointmentScreen extends StatefulWidget {
   final String payload;
+
   ScheduleAppointmentScreen({this.payload});
   @override
   _ScheduleAppointmentScreenState createState() =>
