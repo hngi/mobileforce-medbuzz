@@ -64,7 +64,7 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
         ),
       ),
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text('Fitness',
             style: TextStyle(color: Theme.of(context).primaryColorDark)

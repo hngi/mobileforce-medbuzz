@@ -1,5 +1,6 @@
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/home_page.dart';
@@ -43,7 +44,7 @@ class RouteNames {
   static const String forgotPasswordReset = 'forgotPasswordReset';
   static const String forgotPasswordMail = 'forgotPasswordMail';
   static const String singleDietScreen = 'singleDietScreen';
-
+  static const String scheduleDietReminderScreen = 'scheduleDietReminderScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -70,5 +71,7 @@ class RouteNames {
     RouteNames.forgotPasswordReset: (context) => ForgotPasswordReset(),
     RouteNames.forgotPasswordMail: (context) => ForgotPasswordMail(),
     RouteNames.singleDietScreen: (context) => SingleDiet(),
+    RouteNames.scheduleDietReminderScreen: (context) =>
+        ScheduleDietReminderScreen(),
   };
 }
