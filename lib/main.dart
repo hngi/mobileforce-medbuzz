@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'core/models/medication_reminder_model/medication_reminder.dart';
 import 'core/models/water_reminder_model/water_reminder.dart';
 
 void main() async {
@@ -13,6 +14,7 @@ void main() async {
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
   Hive.registerAdapter(WaterReminderAdapter());
+  Hive.registerAdapter(MedicationReminderAdapter());
   runApp(MyApp());
 }
 

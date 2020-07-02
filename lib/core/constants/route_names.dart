@@ -1,4 +1,5 @@
 import 'package:MedBuzz/ui/views/Home.dart';
+import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -51,6 +52,7 @@ class RouteNames {
   static const String viewAppointmentScreen = 'viewAppointmentScreen';
   static const String singleFitnessScreen = 'singleFitnessScreen';
   static const String medicationView = 'medicationView';
+  static const String addMedicationScreen = 'addMedicationScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -82,5 +84,6 @@ class RouteNames {
     RouteNames.viewAppointmentScreen: (context) => ViewAppointment(),
     RouteNames.singleFitnessScreen: (context) => SingleFitnessScreen(),
     RouteNames.medicationView: (context) => MedicationView(),
+    RouteNames.addMedicationScreen: (context) => AddMedicationScreen(),
   };
 }

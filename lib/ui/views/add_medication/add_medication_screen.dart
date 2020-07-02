@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,14 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     var medModel = Provider.of<AddMedication>(context);
     return Scaffold(
       appBar: AppBar(
-        leading: medModel.isEditing ? Icon(Icons.keyboard_backspace) : null,
+        leading: medModel.isEditing
+            ? GestureDetector(
+                onTap: () {
+                  medModel.isEditing = false;
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.keyboard_backspace))
+            : null,
         title: medModel.isEditing ? titleEdit() : titleAdd(),
         backgroundColor: Theme.of(context).primaryColorLight,
         elevation: 1.0,
