@@ -8,7 +8,6 @@ import 'package:MedBuzz/ui/notifications/fitness_notification_manager.dart';
 class FitnessSchedulesScreen extends StatefulWidget {
   FitnessSchedulesScreen({this.payload});
   final String payload;
-
   @override
   _FitnessSchedulesScreenState createState() => _FitnessSchedulesScreenState();
 }
@@ -64,7 +63,7 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
         ),
       ),
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text('Fitness',
             style: TextStyle(color: Theme.of(context).primaryColorDark)

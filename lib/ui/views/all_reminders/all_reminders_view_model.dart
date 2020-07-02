@@ -67,12 +67,11 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   TextStyle calendarMonthTextStyle(BuildContext context, index) {
     return TextStyle(
-      color: _selectedMonth == index
+      color: _selectedMonth == index + 1
           ? Theme.of(context).primaryColor
           : Theme.of(context).primaryColorDark,
       fontSize: Config.textSize(context, 4),
       fontWeight: FontWeight.bold,
-
     );
   }
 
@@ -88,7 +87,7 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   void updateSelectedMonth(String val) {
     _selectedMonth =
-        monthValues.indexWhere((element) => element.month == val) ;
+        monthValues.indexWhere((element) => element.month == val) + 1;
     notifyListeners();
   }
 

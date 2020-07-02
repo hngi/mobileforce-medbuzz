@@ -168,6 +168,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
                                         child: Checkbox(
+                                          onChanged: null,
                                           value: index == selectedFitnessType,
                                           //value: ,
                                           checkColor: Theme.of(context).backgroundColor,

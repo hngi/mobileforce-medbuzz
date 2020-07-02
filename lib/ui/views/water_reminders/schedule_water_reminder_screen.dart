@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../../../core/constants/route_names.dart';
+import '../../../core/database/waterReminderData.dart';
+
 class ScheduleWaterReminderScreen extends StatelessWidget {
   //values of water measures - stored as int in case of any need to calculate
   static const routeName = 'schedule-water-reminder';
@@ -15,6 +18,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var waterReminder =
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -182,7 +186,12 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: RaisedButton(
-                      color: Theme.of(context).primaryColor,
+                      color: waterReminder.selectedMl != null &&
+                              waterReminder.selectedMonth != null &&
+                              waterReminder.selectedDay != null &&
+                              waterReminder.selectedTime != null
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).primaryColor.withOpacity(0.7),
                       padding: EdgeInsets.symmetric(
                           // horizontal: Config.xMargin(context, 10),
                           vertical: Config.yMargin(context, 3)),
@@ -190,9 +199,18 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(width * 0.03),
                       ),
-                      onPressed:
-                          //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
-                          waterReminder.createSchedule,
+                      onPressed: waterReminder.selectedMl != null &&
+                              waterReminder.selectedMonth != null &&
+                              waterReminder.selectedDay != null &&
+                              waterReminder.selectedTime != null
+                          ? () {
+                              //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
+                              waterReminderDB.addWaterReminder(
+                                  waterReminder.createSchedule());
+                              Navigator.of(context)
+                                  .pushNamed(RouteNames.allRemindersScreen);
+                            }
+                          : null,
                       child: Text(
                         "Save",
                         style: TextStyle(

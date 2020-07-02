@@ -16,4 +16,17 @@ class ScheduleAppointmentModel extends ChangeNotifier {
       this.selectedTime,
       this.typeOfAppointment,
       this.note});
+
+  void updateSelectedTime(dynamic time) {
+    selectedTime = time;
+  }
+
+  int get userSelectedDay => selectedDay;
+  setSelectedDay(int userSelectedDay) => selectedDay = userSelectedDay;
+
+  int get userSelectedMonth => selectedMonth;
+  setSelectedMonth(int userSelectedMonth) => selectedMonth = userSelectedMonth;
+
+  dynamic get userSelectedTime => selectedTime;
+  setSelectedTime(dynamic userSelectedTime) => selectedTime = userSelectedTime;
 }

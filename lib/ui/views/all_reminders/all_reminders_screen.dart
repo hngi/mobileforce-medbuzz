@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../../../core/database/waterReminderData.dart';
+
 class AllRemindersScreen extends StatelessWidget {
   final ItemScrollController _scrollController = ItemScrollController();
   final ItemScrollController _monthScrollController = ItemScrollController();
@@ -14,6 +16,8 @@ class AllRemindersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var allReminders =
         Provider.of<AllRemindersViewModel>(context, listen: true);
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    waterReminderDB.getWaterReminders();
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -29,6 +33,7 @@ class AllRemindersScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColorLight,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(
           vertical: Config.yMargin(context, 1),
         ),
@@ -41,7 +46,7 @@ class AllRemindersScreen extends StatelessWidget {
               height: height * 0.03,
               child: ScrollablePositionedList.builder(
                 //sets default selected day to the index of Date.now() date
-                initialScrollIndex: allReminders.selectedDay - 1,
+                initialScrollIndex: allReminders.selectedMonth - 1,
                 itemScrollController: _monthScrollController,
                 //dynamically sets the itemCount to the number of days in the currently selected month
                 itemCount: monthValues.length,
@@ -220,7 +225,16 @@ class AllRemindersScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.02),
-                  WaterCard(height: height, width: width),
+                  Visibility(
+                      visible: waterReminderDB.waterReminders.isEmpty,
+                      child: Container(
+                        child: Text('No water reminders for this date'),
+                      )),
+                  for (var waterReminder in waterReminderDB.waterReminders)
+                    WaterCard(
+                        height: height,
+                        width: width,
+                        waterReminder: waterReminder)
                 ],
               ),
             ),

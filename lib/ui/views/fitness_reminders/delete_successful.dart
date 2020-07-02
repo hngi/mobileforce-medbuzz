@@ -1,9 +1,6 @@
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 
-import '../home_page.dart';
-
-
 class DeleteSuccess extends StatelessWidget {
   Color color;
   @override
@@ -14,16 +11,14 @@ class DeleteSuccess extends StatelessWidget {
           backgroundColor: color = Color(0xffFAFAFA),
           leading: IconButton(
               icon: Icon(Icons.keyboard_backspace,
-                  color: Theme.of(context).primaryColorDark
-              ),
-
+                  color: Theme.of(context).primaryColorDark),
               onPressed: () {
                 //Function to navigate to Fitness screen page here.
               }),
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment:  MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/check.png'),
               SizedBox(
@@ -32,23 +27,25 @@ class DeleteSuccess extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Successfully Deleted',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontFamily: 'Segoe',
-                  ),
-                  ),
-                  Text('"Running"',
+                  Text(
+                    'Successfully deleted',
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: Config.textSize(context, 3.9),
+                      fontFamily: 'Segoe',
+                    ),
+                  ),
+                  Text(
+                    ' "Running"',
+                    style: TextStyle(
+                      fontSize: Config.textSize(context, 3.9),
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Segoe',
-                    ),),
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

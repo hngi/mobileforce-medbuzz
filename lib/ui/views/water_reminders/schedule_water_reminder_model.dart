@@ -1,9 +1,10 @@
-import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../core/models/water_reminder_model/water_reminder.dart';
 
 class MonthCount {
   String month;
@@ -100,7 +101,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createSchedule() {
+  WaterReminder createSchedule() {
     var dayValue =
         selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
     var monthValue = selectedMonth.toString().length < 2
@@ -111,7 +112,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     WaterReminder newReminder = WaterReminder(
         ml: selectedMl, dateTime: DateTime.parse(selectedDateTime));
 
-    print(newReminder.dateTime);
+    return newReminder;
   }
 
   void updateSelectedDay(int dayIndex) {
