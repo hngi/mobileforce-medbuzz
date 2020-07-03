@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/material.dart';
@@ -294,7 +295,10 @@ class FitnessCard extends StatelessWidget {
                           child: Row(
                             children: <Widget>[
                               FlatButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, RouteNames.medicationView);
+                                },
                                 child: Text(
                                   "View",
                                   style: TextStyle(

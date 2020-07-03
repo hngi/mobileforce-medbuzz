@@ -2,7 +2,8 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class DietReminder extends ChangeNotifier{
+//Crazelu renamed this as DietReminderDB for better disctinction
+class DietReminderDB extends ChangeNotifier{
   // Hive box name 
 
   static const String _boxname = "dietReminderBox";

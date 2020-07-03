@@ -65,4 +65,9 @@ class FitnessNotificationManager {
           builder: (context) => FitnessSchedulesScreen(payload: payload)),
     );
   }
+
+  void removeReminder(int notificationId) {
+    flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notfication with id: $notificationId been removed successfully');
+  }
 }

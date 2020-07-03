@@ -4,12 +4,15 @@ part 'water_reminder.g.dart';
 
 @HiveType()
 class WaterReminder {
-
   @HiveField(0)
   int ml;
 
   @HiveField(1)
   DateTime dateTime;
 
-  WaterReminder({@required this.ml, @required this.dateTime});
+  @HiveField(2)
+  String id;
+
+  WaterReminder(
+      {@required this.ml, @required this.dateTime, @required this.id});
 }

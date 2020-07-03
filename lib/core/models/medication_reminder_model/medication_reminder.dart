@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'medication_reminder.g.dart';
@@ -14,13 +15,13 @@ class MedicationReminder {
   String frequency;
 
   @HiveField(3)
-  List<int> firstTime;
+  TimeOfDay firstTime;
 
   @HiveField(4)
-  List<int> secondTime;
+  TimeOfDay secondTime;
 
   @HiveField(5)
-  List<int> thirdTime;
+  TimeOfDay thirdTime;
 
   @HiveField(6)
   int dosage;

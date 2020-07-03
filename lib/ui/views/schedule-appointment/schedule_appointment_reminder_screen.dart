@@ -1,97 +1,46 @@
 import 'dart:ui';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/widget/appBar.dart';
+import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
-
+import 'package:provider/provider.dart';
 import '../../size_config/config.dart';
+import 'package:MedBuzz/ui/widget/time_wheel.dart';
+import 'schedule_appointment_screen_model.dart';
 
-class ScheduleAppointmentScreen extends StatefulWidget {
+class ScheduleAppointmentScreen extends StatelessWidget {
   final String payload;
-
-  ScheduleAppointmentScreen({this.payload});
-  @override
-  _ScheduleAppointmentScreenState createState() =>
-      _ScheduleAppointmentScreenState();
-}
-
-class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   //Table calendar object class
-  CalendarController _controller;
   final TextEditingController _typeOfAppointmentController =
       TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = CalendarController();
-  }
+  final ScheduleAppointmentModel appointmentSchedule =
+      ScheduleAppointmentModel();
 
-  //Instantiating a Config object to handle responsiveness
-  Config config = Config();
-
-  var _months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  var _currentMonthSelected = "January";
+  ScheduleAppointmentScreen({Key key, this.payload}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-//    double height = MediaQuery.of(context).size.height;
-
-    print(Config.xMargin(context, 1));
-    print(Config.yMargin(context, 1));
-    print(Config.textSize(context, 1));
+    var model = Provider.of<ScheduleAppointmentModel>(context);
+    Color bgColor = Theme.of(context).backgroundColor;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        leading: IconButton(
-          color: Theme.of(context).primaryColorDark,
-          icon: Icon(Icons.keyboard_backspace),
-          // This function navigates to the previous screen
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Add your appointments',
-          style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColorDark),
-        ),
-      ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: appBar(context: context, title: 'Add your appointment'),
+      backgroundColor: bgColor,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 35),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+              Config.xMargin(context, 5),
+              Config.yMargin(context, 1),
+              Config.xMargin(context, 5),
+              Config.yMargin(context, 5)),
+          color: bgColor,
           child: ListView(
+            physics: BouncingScrollPhysics(),
             children: <Widget>[
-              // Widget from the table calendar object, this widget could later be replaced with a ListView.builder
-//              TableCalendar(
-//                  initialCalendarFormat: CalendarFormat.week,
-//                  headerStyle: HeaderStyle(
-//                    formatButtonVisible: false,
-//                    centerHeaderTitle: true,
-//                  ),
-//                  onDaySelected: (date, event) {},
-//                  calendarStyle: CalendarStyle(
-//                      selectedColor: Theme.of(context).primaryColor),
-//                  calendarController: _controller),
               Center(
                 child: DropdownButton<String>(
+                  underline: Container(),
                   style: TextStyle(
                     color: Color(0xFFC4C4C4),
                   ),
@@ -99,118 +48,109 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                     Icons.keyboard_arrow_down,
                     color: Color(0xFFC4C4C4),
                   ),
-                  items: _months.map((String dropDownStringItem) {
+                  items: model.months.map((String dropDownStringItem) {
                     return DropdownMenuItem<String>(
                       value: dropDownStringItem,
-                      child: Text(dropDownStringItem),
+                      child: Text(
+                        dropDownStringItem,
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 4.8),
+                            color: Theme.of(context).hintColor),
+                      ),
                     );
                   }).toList(),
                   onChanged: (String newMonthSelected) {
-                    setState(() {
-                      this._currentMonthSelected = newMonthSelected;
-                    });
+                    model.updateSelectedMonth(newMonthSelected);
                   },
-                  value: _currentMonthSelected,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 35),
-                // height helps to stop overflowing of this widget into divider
-                height: Config.yMargin(context, 10),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    DateAndDay(
-                      date: '12',
-                      day: 'Thurs',
-                      colour: Theme.of(context).primaryColor,
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '13',
-                      day: 'Fri',
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '14',
-                      day: 'Sat',
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '15',
-                      day: 'Sun',
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '16',
-                      day: 'Mon',
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '17',
-                      day: 'Tues',
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 4.3),
-                    ),
-                    DateAndDay(
-                      date: '18',
-                      day: 'Wed',
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: Config.yMargin(context, 0.5),
-                width: Config.xMargin(context, 9.24),
-                child: Text('h'),
-                decoration: BoxDecoration(
-                  color: Color(0xFFEEEEEE),
+                  value: model.currentMonthSelected,
                 ),
               ),
               SizedBox(
-                height: Config.xMargin(context, 2.43),
+                height: Config.yMargin(context, 3),
+              ),
+              Container(
+
+                  // height helps to stop overflowing of this widget into divider
+                  height: Config.yMargin(context, 15),
+                  child: ScrollableCalendar(
+                    model: model,
+                  )
+                  //ListView(
+                  //   // To be replaced with a ListView builder showing correct date date from DB
+                  //   scrollDirection: Axis.horizontal,
+                  //   children: <Widget>[
+                  //     DateAndDay(
+                  //       date: '12',
+                  //       day: 'Thurs',
+                  //       colour: Theme.of(context).primaryColor,
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '13',
+                  //       day: 'Fri',
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '14',
+                  //       day: 'Sat',
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '15',
+                  //       day: 'Sun',
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '16',
+                  //       day: 'Mon',
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '17',
+                  //       day: 'Tues',
+                  //     ),
+                  //     SizedBox(
+                  //       width: Config.xMargin(context, 4.3),
+                  //     ),
+                  //     DateAndDay(
+                  //       date: '18',
+                  //       day: 'Wed',
+                  //     )
+                  //   ],
+                  // ),
+                  ),
+              SizedBox(
+                height: Config.yMargin(context, 1),
               ),
               Column(
                 children: <Widget>[
                   Text(
                     'Time',
                     style: TextStyle(
-                      color: Color(0xFFC4C4C4),
-                    ),
+                        fontSize: Config.textSize(context, 4.8),
+                        color: Theme.of(context).hintColor),
                   ),
-//                  Container(
-//                    height: height * 0.2,
-//                    transform: Matrix4.translationValues(
-//                        0.0, -Config.yMargin(context, 10), 0.0),
-//                    //TimePickerSpinner a plugin that was tweaked to give the required result
-//                    child: TimePickerSpinner(
-//                      is24HourMode: false,
-//                      isForce2Digits: true,
-//                      spacing: 60,
-//                      itemHeight: height * 0.1,
-//                      alignment: Alignment.center,
-//                      onTimeChange: (val) {},
-//                    ),
-//                  ),
                   SizedBox(
-                    height: 20,
+                    height: Config.yMargin(context, 3.2),
                   ),
                   Container(
-                    child: Timer(),
+                    child: TimeWheel(
+                      updateTimeChanged: (value) =>
+                          appointmentSchedule.updateSelectedTime(value),
+                    ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: Config.yMargin(context, 3.5),
                   ),
                   Text(
                     'Appointment For:',
@@ -287,8 +227,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                     'Save',
                     style: TextStyle(
                       color: Theme.of(context).primaryColorLight,
-                      fontFamily: 'Segoe UI',
-                      fontSize: Config.textSize(context, 4.13),
+                      fontSize: Config.textSize(context, 5.5),
                     ),
                   ),
                   // When this button is pressed, it saves the appointment to the DB
@@ -303,124 +242,37 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   }
 }
 
-class Timer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Text(
-              '09',
-              style: TextStyle(
-                  fontSize: Config.textSize(context, 6.07),
-                  fontFamily: 'Segoe UI'),
-            ),
-            Container(
-              height: Config.yMargin(context, 0.3),
-              width: Config.xMargin(context, 9.24),
-              child: Text('h'),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0.0),
-                      topRight: Radius.circular(0.0))),
-            ),
-          ],
-        ),
-        SizedBox(
-          width: Config.xMargin(context, 6.07),
-        ),
-        Text(
-          ':',
-          style: TextStyle(
-            fontSize: Config.textSize(context, 6.07),
-            color: Color(0xFFC4C4C4),
-          ),
-        ),
-        SizedBox(
-          width: Config.xMargin(context, 6.07),
-        ),
-        Column(
-          children: <Widget>[
-            Text(
-              '09',
-              style: TextStyle(
-                fontSize: Config.textSize(context, 6.07),
-              ),
-            ),
-            Container(
-              height: Config.yMargin(context, 0.3),
-              width: Config.xMargin(context, 9.24),
-              child: Text('h'),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          width: Config.xMargin(context, 6.07),
-        ),
-        Text(
-          ':',
-          style: TextStyle(
-            fontSize: Config.textSize(context, 6.07),
-            color: Color(0xFFC4C4C4),
-          ),
-        ),
-        SizedBox(
-          width: Config.xMargin(context, 6.07),
-        ),
-        Column(
-          children: <Widget>[
-            Text(
-              'AM',
-              style: TextStyle(
-                fontSize: Config.textSize(context, 6.07),
-              ),
-            ),
-            Container(
-              height: Config.yMargin(context, 0.3),
-              width: Config.xMargin(context, 9.24),
-              child: Text('h'),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-//                borderRadius: BorderRadius.only(
-//                  topLeft: Radius.circular(0.0),
-//                  topRight: Radius.circular(0.0),
-//                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class DateAndDay extends StatelessWidget {
+class DateAndDay extends StatefulWidget {
   DateAndDay({this.colour, @required this.day, @required this.date});
 
-  final Color colour;
+  Color colour;
   final String day;
   final String date;
 
   @override
+  _DateAndDayState createState() => _DateAndDayState();
+}
+
+class _DateAndDayState extends State<DateAndDay> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
+//      onTap: () {
+//        setState(() {
+//          widget.colour = Theme.of(context).primaryColor;
+//        });
+//      },
       child: Container(
         child: Column(
           children: <Widget>[
             Text(
-              date,
+              widget.date,
               style: TextStyle(
                   fontSize: Config.textSize(context, 7.29),
                   fontWeight: FontWeight.w500),
             ),
             Text(
-              day,
+              widget.day,
               style: TextStyle(
                   color: Color(0xFFC4C4C4),
                   fontSize: Config.textSize(context, 2.92)),
@@ -431,13 +283,8 @@ class DateAndDay extends StatelessWidget {
             Container(
               height: Config.yMargin(context, 0.3),
               width: Config.xMargin(context, 9.24),
-              child: Text('h'),
               decoration: BoxDecoration(
-                color: colour,
-//                borderRadius: BorderRadius.only(
-//                  topLeft: Radius.circular(0.0),
-//                  topRight: Radius.circular(0.0),
-//                ),
+                color: widget.colour,
               ),
             ),
           ],

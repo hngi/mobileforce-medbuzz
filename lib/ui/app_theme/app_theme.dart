@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 
 ThemeData appThemeLight = ThemeData(
-
     appBarTheme: AppBarTheme(
       textTheme: TextTheme(),
       color: Color(0xfff4f4f4),
       iconTheme: IconThemeData(color: Colors.black87),
     ),
+    //this color is used for the 'see all' text in [HomeScreen]
+    textSelectionColor: Color(0xff2D7DD2),
+    // this color is used by text in the upcoming appointments card shown on the home screen
+    dividerColor: Color(0xff777777),
+    //this color is used by date (day) in the upcoming appointments card shown on the home screen
+    focusColor: Color(0xff2DBFC3),
     primaryColor: Color(0xff617ADC),
     highlightColor: Color.fromARGB(255, 45, 191, 195),
     accentColor: Color(0xff219653),
     primaryColorLight: Colors.white,
-    primaryColorDark: Colors.black,
-    backgroundColor: Color(0xffe5e5e5),
+    primaryColorDark: Color(0xff333333),
+    backgroundColor: Color(0xfafafafa),
     buttonColor: Color(0xffF2994A),
     hintColor: Color(0xff777777),
     textTheme: TextTheme(
@@ -27,4 +32,3 @@ ThemeData appThemeLight = ThemeData(
       caption: TextStyle().copyWith(fontFamily: 'Segoe'),
       button: TextStyle().copyWith(fontFamily: 'Segoe'),
     ));
-

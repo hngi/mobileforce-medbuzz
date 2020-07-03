@@ -1,9 +1,10 @@
-import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../core/models/water_reminder_model/water_reminder.dart';
 
 class MonthCount {
   String month;
@@ -34,6 +35,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   int _selectedDay;
   int _selectedMonth;
   dynamic _selectedTime;
+  List<WaterReminder> _availableReminders = [];
 
   ScheduleWaterReminderViewModel() {
     this._selectedMl = null;
@@ -55,9 +57,13 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   setSelectedMonth(int selectedMonth) => _selectedMonth = selectedMonth;
 
   List<int> get mls => _mls;
+  List<WaterReminder> get availableReminders => _availableReminders;
 
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
+
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
@@ -100,7 +106,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createSchedule() {
+  WaterReminder createSchedule() {
     var dayValue =
         selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
     var monthValue = selectedMonth.toString().length < 2
@@ -109,9 +115,10 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     var selectedDateTime = "${_today.year}-$monthValue-$dayValue $selectedTime";
 
     WaterReminder newReminder = WaterReminder(
-        ml: selectedMl, dateTime: DateTime.parse(selectedDateTime));
-
-    print(newReminder.dateTime);
+        id: DateTime.now().toString(),
+        ml: _selectedMl,
+        dateTime: DateTime.parse(selectedDateTime));
+    return newReminder;
   }
 
   void updateSelectedDay(int dayIndex) {
@@ -126,6 +133,11 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   void updateSelectedMl(ml) {
     _selectedMl = ml;
+    notifyListeners();
+  }
+
+  void updateAvailableReminders(waterReminders) {
+    _availableReminders = waterReminders;
     notifyListeners();
   }
 
@@ -144,6 +156,12 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   String get selectedMonthValue {
     return monthValues[_today.month - 1].month;
+  }
+
+  List<WaterReminder> get waterRemindersBasedOnDateTime {
+    return _availableReminders
+        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .toList();
   }
 
   getWeekDay(index) {

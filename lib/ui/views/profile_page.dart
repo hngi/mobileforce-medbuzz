@@ -1,8 +1,6 @@
-import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
 import 'package:flutter/material.dart';
-
 
 // TODO: In other to stop thunder from firing yolu change the routes before you push
 // TODO: Fix the orientation of this page to POTRAIT
@@ -19,30 +17,34 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         centerTitle: true,
         title: Text(
           'Profile',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
       ),
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[100],
-                  // offset: Offset(-10.0, 10.0)
-                  spreadRadius: 2.0,
-                  blurRadius: 10.0,
-                )
-              ], borderRadius: BorderRadius.circular(30), color: Colors.white),
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[100],
+                      // offset: Offset(-10.0, 10.0)
+                      spreadRadius: 2.0,
+                      blurRadius: 10.0,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(30),
+                  color: Theme.of(context).primaryColorLight),
               height: Config.yMargin(context, 36),
               width: Config.xMargin(context, 100),
               child: Column(
@@ -117,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         activeTrackColor: Colors.blueAccent,
                         onChanged: (value) {
                           setState(() {
-                            value = switcher;
+                            switcher = value;
                           });
                         },
                         value: switcher),
@@ -142,14 +144,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   const EdgeInsets.symmetric(horizontal: 90.0, vertical: 10),
               child: GestureDetector(
                 onTap: () {
-                  Navigation().pushToAndReplace(context, LoginPage());
+                  //Code throws error with named routes
+                  // Navigation().pushToAndReplace(context, LoginPage());
+                  //this works
+                  Navigator.of(context).pushReplacementNamed(RouteNames.login);
                 },
                 child: Container(
                   height: Config.yMargin(context, 12),
                   width: Config.xMargin(context, 30),
                   child: Row(
                     children: <Widget>[
-                      ImageIcon(AssetImage('images/logout.png'), color: Colors.red,),
+                      ImageIcon(
+                        AssetImage('images/logout.png'),
+                        color: Colors.red,
+                      ),
                       SizedBox(
                         width: 20,
                       ),
@@ -168,6 +176,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-
-
