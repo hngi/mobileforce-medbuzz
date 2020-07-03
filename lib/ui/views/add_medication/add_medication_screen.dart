@@ -24,7 +24,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
     //Select MedicationReminder from List based on id
     int id = 0;
-    MedicationReminder data = allData[id];
+    MedicationReminder data =
+        MedicationReminder(drugName: "Ampicilin", frequency: "once", id: 3);
 
     return Scaffold(
       appBar: AppBar(
@@ -135,7 +136,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             ),
                             value: medModel.isEditing
                                 ? data.frequency
-                                : medModel.selectedFreq,
+                                : Text("once"),
                             isDense: true,
                             onChanged: (String newValue) {
                               setState(() {
@@ -338,9 +339,10 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
   Widget drugTextField(MedicationReminder data) {
     var medModel = Provider.of<MedicationData>(context);
+    textEditingController.text = medModel.isEditing ? data.drugName : null;
     return TextFormField(
       //Set initial value is in edit mode
-      initialValue: medModel.isEditing ? data.drugName : null,
+
       onFieldSubmitted: (text) {
         medModel.updateDrugName(text);
       },
@@ -373,9 +375,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
   Widget buildImageContainer(int index, MedicationReminder data) {
     var medModel = Provider.of<MedicationData>(context);
-    medModel.isEditing
-        ? medModel.onSelectedDrugImage(int.parse(data.drugType))
-        : null;
+    medModel.isEditing ? medModel.onSelectedDrugImage(data.id) : null;
     return GestureDetector(
       onTap: () => medModel.onSelectedDrugImage(index),
       child: Container(
