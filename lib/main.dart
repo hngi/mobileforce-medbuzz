@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'MedBuzz',
         theme: appThemeLight,
-        initialRoute: RouteNames.addMedicationScreen,
+        initialRoute: RouteNames.splashScreen,
         //Crazelu moved the routes to RouteNames class to clean things up here
         //head over there if you need to add your named routes
         routes: RouteNames.routes,
