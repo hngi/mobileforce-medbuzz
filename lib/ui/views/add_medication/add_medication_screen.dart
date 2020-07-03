@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   TextEditingController textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
   String newIndex = DateTime.now().toString();
+  String appBarTitle = 'Add Medication';
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +249,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                   buildEndDate(),
                   SizedBox(height: Config.yMargin(context, 10)),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
 //                      MaterialLocalizations localizations =
 //                          MaterialLocalizations.of(context);
 //                      print([
@@ -262,56 +264,66 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 //                        medModel.dosage
 //                      ]);
                       if (textEditingController.text.isNotEmpty) {
-                        medModel.addMedicationReminder(
-                            newIndex,
-                            MedicationReminder(
+                        switch (appBarTitle) {
+                          case 'Add Schedule':
+                            await medModel.addMedicationReminder(
+                              newIndex,
+                              MedicationReminder(
+                                  drugName: medModel.drugName,
+                                  drugType: medModel
+                                      .drugTypes[medModel.selectedIndex],
+                                  dosage: medModel.dosage,
+                                  firstTime: medModel.firstTime,
+                                  secondTime: medModel.secondTime != null
+                                      ? medModel.secondTime
+                                      : null,
+                                  thirdTime: medModel.thirdTime != null
+                                      ? medModel.thirdTime
+                                      : null,
+                                  frequency: medModel.selectedFreq,
+                                  startAt: medModel.startDate,
+                                  endAt: medModel.endDate),
+                            );
+                            break;
+
+                          case 'Edit Schedule':
+
+                            // work here on your editing schedule code
+//                            case 'Edit Schedule':
+                            //Code to insert new schedule
+                            MedicationReminder newReminder = MedicationReminder(
                                 drugName: medModel.drugName,
-                                drugType:
-                                    medModel.drugTypes[medModel.selectedIndex],
+                                frequency: medModel.selectedFreq,
+                                drugType: medModel.selectedIndex.toString(),
                                 dosage: medModel.dosage,
                                 firstTime: medModel.firstTime,
-                                secondTime: medModel.secondTime != null
-                                    ? medModel.secondTime
-                                    : null,
-                                thirdTime: medModel.thirdTime != null
-                                    ? medModel.thirdTime
-                                    : null,
-                                frequency: medModel.selectedFreq,
+                                secondTime: medModel.secondTime,
+                                thirdTime: medModel.thirdTime,
                                 startAt: medModel.startDate,
-                                endAt: medModel.endDate));
+                                endAt: medModel.endDate);
+
+                            await medModel.editSchedule(newReminder);
+                            break;
+                        }
+
+                        Navigator.popAndPushNamed(
+                            context, RouteNames.medicationView);
                       }
                     },
-                    child: InkWell(
-                      onTap: () async {
-                        //Code to insert new schedule
-                        MedicationReminder newReminder = MedicationReminder(
-                            drugName: medModel.drugName,
-                            frequency: medModel.selectedFreq,
-                            drugType: medModel.selectedIndex.toString(),
-                            dosage: medModel.dosage,
-                            firstTime: medModel.firstTime,
-                            secondTime: medModel.secondTime,
-                            thirdTime: medModel.thirdTime,
-                            startAt: medModel.startDate,
-                            endAt: medModel.endDate);
-
-                        await medModel.editSchedule(newReminder);
-                      },
-                      child: Container(
-                        height: Config.yMargin(context, 10.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(Config.xMargin(context, 3.5))),
-                            color: Theme.of(context).primaryColor),
-                        child: Center(
-                          child: Text(
-                            'Save',
-                            style: TextStyle(
-                              fontSize: Config.textSize(context, 4.5),
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
+                    child: Container(
+                      height: Config.yMargin(context, 10.0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Config.xMargin(context, 3.5))),
+                          color: Theme.of(context).primaryColor),
+                      child: Center(
+                        child: Text(
+                          'Save',
+                          style: TextStyle(
+                            fontSize: Config.textSize(context, 4.5),
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColorLight,
                           ),
                         ),
                       ),
