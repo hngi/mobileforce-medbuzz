@@ -19,6 +19,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
     var waterReminder =
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    waterReminderDB.getWaterReminders();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
+    });
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;

@@ -15,11 +15,12 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   TextEditingController textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
   String newIndex = DateTime.now().toString();
-  String appBarTitle = 'Add Medication';
 
   @override
   Widget build(BuildContext context) {
     var medModel = Provider.of<MedicationData>(context);
+    String appBarTitle =
+        medModel.isEditing ? 'Edit Medication' : 'Add Medication';
 
     //Fetch current List from Model
     //List<MedicationReminder> allData = medModel.medicationReminder;
@@ -36,7 +37,15 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 onPressed: () => Navigator.of(context).pop(true),
                 icon: Icon(Icons.keyboard_backspace))
             : null,
-        title: medModel.isEditing ? titleEdit() : titleAdd(),
+        title: Text(
+          appBarTitle,
+          style: Theme.of(context)
+              .textTheme
+              .headline6 //REMOVED THE 6
+              .copyWith(
+                color: Theme.of(context).primaryColorDark,
+              ),
+        ),
         backgroundColor: Theme.of(context).primaryColorLight,
         elevation: 1.0,
       ),

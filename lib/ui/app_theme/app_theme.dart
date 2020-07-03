@@ -6,6 +6,12 @@ ThemeData appThemeLight = ThemeData(
       color: Color(0xfff4f4f4),
       iconTheme: IconThemeData(color: Colors.black87),
     ),
+    //this color is used for the 'see all' text in [HomeScreen]
+    textSelectionColor: Color(0xff2D7DD2),
+    // this color is used by text in the upcoming appointments card shown on the home screen
+    dividerColor: Color(0xff777777),
+    //this color is used by date (day) in the upcoming appointments card shown on the home screen
+    focusColor: Color(0xff2DBFC3),
     primaryColor: Color(0xff617ADC),
     highlightColor: Color.fromARGB(255, 45, 191, 195),
     accentColor: Color(0xff219653),

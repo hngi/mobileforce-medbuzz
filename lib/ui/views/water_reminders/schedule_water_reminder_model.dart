@@ -62,6 +62,9 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
 
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
+
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
         ? Theme.of(context).primaryColor
@@ -153,6 +156,12 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   String get selectedMonthValue {
     return monthValues[_today.month - 1].month;
+  }
+
+  List<WaterReminder> get waterRemindersBasedOnDateTime {
+    return _availableReminders
+        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .toList();
   }
 
   getWeekDay(index) {

@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 
-class AppointmentData extends ChangeNotifier{
+class AppointmentData extends ChangeNotifier {
   static const String _boxName = "appointmentBox";
+
+  DateTime appointmentMonth = DateTime.now();
+  DateTime appointmentDay = DateTime.now();
+  DateTime appointmentTime = DateTime.now();
+  String appointmentSubject;
+  String appointmentNote;
+
+  bool isEditing = false;
 
   List<Appointment> _appointment = [];
 
@@ -19,7 +27,7 @@ class AppointmentData extends ChangeNotifier{
   }
 
   //get a particular appointment
-  Appointment getAppointment(index){
+  Appointment getAppointment(index) {
     return _appointment[index];
   }
 
@@ -61,11 +69,11 @@ class AppointmentData extends ChangeNotifier{
     notifyListeners();
   }
 
-  Appointment getActiveAppointment(){
+  Appointment getActiveAppointment() {
     return _activeAppointment;
   }
 
-  int get appointmentCount{
+  int get appointmentCount {
     return _appointment.length;
   }
 }

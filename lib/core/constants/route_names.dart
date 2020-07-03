@@ -1,8 +1,10 @@
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
+import 'package:MedBuzz/ui/views/fitness_reminders/add_fitness_screen.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/single_fitness_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
@@ -22,7 +24,9 @@ import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
 import 'package:MedBuzz/ui/views/snooze_reminder/confirmation_or_snooze.dart';
 import 'package:MedBuzz/ui/views/splash_screen.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/views/water_reminders/water_reminders_view.dart';
+import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 
 class RouteNames {
@@ -39,6 +43,7 @@ class RouteNames {
   static const String signup = 'signup';
   static const String drugDescription = 'drugDescription';
   static const String fitnessSchedulesScreen = 'fitnessSchedulesScreen';
+  static const String fitnessDescriptionScreen = 'fitnessDescriptionScreen';
   static const String allRemindersScreen = 'allRemindersScreen';
   static const String scheduleAppointmentScreen = 'scheduleAppointmentScreen';
   static const String scheduledAppointmentsPage = 'scheduledAppointmentsPage';
@@ -55,6 +60,9 @@ class RouteNames {
   static const String medicationView = 'medicationView';
   static const String addMedicationScreen = 'addMedicationScreen';
   static const String medicationScreen = 'medicationScreen';
+  static const String dietScheduleScreen = 'dietScheduleScreen';
+  static const String singleWater = 'singleWater';
+  static const String deleteDialog = 'deleteDialog';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -69,6 +77,8 @@ class RouteNames {
     RouteNames.allRemindersScreen: (context) => AllRemindersScreen(),
     RouteNames.drugDescription: (context) => DrugDescription(),
     RouteNames.fitnessSchedulesScreen: (context) => FitnessSchedulesScreen(),
+    RouteNames.fitnessDescriptionScreen: (context) =>
+        FitnessDescriptionScreen(),
     RouteNames.scheduleAppointmentScreen: (context) =>
         ScheduleAppointmentScreen(),
     RouteNames.scheduledAppointmentsPage: (context) =>
@@ -88,5 +98,8 @@ class RouteNames {
     RouteNames.medicationView: (context) => MedicationView(),
     RouteNames.addMedicationScreen: (context) => AddMedicationScreen(),
     RouteNames.medicationScreen: (context) => MedicationScreen(),
+    RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
+    RouteNames.singleWater: (context) => SingleWater(),
+    RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
 }

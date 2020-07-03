@@ -79,7 +79,9 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 color: Theme.of(context).primaryColorDark),
 
             //Function to navigate to previous screen or home screen (as the case maybe) goes here
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.pushNamed(context, 'homePage');
+            }),
       ),
       body: SingleChildScrollView(
         controller: controller,

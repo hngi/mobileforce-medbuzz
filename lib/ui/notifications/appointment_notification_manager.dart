@@ -67,4 +67,9 @@ class AppointmentNotificationManager {
           builder: (context) => ScheduleAppointmentScreen(payload: payload)),
     );
   }
+
+  void removeReminder(int notificationId) {
+    flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notfication with id: $notificationId been removed successfully');
+  }
 }
