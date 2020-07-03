@@ -35,6 +35,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   int _selectedDay;
   int _selectedMonth;
   dynamic _selectedTime;
+  List<WaterReminder> _availableReminders = [];
 
   ScheduleWaterReminderViewModel() {
     this._selectedMl = null;
@@ -56,9 +57,13 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   setSelectedMonth(int selectedMonth) => _selectedMonth = selectedMonth;
 
   List<int> get mls => _mls;
+  List<WaterReminder> get availableReminders => _availableReminders;
 
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
+
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
@@ -110,8 +115,9 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     var selectedDateTime = "${_today.year}-$monthValue-$dayValue $selectedTime";
 
     WaterReminder newReminder = WaterReminder(
-        ml: selectedMl, dateTime: DateTime.parse(selectedDateTime));
-
+        id: DateTime.now().toString(),
+        ml: _selectedMl,
+        dateTime: DateTime.parse(selectedDateTime));
     return newReminder;
   }
 
@@ -130,6 +136,11 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateAvailableReminders(waterReminders) {
+    _availableReminders = waterReminders;
+    notifyListeners();
+  }
+
   bool isActive(index) {
     //increment index to match day index and compare
     return index + 1 == _selectedDay;
@@ -145,6 +156,12 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   String get selectedMonthValue {
     return monthValues[_today.month - 1].month;
+  }
+
+  List<WaterReminder> get waterRemindersBasedOnDateTime {
+    return _availableReminders
+        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .toList();
   }
 
   getWeekDay(index) {

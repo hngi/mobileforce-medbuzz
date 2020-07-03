@@ -1,5 +1,7 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
+import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/medication_card.dart';
 import 'package:MedBuzz/ui/widget/water_card.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +20,28 @@ class AllRemindersScreen extends StatelessWidget {
         Provider.of<AllRemindersViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allReminders
+          .updateAvailableWaterReminders(waterReminderDB.waterReminders);
+    });
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    Color bgColor = Theme.of(context).backgroundColor;
 
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
-        leading: BackButton(color: Theme.of(context).primaryColorDark),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        //leading: BackButton(color: Theme.of(context).primaryColorDark),
+
         title: Text(
           'All reminders',
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
-        elevation: 0.5,
-        backgroundColor: Theme.of(context).primaryColorLight,
+        elevation: 0,
+        backgroundColor: bgColor,
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -151,10 +162,9 @@ class AllRemindersScreen extends StatelessWidget {
                   SizedBox(height: height * 0.02),
                   Container(
                     width: width,
-                    child: InkWell(
+                    child: GestureDetector(
                       //Navigate to screen with single reminder i.e the on user clicked on
                       onTap: () {},
-                      splashColor: Colors.transparent,
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,11 +236,13 @@ class AllRemindersScreen extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.02),
                   Visibility(
-                      visible: waterReminderDB.waterReminders.isEmpty,
+                      visible:
+                          allReminders.waterRemindersBasedOnDateTime.isEmpty,
                       child: Container(
                         child: Text('No water reminders for this date'),
                       )),
-                  for (var waterReminder in waterReminderDB.waterReminders)
+                  for (var waterReminder
+                      in allReminders.waterRemindersBasedOnDateTime)
                     WaterCard(
                         height: height,
                         width: width,
@@ -255,160 +267,7 @@ class AllRemindersScreen extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.02),
                   Text('08:00AM'),
-                  SizedBox(height: height * 0.02),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: Config.xMargin(context, 3),
-                        vertical: Config.yMargin(context, 1)),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Config.xMargin(context, 6)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white,
-                          spreadRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Icon(
-                            Icons.more_vert,
-                            size: Config.textSize(context, 5),
-                          ),
-                          onTap: () {},
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'July',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Config.textSize(context, 3),
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                ),
-                                Text(
-                                  '12',
-                                  style: TextStyle(
-                                    fontSize: Config.textSize(context, 7),
-                                    color: Theme.of(context).highlightColor,
-                                  ),
-                                ),
-                                Text(
-                                  'Thurs',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: Config.textSize(context, 3),
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: Config.xMargin(context, 3),
-                            ),
-                            Container(
-                              color: Theme.of(context).primaryColorDark,
-                              height: height * 0.07,
-                              width: width * 0.001,
-                              child: VerticalDivider(),
-                            ),
-                            SizedBox(width: Config.xMargin(context, 5)),
-                            Expanded(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Timing',
-                                              style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 3.4),
-                                                color:
-                                                    Theme.of(context).hintColor,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height:
-                                                  Config.yMargin(context, 1),
-                                            ),
-                                            Text(
-                                              '6.00 PM',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: Config.textSize(
-                                                      context, 3.8)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                            width: Config.xMargin(context, 9)),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Appointment for',
-                                              style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 3.4),
-                                                color:
-                                                    Theme.of(context).hintColor,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height:
-                                                  Config.yMargin(context, 1),
-                                            ),
-                                            Text(
-                                              'Dance Class',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: Config.textSize(
-                                                      context, 3.8)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: height * 0.03,
-                                      width: double.infinity,
-                                      child: Divider(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-//indent: 50.0,
-                                        // endIndent: 10.0,
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        'Make sure to make lots of friends',
-                                        style: TextStyle(
-                                            fontSize:
-                                                Config.textSize(context, 3.8)),
-                                      ),
-                                    ),
-                                  ]),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  AppointmentCard(width: width, height: height),
                 ],
               ),
             ),

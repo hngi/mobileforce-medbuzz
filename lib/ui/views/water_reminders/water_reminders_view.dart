@@ -1,8 +1,14 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../size_config/config.dart';
 import 'schedule_water_reminder_screen.dart';
+import '../../../core/constants/route_names.dart';
+import '../../../core/database/waterReminderData.dart';
+import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
+import 'package:provider/provider.dart';
+import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
 
 class WaterScheduleViewScreen extends StatelessWidget {
   @override
@@ -96,12 +102,28 @@ class _WaterScheduleViewState extends State<WaterScheduleView> {
 
   @override
   Widget build(BuildContext context) {
+    var waterReminder =
+        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    waterReminderDB.getWaterReminders();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
+    });
+
     formattedTime = DateFormat.jm().format(time);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      margin: EdgeInsets.only(top: 60),
-      child: SingleChildScrollView(
+    return Scaffold(
+      // margin: EdgeInsets.only(top: 60),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: BackButton(
+            color: Theme.of(context).primaryColorDark,
+            onPressed: () =>
+                {Navigator.of(context).popAndPushNamed(RouteNames.homePage)}),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
         //container wrapping all the widgets
         child: Container(
           margin: EdgeInsets.only(
@@ -183,10 +205,16 @@ class _WaterScheduleViewState extends State<WaterScheduleView> {
                 height: Config.yMargin(context, 5),
               ),
               //Tap cards at your own risk :). Proper card display will be done when fetching data from DB
-              card('Drink 1000ml of water'),
-              card('Drink 1000ml of water'),
-              card('Drink 1000ml of water'),
-              card('Drink 1000ml of water')
+
+              Visibility(
+                  visible: waterReminder.waterRemindersBasedOnDateTime.isEmpty,
+                  child: Container(
+                    child: Text('No water reminders for this date'),
+                  )),
+              for (var waterReminder
+                  in waterReminder.waterRemindersBasedOnDateTime)
+                WaterReminderCard(
+                    height: height, width: width, waterReminder: waterReminder)
             ],
           ),
         ),

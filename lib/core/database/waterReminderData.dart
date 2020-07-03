@@ -7,8 +7,10 @@ class WaterReminderData extends ChangeNotifier {
   static const String _boxName = "waterReminderBox";
 
   List<WaterReminder> _waterReminders = [];
+  List<WaterReminder> _sortedReminders = [];
 
   List<WaterReminder> get waterReminders => _waterReminders;
+  List<WaterReminder> get sortedReminders => _sortedReminders;
 
   WaterReminder _activeWaterReminder;
 
@@ -27,7 +29,7 @@ class WaterReminderData extends ChangeNotifier {
   void addWaterReminder(WaterReminder waterReminder) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
 
-    await box.add(waterReminder);
+    await box.put(waterReminder.id, waterReminder);
 
     //reinitialise water reminders after write operation
     _waterReminders = box.values.toList();

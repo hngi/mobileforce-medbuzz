@@ -60,4 +60,9 @@ class HealthTipsManager {
       MaterialPageRoute(builder: (context) => HealthTips(payload: payload)),
     );
   }
+
+  void removeReminder(int notificationId) {
+    flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notfication with id: $notificationId been removed successfully');
+  }
 }

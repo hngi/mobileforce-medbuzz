@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ void main() async {
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
   Hive.registerAdapter(WaterReminderAdapter());
+  Hive.registerAdapter(MedicationReminderAdapter());
   runApp(MyApp());
 }
 
