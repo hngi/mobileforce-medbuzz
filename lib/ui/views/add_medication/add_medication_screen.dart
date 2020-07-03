@@ -24,8 +24,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
     //Select MedicationReminder from List based on id
     int id = 0;
-    MedicationReminder data =
-        MedicationReminder(drugName: "Ampicilin", frequency: "once", id: 3);
+    MedicationReminder data = MedicationReminder(
+        drugName: "Ampicilin", frequency: "once", id: 3, dosage: 3);
 
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +114,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
                         decoration: InputDecoration(
-                          hintText: 'Once',
+                          hintText: '${data.frequency}',
                           hintStyle: TextStyle(
                             color: Colors.black38,
                             fontSize: Config.xMargin(context, 5),
@@ -134,9 +134,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                               Icons.keyboard_arrow_down,
                               size: Config.xMargin(context, 8),
                             ),
-                            value: medModel.isEditing
-                                ? data.frequency
-                                : Text("once"),
+                            value: medModel.selectedFreq,
                             isDense: true,
                             onChanged: (String newValue) {
                               setState(() {
@@ -213,7 +211,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         ),
                       ),
                       Text(
-                        '${medModel.dosage}',
+                        '${data.dosage}',
                         style: TextStyle(
                             fontSize: Config.textSize(context, 5),
                             fontWeight: FontWeight.bold),
