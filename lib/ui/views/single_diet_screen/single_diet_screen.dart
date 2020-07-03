@@ -1,7 +1,13 @@
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 
 class SingleDiet extends StatelessWidget {
+  final DietModel diet;
+  final db = DietReminderDB();
+  SingleDiet({this.diet});
+  //this constructor will get the data from the general meal reminder screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +28,17 @@ class SingleDiet extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(Config.yMargin(context, 2.6)),
             child: FlatButton.icon(
-                onPressed: () {
+                onPressed: () async {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) =>
                         confirmationDialog(context), //show Confirmation dialog
                   );
+                  showSnackBar(context);
+                  Future.delayed(Duration(seconds: 1)).then((value) {
+                    db.deleteDiet(diet.dietName);
+                    Navigator.of(context).pop(true);
+                  });
                 },
                 icon: Icon(
                   Icons.delete,
@@ -253,5 +264,21 @@ class SingleDiet extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  void showSnackBar(BuildContext context) {
+    SnackBar snackBar = SnackBar(
+      backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+      duration: Duration(seconds: 2),
+      content: Text(
+        'Schedule deleted',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: Config.textSize(context, 5.3),
+            color: Theme.of(context).primaryColorLight),
+      ),
+    );
+
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
