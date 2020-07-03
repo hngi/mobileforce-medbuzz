@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../core/database/waterReminderData.dart';
+import '../../../core/models/water_reminder_model/water_reminder.dart';
+
 class MonthCount {
   String month;
   // int days;
@@ -28,13 +31,15 @@ List<MonthCount> monthValues = [
 
 class AllRemindersViewModel extends ChangeNotifier {
   DateTime _today = DateTime.now();
-  int _selectedMl;
+  // int _selectedMl;
   int _selectedDay;
   int _selectedMonth;
   dynamic _selectedTime;
+  List<WaterReminder> _availableWaterReminders = [];
 
   AllRemindersViewModel() {
-    this._selectedMl = null;
+    // this._selectedMl = null;
+    // this.waterReminderDB.getWaterReminders();
     this._selectedMonth = _today.month;
     this._selectedDay = _today.day;
     this._selectedTime = null;
@@ -48,6 +53,10 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
+
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
+  // "${_today.year}-${selectedMonth.toString().padLeft(2, '0')}-${selectedDay.toString().padLeft(2, '0')} ";
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
@@ -67,12 +76,11 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   TextStyle calendarMonthTextStyle(BuildContext context, index) {
     return TextStyle(
-      color: _selectedMonth == index
+      color: _selectedMonth == index + 1
           ? Theme.of(context).primaryColor
           : Theme.of(context).primaryColorDark,
       fontSize: Config.textSize(context, 4),
       fontWeight: FontWeight.bold,
-
     );
   }
 
@@ -88,7 +96,12 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   void updateSelectedMonth(String val) {
     _selectedMonth =
-        monthValues.indexWhere((element) => element.month == val) ;
+        monthValues.indexWhere((element) => element.month == val) + 1;
+    notifyListeners();
+  }
+
+  void updateAvailableWaterReminders(List<WaterReminder> waterReminders) {
+    _availableWaterReminders = waterReminders;
     notifyListeners();
   }
 
@@ -113,6 +126,12 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   String get selectedMonthValue {
     return monthValues[_today.month - 1].month;
+  }
+
+  List<WaterReminder> get waterRemindersBasedOnDateTime {
+    return _availableWaterReminders
+        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .toList();
   }
 
   getWeekDay(index) {

@@ -8,7 +8,6 @@ import 'package:MedBuzz/ui/notifications/fitness_notification_manager.dart';
 class FitnessSchedulesScreen extends StatefulWidget {
   FitnessSchedulesScreen({this.payload});
   final String payload;
-
   @override
   _FitnessSchedulesScreenState createState() => _FitnessSchedulesScreenState();
 }

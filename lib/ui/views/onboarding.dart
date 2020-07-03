@@ -43,7 +43,10 @@ class _OnboardState extends State<Onboard> {
               }, //navigate to the sign up page
               child: Text(
                 "Skip",
-                style: TextStyle(color: appThemeLight.primaryColorDark),
+                style: TextStyle(
+                    color: appThemeLight.primaryColorDark,
+                    fontSize: Config.textSize(context, 3.7),
+                    fontWeight: FontWeight.normal),
               ),
               color: Colors.transparent,
             ),
@@ -60,16 +63,18 @@ class _OnboardState extends State<Onboard> {
               controller: _controller,
               children: <Widget>[
                 FirstScreen(
-                  image: 'images/first1.png',
-                  description: 'Set your Appointment with your doctor',
+                  image: 'images/schedule.png',
+                  description: 'Book appointments with \ndoctors',
                 ),
                 FirstScreen(
-                    image: 'images/first3.png',
-                    description:
-                        'Keep track of your medications and set reminders for them'),
+                  image: 'images/doctor.png',
+                  description:
+                      'Keep track of your medications \nand set reminders for them',
+                ),
                 FirstScreen(
-                    image: 'images/first2.png',
-                    description: 'Monitor your Health Activities')
+                  image: 'images/habit.png',
+                  description: 'Monitor your health activities',
+                )
               ],
             ),
             Positioned(
@@ -126,8 +131,9 @@ class _OnboardState extends State<Onboard> {
                         },
                         child: Text(
                           "Sign Up",
-                          style:
-                              TextStyle(color: appThemeLight.primaryColorLight),
+                          style: TextStyle(
+                              color: appThemeLight.primaryColorLight,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -148,8 +154,8 @@ class _OnboardState extends State<Onboard> {
                         child: Text(
                           "Login",
                           style: TextStyle(
-                            color: appThemeLight.primaryColor,
-                          ),
+                              color: appThemeLight.primaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -207,10 +213,9 @@ class FirstScreen extends StatelessWidget {
                   child: Text(description,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontFamily: 'Segoe-Bold',
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 3.7),
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.bold)),
                 ),
               ),
             ],

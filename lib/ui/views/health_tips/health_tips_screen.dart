@@ -1,4 +1,4 @@
-import 'package:MedBuzz/ui/views/home_page.dart';
+import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';

@@ -56,13 +56,14 @@ import 'package:flutter/material.dart';
 
 PreferredSizeWidget appBar(
         {@required BuildContext context,
+        Color color,
         String title,
         List<Widget> actions,
         Widget leading,
-        bool useDefaultActions}) =>
+        bool useDefaultActions = false}) =>
     AppBar(
       elevation: 0,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: color ?? Theme.of(context).backgroundColor,
       title: Text(title,
           style: TextStyle(color: Theme.of(context).primaryColorDark)),
       leading: leading ??
@@ -71,7 +72,9 @@ PreferredSizeWidget appBar(
                   color: Theme.of(context).primaryColorDark),
 
               //Function to navigate to previous screen or home screen (as the case maybe) goes here
-              onPressed: () {}),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
       actions: actions != null
           ? actions
           : useDefaultActions
