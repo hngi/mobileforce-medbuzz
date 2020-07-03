@@ -19,6 +19,13 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   Widget build(BuildContext context) {
     var medModel = Provider.of<MedicationData>(context);
 
+    //Fetch current List from Model
+    List<MedicationReminder> allData = medModel.medicationReminder;
+
+    //Select MedicationReminder from List based on id
+    int id = 0;
+    MedicationReminder data = allData[id];
+
     return Scaffold(
       appBar: AppBar(
         leading: medModel.isEditing
@@ -53,7 +60,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: Config.yMargin(context, 1.5)),
-                  drugTextField(),
+                  drugTextField(data),
                 ],
               ),
             ),
@@ -80,7 +87,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: medModel.drugTypes.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return buildImageContainer(index);
+                  return buildImageContainer(index, data);
                 },
               ),
             ),
@@ -126,7 +133,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                               Icons.keyboard_arrow_down,
                               size: Config.xMargin(context, 8),
                             ),
-                            value: medModel.selectedFreq,
+                            value: medModel.isEditing
+                                ? data.frequency
+                                : medModel.selectedFreq,
                             isDense: true,
                             onChanged: (String newValue) {
                               setState(() {
@@ -327,9 +336,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget drugTextField() {
+  Widget drugTextField(MedicationReminder data) {
     var medModel = Provider.of<MedicationData>(context);
     return TextFormField(
+      //Set initial value is in edit mode
+      initialValue: medModel.isEditing ? data.drugName : null,
       onFieldSubmitted: (text) {
         medModel.updateDrugName(text);
       },
@@ -360,8 +371,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget buildImageContainer(int index) {
+  Widget buildImageContainer(int index, MedicationReminder data) {
     var medModel = Provider.of<MedicationData>(context);
+    medModel.isEditing
+        ? medModel.onSelectedDrugImage(int.parse(data.drugType))
+        : null;
     return GestureDetector(
       onTap: () => medModel.onSelectedDrugImage(index),
       child: Container(
