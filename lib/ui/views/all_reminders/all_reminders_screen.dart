@@ -18,6 +18,10 @@ class AllRemindersScreen extends StatelessWidget {
         Provider.of<AllRemindersViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allReminders
+          .updateAvailableWaterReminders(waterReminderDB.waterReminders);
+    });
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -151,10 +155,9 @@ class AllRemindersScreen extends StatelessWidget {
                   SizedBox(height: height * 0.02),
                   Container(
                     width: width,
-                    child: InkWell(
+                    child: GestureDetector(
                       //Navigate to screen with single reminder i.e the on user clicked on
                       onTap: () {},
-                      splashColor: Colors.transparent,
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,11 +229,13 @@ class AllRemindersScreen extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.02),
                   Visibility(
-                      visible: waterReminderDB.waterReminders.isEmpty,
+                      visible:
+                          allReminders.waterRemindersBasedOnDateTime.isEmpty,
                       child: Container(
                         child: Text('No water reminders for this date'),
                       )),
-                  for (var waterReminder in waterReminderDB.waterReminders)
+                  for (var waterReminder
+                      in allReminders.waterRemindersBasedOnDateTime)
                     WaterCard(
                         height: height,
                         width: width,

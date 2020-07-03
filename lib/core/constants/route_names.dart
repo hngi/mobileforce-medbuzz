@@ -1,4 +1,5 @@
 import 'package:MedBuzz/ui/views/Home.dart';
+import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -6,6 +7,7 @@ import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.
 import 'package:MedBuzz/ui/views/fitness_reminders/single_fitness_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_mail.dart';
@@ -51,6 +53,8 @@ class RouteNames {
   static const String viewAppointmentScreen = 'viewAppointmentScreen';
   static const String singleFitnessScreen = 'singleFitnessScreen';
   static const String medicationView = 'medicationView';
+  static const String addMedicationScreen = 'addMedicationScreen';
+  static const String medicationScreen = 'medicationScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -82,5 +86,7 @@ class RouteNames {
     RouteNames.viewAppointmentScreen: (context) => ViewAppointment(),
     RouteNames.singleFitnessScreen: (context) => SingleFitnessScreen(),
     RouteNames.medicationView: (context) => MedicationView(),
+    RouteNames.addMedicationScreen: (context) => AddMedicationScreen(),
+    RouteNames.medicationScreen: (context) => MedicationScreen(),
   };
 }

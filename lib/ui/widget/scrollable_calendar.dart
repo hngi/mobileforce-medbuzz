@@ -78,33 +78,35 @@ class ScrollableCalendar extends StatelessWidget {
                           thickness: 2,
                         ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            time.length > 1 ? time : '0$time',
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: Config.textSize(context, 7.2),
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: Config.yMargin(context, .5)),
-                          Text(model.getWeekDay(index),
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              time.length > 1 ? time : '0$time',
                               style: TextStyle(
-                                letterSpacing: 1.2,
-                                color: Theme.of(context).hintColor,
-                                fontSize: Config.textSize(context, 4.2),
-                                //fontWeight: FontWeight.w500
-                              )),
-                          index + 1 == model.selectedDay
-                              ? Divider(
-                                  endIndent: Config.xMargin(context, 11),
-                                  color: Theme.of(context).primaryColor,
-                                  thickness: 2,
-                                )
-                              : Container(),
-                        ],
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: Config.textSize(context, 7.2),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: Config.yMargin(context, .5)),
+                            Text(model.getWeekDay(index),
+                                style: TextStyle(
+                                  letterSpacing: 1.2,
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: Config.textSize(context, 4.2),
+                                  //fontWeight: FontWeight.w500
+                                )),
+                            index + 1 == model.selectedDay
+                                ? Divider(
+                                    endIndent: Config.xMargin(context, 11),
+                                    color: Theme.of(context).primaryColor,
+                                    thickness: 2,
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
                     ]),
                   ),

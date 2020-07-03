@@ -1,4 +1,7 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/fitness_reminders/add_fitness_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +9,7 @@ import 'package:bubbled_navigation_bar/bubbled_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isPressed = false;
   PageController _pageController;
   MenuPositionController _menuPositionController;
   bool userPageDragging = false;
@@ -772,60 +777,163 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: model.currentIndex != 0
             ? Container()
-            : FloatingActionButton(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                child: Icon(Icons.add),
+            : SpeedDial(
                 backgroundColor: Theme.of(context).primaryColor,
+                onOpen: () {
+                  setState(() {
+                    isPressed = true;
+                  });
+                },
+                onClose: () {
+                  setState(() {
+                    isPressed = false;
+                  });
+                },
+                child: Icon(isPressed == true ? Icons.close : Icons.add),
+                overlayColor: Colors.black,
+                overlayOpacity: 0.7,
+                children: [
+                  SpeedDialChild(
+                    child: Image(image: AssetImage('images/calender.png')),
+                    backgroundColor: Colors.white,
+                    labelWidget: Container(
+                      margin:
+                          EdgeInsets.only(right: Config.xMargin(context, 4)),
+                      child: Text(
+                        'Appointment',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.scheduleAppointmentScreen);
+                    },
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Image(image: AssetImage('images/drugoutline.png')),
+                    labelWidget: Container(
+                      margin:
+                          EdgeInsets.only(right: Config.xMargin(context, 4)),
+                      child: Text(
+                        'Medication',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddMedicationScreen()));
+                    },
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Image(image: AssetImage('images/dumbell.png')),
+                    labelWidget: Container(
+                      margin:
+                          EdgeInsets.only(right: Config.xMargin(context, 4)),
+                      child: Text(
+                        'Fitness',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.fitnessSchedulesScreen);
+                    },
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Image(image: AssetImage('images/dropoutline.png')),
+                    labelWidget: Container(
+                      margin:
+                          EdgeInsets.only(right: Config.xMargin(context, 4)),
+                      child: Text(
+                        'Water',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.scheduleWaterReminderScreen);
+                    },
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Image(image: AssetImage('images/foood.png')),
+                    labelWidget: Container(
+                      margin:
+                          EdgeInsets.only(right: Config.xMargin(context, 4)),
+                      child: Text(
+                        'Diet',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.scheduleDietReminderScreen);
+                    },
+                  ),
+                ],
               ),
         //Crazelu extracted BottomNavigationBar widget to Widgets folder
-        bottomNavigationBar: BubbledNavigationBar(
-          controller: _menuPositionController,
-          initialIndex: 0,
-          defaultBubbleColor: Theme.of(context).primaryColorLight,
-          backgroundColor: Theme.of(context).backgroundColor,
-          onTap: (index) {
-            model.updateCurrentIndex(index);
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOutQuad);
-          },
-          items: <BubbledNavigationBarItem>[
-            BubbledNavigationBarItem(
-              icon: Icon(CupertinoIcons.home,
-                  size: 30, color: Theme.of(context).primaryColorDark),
-              activeIcon:
-                  Icon(CupertinoIcons.home, size: 30, color: Colors.blueAccent),
-              title: Text(
-                'Home',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark, fontSize: 12),
-              ),
-            ),
-            BubbledNavigationBarItem(
-              icon: Icon(CupertinoIcons.bell,
-                  size: 30, color: Theme.of(context).primaryColorDark),
-              activeIcon:
-                  Icon(CupertinoIcons.bell, size: 30, color: Colors.blueAccent),
-              title: Text(
-                'Reminders',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark, fontSize: 12),
-              ),
-            ),
-            BubbledNavigationBarItem(
-              icon: Icon(CupertinoIcons.profile_circled,
-                  size: 30, color: Theme.of(context).primaryColorDark),
-              activeIcon: Icon(CupertinoIcons.profile_circled,
-                  size: 30, color: Colors.blueAccent),
-              title: Text(
-                'Profile',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark, fontSize: 12),
-              ),
-            ),
-          ],
-        ));
+        bottomNavigationBar: isPressed == true
+            ? null
+            : BubbledNavigationBar(
+                controller: _menuPositionController,
+                initialIndex: 0,
+                defaultBubbleColor: Theme.of(context).primaryColorLight,
+                backgroundColor: Theme.of(context).backgroundColor,
+                onTap: (index) {
+                  model.updateCurrentIndex(index);
+                  _pageController.animateToPage(index,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOutQuad);
+                },
+                items: <BubbledNavigationBarItem>[
+                  BubbledNavigationBarItem(
+                    icon: Icon(CupertinoIcons.home,
+                        size: 30, color: Theme.of(context).primaryColorDark),
+                    activeIcon: Icon(CupertinoIcons.home,
+                        size: 30, color: Colors.blueAccent),
+                    title: Text(
+                      'Home',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 12),
+                    ),
+                  ),
+                  BubbledNavigationBarItem(
+                    icon: Icon(CupertinoIcons.bell,
+                        size: 30, color: Theme.of(context).primaryColorDark),
+                    activeIcon: Icon(CupertinoIcons.bell,
+                        size: 30, color: Colors.blueAccent),
+                    title: Text(
+                      'Reminders',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 12),
+                    ),
+                  ),
+                  BubbledNavigationBarItem(
+                    icon: Icon(CupertinoIcons.profile_circled,
+                        size: 30, color: Theme.of(context).primaryColorDark),
+                    activeIcon: Icon(CupertinoIcons.profile_circled,
+                        size: 30, color: Colors.blueAccent),
+                    title: Text(
+                      'Profile',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 12),
+                    ),
+                  ),
+                ],
+              ));
   }
 }

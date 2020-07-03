@@ -35,6 +35,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   int _selectedDay;
   int _selectedMonth;
   dynamic _selectedTime;
+  List<WaterReminder> _availableReminders = [];
 
   ScheduleWaterReminderViewModel() {
     this._selectedMl = null;
@@ -56,6 +57,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   setSelectedMonth(int selectedMonth) => _selectedMonth = selectedMonth;
 
   List<int> get mls => _mls;
+  List<WaterReminder> get availableReminders => _availableReminders;
 
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
@@ -110,8 +112,9 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     var selectedDateTime = "${_today.year}-$monthValue-$dayValue $selectedTime";
 
     WaterReminder newReminder = WaterReminder(
-        ml: selectedMl, dateTime: DateTime.parse(selectedDateTime));
-
+        id: DateTime.now().toString(),
+        ml: _selectedMl,
+        dateTime: DateTime.parse(selectedDateTime));
     return newReminder;
   }
 
@@ -127,6 +130,11 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   void updateSelectedMl(ml) {
     _selectedMl = ml;
+    notifyListeners();
+  }
+
+  void updateAvailableReminders(waterReminders) {
+    _availableReminders = waterReminders;
     notifyListeners();
   }
 

@@ -19,7 +19,7 @@ class DietNotificationManager {
   void initNotifications() {
     // initialise the plugin.
     var initializationSettingsAndroid =
-    new AndroidInitializationSettings('@mipmap/ic_launcher');
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(
@@ -64,5 +64,10 @@ class DietNotificationManager {
       MaterialPageRoute(
           builder: (context) => DietScheduleScreen(payload: payload)),
     );
+  }
+
+  void removeReminder(int notificationId) {
+    flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notfication with id: $notificationId been removed successfully');
   }
 }
