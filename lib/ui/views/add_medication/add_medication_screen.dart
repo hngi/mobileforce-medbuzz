@@ -20,12 +20,12 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     var medModel = Provider.of<MedicationData>(context);
 
     //Fetch current List from Model
-    List<MedicationReminder> allData = medModel.medicationReminder;
+    //List<MedicationReminder> allData = medModel.medicationReminder;
 
     //Select MedicationReminder from List based on id
-    int id = 0;
-    MedicationReminder data = MedicationReminder(
-        drugName: "Ampicilin", frequency: "once", id: 3, dosage: 3);
+    // int id = 0;
+    // MedicationReminder data = MedicationReminder(
+    //     drugName: "Ampicilin", frequency: "once", id: 3, dosage: 3);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +61,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: Config.yMargin(context, 1.5)),
-                  drugTextField(data),
+                  drugTextField(),
                 ],
               ),
             ),
@@ -88,7 +88,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: medModel.drugTypes.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return buildImageContainer(index, data);
+                  return buildImageContainer(index);
                 },
               ),
             ),
@@ -114,7 +114,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
                         decoration: InputDecoration(
-                          hintText: '${data.frequency}',
+                          hintText: '${medModel.frequency}',
                           hintStyle: TextStyle(
                             color: Colors.black38,
                             fontSize: Config.xMargin(context, 5),
@@ -211,7 +211,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         ),
                       ),
                       Text(
-                        '${data.dosage}',
+                        '${medModel.dosage}',
                         style: TextStyle(
                             fontSize: Config.textSize(context, 5),
                             fontWeight: FontWeight.bold),
@@ -281,20 +281,37 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                                 endAt: medModel.endDate));
                       }
                     },
-                    child: Container(
-                      height: Config.yMargin(context, 10.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(Config.xMargin(context, 3.5))),
-                          color: Theme.of(context).primaryColor),
-                      child: Center(
-                        child: Text(
-                          'Save',
-                          style: TextStyle(
-                            fontSize: Config.textSize(context, 4.5),
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                    child: InkWell(
+                      onTap: () async {
+                        //Code to insert new schedule
+                        MedicationReminder newReminder = MedicationReminder(
+                            drugName: medModel.drugName,
+                            frequency: medModel.selectedFreq,
+                            drugType: medModel.selectedIndex.toString(),
+                            dosage: medModel.dosage,
+                            firstTime: medModel.firstTime,
+                            secondTime: medModel.secondTime,
+                            thirdTime: medModel.thirdTime,
+                            startAt: medModel.startDate,
+                            endAt: medModel.endDate);
+
+                        await medModel.editSchedule(newReminder);
+                      },
+                      child: Container(
+                        height: Config.yMargin(context, 10.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 3.5))),
+                            color: Theme.of(context).primaryColor),
+                        child: Center(
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                              fontSize: Config.textSize(context, 4.5),
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
                           ),
                         ),
                       ),
@@ -335,9 +352,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget drugTextField(MedicationReminder data) {
+  Widget drugTextField() {
     var medModel = Provider.of<MedicationData>(context);
-    textEditingController.text = medModel.isEditing ? data.drugName : null;
+    textEditingController.text = medModel.isEditing ? medModel.drugName : null;
     return TextFormField(
       //Set initial value is in edit mode
 
@@ -371,9 +388,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget buildImageContainer(int index, MedicationReminder data) {
+  Widget buildImageContainer(int index) {
     var medModel = Provider.of<MedicationData>(context);
-    medModel.isEditing ? medModel.onSelectedDrugImage(data.id) : null;
+    medModel.isEditing
+        ? medModel.onSelectedDrugImage(medModel.selectedIndex)
+        : null;
     return GestureDetector(
       onTap: () => medModel.onSelectedDrugImage(index),
       child: Container(
@@ -416,7 +435,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               onTap: () async {
                 final TimeOfDay selectedTime = await showTimePicker(
                   context: context,
-                  initialTime: TimeOfDay.now(),
+                  initialTime: medModel.firstTime,
                 );
                 if (selectedTime != null) {
                   medModel.updateFirstTime(selectedTime);

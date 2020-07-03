@@ -212,7 +212,8 @@ class MedicationData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> editSchedule({MedicationReminder medication}) async {
+  Future<void> editSchedule(MedicationReminder newReminder,
+      {MedicationReminder medication}) async {
     String medicationKey = medication.index;
     var medicationReminderBox = Hive.box<MedicationReminder>(_boxName);
     await medicationReminderBox.put(medicationKey, medication);

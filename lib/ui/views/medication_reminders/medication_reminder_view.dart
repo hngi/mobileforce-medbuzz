@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 class MedicationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var medModeller = Provider.of<MedicationData>(context);
-    final medicationInfo = medModeller.getMedicationReminder();
     //Set Widget to use Provider
     return Consumer<MedicationData>(
       builder: (context, medModel, child) {
