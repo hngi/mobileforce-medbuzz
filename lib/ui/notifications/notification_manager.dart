@@ -41,4 +41,12 @@ class NotificationManager {
       debugPrint('notification payload: ' + payload);
     }
   }
+
+  void removeNotification(int notificationId){
+    flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notfication with id: $notificationId been removed successfully');
+  }
+  // to implement delete notification, just use the code above with a unique id
+  //to implement update, first delete the notification with the unique id, then
+  //create again using the showNotificationMethod
 }

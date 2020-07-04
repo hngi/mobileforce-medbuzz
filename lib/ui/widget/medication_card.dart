@@ -98,7 +98,7 @@ class _MedicationCardState extends State<MedicationCard> {
                           FlatButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.drugDescription);
+                                  context, RouteNames.medicationView);
                             },
                             child: Text(
                               'View',
