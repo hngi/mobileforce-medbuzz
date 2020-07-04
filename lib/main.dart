@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_generator.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
@@ -32,10 +33,10 @@ class MyApp extends StatelessWidget {
         title: 'MedBuzz',
         theme: appThemeLight,
         initialRoute: RouteNames.splashScreen,
-
-        //Crazelu moved the routes to RouteNames class to clean things up here
-        //head over there if you need to add your named routes
-        routes: RouteNames.routes,
+        //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
+        //in the RouteGenerator class
+        //This update handles page transitions
+        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

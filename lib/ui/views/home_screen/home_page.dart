@@ -491,7 +491,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: (index) {
                   model.updateCurrentIndex(index);
                   _pageController.animateToPage(index,
-                      duration: Duration(milliseconds: 300),
+                      duration: Duration(milliseconds: 150),
                       curve: Curves.easeInOutQuad);
                 },
                 items: <BubbledNavigationBarItem>[

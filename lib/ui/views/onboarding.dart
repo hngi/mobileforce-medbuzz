@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
@@ -28,24 +29,22 @@ class _OnboardState extends State<Onboard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(Config.yMargin(context, 1));
-    print(Config.xMargin(context, 1));
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: appThemeLight.primaryColorLight,
+        backgroundColor: Theme.of(context).primaryColorLight,
         actions: <Widget>[
           Container(
             padding: const EdgeInsetsDirectional.only(top: 30),
             child: FlatButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'signup');
+                Navigator.pushReplacementNamed(context, RouteNames.signup);
               }, //navigate to the sign up page
               child: Text(
                 "Skip",
                 style: TextStyle(
-                    color: appThemeLight.primaryColorDark,
-                    fontSize: Config.textSize(context, 3.7),
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: Config.textSize(context, 4.5),
                     fontWeight: FontWeight.normal),
               ),
               color: Colors.transparent,
@@ -122,8 +121,9 @@ class _OnboardState extends State<Onboard> {
                       height: Config.yMargin(context, 6),
                       width: Config.xMargin(context, 27),
                       decoration: BoxDecoration(
-                          color: appThemeLight.primaryColor,
-                          border: Border.all(color: appThemeLight.primaryColor),
+                          color: Theme.of(context).primaryColor,
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
                           borderRadius: BorderRadius.circular(10)),
                       child: FlatButton(
                         onPressed: () {
@@ -132,7 +132,7 @@ class _OnboardState extends State<Onboard> {
                         child: Text(
                           "Sign Up",
                           style: TextStyle(
-                              color: appThemeLight.primaryColorLight,
+                              color: Theme.of(context).primaryColorLight,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -144,17 +144,19 @@ class _OnboardState extends State<Onboard> {
                       height: Config.yMargin(context, 6),
                       width: Config.xMargin(context, 27),
                       decoration: BoxDecoration(
-                          color: appThemeLight.primaryColorLight,
-                          border: Border.all(color: appThemeLight.primaryColor),
+                          color: Theme.of(context).primaryColorLight,
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
                           borderRadius: BorderRadius.circular(10)),
                       child: FlatButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.pushReplacementNamed(
+                              context, RouteNames.login);
                         },
                         child: Text(
                           "Login",
                           style: TextStyle(
-                              color: appThemeLight.primaryColor,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -178,7 +180,6 @@ class _OnboardState extends State<Onboard> {
 
 // class to display the screens
 class FirstScreen extends StatelessWidget {
-  final Config config = Config();
   final image;
   final description;
 
@@ -189,7 +190,7 @@ class FirstScreen extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: appThemeLight.primaryColorLight,
+      backgroundColor: Theme.of(context).primaryColorLight,
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: Config.xMargin(context, 6),
@@ -200,13 +201,13 @@ class FirstScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: height * .45,
+                height: height * .4,
                 width: width,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(image), fit: BoxFit.contain)),
               ),
-              SizedBox(height: Config.yMargin(context, 3.4)),
+              SizedBox(height: Config.yMargin(context, 3)),
               Container(
                 child: ForwardAnimation(
                   milliseconds: 500,
@@ -214,7 +215,7 @@ class FirstScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 3.7),
+                          fontSize: Config.textSize(context, 6.5),
                           fontWeight: FontWeight.bold)),
                 ),
               ),

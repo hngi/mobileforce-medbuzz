@@ -11,10 +11,15 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 ///but that one no be today
 class ScrollableCalendar extends StatelessWidget {
   final bool hideDivider;
+  final bool useButtonColor;
   final model;
   final ItemScrollController _scrollController = ItemScrollController();
 
-  ScrollableCalendar({Key key, @required this.model, this.hideDivider = false})
+  ScrollableCalendar(
+      {Key key,
+      @required this.model,
+      this.hideDivider = false,
+      this.useButtonColor = false})
       : super(key: key);
 
   @override
@@ -65,7 +70,9 @@ class ScrollableCalendar extends StatelessWidget {
                   child: Container(
                     width: width * 0.2,
                     decoration: BoxDecoration(
-                      //color: model.getButtonColor(context, index),
+                      color: useButtonColor
+                          ? model.getButtonColor(context, index)
+                          : Theme.of(context).primaryColorLight,
                       borderRadius: BorderRadius.circular(height * 0.04),
                     ),
                     alignment: Alignment.center,
@@ -73,7 +80,6 @@ class ScrollableCalendar extends StatelessWidget {
                     // padding: EdgeInsets.symmetric(
                     //     horizontal: Config.xMargin(context, 4.5)),
                     child: Stack(fit: StackFit.expand, children: [
-                      //Divider that will show which date is tapped
                       Positioned(
                         top: height * .5,
                         child: Divider(
@@ -101,7 +107,8 @@ class ScrollableCalendar extends StatelessWidget {
                                   fontSize: Config.textSize(context, 4.2),
                                   //fontWeight: FontWeight.w500
                                 )),
-                            index + 1 == model.selectedDay
+                            //Divider that will show which date is tapped
+                            !useButtonColor && index + 1 == model.selectedDay
                                 ? Divider(
                                     endIndent: Config.xMargin(context, 11),
                                     color: Theme.of(context).primaryColor,

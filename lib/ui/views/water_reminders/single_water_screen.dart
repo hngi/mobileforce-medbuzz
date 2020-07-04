@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
-import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 
 class SingleWater extends StatefulWidget {
   SingleWater({this.water});
@@ -49,112 +48,105 @@ class _SingleWaterState extends State<SingleWater> {
                 child: FlatButton.icon(
                     onPressed: () {
                       showDialog(
-
-                          context: context,
+                        context: context,
                         child: DeleteDialog(),
                       );
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              child: Container(
-                                height: Config.yMargin(context, 30),
-                                width: Config.xMargin(context, 150.0),
-                                //width: Config.xMargin(context, 50),
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                      Config.xMargin(context, 3.0)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                      builder:
+                      (BuildContext context) {
+                        return Dialog(
+                          child: Container(
+                            height: Config.yMargin(context, 30),
+                            width: Config.xMargin(context, 150.0),
+                            //width: Config.xMargin(context, 50),
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.all(Config.xMargin(context, 3.0)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: Config.yMargin(context, 2),
+                                        bottom: Config.yMargin(context, 1)),
+                                    child: Text(
+                                      'Are you sure you want to delete this?',
+                                      style: TextStyle(
+                                        fontSize: Config.textSize(context, 4.5),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Config.yMargin(context, 2),
-                                            bottom: Config.yMargin(context, 1)),
-                                        child: Text(
-                                          'Are you sure you want to delete this?',
-                                          style: TextStyle(
-                                            fontSize:
-                                                Config.textSize(context, 4.5),
+                                      Container(
+                                        height: Config.yMargin(context, 6.0),
+                                        width: Config.xMargin(context, 30.0),
+                                        child: RaisedButton(
+                                          onPressed: () async {
+                                            showSnackBar(context);
+                                            Future.delayed(
+                                                    Duration(milliseconds: 500))
+                                                .then((value) {
+                                              //  waterNotificationManager.removeReminder();
+
+                                              db.deleteWaterReminder(
+                                                  widget.water.id);
+                                            });
+                                            //Navigate to the Water reminder screen and delete from db
+
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Text(
+                                            "Yes",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  Config.textSize(context, 5),
+                                            ),
                                           ),
+                                          color: Color(0xFF219653),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Config.xMargin(
+                                                          context, 2.0))),
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Container(
-                                            height:
-                                                Config.yMargin(context, 6.0),
-                                            width:
-                                                Config.xMargin(context, 30.0),
-                                            child: RaisedButton(
-                                              onPressed: () async {
-                                                showSnackBar(context);
-                                                Future.delayed(Duration(
-                                                        milliseconds: 500))
-                                                    .then((value) {
-                                                  //  waterNotificationManager.removeReminder();
-
-                                                  db.deleteWaterReminder(
-                                                      widget.water.id);
-                                                });
-                                                //Navigate to the Water reminder screen and delete from db
-
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: Text(
-                                                "Yes",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: Config.textSize(
-                                                      context, 5),
-                                                ),
-                                              ),
-                                              color: Color(0xFF219653),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          Config.xMargin(
-                                                              context, 2.0))),
+                                      Container(
+                                        height: Config.yMargin(context, 6.0),
+                                        width: Config.xMargin(context, 30.0),
+                                        child: RaisedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            "No",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  Config.textSize(context, 5),
                                             ),
                                           ),
-                                          Container(
-                                            height:
-                                                Config.yMargin(context, 6.0),
-                                            width:
-                                                Config.xMargin(context, 30.0),
-                                            child: RaisedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "No",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: Config.textSize(
-                                                      context, 5),
-                                                ),
-                                              ),
-                                              color: Color(0xFFEB5757),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          Config.xMargin(
-                                                              context, 2.0))),
-                                            ),
-                                          ),
-                                        ],
-                                      )
+                                          color: Color(0xFFEB5757),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Config.xMargin(
+                                                          context, 2.0))),
+                                        ),
+                                      ),
                                     ],
-                                  ),
-                                ),
+                                  )
+                                ],
                               ),
-                            );
-                          };
-
+                            ),
+                          ),
+                        );
+                      };
                     },
                     icon: Icon(
                       Icons.delete,

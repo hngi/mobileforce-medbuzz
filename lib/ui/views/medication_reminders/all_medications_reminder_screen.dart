@@ -56,10 +56,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 splashColor: Theme.of(context).buttonColor.withOpacity(.9),
                 //Navigate to fitness reminder creation screen
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMedicationScreen()));
+                  Navigator.pushNamed(context, RouteNames.addMedicationScreen);
                 }),
           ),
         ),
@@ -80,71 +77,77 @@ class _MedicationScreenState extends State<MedicationScreen> {
 
             //Function to navigate to previous screen or home screen (as the case maybe) goes here
             onPressed: () {
-              Navigator.pushNamed(context, 'homePage');
+              Navigator.pushReplacementNamed(context, RouteNames.homePage);
             }),
       ),
-      body: SingleChildScrollView(
-        controller: controller,
-        physics: BouncingScrollPhysics(),
-        child: Container(
-            margin: EdgeInsets.fromLTRB(Config.xMargin(context, 3),
-                Config.yMargin(context, 2), Config.xMargin(context, 3), 0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: height * .27,
-                  width: width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //ListView to display all dates with entries in the DB
-                      Container(
-                        height: height * .2,
-                        //To be replaced with a ListView.builder for CustomDateButtons with date range from DB
-                        child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            //Some example (pronounced igzampl, yunno?)
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 1))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 2))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 3))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 4))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 5))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 6))),
-                            CustomDateButton(date: DateTime.now()),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 10))),
-                          ],
+      body: WillPopScope(
+        onWillPop: () {
+          Navigator.pushReplacementNamed(context, RouteNames.homePage);
+          return Future.value(false);
+        },
+        child: SingleChildScrollView(
+          controller: controller,
+          physics: BouncingScrollPhysics(),
+          child: Container(
+              margin: EdgeInsets.fromLTRB(Config.xMargin(context, 3),
+                  Config.yMargin(context, 2), Config.xMargin(context, 3), 0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: height * .27,
+                    width: width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        //ListView to display all dates with entries in the DB
+                        Container(
+                          height: height * .2,
+                          //To be replaced with a ListView.builder for CustomDateButtons with date range from DB
+                          child: ListView(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            children: <Widget>[
+                              //Some example (pronounced igzampl, yunno?)
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 1))),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 2))),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 3))),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 4))),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 5))),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 6))),
+                              CustomDateButton(date: DateTime.now()),
+                              CustomDateButton(
+                                  date: DateTime.now().add(Duration(days: 10))),
+                            ],
+                          ),
                         ),
-                      ),
-                      //Text widget to display current date in MONTH Year format
-                      Text(
-                        'JUN 2020',
-                        style: TextStyle(
-                            letterSpacing: 2,
-                            fontSize: Config.textSize(context, 4)),
-                      ),
-                    ],
+                        //Text widget to display current date in MONTH Year format
+                        Text(
+                          'JUN 2020',
+                          style: TextStyle(
+                              letterSpacing: 2,
+                              fontSize: Config.textSize(context, 4)),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(height: Config.yMargin(context, 5)),
-                //Here the already saved reminders will be loaded dynamically
+                  SizedBox(height: Config.yMargin(context, 5)),
+                  //Here the already saved reminders will be loaded dynamically
 
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
-              ],
-            )),
+                  FitnessCard(),
+                  FitnessCard(),
+                  FitnessCard(),
+                  FitnessCard(),
+                ],
+              )),
+        ),
       ),
     );
   }
