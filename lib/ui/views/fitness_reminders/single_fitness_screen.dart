@@ -1,7 +1,6 @@
-import 'package:MedBuzz/ui/views/fitness_reminders/delete_successful.dart';
+import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SingleFitnessScreen extends StatefulWidget {
   @override
@@ -15,9 +14,10 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: color = Color(0xffFAFAFA),
+        backgroundColor: Theme.of(context).backgroundColor,
         leading: IconButton(
             icon: Icon(Icons.keyboard_backspace,
                 color: Theme.of(context).primaryColorDark),
@@ -48,7 +48,8 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               Text(
                 'Running',
                 style: TextStyle(
-                  fontSize: 24.0,
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: Config.textSize(context, 5.3),
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Segoe',
                 ),
@@ -68,94 +69,10 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   ),
                 ),
                 onPressed: () {
-                  //pops up the delete function
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          child: Container(
-                            height: Config.yMargin(context, 15),
-                            width: Config.xMargin(context, 150.0),
-                            //width: Config.xMargin(context, 50),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 23.0, bottom: 17.0),
-                                    child: Text(
-                                      'Are you sure you want to delete this?',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DeleteSuccess()),
-                                            );
-                                          },
-                                          child: Text(
-                                            "Yes",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                          color: Color(0xFF219653),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            "No",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                          color: Color(0xFFEB5757),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      });
+                    context: context,
+                    child: DeleteDialog(),
+                  );
                 },
               ),
             ],
@@ -172,7 +89,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
+                  fontSize: Config.textSize(context, 4.5),
                 ),
               ),
               SizedBox(height: Config.yMargin(context, 2.0)),
@@ -182,7 +99,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.normal,
-                  fontSize: 16.0,
+                  fontSize: Config.textSize(context, 4),
                 ),
               ),
               SizedBox(height: Config.yMargin(context, 7.0)),
@@ -192,7 +109,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
+                  fontSize: Config.textSize(context, 4.5),
                 ),
               ),
               SizedBox(height: Config.yMargin(context, 2.0)),
@@ -205,7 +122,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                       fontFamily: 'Segoe',
                       color: Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.normal,
-                      fontSize: 16.0,
+                      fontSize: Config.textSize(context, 4),
                     ),
                   ),
                   Text(
@@ -214,7 +131,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                       fontFamily: 'Segoe',
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.normal,
-                      fontSize: 16.0,
+                      fontSize: Config.textSize(context, 3.6),
                     ),
                   ),
                 ],
@@ -226,7 +143,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
+                  fontSize: Config.textSize(context, 4.5),
                 ),
               ),
               SizedBox(height: Config.yMargin(context, 2.0)),
@@ -236,7 +153,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.normal,
-                  fontSize: 16.0,
+                  fontSize: Config.textSize(context, 4),
                 ),
               ),
               SizedBox(height: Config.yMargin(context, 6.0)),
@@ -263,8 +180,8 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               ),
               color: Theme.of(context).primaryColor,
               shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Config.xMargin(context, 4.0))),
+                borderRadius: BorderRadius.circular(Config.xMargin(context, 4)),
+              ),
             ),
           )),
         ),

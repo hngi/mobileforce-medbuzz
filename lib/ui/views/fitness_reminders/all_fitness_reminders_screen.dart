@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_model.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,9 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                 color: Theme.of(context).primaryColorDark),
 
             //Function to navigate to previous screen or home screen (as the case maybe) goes here
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.pushNamed(context, RouteNames.homePage);
+            }),
       ),
       body: SingleChildScrollView(
         controller: controller,

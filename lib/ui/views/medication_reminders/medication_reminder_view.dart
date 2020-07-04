@@ -1,6 +1,7 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,109 +31,14 @@ class MedicationView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(right: Config.yMargin(context, 1)),
+                    padding:
+                        EdgeInsets.only(right: Config.yMargin(context, 2.6)),
                     child: FlatButton.icon(
                         onPressed: () {
                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                  child: Container(
-                                    height: Config.yMargin(context, 30),
-                                    width: Config.xMargin(context, 150.0),
-                                    //width: Config.xMargin(context, 50),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          Config.xMargin(context, 3.0)),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left:
-                                                    Config.yMargin(context, 2),
-                                                bottom:
-                                                    Config.yMargin(context, 1)),
-                                            child: Text(
-                                              'Are you sure you want to delete this?',
-                                              style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 4.5),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Container(
-                                                height: Config.yMargin(
-                                                    context, 6.0),
-                                                width: Config.xMargin(
-                                                    context, 30.0),
-                                                child: RaisedButton(
-                                                  onPressed: () {
-                                                    //Navigate to the Water reminder screen and delete from db
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text(
-                                                    "Yes",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: Config.textSize(
-                                                          context, 5),
-                                                    ),
-                                                  ),
-                                                  color: Color(0xFF219653),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              Config.xMargin(
-                                                                  context,
-                                                                  2.0))),
-                                                ),
-                                              ),
-                                              Container(
-                                                height: Config.yMargin(
-                                                    context, 6.0),
-                                                width: Config.xMargin(
-                                                    context, 30.0),
-                                                child: RaisedButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text(
-                                                    "No",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: Config.textSize(
-                                                          context, 5),
-                                                    ),
-                                                  ),
-                                                  color: Color(0xFFEB5757),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              Config.xMargin(
-                                                                  context,
-                                                                  2.0))),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
+                            context: context,
+                            child: DeleteDialog(),
+                          );
                         },
                         icon: Icon(
                           Icons.delete,
@@ -227,7 +133,7 @@ class MedicationView extends StatelessWidget {
                                       '8:00AM',
                                       style: TextStyle(
                                         color: Theme.of(context).primaryColor,
-                                        fontSize: Config.textSize(context, 4),
+                                        fontSize: Config.textSize(context, 3.6),
                                       ),
                                     ),
                                   ],
@@ -246,7 +152,7 @@ class MedicationView extends StatelessWidget {
                                       '8:00AM',
                                       style: TextStyle(
                                         color: Theme.of(context).primaryColor,
-                                        fontSize: Config.textSize(context, 4),
+                                        fontSize: Config.textSize(context, 3.6),
                                       ),
                                     )
                                   ],
@@ -303,7 +209,7 @@ class MedicationView extends StatelessWidget {
                           style: TextStyle(
                             color: Theme.of(context).primaryColorLight,
                             fontWeight: FontWeight.bold,
-                            fontSize: Config.textSize(context, 3.9),
+                            fontSize: Config.textSize(context, 4),
                           ),
                         ),
                       ),

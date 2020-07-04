@@ -20,8 +20,8 @@ class WaterScheduleViewScreen extends StatelessWidget {
             bottom: Config.yMargin(context, 2),
             right: Config.xMargin(context, 4)),
         child: SizedBox(
-          height: 90,
-          width: 90,
+          height: 70,
+          width: 70,
           child: FloatingActionButton(
             elevation: 0,
             onPressed: () {
@@ -33,7 +33,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(
               Icons.add,
-              size: 47,
+              size: 35,
             ),
           ),
         ),

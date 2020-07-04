@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -111,7 +112,10 @@ class _WaterCardState extends State<WaterCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             FlatButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, RouteNames.singleWater);
+                              },
                               child: Text(
                                 'View',
                                 style: TextStyle(

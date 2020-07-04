@@ -200,9 +200,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           height: Config.yMargin(context, 4.5),
                           width: Config.xMargin(context, 8.3),
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Config.xMargin(context, 4)))),
+                            shape: BoxShape.circle,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           child: Center(
                             child: Icon(
                               Icons.remove,
@@ -293,7 +293,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         }
                       },
                       child: Container(
-                        height: Config.yMargin(context, 10.0),
+                        height: Config.yMargin(context, 8.0),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -383,15 +383,15 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     return GestureDetector(
       onTap: () => medModel.onSelectedDrugImage(index),
       child: Container(
+        padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
         margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
         height: Config.yMargin(context, 10),
         width: Config.xMargin(context, 18),
         decoration: BoxDecoration(
+          shape: BoxShape.circle,
           color: medModel.selectedIndex == index
               ? Theme.of(context).primaryColor
               : Color(0xffFCEDB8),
-          borderRadius:
-              BorderRadius.all(Radius.circular(Config.xMargin(context, 10))),
         ),
         child: Image(
           image: AssetImage(medModel.images[index]),
@@ -432,7 +432,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -483,7 +483,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -526,7 +526,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -578,7 +578,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -621,7 +621,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -664,7 +664,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -717,7 +717,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
@@ -770,7 +770,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 }
               },
               child: Container(
-                height: Config.yMargin(context, 10.0),
+                height: Config.yMargin(context, 8.0),
                 width: Config.xMargin(context, 26.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(

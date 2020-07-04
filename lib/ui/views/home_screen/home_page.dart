@@ -2,7 +2,6 @@ import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
-import 'package:MedBuzz/ui/views/fitness_reminders/add_fitness_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
@@ -194,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               GestureDetector(
                                 onTap: () => Navigator.pushNamed(
-                                    context, RouteNames.singleDietScreen),
+                                    context, RouteNames.dietScheduleScreen),
                                 child: ProgressCard(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -317,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text(
                                   'See all',
                                   style: TextStyle(
-                                    fontSize: Config.textSize(context, 3.3),
+                                    fontSize: Config.textSize(context, 3.5),
                                     fontWeight: FontWeight.w600,
                                     color: Theme.of(context).primaryColor,
                                   ),
@@ -340,12 +339,12 @@ class _HomePageState extends State<HomePage> {
                               FlatButton(
                                 onPressed: () {
                                   Navigator.popAndPushNamed(context,
-                                      RouteNames.viewAppointmentScreen);
+                                      RouteNames.scheduledAppointmentsPage);
                                 },
                                 child: Text(
                                   'See all',
                                   style: TextStyle(
-                                    fontSize: Config.textSize(context, 3.3),
+                                    fontSize: Config.textSize(context, 3.5),
                                     fontWeight: FontWeight.w600,
                                     color: Theme.of(context).primaryColor,
                                   ),
@@ -477,7 +476,7 @@ class _HomePageState extends State<HomePage> {
                 controller: _menuPositionController,
                 initialIndex: 0,
                 defaultBubbleColor: Theme.of(context).primaryColorLight,
-                backgroundColor: Theme.of(context).focusColor,
+                backgroundColor: Theme.of(context).primaryColor,
                 onTap: (index) {
                   model.updateCurrentIndex(index);
                   _pageController.animateToPage(index,
@@ -491,7 +490,7 @@ class _HomePageState extends State<HomePage> {
                         color: Theme.of(context).primaryColorDark),
                     activeIcon: Icon(CupertinoIcons.home,
                         size: Config.xMargin(context, 8.33),
-                        color: Colors.blueAccent),
+                        color: Theme.of(context).primaryColor),
                     title: Text(
                       'Home',
                       style: TextStyle(
@@ -506,7 +505,7 @@ class _HomePageState extends State<HomePage> {
                         color: Theme.of(context).primaryColorDark),
                     activeIcon: Icon(CupertinoIcons.bell,
                         size: Config.xMargin(context, 8.33),
-                        color: Colors.blueAccent),
+                        color: Theme.of(context).primaryColor),
                     title: Text(
                       'Reminders',
                       style: TextStyle(
@@ -521,7 +520,7 @@ class _HomePageState extends State<HomePage> {
                         color: Theme.of(context).primaryColorDark),
                     activeIcon: Icon(CupertinoIcons.profile_circled,
                         size: Config.xMargin(context, 8.33),
-                        color: Colors.blueAccent),
+                        color: Theme.of(context).primaryColor),
                     title: Text(
                       'Profile',
                       style: TextStyle(

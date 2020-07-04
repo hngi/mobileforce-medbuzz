@@ -94,7 +94,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 5)),
           child: Container(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).backgroundColor,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ScrollConfiguration(
@@ -112,10 +112,11 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                     Text(
                       'Name of fitness',
                       style: TextStyle(
-                          fontFamily: 'Segoe',
+                          color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
                           fontSize: Config.xMargin(context, 5)),
                     ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
                     Container(
                       width: double.infinity,
                       decoration: ShapeDecoration(
@@ -134,7 +135,10 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.xMargin(context, 5.5)),
                         decoration: InputDecoration(
-                          hintText: 'Running',
+                          contentPadding: EdgeInsets.only(
+                            left: Config.yMargin(context, 1.0),
+                          ),
+                          hintText: 'Input name',
                           hintStyle: TextStyle(
                               fontSize: Config.xMargin(context, 5),
                               color: Theme.of(context).hintColor),
@@ -148,7 +152,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                     SizedBox(height: Config.yMargin(context, 5)),
                     Container(
                       height: Config.yMargin(context, 12),
-                      color: Colors.white,
+                      color: Theme.of(context).backgroundColor,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: activityType.length,
@@ -191,9 +195,8 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                         Text(
                           'Reminder Frequency',
                           style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Segoe-Bold',
-                              //  fontWeight: FontWeight.w600,
+                              color: Theme.of(context).primaryColorDark,
+                              fontWeight: FontWeight.bold,
                               fontSize: Config.xMargin(context, 5.5)),
                         ),
                         SizedBox(height: Config.xMargin(context, 4.5)),
@@ -204,29 +207,30 @@ class __fitnesssDescriptionState extends State<add_fitness> {
 //                        children: <Widget>[
                         //  Expanded(
                         Container(
-                            width: double.infinity,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 1.0, style: BorderStyle.solid),
-                                borderRadius:
-                                    BorderRadius.all((Radius.circular(5.0))),
-                              ),
+                          width: double.infinity,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1.0, style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(6.0))),
                             ),
-                            child: Center(
-                              child: DropdownButton<String>(
-                                  underline: Text(''),
-                                  items: fitnessTime.map((String time) {
-                                    return DropdownMenuItem<String>(
-                                        value: time, child: Text(time));
-                                  }).toList(),
-                                  value: _selectedFreq,
-                                  onChanged: (newFreq) {
-                                    setState(() {
-                                      _selectedFreq = newFreq;
-                                    });
-                                  }),
-                            )),
+                          ),
+                          child: Center(
+                            child: DropdownButton<String>(
+                                underline: Text(''),
+                                items: fitnessTime.map((String time) {
+                                  return DropdownMenuItem<String>(
+                                      value: time, child: Text(time));
+                                }).toList(),
+                                value: _selectedFreq,
+                                onChanged: (newFreq) {
+                                  setState(() {
+                                    _selectedFreq = newFreq;
+                                  });
+                                }),
+                          ),
+                        ),
 
                         // ),
 
@@ -239,8 +243,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                     Text(
                       'Set time For Fitness Activity',
                       style: TextStyle(
-                          fontFamily: 'Segoe-Bold',
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
                           fontSize: Config.xMargin(context, 5.0)),
                     ),
@@ -258,7 +261,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                               SizedBox(width: Config.xMargin(context, 1.5)),
                               InkWell(
                                 focusColor: Theme.of(context).primaryColorLight,
-                                splashColor: Colors.blue,
+                                splashColor: Theme.of(context).primaryColor,
                                 child: Text(
                                   localizations.formatTimeOfDay(activityTime),
                                   style: TextStyle(
@@ -272,11 +275,12 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   Config.xMargin(context, 4.0))),
-                          color: Colors.blue,
+                          color: Theme.of(context).primaryColor,
                           child: Text(
                             'Edit',
                             style: TextStyle(
-                              fontFamily: 'Segoe',
+                              fontWeight: FontWeight.bold,
+                              fontSize: Config.textSize(context, 4),
                               color: Theme.of(context).backgroundColor,
                             ),
                           ),
@@ -291,17 +295,28 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IconButton(
-                            color: Colors.blue,
-                            icon: Icon(Icons.add_circle),
+                            color: Theme.of(context).primaryColor,
+                            icon: Icon(
+                              Icons.add_circle,
+                              size: 30,
+                            ),
                             onPressed: () {
                               setState(() {
                                 minDaily++;
                               });
                             }),
-                        Text('$minDaily'),
+                        Text(
+                          '$minDaily',
+                          style: TextStyle(
+                            fontSize: Config.textSize(context, 4),
+                          ),
+                        ),
                         IconButton(
-                            color: Colors.blue,
-                            icon: Icon(Icons.remove_circle),
+                            color: Theme.of(context).primaryColor,
+                            icon: Icon(
+                              Icons.remove_circle,
+                              size: 30,
+                            ),
                             onPressed: () {
                               setState(() {
                                 minDaily--;
@@ -313,8 +328,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                     Text(
                       'Duration',
                       style: TextStyle(
-                          fontFamily: 'Segoe-Bold',
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
                           fontSize: Config.xMargin(context, 5.0)),
                     ),
@@ -326,18 +340,20 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                             Text(
                               'Start - ${localizations.formatShortDate(startDate)}',
                               style: TextStyle(
-                                  fontSize: Config.xMargin(context, 5)),
+                                fontSize: Config.xMargin(context, 4),
+                              ),
                             ),
                             SizedBox(width: Config.xMargin(context, 3)),
                             FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       Config.xMargin(context, 4.0))),
-                              color: Colors.blue,
+                              color: Theme.of(context).primaryColor,
                               child: Text(
                                 'Edit',
                                 style: TextStyle(
-                                  fontFamily: 'Segoe',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Config.textSize(context, 4),
                                   color: Theme.of(context).backgroundColor,
                                 ),
                               ),
@@ -353,18 +369,19 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                             Text(
                               'End  -  ${localizations.formatShortDate(endDate)}',
                               style: TextStyle(
-                                  fontFamily: 'Segoe',
-                                  fontSize: Config.xMargin(context, 5)),
+                                  fontSize: Config.xMargin(context, 4)),
                             ),
                             SizedBox(width: Config.xMargin(context, 3)),
                             FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       Config.xMargin(context, 4.0))),
-                              color: Colors.blue,
+                              color: Theme.of(context).primaryColor,
                               child: Text(
                                 'Edit',
                                 style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Config.textSize(context, 4),
                                   color: Theme.of(context).backgroundColor,
                                 ),
                               ),
@@ -407,11 +424,12 @@ class __fitnesssDescriptionState extends State<add_fitness> {
                         child: Text(
                           'Save',
                           style: TextStyle(
-                            fontFamily: 'Segoe',
+                            fontWeight: FontWeight.bold,
+                            fontSize: Config.textSize(context, 4),
                             color: Theme.of(context).backgroundColor,
                           ),
                         ),
-                        color: Colors.blue,
+                        color: Theme.of(context).primaryColor,
 
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
