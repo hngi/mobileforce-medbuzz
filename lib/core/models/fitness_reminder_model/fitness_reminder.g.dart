@@ -28,7 +28,7 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
   @override
   void write(BinaryWriter writer, FitnessReminder obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)

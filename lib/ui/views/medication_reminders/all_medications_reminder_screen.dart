@@ -1,9 +1,8 @@
+import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'all_medications_reminder_model.dart';
 
 class MedicationScreen extends StatefulWidget {
   @override
@@ -18,10 +17,16 @@ class _MedicationScreenState extends State<MedicationScreen> {
     //This makes the FAB disappear as you scroll down
     controller.addListener(() {
       if (controller.offset < 120) {
-        Provider.of<MedicationsSchedulesModel>(context).updateVisibility(true);
+        Provider.of<MedicationData>(context).updateVisibility(true);
       } else {
-        Provider.of<MedicationsSchedulesModel>(context).updateVisibility(false);
+        Provider.of<MedicationData>(context).updateVisibility(false);
       }
+    });
+//    Future.delayed(Duration.zero, () {
+//      Provider.of<MedicationData>(context).getMedicationReminder();
+//    });
+    Future.delayed(Duration.zero, () {
+      print(Provider.of<MedicationData>(context).medicationReminder);
     });
   }
 
@@ -32,7 +37,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   var _height = 80;
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context);
+    var model = Provider.of<MedicationData>(context);
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -78,7 +83,9 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 color: Theme.of(context).primaryColorDark),
 
             //Function to navigate to previous screen or home screen (as the case maybe) goes here
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: SingleChildScrollView(
         controller: controller,
@@ -136,10 +143,40 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 SizedBox(height: Config.yMargin(context, 5)),
                 //Here the already saved reminders will be loaded dynamically
 
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
+                Container(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return MedicationCard(
+                        drugName: model.medicationReminder[index].drugName,
+                        drugType: model.medicationReminder[index].drugType ==
+                                'Injection'
+                            ? "images/injection.png"
+                            : model.medicationReminder[index].drugType ==
+                                    'Drops'
+                                ? "images/drops.png"
+                                : model.medicationReminder[index].drugType ==
+                                        'Pills'
+                                    ? "images/pills.png"
+                                    : model.medicationReminder[index]
+                                                .drugType ==
+                                            'Ointment'
+                                        ? "images/ointment.png"
+                                        : model.medicationReminder[index]
+                                                    .drugType ==
+                                                'Syrup'
+                                            ? "images/syrup.png"
+                                            : "images/inhaler.png",
+                        time: model.medicationReminder[index].firstTime
+                            .toString(),
+                        dosage: model.medicationReminder[index].dosage,
+                        selectedFreq: model.medicationReminder[index].frequency,
+                      );
+                    },
+                    itemCount: model.medicationReminder.length,
+                  ),
+                )
               ],
             )),
       ),
@@ -153,7 +190,7 @@ class CustomDateButton extends StatelessWidget {
   CustomDateButton({this.date});
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context, listen: false);
+    var model = Provider.of<MedicationData>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
       width: Config.xMargin(context, 15.5),
@@ -199,33 +236,24 @@ class CustomDateButton extends StatelessWidget {
     );
   }
 }
-//class MyExpand extends StatelessWidget {
-//  var _color = Colors.grey;
-//  var _height = 80.0;
-//  @override
-//  Widget build(BuildContext context) {
-//    var model = Provider.of<MedicationsSchedulesModel>(context);
-//    return GestureDetector(
-//      onTap: model.animateContainer(),
-//      child: Container(
-//        padding: EdgeInsets.all(10),
-//        child: Column(
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            AnimatedContainer(duration: Duration(seconds: 1),
-//            color: _color,
-//            height: _height)
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}
 
-class FitnessCard extends StatelessWidget {
+class MedicationCard extends StatelessWidget {
+  final String drugName;
+  final String drugType;
+  final String time;
+  final int dosage;
+  final String selectedFreq;
+
+  MedicationCard(
+      {this.drugName,
+      this.drugType,
+      this.time,
+      this.dosage,
+      this.selectedFreq});
+
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context);
+    var model = Provider.of<MedicationData>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -240,7 +268,7 @@ class FitnessCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "8:00 AM",
+                time,
                 style: TextStyle(fontSize: Config.textSize(context, 5)),
               ),
               Divider(
@@ -260,7 +288,7 @@ class FitnessCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: ExpansionTile(
                       title: Text(
-                        "Chloroquine Injection",
+                        drugName,
                         style: TextStyle(
                             fontSize: Config.textSize(context, 5),
                             fontWeight: FontWeight.bold,
@@ -269,12 +297,13 @@ class FitnessCard extends StatelessWidget {
                                 : Theme.of(context).primaryColorDark),
                       ),
                       leading: Image.asset(
-                        "images/injection.png",
+//                        "images/injection.png",
+                        drugType,
                         color: Theme.of(context).primaryColorLight,
                         width: 50,
                         height: 50,
                       ),
-                      subtitle: Text("1 shots once daily",
+                      subtitle: Text('$dosage - $selectedFreq per day',
                           style: TextStyle(
                               fontSize: Config.textSize(context, 5),
                               color: model.isExpanded

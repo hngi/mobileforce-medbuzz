@@ -15,13 +15,13 @@ class MedicationReminder {
   String frequency;
 
   @HiveField(3)
-  TimeOfDay firstTime;
+  List<int> firstTime;
 
   @HiveField(4)
-  TimeOfDay secondTime;
+  List<int> secondTime;
 
   @HiveField(5)
-  TimeOfDay thirdTime;
+  List<int> thirdTime;
 
   @HiveField(6)
   int dosage;

@@ -154,9 +154,10 @@ class MedicationData extends ChangeNotifier {
     }
   }
 
-  void updateDrugName(String name) {
+  String updateDrugName(String name) {
     drugName = name;
     notifyListeners();
+    return drugName;
   }
 
   int diffFromPresent(DateTime end) {
@@ -202,7 +203,8 @@ class MedicationData extends ChangeNotifier {
 
   Future<void> addMedicationReminder(
       String index, MedicationReminder medication) async {
-    var medicationReminderBox = Hive.box<MedicationReminder>(_boxName);
+    var medicationReminderBox =
+        await Hive.openBox<MedicationReminder>(_boxName);
 
     await medicationReminderBox.put(index, medication);
 
@@ -214,7 +216,8 @@ class MedicationData extends ChangeNotifier {
 
   Future<void> editSchedule({MedicationReminder medication}) async {
     String medicationKey = medication.index;
-    var medicationReminderBox = Hive.box<MedicationReminder>(_boxName);
+    var medicationReminderBox =
+        await Hive.openBox<MedicationReminder>(_boxName);
     await medicationReminderBox.put(medicationKey, medication);
 
     medicationReminder = medicationReminderBox.values.toList();
@@ -223,13 +226,68 @@ class MedicationData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteSchedule(key) {
-    var medicationReminderBox = Hive.box<MedicationReminder>(_boxName);
+  void deleteSchedule(key) async {
+    var medicationReminderBox =
+        await Hive.openBox<MedicationReminder>(_boxName);
 
     medicationReminder = medicationReminderBox.values.toList();
     medicationReminderBox.delete(key);
     medicationReminderBox.close();
 
+    notifyListeners();
+  }
+
+  //model for all medication screen
+  bool isVisible = true;
+  bool isExpanded = false;
+  DateTime _selectedDay = DateTime.now();
+
+  //functionality for making the FAB appear and disappear when user scrolls
+  void updateVisibility(bool visible) {
+    this.isVisible = visible;
+    notifyListeners();
+  }
+
+  void expandTile(bool changed) {
+    this.isExpanded = !isExpanded;
+    notifyListeners();
+  }
+
+  //Retrieve data from DB
+
+  //Get name of weekday
+  String getWeekday(DateTime date) {
+    return date.weekday == 1
+        ? 'Mon'
+        : date.weekday == 2
+            ? 'Tue'
+            : date.weekday == 3
+                ? 'Wed'
+                : date.weekday == 4
+                    ? 'Thur'
+                    : date.weekday == 5
+                        ? 'Fri'
+                        : date.weekday == 6 ? 'Sat' : 'Sun';
+  }
+
+  //Button color for selected day is different from others
+//Selected day is DateTime.now().day by default
+  Color getButtonColor(BuildContext context, DateTime date) {
+    return date.day == _selectedDay.day
+        ? Theme.of(context).buttonColor
+        : Colors.grey[200];
+  }
+
+  //Text color changes depending on the button color
+  Color getTextColor(BuildContext context, DateTime date) {
+    return date.day == _selectedDay.day
+        ? Theme.of(context).primaryColorLight
+        : Theme.of(context).primaryColorDark;
+  }
+
+  //Toggles date displayed on the screen
+  void changeDay(DateTime date) {
+    this._selectedDay = date;
     notifyListeners();
   }
 }

@@ -1,7 +1,12 @@
+import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 
 class MedicationView extends StatelessWidget {
+  final MedicationReminder medicationReminder;
+
+  MedicationView({@required this.medicationReminder});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
