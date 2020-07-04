@@ -3,6 +3,7 @@ import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/models/water_reminder_model/water_reminder.dart';
 
@@ -61,6 +62,9 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   dynamic get selectedTime => _selectedTime;
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
+
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
@@ -153,6 +157,12 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   String get selectedMonthValue {
     return monthValues[_today.month - 1].month;
+  }
+
+  List<WaterReminder> get waterRemindersBasedOnDateTime {
+    return _availableReminders
+        .where((reminder) => selectedDateTime.year == reminder.dateTime.year)
+        .toList();
   }
 
   getWeekDay(index) {

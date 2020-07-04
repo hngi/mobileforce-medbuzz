@@ -1,7 +1,29 @@
+import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
+import 'package:MedBuzz/ui/notifications/water_notification_manager.dart';
+import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 
-class SingleWater extends StatelessWidget {
+class SingleWater extends StatefulWidget {
+  SingleWater({this.water});
+
+  final WaterReminder water;
+
+  @override
+  _SingleWaterState createState() => _SingleWaterState();
+}
+
+class _SingleWaterState extends State<SingleWater> {
+  WaterReminder waterReminder;
+  WaterNotificationManager waterNotificationManager =
+      WaterNotificationManager();
+
+  Navigation navigation = Navigation();
+
+  final db = WaterReminderData();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,98 +48,9 @@ class SingleWater extends StatelessWidget {
                 child: FlatButton.icon(
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              child: Container(
-                                height: Config.yMargin(context, 30),
-                                width: Config.xMargin(context, 150.0),
-                                //width: Config.xMargin(context, 50),
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                      Config.xMargin(context, 3.0)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Config.yMargin(context, 2),
-                                            bottom: Config.yMargin(context, 1)),
-                                        child: Text(
-                                          'Are you sure you want to delete this?',
-                                          style: TextStyle(
-                                            fontSize:
-                                                Config.textSize(context, 4.5),
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Container(
-                                            height:
-                                                Config.yMargin(context, 6.0),
-                                            width:
-                                                Config.xMargin(context, 30.0),
-                                            child: RaisedButton(
-                                              onPressed: () {
-                                                //Navigate to the Water reminder screen and delete from db
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                "Yes",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: Config.textSize(
-                                                      context, 5),
-                                                ),
-                                              ),
-                                              color: Color(0xFF219653),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          Config.xMargin(
-                                                              context, 2.0))),
-                                            ),
-                                          ),
-                                          Container(
-                                            height:
-                                                Config.yMargin(context, 6.0),
-                                            width:
-                                                Config.xMargin(context, 30.0),
-                                            child: RaisedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "No",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: Config.textSize(
-                                                      context, 5),
-                                                ),
-                                              ),
-                                              color: Color(0xFFEB5757),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          Config.xMargin(
-                                                              context, 2.0))),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
+                        context: context,
+                        child: DeleteDialog(),
+                      );
                     },
                     icon: Icon(
                       Icons.delete,
@@ -138,10 +71,10 @@ class SingleWater extends StatelessWidget {
                     Container(
                       width: Config.xMargin(context, 44),
                       child: Text(
-                        'Drink 250ml of Water',
+                        'Drink 1000 ml of water',
                         style: TextStyle(
-                          color: Color(0xff333333),
-                          fontSize: Config.textSize(context, 7),
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 5.3),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -166,8 +99,8 @@ class SingleWater extends StatelessWidget {
                       Text(
                         'Description',
                         style: TextStyle(
-                          color: Color(0xff333333),
-                          fontSize: Config.textSize(context, 5),
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -177,7 +110,7 @@ class SingleWater extends StatelessWidget {
                         child: Text(
                           'A quick run from home to the estate junction and back home',
                           style: TextStyle(
-                            color: Color(0xff333333),
+                            color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
                           ),
                           //\n
@@ -187,8 +120,8 @@ class SingleWater extends StatelessWidget {
                       Text(
                         'Frequency',
                         style: TextStyle(
-                          color: Color(0xff333333),
-                          fontSize: Config.textSize(context, 5),
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -205,10 +138,10 @@ class SingleWater extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '8:00AM',
+                              "10:00AM",
                               style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: Config.textSize(context, 4),
+                                color: Theme.of(context).primaryColor,
+                                fontSize: Config.textSize(context, 3.6),
                               ),
                             )
                           ],
@@ -218,8 +151,8 @@ class SingleWater extends StatelessWidget {
                       Text(
                         'Length',
                         style: TextStyle(
-                          color: Color(0xff333333),
-                          fontSize: Config.textSize(context, 5),
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -229,7 +162,7 @@ class SingleWater extends StatelessWidget {
                         child: Text(
                           '4 days left out of 30 days',
                           style: TextStyle(
-                            color: Color(0xff333333),
+                            color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
                           ),
                         ),
@@ -256,7 +189,7 @@ class SingleWater extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).primaryColorLight,
                       fontWeight: FontWeight.bold,
-                      fontSize: Config.textSize(context, 3.9),
+                      fontSize: Config.textSize(context, 4),
                     ),
                   ),
                 ),
@@ -267,4 +200,20 @@ class SingleWater extends StatelessWidget {
       ]),
     );
   }
+}
+
+void showSnackBar(BuildContext context) {
+  SnackBar snackBar = SnackBar(
+    backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+    duration: Duration(seconds: 2),
+    content: Text(
+      'Schedule deleted',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: Config.textSize(context, 5.3),
+          color: Theme.of(context).primaryColorLight),
+    ),
+  );
+
+  Scaffold.of(context).showSnackBar(snackBar);
 }

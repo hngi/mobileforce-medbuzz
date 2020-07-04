@@ -84,15 +84,24 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
           'My Diet Plan',
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
-        leading: Icon(
-          Icons.keyboard_backspace,
-          color: Theme.of(context).primaryColorDark,
-        ),
+        leading: IconButton(
+            icon: Icon(
+              Icons.keyboard_backspace,
+              color: Theme.of(context).primaryColorDark,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, 'homePage');
+            }),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
-              child: Text('Diet tracker'),
+              child: Text(
+                'Diet tracker',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
+              ),
               onPressed: () {},
               shape: RoundedRectangleBorder(
                 side: BorderSide(
