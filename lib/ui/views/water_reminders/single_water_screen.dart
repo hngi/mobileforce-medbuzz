@@ -49,8 +49,10 @@ class _SingleWaterState extends State<SingleWater> {
                 child: FlatButton.icon(
                     onPressed: () {
                       showDialog(
-<<<<<<< HEAD
+
                           context: context,
+                        child: DeleteDialog(),
+                      );
                           builder: (BuildContext context) {
                             return Dialog(
                               child: Container(
@@ -151,12 +153,8 @@ class _SingleWaterState extends State<SingleWater> {
                                 ),
                               ),
                             );
-                          });
-=======
-                        context: context,
-                        child: DeleteDialog(),
-                      );
->>>>>>> upstream/dev
+                          };
+
                     },
                     icon: Icon(
                       Icons.delete,
