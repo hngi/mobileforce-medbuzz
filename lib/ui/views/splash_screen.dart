@@ -1,6 +1,6 @@
 import 'dart:async';
 //import 'package:MedBuzz/ui/views/Home.dart';
-import 'package:MedBuzz/ui/views/onboarding.dart';
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,8 +26,7 @@ class StartState extends State<SplashScreen> {
   }
 
   route() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Onboard()));
+    Navigator.pushReplacementNamed(context, RouteNames.onboarding);
   }
 
   initScreen(BuildContext context) {

@@ -1,5 +1,4 @@
-import 'package:MedBuzz/ui/views/Home.dart';
-import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +72,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
-        title: Text('Add Fitness',
+        title: Text('Edit Fitness',
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
             )),
@@ -84,13 +83,16 @@ class __fitnesssDescriptionState extends State<add_fitness> {
             size: Config.xMargin(context, 8),
           ),
           onPressed: () {
-            navigation.pushFrom(context, HomePage());
+            navigation.pushFrom(context, FitnessSchedulesScreen());
+            Navigator.pushReplacementNamed(
+                context, RouteNames.fitnessSchedulesScreen);
           },
         ),
       ),
       body: WillPopScope(
         onWillPop: () {
-          navigation.pushFrom(context, FitnessSchedulesScreen());
+          Navigator.pushReplacementNamed(
+              context, RouteNames.fitnessSchedulesScreen);
           return Future.value(false);
         },
         child: Padding(

@@ -3,6 +3,7 @@ import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/models/water_reminder_model/water_reminder.dart';
 
@@ -160,7 +161,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   List<WaterReminder> get waterRemindersBasedOnDateTime {
     return _availableReminders
-        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .where((reminder) => selectedDateTime.year == reminder.dateTime.year)
         .toList();
   }
 

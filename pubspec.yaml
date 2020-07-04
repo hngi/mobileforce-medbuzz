@@ -32,7 +32,7 @@ dependencies:
   provider: ^3.0.1
   scrollable_positioned_list: ^0.1.6
   table_calendar: ^2.2.3
-  intl:
+  intl: ^0.16.1
   date_util:
   google_fonts: ^1.1.0
   rate_my_app: ^0.6.1+6

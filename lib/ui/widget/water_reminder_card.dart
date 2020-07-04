@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/models/water_reminder_model/water_reminder.dart';
+import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 
 class WaterReminderCard extends StatefulWidget {
   final double height;
   final double width;
   final WaterReminder waterReminder;
+
+  final ScheduleWaterReminderViewModel scheduleWaterReminderViewModel =
+      ScheduleWaterReminderViewModel();
 
   WaterReminderCard(
       {@required this.height,
@@ -21,6 +25,7 @@ class _WaterCardState extends State<WaterReminderCard> {
   bool isSelected = false;
   bool _skip = false;
   bool _done = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

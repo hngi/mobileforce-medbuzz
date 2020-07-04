@@ -1,4 +1,4 @@
-import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +9,12 @@ import '../../../core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
+import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 
 class WaterScheduleViewScreen extends StatelessWidget {
+  final Navigation navigation = Navigation();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +24,8 @@ class WaterScheduleViewScreen extends StatelessWidget {
             bottom: Config.yMargin(context, 2),
             right: Config.xMargin(context, 4)),
         child: SizedBox(
-          height: 70,
-          width: 70,
+          height: 90,
+          width: 90,
           child: FloatingActionButton(
             elevation: 0,
             onPressed: () {
@@ -33,7 +37,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(
               Icons.add,
-              size: 35,
+              size: 47,
             ),
           ),
         ),
@@ -113,17 +117,9 @@ class _WaterScheduleViewState extends State<WaterScheduleView> {
     formattedTime = DateFormat.jm().format(time);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      // margin: EdgeInsets.only(top: 60),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: BackButton(
-            color: Theme.of(context).primaryColorDark,
-            onPressed: () =>
-                {Navigator.of(context).popAndPushNamed(RouteNames.homePage)}),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
+    return Container(
+      margin: EdgeInsets.only(top: 60),
+      child: SingleChildScrollView(
         //container wrapping all the widgets
         child: Container(
           margin: EdgeInsets.only(
@@ -209,128 +205,13 @@ class _WaterScheduleViewState extends State<WaterScheduleView> {
               Visibility(
                   visible: waterReminder.waterRemindersBasedOnDateTime.isEmpty,
                   child: Container(
-                    child: Text('No water reminders for this date'),
+                    child: Text('No water reminders'),
                   )),
               for (var waterReminder
                   in waterReminder.waterRemindersBasedOnDateTime)
                 WaterReminderCard(
                     height: height, width: width, waterReminder: waterReminder)
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget card(String text) {
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      margin: EdgeInsets.only(bottom: Config.yMargin(context, 2)),
-      height: _isHidden ? height * 0.15 : height * 0.25,
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _isHidden = false;
-          });
-        },
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(height * 0.03)),
-          child: Container(
-            margin: EdgeInsets.only(
-                left: Config.xMargin(context, 5),
-                right: Config.xMargin(context, 5),
-                top: Config.yMargin(context, 3)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(
-                        right: Config.xMargin(context, 7),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Image(
-                            image: AssetImage(
-                              'images/bigdrop.png',
-                            ),
-                            height: height * 0.05,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: Config.xMargin(context, 4.5),
-                                top: Config.yMargin(context, 1)),
-                            child: Image(
-                              image: AssetImage('images/smalldrop.png'),
-                              height: height * 0.03,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          text,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Config.textSize(context, 4.2),
-                          ),
-                        ),
-                        SizedBox(
-                          height: Config.yMargin(context, 0.7),
-                        ),
-
-                        // To display status of reminder
-                        Text(
-                          _skip == true
-                              ? 'Skipped'
-                              : _done == true ? 'Completed' : 'Upcoming',
-                          style: TextStyle(
-                              fontSize: Config.textSize(context, 3.7)),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      child: Container(
-                          margin: EdgeInsets.only(
-                              left: Config.xMargin(context, 3.5),
-                              bottom: Config.yMargin(context, 2.5)),
-                          child: Text(formattedTime)),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: Config.yMargin(context, 2.5),
-                ),
-                !_isHidden
-                    ? Divider(
-                        thickness: 2,
-                      )
-                    : Container(),
-                !_isHidden
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          flatButton('View'),
-                          SizedBox(
-                            width: Config.xMargin(context, 3.5),
-                          ),
-                          flatButton('Skip'),
-                          SizedBox(
-                            width: Config.xMargin(context, 3.5),
-                          ),
-                          flatButton('Done')
-                        ],
-                      )
-                    : Container()
-              ],
-            ),
           ),
         ),
       ),
