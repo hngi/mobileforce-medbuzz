@@ -1,3 +1,5 @@
+import 'package:MedBuzz/ui/views/Home.dart';
+import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +73,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
-        title: Text('Edit Fitness',
+        title: Text('Add Fitness',
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
             )),
@@ -82,7 +84,7 @@ class __fitnesssDescriptionState extends State<add_fitness> {
             size: Config.xMargin(context, 8),
           ),
           onPressed: () {
-            navigation.pushFrom(context, FitnessSchedulesScreen());
+            navigation.pushFrom(context, HomePage());
           },
         ),
       ),

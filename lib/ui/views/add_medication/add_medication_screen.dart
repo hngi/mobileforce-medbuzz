@@ -37,11 +37,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 color: Theme.of(context).primaryColorDark,
               ),
         ),
-        backgroundColor: Theme.of(context).primaryColorLight,
-        elevation: 1.0,
+        backgroundColor: Theme.of(context).backgroundColor,
+        elevation: 0,
       ),
       body: Container(
-        color: Theme.of(context).primaryColorLight,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           addRepaintBoundaries: false,
           children: <Widget>[
