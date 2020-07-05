@@ -3,17 +3,33 @@ import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 
 class MedicationCard extends StatefulWidget {
-  final double height;
-  final double width;
-  MedicationCard({this.height, this.width});
+  final String drugName;
+  final String drugType;
+  final String time;
+  final int dosage;
+  final String selectedFreq;
+
+  MedicationCard({
+    this.drugName,
+    this.drugType,
+    this.time,
+    this.dosage,
+    this.selectedFreq,
+  });
+
   @override
   _MedicationCardState createState() => _MedicationCardState();
 }
 
 class _MedicationCardState extends State<MedicationCard> {
   bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+//    print(height);
+//    print(width);
     return GestureDetector(
       //Navigate to screen with single reminder i.e the on user clicked on
       onTap: () {
@@ -26,18 +42,18 @@ class _MedicationCardState extends State<MedicationCard> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              "8:00 AM",
+              widget.time,
             ),
-            SizedBox(height: widget.height * 0.02),
+            SizedBox(height: height * 0.02),
             Container(
-                width: widget.width,
+                width: width,
                 padding: EdgeInsets.symmetric(
                     horizontal: Config.xMargin(context, 3),
                     vertical: Config.yMargin(context, 1)),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Theme.of(context).primaryColor
-                      : Theme.of(context).primaryColorLight,
+                      : Theme.of(context).backgroundColor,
                   borderRadius:
                       BorderRadius.circular(Config.xMargin(context, 5)),
                   boxShadow: [
@@ -52,25 +68,28 @@ class _MedicationCardState extends State<MedicationCard> {
                     Row(
                       children: <Widget>[
                         Image.asset(
-                          "images/injection.png",
+                          widget.drugType,
 //                            color: Theme.of(context).primaryColorLight,
-                          width: widget.width * 0.2,
-                          height: widget.height * 0.1,
+                          width: width * 0.2,
+                          height: height * 0.1,
+                        ),
+                        SizedBox(
+                          width: Config.xMargin(context, 8.5),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Chloroquine Injection',
+                              widget.drugName,
                               style: TextStyle(
                                   color: isSelected
                                       ? Theme.of(context).primaryColorLight
                                       : Theme.of(context).primaryColorDark,
                                   fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(height: widget.height * 0.005),
+                            SizedBox(height: height * 0.005),
                             Text(
-                              '1 shots once daily',
+                              '${widget.dosage} - ${widget.selectedFreq} per day',
                               style: TextStyle(
                                   color: isSelected
                                       ? Theme.of(context).primaryColorLight
@@ -86,7 +105,7 @@ class _MedicationCardState extends State<MedicationCard> {
                     ),
                     Divider(
                       color: Theme.of(context).primaryColorLight,
-                      height: widget.height * 0.02,
+                      height: height * 0.02,
 //indent: 50.0,
                       // endIndent: 10.0,
                     ),

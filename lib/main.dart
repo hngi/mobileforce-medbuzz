@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'MedBuzz',
         theme: appThemeLight,
-        initialRoute: RouteNames.splashScreen,
+        initialRoute: RouteNames.addMedicationScreen,
         //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
         //in the RouteGenerator class
         //This update handles page transitions

@@ -348,7 +348,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 //                            case 'Edit Schedule':
                           }
                           Navigator.popAndPushNamed(
-                              context, RouteNames.allMedicationScreen);
+                              context, RouteNames.medicationScreen);
                         }
                       },
                       child: Container(

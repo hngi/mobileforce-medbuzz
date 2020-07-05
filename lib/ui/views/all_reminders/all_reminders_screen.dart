@@ -215,7 +215,7 @@ class AllRemindersScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.02),
-                  MedicationCard(height: height, width: width)
+                  MedicationCard()
                 ],
               ),
             ),
