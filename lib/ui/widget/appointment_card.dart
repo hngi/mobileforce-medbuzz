@@ -28,29 +28,12 @@ class AppointmentCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                SizedBox.fromSize(
-                  size: Size(
-                      Config.xMargin(context, 5), Config.yMargin(context, 2)),
-                  child: PopupMenuButton(
-                      tooltip: 'Options',
-                      padding: EdgeInsets.only(right: 58),
-                      icon: Icon(Icons.more_vert,
-                          size: Config.textSize(context, 5)),
-                      onSelected: (_) {},
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          PopupMenuItem(
-                              child: GestureDetector(
-                            child: Text('Edit'),
-                            onTap: () {},
-                          )),
-                          PopupMenuItem(
-                              child: GestureDetector(
-                            child: Text('Delete'),
-                            onTap: () {},
-                          )),
-                        ];
-                      }),
+                GestureDetector(
+                  child: Icon(
+                    Icons.more_vert,
+                    size: Config.textSize(context, 5),
+                  ),
+                  onTap: () {},
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
