@@ -27,7 +27,6 @@ class WaterScheduleViewScreen extends StatelessWidget {
     //   if (waterReminderDB.waterRemindersCount > 0)
     //     waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
     // });
-
     // String formattedTime = DateFormat.jm().format(time);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
