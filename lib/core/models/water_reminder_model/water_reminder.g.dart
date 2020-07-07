@@ -17,19 +17,25 @@ class WaterReminderAdapter extends TypeAdapter<WaterReminder> {
       ml: fields[0] as int,
       dateTime: fields[1] as DateTime,
       id: fields[2] as String,
+      isTaken: fields[3] as bool,
+      isSkipped: fields[4] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, WaterReminder obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.ml)
       ..writeByte(1)
       ..write(obj.dateTime)
       ..writeByte(2)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.isTaken)
+      ..writeByte(4)
+      ..write(obj.isSkipped);
   }
 
   @override

@@ -71,7 +71,7 @@ class _SingleWaterState extends State<SingleWater> {
                     Container(
                       width: Config.xMargin(context, 44),
                       child: Text(
-                        'Drink 1000 ml of water',
+                        'Drink ${widget.water.ml} ml of water',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 5.3),
