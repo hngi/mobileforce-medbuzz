@@ -211,7 +211,8 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
                               waterReminderDB.addWaterReminder(
                                   waterReminder.createSchedule());
-                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .pushNamed(RouteNames.allRemindersScreen);
                             }
                           : null,
                       child: Text(

@@ -64,7 +64,7 @@ class WaterNotificationManager {
     await Navigator.push(
       MyApp.navigatorKey.currentState.context,
       MaterialPageRoute(
-          builder: (context) => WaterScheduleViewScreen(payload: payload)),
+          builder: (context) => WaterScheduleView(payload: payload)),
     );
   }
 

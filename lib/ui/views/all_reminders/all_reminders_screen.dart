@@ -3,7 +3,7 @@ import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/medication_card.dart';
-import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
+import 'package:MedBuzz/ui/widget/water_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -243,7 +243,7 @@ class AllRemindersScreen extends StatelessWidget {
                       )),
                   for (var waterReminder
                       in allReminders.waterRemindersBasedOnDateTime)
-                    WaterReminderCard(
+                    WaterCard(
                         height: height,
                         width: width,
                         waterReminder: waterReminder)
