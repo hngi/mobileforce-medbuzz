@@ -1,8 +1,16 @@
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 
 class SingleDiet extends StatelessWidget {
+  final DietModel diet;
+  final db = DietReminderDB();
+  SingleDiet({this.diet});
+  //this constructor will get the data from the general meal reminder screen
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +31,16 @@ class SingleDiet extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(Config.yMargin(context, 2.6)),
             child: FlatButton.icon(
-                onPressed: () {
+                onPressed: () async {
                   showDialog(
-                    context: context,
-                    child: DeleteDialog(),
-                  );
+                      context: context,
+                      child: DeleteDialog() //show Confirmation dialog
+                      );
+                  showSnackBar(context);
+                  Future.delayed(Duration(seconds: 1)).then((value) {
+                    db.deleteDiet(diet.id);
+                    Navigator.of(context).pop(true);
+                  });
                 },
                 icon: Icon(
                   Icons.delete,

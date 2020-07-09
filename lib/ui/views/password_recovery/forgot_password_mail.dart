@@ -11,25 +11,26 @@ class ForgotPasswordMail extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SafeArea(
-          child: Container(
-        padding: EdgeInsets.only(
-          top: Config.yMargin(context, 15.94),
-        ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: SingleChildScrollView(
+          child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Center(
+            Container(
+              padding: EdgeInsets.fromLTRB(Config.xMargin(context, 7),
+                  Config.yMargin(context, 25), 0, 0),
               child: Text(
                 'Reset Password',
                 style: TextStyle(
-                    fontFamily: 'Segoe UI',
-                    fontSize: Config.textSize(context, 7.77),
-                    fontWeight: FontWeight.w600),
+                  fontSize: Config.textSize(context, 7.8),
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColorDark,
+                ),
               ),
             ),
             SizedBox(
-              height: Config.yMargin(context, 6.44),
+              height: Config.yMargin(context, 1.2),
             ),
             Divider(
               height: Config.yMargin(context, 8.25),
@@ -38,17 +39,18 @@ class ForgotPasswordMail extends StatelessWidget {
               endIndent: screenSize.width * 0.36,
             ),
             SizedBox(
-              height: Config.yMargin(context, 11.56),
+              height: Config.yMargin(context, 3.6),
             ),
             Container(
+              alignment: Alignment.center,
               padding: EdgeInsets.symmetric(
-                horizontal: Config.xMargin(context, 13.6),
+                horizontal: Config.xMargin(context, 5.4),
               ),
               child: Text(
                 'A link has been sent to your mail, click to reset your password.',
                 style: TextStyle(
                     fontFamily: 'Segoe UI',
-                    fontSize: Config.textSize(context, 3.89),
+                    fontSize: Config.textSize(context, 4),
                     fontWeight: FontWeight.normal,
                     color: Theme.of(context).primaryColorDark),
               ),
@@ -60,18 +62,20 @@ class ForgotPasswordMail extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: Config.xMargin(context, 7.3),
               ),
-              height: Config.yMargin(context, 8.63),
+              height: Config.yMargin(context, 7.2),
               child: FlatButton(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(Config.yMargin(context, 1.28)),
+                  ),
                 ),
                 color: Theme.of(context).primaryColor,
                 child: Text(
                   'Mail',
                   style: TextStyle(
                     color: Theme.of(context).primaryColorLight,
-                    fontFamily: 'Segoe UI',
-                    fontSize: Config.textSize(context, 4.13),
+                    fontSize: Config.textSize(context, 3.9),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 // When this button is pressed, it sends mail to user

@@ -14,6 +14,10 @@ class AppointmentData extends ChangeNotifier {
   bool isEditing = false;
 
   List<Appointment> _appointment = [];
+  List<Appointment> _sortedAppointment = [];
+
+  List<Appointment> get appointment => _appointment;
+  List<Appointment> get sortedAppointment => _sortedAppointment;
 
   Appointment _activeAppointment;
 
@@ -31,13 +35,13 @@ class AppointmentData extends ChangeNotifier {
     return _appointment[index];
   }
 
-  void addAppointment(Appointment appointment) async {
+  Future<void> addAppointment(Appointment appointment) async {
     var box = await Hive.openBox<Appointment>(_boxName);
 
-    await box.add(appointment);
+    await box.put(appointment.dateTime, appointment);
 
     _appointment = box.values.toList();
-
+    box.close();
     notifyListeners();
   }
 
@@ -45,6 +49,8 @@ class AppointmentData extends ChangeNotifier {
     var box = await Hive.openBox<Appointment>(_boxName);
 
     _appointment = box.values.toList();
+    box.delete(key);
+    box.close();
 
     notifyListeners();
   }

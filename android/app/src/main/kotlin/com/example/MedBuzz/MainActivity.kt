@@ -1,4 +1,4 @@
-package com.example.MedBuzz
+package com.incredible.medbuzz
 
 import io.flutter.embedding.android.FlutterActivity
 
