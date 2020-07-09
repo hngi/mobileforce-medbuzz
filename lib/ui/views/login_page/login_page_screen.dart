@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:MedBuzz/core/constants/route_names.dart';
@@ -131,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                         onTap: () {
                           Navigator.pushReplacementNamed(
-                              context, RouteNames.forgotPasswordReset);
+                              context, RouteNames.forgotPasswordSubmit);
                         },
                         child: Text(
                           'Forgot Password?',
@@ -152,9 +151,11 @@ class _LoginPageState extends State<LoginPage> {
                             context, RouteNames.homePage);
                       },
                       child: Container(
-                        height: height * .065,
+                        height: height * .07,
                         child: Material(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(Config.yMargin(context, 1.28)),
+                          ),
                           color: Theme.of(context).primaryColor,
                           child: Center(
                             child: Text(
@@ -187,11 +188,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Signup(),
-                                  ));
+                              Navigator.pushReplacementNamed(
+                                  context, RouteNames.signup);
                             },
                             child: Text(
                               ' Sign Up',
@@ -215,4 +213,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

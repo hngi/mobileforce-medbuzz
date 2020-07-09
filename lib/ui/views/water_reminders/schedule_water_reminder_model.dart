@@ -121,6 +121,16 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     return newReminder;
   }
 
+  DateTime getDateTime() {
+    String month = _selectedMonth.toString().length < 2
+        ? '0$_selectedMonth'
+        : '$_selectedMonth';
+    String weekday =
+        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+    return DateTime.parse(
+        '${_today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
+  }
+
   void updateSelectedDay(int dayIndex) {
     _selectedDay = dayIndex + 1;
     notifyListeners();
@@ -160,7 +170,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   List<WaterReminder> get waterRemindersBasedOnDateTime {
     return _availableReminders
-        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .where((reminder) => selectedDateTime.year == reminder.dateTime.year)
         .toList();
   }
 

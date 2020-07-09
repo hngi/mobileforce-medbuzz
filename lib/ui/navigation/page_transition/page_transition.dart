@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class ForwardAnimation extends StatefulWidget {
   final Widget child;
@@ -42,7 +43,7 @@ class _ForwardAnimationState extends State<ForwardAnimation>
         animation: animationController,
         builder: (context, child) {
           return Material(
-            //  color: appThemeLight.primaryColorLight,
+            color: Theme.of(context).primaryColorLight,
             child: Transform(
                 transform:
                     Matrix4.translationValues(animation.value * width, 0, 0),
@@ -153,4 +154,35 @@ class _BackwardAnimationState extends State<BackwardAnimation>
       },
     );
   }
+}
+
+class CustomSlideTransition extends PageRouteBuilder {
+  final Widget child;
+  CustomSlideTransition({this.child})
+      : super(
+          transitionDuration: Duration(milliseconds: 50),
+          pageBuilder: (context, animation, secondaryAnomation) => child,
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            return Material(
+              color: Theme.of(context).backgroundColor,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .animate(animation),
+                child: Material(
+                  color: Theme.of(context).backgroundColor,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                            begin: Offset.zero, end: const Offset(0.0, 1.0))
+                        .animate(secondaryAnimation),
+                    child: child,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
 }
