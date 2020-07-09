@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'appointment_reminder.g.dart';
@@ -5,23 +6,17 @@ part 'appointment_reminder.g.dart';
 @HiveType()
 class Appointment {
   @HiveField(0)
-  DateTime appointmentMonth;
+  final String dateTime;
   @HiveField(1)
-  DateTime appointmentDay;
+  final String appointmentType;
   @HiveField(2)
-  DateTime appointmentTime;
+  final String note;
   @HiveField(3)
-  String appointmentSubject;
-  @HiveField(4)
-  String appointmentNote;
+  final DateTime date;
 
-
-  Appointment({
-    this.appointmentMonth,
-    this.appointmentDay,
-    this.appointmentTime,
-    this.appointmentSubject,
-    this.appointmentNote
-});
-
+  Appointment(
+      {this.dateTime,
+      @required this.appointmentType,
+      this.note,
+      @required this.date});
 }

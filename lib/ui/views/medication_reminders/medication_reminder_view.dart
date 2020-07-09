@@ -1,15 +1,22 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
+import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/widget/delete_dialog.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MedicationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var medModeller = Provider.of<MedicationData>(context);
-    final medicationInfo = medModeller.getMedicationReminder();
+    var medModel = Provider.of<MedicationData>(context);
+    int no_of_days = medModel.endDate.day - medModel.startDate.day;
+    int current_day = medModel.endDate.day - DateTime.now().day - 1;
+    String days_left = no_of_days == 0
+        ? 'Today is the last day!'
+        : '$current_day day(s) left out of $no_of_days days';
+
     //Set Widget to use Provider
     return Consumer<MedicationData>(
       builder: (context, medModel, child) {
@@ -34,11 +41,19 @@ class MedicationView extends StatelessWidget {
                     padding:
                         EdgeInsets.only(right: Config.yMargin(context, 2.6)),
                     child: FlatButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           showDialog(
-                            context: context,
-                            child: DeleteDialog(),
-                          );
+                              context: context,
+                              child: DeleteBox(
+                                  deletion_key: medModel.id,
+                                  newReminder: medModel
+                                      .getSchedule()) //show Confirmation dialog
+                              );
+                          showSnackBar(context);
+                          Future.delayed(Duration(seconds: 1)).then((value) {
+                            medModel.deleteSchedule(key);
+                            Navigator.of(context).pop(true);
+                          });
                         },
                         icon: Icon(
                           Icons.delete,
@@ -59,7 +74,7 @@ class MedicationView extends StatelessWidget {
                         Container(
                           width: Config.xMargin(context, 44),
                           child: Text(
-                            'Chloroquine Injection',
+                            '${medModel.drugName}',
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontSize: Config.textSize(context, 5.3),
@@ -70,7 +85,8 @@ class MedicationView extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(
                               right: Config.xMargin(context, 5)),
-                          child: Image.asset('images/injection.png'),
+                          child: Image.asset(
+                              medModel.images[medModel.selectedIndex]),
                         ),
                       ],
                     ),
@@ -96,7 +112,10 @@ class MedicationView extends StatelessWidget {
                             padding: EdgeInsets.only(
                                 top: Config.yMargin(context, 1.0)),
                             child: Text(
-                              'Take a shot at st.charles hospital daily and remember to eat before leaving the house',
+                              medModel.description == null ||
+                                      medModel.description == ""
+                                  ? 'No Description'
+                                  : '${medModel.description}',
                               style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.textSize(context, 4),
@@ -106,63 +125,28 @@ class MedicationView extends StatelessWidget {
                           ),
                           SizedBox(height: Config.yMargin(context, 10)),
                           Text(
-                            'Frequency',
+                            'Dosage',
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontSize: Config.textSize(context, 4.5),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: Config.yMargin(context, 1)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Once Daily',
-                                      style: TextStyle(
-                                        fontSize: Config.textSize(context, 4),
-                                      ),
-                                    ),
-                                    Text(
-                                      '8:00AM',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: Config.textSize(context, 3.6),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Once Daily',
-                                      style: TextStyle(
-                                        fontSize: Config.textSize(context, 4),
-                                      ),
-                                    ),
-                                    Text(
-                                      '8:00AM',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: Config.textSize(context, 3.6),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
+                          Container(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: medModel.selectedFreq == 'Once'
+                                  ? 1
+                                  : medModel.selectedFreq == 'Twice' ? 2 : 3,
+                              itemBuilder: (context, index) {
+                                return FrequencyList(
+                                    context: context, index: index);
+                              },
                             ),
                           ),
                           SizedBox(height: Config.yMargin(context, 10)),
                           Text(
-                            'Length',
+                            'Days Left',
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontSize: Config.textSize(context, 4.5),
@@ -173,7 +157,7 @@ class MedicationView extends StatelessWidget {
                             padding: EdgeInsets.only(
                                 top: Config.yMargin(context, 1.0)),
                             child: Text(
-                              '4 days left out of 30 days',
+                              days_left,
                               style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.textSize(context, 4),
@@ -223,4 +207,175 @@ class MedicationView extends StatelessWidget {
       },
     );
   }
+
+  DrugNotificationManager() {}
+}
+
+class FrequencyList extends StatelessWidget {
+  final int index;
+  final BuildContext context;
+
+  FrequencyList({this.context, this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    var medModel = Provider.of<MedicationData>(context);
+    return Container(
+      // margin: EdgeInsets.all(15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '${medModel.dosage} Once Daily',
+            style: TextStyle(
+              fontSize: Config.textSize(context, 4),
+            ),
+          ),
+          Text(
+            index == 0
+                ? medModel.firstTime.format(context)
+                : index == 1
+                    ? medModel.secondTime.format(context)
+                    : medModel.thirdTime.format(context),
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: Config.textSize(context, 3.6),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DeleteBox extends StatelessWidget {
+  String deletion_key;
+  MedicationReminder newReminder;
+
+  DeleteBox({this.deletion_key, this.newReminder});
+
+  @override
+  Widget build(BuildContext context) {
+    final medModel = Provider.of<MedicationData>(context);
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
+      ),
+      child: Container(
+        height: Config.yMargin(context, 20),
+        width: Config.xMargin(context, 150.0),
+        //width: Config.xMargin(context, 50),
+        child: Padding(
+          padding: EdgeInsets.all(5.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 23.0, bottom: 20.0),
+                child: Text(
+                  'Are you sure you want to delete this?',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Config.yMargin(context, 6.0),
+                    width: Config.xMargin(context, 30.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      color: Theme.of(context).primaryColorLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Config.xMargin(context, 2.0)),
+                        side: BorderSide(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.4),
+                            width: 1.5),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: Config.yMargin(context, 6.0),
+                    width: Config.xMargin(context, 30.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        //Code to delete using key
+                        medModel.deleteSchedule(deletion_key);
+
+                        //Code to delete notification
+                        switch (newReminder.frequency) {
+                          case 'Once':
+                            deleteNotification(
+                                newReminder, newReminder.firstTime);
+                            break;
+                          case 'Twice':
+                            deleteNotification(
+                                newReminder, newReminder.firstTime);
+                            deleteNotification(
+                                newReminder, newReminder.secondTime);
+                            break;
+                          case 'Thrice':
+                            deleteNotification(
+                                newReminder, newReminder.firstTime);
+                            deleteNotification(
+                                newReminder, newReminder.secondTime);
+                            deleteNotification(
+                                newReminder, newReminder.thirdTime);
+                            break;
+                        }
+                        Navigator.of(context)
+                            .popAndPushNamed(RouteNames.medicationScreen);
+                      },
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      color: Theme.of(context).primaryColorLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Config.xMargin(context, 2.0)),
+                        side: BorderSide(
+                            color: Theme.of(context).hintColor.withOpacity(.4),
+                            width: 1.5),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void deleteNotification(MedicationReminder med, List<int> time) {
+  DateTime date = DateTime.parse(med.id);
+  int id =
+      num.parse('${date.year}${date.month}${date.day}${time[0]}${time[1]}');
+
+  DrugNotificationManager notificationManager = DrugNotificationManager();
+  notificationManager.removeReminder(id);
+  print("Deleted Notification of id $id");
 }
