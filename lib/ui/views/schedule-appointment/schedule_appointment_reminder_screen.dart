@@ -31,9 +31,6 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
 
   final TextEditingController _noteController = TextEditingController();
 
-  final ScheduleAppointmentModel appointmentSchedule =
-      ScheduleAppointmentModel();
-
   ScheduleAppointmentModel appointmentModel = ScheduleAppointmentModel();
 
   String _updateMonth;
@@ -292,7 +289,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                                     DateTime.now().month) {
                               notificationManager
                                   .showAppointmentNotificationOnce(
-                                      appointmentReminder.selectedDay,
+                                      appointmentModel.selectedDay,
                                       'Hey, you\' got somewhere to go',
                                       ' ${_typeOfAppointmentController.text} ',
                                       appointmentReminder.getDateTime());
