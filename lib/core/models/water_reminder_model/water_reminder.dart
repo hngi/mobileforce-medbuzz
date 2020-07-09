@@ -13,6 +13,17 @@ class WaterReminder {
   @HiveField(2)
   String id;
 
-  WaterReminder(
-      {@required this.ml, @required this.dateTime, @required this.id});
+  @HiveField(3)
+  bool isTaken;
+
+  @HiveField(4)
+  bool isSkipped;
+
+  WaterReminder({
+    @required this.ml,
+    @required this.dateTime,
+    @required this.id,
+    this.isTaken = false,
+    this.isSkipped = false,
+  });
 }

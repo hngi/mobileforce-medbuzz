@@ -1,15 +1,38 @@
+import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ViewAppointment extends StatelessWidget {
+  static const routeName = 'view-schedule-appointment-reminder';
+  DateTime time = DateTime.now();
+  String formattedTime;
+  final Appointment appointment;
+
+  ViewAppointment({this.appointment});
+
   @override
   Widget build(BuildContext context) {
-    var appointmentModeller = Provider.of<AppointmentData>(context);
-    final appointmentInfo = appointmentModeller.getAppointments();
+    var appointmentModellerDB = Provider.of<AppointmentData>(context, listen:true);
+
+    var appointmentReminder = Provider.of<ScheduleAppointmentModel>(context, listen: true);
+
+    final appointmentInfo = appointmentModellerDB.getAppointments();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      appointmentReminder.updateAvailableAppointmentReminder(appointmentModellerDB.appointment);
+    });
+
+    formattedTime = DateFormat.jm().format(time);
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     //Set Widget to use Provider
     return Consumer<AppointmentData>(
       builder: (context, appointmentModel, child) {
@@ -33,6 +56,10 @@ class ViewAppointment extends StatelessWidget {
                           context: context,
                           child: DeleteDialog(),
                         );
+                        showSnackBar(context);
+                        Future.delayed(Duration(seconds: 1)).then((value) {
+                          appointmentModellerDB.deleteAppointment(appointment.dateTime);
+                        });
                       },
                       icon: Icon(
                         Icons.delete,
@@ -161,7 +188,7 @@ class ViewAppointment extends StatelessWidget {
                     onTap: () {
                       appointmentModel.isEditing = true;
                       Navigator.pushNamed(
-                          context, RouteNames.viewAppointmentScreen);
+                          context, RouteNames.scheduleAppointmentScreen);
                     },
                     child: Container(
                       padding: EdgeInsets.all(Config.xMargin(context, 3.55)),

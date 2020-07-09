@@ -7,6 +7,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../core/constants/route_names.dart';
 import '../../../core/database/waterReminderData.dart';
+import '../../../core/notifications/water_notification_manager.dart';
 
 class ScheduleWaterReminderScreen extends StatelessWidget {
   //values of water measures - stored as int in case of any need to calculate
@@ -20,6 +21,8 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
+    WaterNotificationManager waterNotificationManager =
+        WaterNotificationManager();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
     });
@@ -207,12 +210,21 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                               waterReminder.selectedMonth != null &&
                               waterReminder.selectedDay != null &&
                               waterReminder.selectedTime != null
-                          ? () {
+                          ? () async {
+                              if (waterReminder.selectedDay ==
+                                      DateTime.now().day &&
+                                  waterReminder.selectedMonth ==
+                                      DateTime.now().month) {
+                                waterNotificationManager.showWaterNotificationOnce(
+                                    waterReminder.selectedDay,
+                                    'It\' s time to take some Waters',
+                                    'Take ${waterReminder.selectedMl} ml of Water ',
+                                    waterReminder.getDateTime());
+                              }
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
                               waterReminderDB.addWaterReminder(
                                   waterReminder.createSchedule());
-                              Navigator.of(context)
-                                  .pushNamed(RouteNames.allRemindersScreen);
+                              Navigator.of(context).pop();
                             }
                           : null,
                       child: Text(

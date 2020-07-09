@@ -29,6 +29,8 @@ import 'package:MedBuzz/ui/views/water_reminders/water_reminders_view.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../../ui/views/fitness_reminders/add_fitness_screen.dart';
+
 class RouteNames {
   ///Custom class that holds all the named routes as constants for easy reference
 
@@ -38,7 +40,7 @@ class RouteNames {
   static const String home = 'home';
   static const String login = 'login';
   static const String forgotPasswordSubmit = 'forgotPasswordSubmit';
-  static const String profile = 'profile';
+  // static const String profile = 'profile'; //Commented out for testing purposes
   static const String onboarding = 'onboarding';
   static const String signup = 'signup';
   static const String drugDescription = 'drugDescription';
@@ -70,15 +72,14 @@ class RouteNames {
     RouteNames.home: (context) => HomeScreen(),
     RouteNames.login: (context) => LoginPage(),
     RouteNames.forgotPasswordSubmit: (context) => ForgotPasswordSubmit(),
-    RouteNames.profile: (context) => ProfilePage(),
+    // RouteNames.profile: (context) => ProfilePage(),  //Commented out for testing purposes
     RouteNames.onboarding: (context) => Onboard(),
     RouteNames.homePage: (context) => HomePage(),
     RouteNames.signup: (context) => Signup(),
     RouteNames.allRemindersScreen: (context) => AllRemindersScreen(),
     RouteNames.drugDescription: (context) => DrugDescription(),
     RouteNames.fitnessSchedulesScreen: (context) => FitnessSchedulesScreen(),
-    RouteNames.fitnessDescriptionScreen: (context) =>
-        FitnessDescriptionScreen(),
+    RouteNames.fitnessDescriptionScreen: (context) => FitnessEditScreen(),
     RouteNames.scheduleAppointmentScreen: (context) =>
         ScheduleAppointmentScreen(),
     RouteNames.scheduledAppointmentsPage: (context) =>
@@ -100,6 +101,7 @@ class RouteNames {
     RouteNames.medicationScreen: (context) => MedicationScreen(),
     RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
     RouteNames.singleWater: (context) => SingleWater(),
-    RouteNames.deleteDialog: (context) => DeleteDialog(),
+
+    // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
 }
