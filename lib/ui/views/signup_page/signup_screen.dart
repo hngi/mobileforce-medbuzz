@@ -64,13 +64,13 @@ class Signup extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () {
+          onTap: () async {
             if (nameController.text.isNotEmpty) {
               print('${nameController.text}');
               var newuser = User(
                   id: DateTime.now().toString(), name: nameController.text);
-              userDb.adduser(newuser);
-              box.put('status', 'true');
+              await userDb.adduser(newuser);
+              //  await box.put('status', 'true');
               Future.delayed(Duration(seconds: 2), () {
                 Navigator.pushReplacementNamed(context, RouteNames.homePage);
               });
