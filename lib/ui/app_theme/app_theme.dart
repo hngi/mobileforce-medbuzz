@@ -12,6 +12,7 @@ ThemeData appThemeLight = ThemeData(
     dividerColor: Color(0xff777777),
     //this color is used by date (day) in the upcoming appointments card shown on the home screen
     focusColor: Color(0xff2DBFC3),
+    cursorColor: Color(0xff333333),
     primaryColor: Color(0xff617ADC),
     highlightColor: Color.fromARGB(255, 45, 191, 195),
     accentColor: Color(0xff219653),
@@ -31,4 +32,5 @@ ThemeData appThemeLight = ThemeData(
       headline6: TextStyle().copyWith(fontFamily: 'Segoe'),
       caption: TextStyle().copyWith(fontFamily: 'Segoe'),
       button: TextStyle().copyWith(fontFamily: 'Segoe'),
+      overline: TextStyle().copyWith(fontFamily: 'Segoe'),
     ));

@@ -28,14 +28,17 @@ class FitnessReminder {
   @HiveField(7)
   DateTime endDate;
 
-  FitnessReminder({
-    this.index,
-    this.name,
-    this.fitnesstype,
-    this.fitnessfreq,
-    this.activityTime,
-    this.minsperday,
-    this.startDate,
-    this.endDate,
-  });
+  @HiveField(8)
+  final String id;
+
+  FitnessReminder(
+      {this.index,
+      this.name,
+      this.fitnesstype,
+      this.fitnessfreq,
+      this.activityTime,
+      this.minsperday,
+      this.startDate,
+      this.endDate,
+      this.id});
 }

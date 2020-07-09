@@ -1,6 +1,11 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/core/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
@@ -23,12 +28,29 @@ class WaterReminderCard extends StatefulWidget {
 
 class _WaterCardState extends State<WaterReminderCard> {
   bool isSelected = false;
-  bool _skip = false;
-  bool _done = false;
+
+  String _status(waterReminder) {
+    String value = 'Pending';
+    if (waterReminder.isSkipped) {
+      value = 'Skipped';
+    } else if (waterReminder.isTaken) {
+      value = 'Completed';
+    } else if (waterReminder.dateTime.isBefore(DateTime.now()) &&
+        !waterReminder.isTaken &&
+        !waterReminder.isSkipped) {
+      value = 'Missed';
+    }
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    var waterReminder =
+        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    WaterNotificationManager waterNotificationManager =
+        WaterNotificationManager();
     return Container(
       width: double.infinity,
       child: GestureDetector(
@@ -52,17 +74,13 @@ class _WaterCardState extends State<WaterReminderCard> {
                       horizontal: Config.xMargin(context, 3),
                       vertical: Config.yMargin(context, 1)),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColorLight,
                     borderRadius:
                         BorderRadius.circular(Config.xMargin(context, 5)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.white,
                         spreadRadius: 5,
-//blurRadius: 2,
-//offset: Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
@@ -81,6 +99,7 @@ class _WaterCardState extends State<WaterReminderCard> {
                                     'images/bigdrop.png',
                                   ),
                                   height: height * 0.05,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
@@ -98,29 +117,39 @@ class _WaterCardState extends State<WaterReminderCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Drink ${widget.waterReminder.ml ?? 150}ml of water',
+                                'Drink ${widget.waterReminder.ml ?? 0}ml of water',
                                 style: TextStyle(
-                                    color: isSelected
-                                        ? Theme.of(context).primaryColorLight
-                                        : Theme.of(context).primaryColorDark,
+                                    color: Theme.of(context).primaryColorDark,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: widget.height * 0.005),
                               Text(
-                                _skip == true
-                                    ? 'Skipped'
-                                    : _done == true ||
-                                            widget.waterReminder.dateTime
-                                                .isAfter(DateTime.now())
-                                        ? 'Completed'
-                                        : 'Upcoming',
+                                _status(widget.waterReminder),
                                 style: TextStyle(
-                                    color: isSelected
-                                        ? Theme.of(context).primaryColorLight
-                                        : Theme.of(context).primaryColorDark),
+                                    color: Theme.of(context).primaryColorDark),
                               ),
                             ],
                           ),
+
+                          //Temporary fix to delete reminders
+
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                left: Config.xMargin(context, 20),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  waterReminderDB.deleteWaterReminder(
+                                      widget.waterReminder.id);
+                                  waterNotificationManager.removeReminder(
+                                      waterReminder.selectedDay);
+                                },
+                                icon: Icon(Icons.delete),
+                                color: Colors.red,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(
@@ -140,15 +169,9 @@ class _WaterCardState extends State<WaterReminderCard> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              flatButton('View'),
-                              SizedBox(
-                                width: Config.xMargin(context, 3.5),
-                              ),
-                              flatButton('Skip'),
-                              SizedBox(
-                                width: Config.xMargin(context, 3.5),
-                              ),
-                              flatButton('Done')
+                              Expanded(child: flatButton('View')),
+                              Expanded(child: flatButton('Skip')),
+                              Expanded(child: flatButton('Done'))
                             ],
                           ))
                     ],
@@ -159,19 +182,51 @@ class _WaterCardState extends State<WaterReminderCard> {
   }
 
   Widget flatButton(String text) {
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     return FlatButton(
       onPressed: () {
-        setState(() {
-          text == 'Skip' ? _skip = true : _skip = false;
-          text == 'Done' ? _done = true : _done = false;
-        });
+        switch (text) {
+          case 'Skip':
+            waterReminderDB.editWaterReminder(
+                waterReminder: WaterReminder(
+                    ml: widget.waterReminder.ml,
+                    dateTime: widget.waterReminder.dateTime,
+                    id: widget.waterReminder.id,
+                    isSkipped: true,
+                    isTaken: false),
+                waterReminderKey: widget.waterReminder.id);
+            break;
+          case 'Done':
+            waterReminderDB.editWaterReminder(
+                waterReminder: WaterReminder(
+                    ml: widget.waterReminder.ml,
+                    dateTime: widget.waterReminder.dateTime,
+                    id: widget.waterReminder.id,
+                    isSkipped: false,
+                    isTaken: true),
+                waterReminderKey: widget.waterReminder.id);
+            break;
+          case 'View':
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SingleWater(water: widget.waterReminder)));
+            break;
+          default:
+        }
+
+        // setState(() {
+        //   text == 'Skip' ? waterRe = true : _skip = false;
+        //   text == 'Done' ? _done = true : _done = false;
+        // });
       },
       child: Row(
         children: <Widget>[
           Icon(
             text == 'Skip' ? Icons.close : text == 'Done' ? Icons.check : null,
             size: 15,
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).primaryColorDark,
           ),
           SizedBox(
             width: Config.xMargin(context, 2),
@@ -181,9 +236,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Config.textSize(context, 3.7),
-                color: isSelected
-                    ? Theme.of(context).primaryColorLight
-                    : Theme.of(context).primaryColorDark),
+                color: Theme.of(context).primaryColorDark),
           ),
         ],
       ),

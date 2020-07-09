@@ -3,7 +3,6 @@ import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/models/water_reminder_model/water_reminder.dart';
 
@@ -120,6 +119,16 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
         ml: _selectedMl,
         dateTime: DateTime.parse(selectedDateTime));
     return newReminder;
+  }
+
+  DateTime getDateTime() {
+    String month = _selectedMonth.toString().length < 2
+        ? '0$_selectedMonth'
+        : '$_selectedMonth';
+    String weekday =
+        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+    return DateTime.parse(
+        '${_today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
   }
 
   void updateSelectedDay(int dayIndex) {

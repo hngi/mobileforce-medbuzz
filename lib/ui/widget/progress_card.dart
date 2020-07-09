@@ -53,6 +53,12 @@ class _ProgressCardState extends State<ProgressCard>
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
+
+    double progress() {
+      var value = widget.progress / widget.total;
+      return value.isNaN ? 0.0 : value;
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: Config.xMargin(context, 3),
@@ -97,7 +103,7 @@ class _ProgressCardState extends State<ProgressCard>
                         _animation.value * width, 0, 0),
                     child: Container(
                       height: widget.height,
-                      width: widget.width * (widget.progress / widget.total),
+                      width: widget.width * progress(),
                       decoration: BoxDecoration(
                           color: widget.progressBarColor,
                           borderRadius: BorderRadius.circular(

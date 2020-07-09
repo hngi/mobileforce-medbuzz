@@ -1,11 +1,10 @@
+import 'package:MedBuzz/core/notifications/healthtips_notification_manager.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:MedBuzz/ui/views/health_tips/health_tips_bank.dart';
-
-import 'package:MedBuzz/ui/notifications/healthtips_notification_manager.dart';
 
 class HealthTips extends StatefulWidget {
   HealthTips({this.payload});

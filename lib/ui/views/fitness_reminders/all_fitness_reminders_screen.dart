@@ -1,10 +1,18 @@
+import 'dart:async';
+
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
+import 'package:MedBuzz/core/notifications/fitness_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_model.dart';
+import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:MedBuzz/ui/notifications/fitness_notification_manager.dart';
+
+import '../../../core/constants/route_names.dart';
+import '../../../core/database/fitness_reminder.dart';
+import 'single_fitness_screen.dart';
 
 class FitnessSchedulesScreen extends StatefulWidget {
   FitnessSchedulesScreen({this.payload});
@@ -40,6 +48,7 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
     });
 
     var model = Provider.of<FitnessSchedulesModel>(context);
+    var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -60,19 +69,17 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
               backgroundColor: Theme.of(context).buttonColor,
               splashColor: Theme.of(context).buttonColor.withOpacity(.9),
               //Navigate to fitness reminder creation screen
-              onPressed: () {}),
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, RouteNames.fitnessDescriptionScreen);
+              }),
         ),
       ),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text('Fitness',
-            style: TextStyle(color: Theme.of(context).primaryColorDark)
-            // Theme.of(context)
-            //     .textTheme
-            //     .headline6
-            //     .copyWith(color: Theme.of(context).primaryColorDark),
-            ),
+            style: TextStyle(color: Theme.of(context).primaryColorDark)),
         leading: IconButton(
             icon: Icon(Icons.keyboard_backspace,
                 color: Theme.of(context).primaryColorDark),
@@ -92,39 +99,19 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: height * .27,
+                  height: height * .3,
                   width: width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      //ListView to display all dates with entries in the DB
                       Container(
-                        height: height * .2,
-                        //To be replaced with a ListView.builder for CustomDateButtons with date range from DB
-                        child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            //Some example (pronounced igzampl, yunno?)
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 1))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 2))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 3))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 4))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 5))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 6))),
-                            CustomDateButton(date: DateTime.now()),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 10))),
-                          ],
-                        ),
-                      ),
+                          height: Config.yMargin(context, 23),
+                          child: ScrollableCalendar(
+                            model: model,
+                            useButtonColor: true,
+                            hideDivider: true,
+                          )),
                       //Text widget to display current date in MONTH Year format
                       Text(
                         'JUN 2020',
@@ -147,66 +134,9 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                         fontSize: Config.textSize(context, 6)),
                   ),
                 ),
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
+                FitnessCard()
               ],
             )),
-      ),
-    );
-  }
-}
-
-class CustomDateButton extends StatelessWidget {
-  final DateTime date;
-
-  CustomDateButton({this.date});
-  @override
-  Widget build(BuildContext context) {
-    var model = Provider.of<FitnessSchedulesModel>(context, listen: false);
-    return Container(
-      margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
-      width: Config.xMargin(context, 19),
-      alignment: Alignment.center,
-      child: FlatButton(
-        onPressed: () => model.changeDay(date),
-
-        //functionality for finding out if selected date (defaults to present day) equals the date passed in the constructor
-        //I'm using this to determine the color of the container
-        color: model.getButtonColor(context, date),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Config.xMargin(context, 11)),
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              //Day in integer goes here
-              Text(
-                '${date.day}',
-                style: TextStyle(
-                    fontSize: Config.textSize(context, 8),
-                    fontWeight: FontWeight.w600,
-                    color: model.getTextColor(context, date)),
-              ),
-
-              SizedBox(
-                height: Config.yMargin(context, 3),
-              ),
-
-              //Day in shortened words goes here
-              Text(
-                model.getWeekday(date),
-                style: TextStyle(
-                    fontSize: Config.textSize(context, 4.8),
-                    fontWeight: FontWeight.w500,
-                    color: model.getTextColor(context, date)),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -217,51 +147,154 @@ class FitnessCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width,
-      height: height * .35,
-      child: InkWell(
-        //Navigate to screen with single reminder i.e the on user clicked on
-        onTap: () {
-          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
-        },
-        splashColor: Colors.transparent,
-        child: Column(
+    // FitnessNotificationManager fitnessNotificationManager =
+    //     FitnessNotificationManager();
+    return Consumer<FitnessReminderCRUD>(builder: (context, data, child) {
+      return Container(
+        width: width,
+        height: height * .80,
+        child: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(
-                  thickness: 0.7,
-                  color: Theme.of(context).primaryColorDark.withOpacity(.4),
-                  indent: Config.xMargin(context, 0.5),
-                  endIndent: Config.xMargin(context, 2.5)),
-              SizedBox(height: Config.yMargin(context, .5)),
-              Container(
-                width: width,
-                height: height * .22,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('images/sprint.png'),
-                      fit: BoxFit.contain),
-                  borderRadius:
-                      BorderRadius.circular(Config.xMargin(context, 8)),
+            children: data.fitnessReminder.map((e) {
+              // getNotification() {
+              //   final now = new DateTime.now();
+              //   final time = DateTime(now.year, now.month, now.day,
+              //       e.activityTime[0], e.activityTime[1]);
+              //   if (DateTime(now.year, now.month, now.day, now.hour, now.minute)
+              //           .compareTo(time) ==
+              //       0) {
+              //     fitnessNotificationManager.showFitnessNotificationOnce(
+              //         0,
+              //         "It's time to go ${e.name}",
+              //         "For ${e.minsperday} minutes");
+              //   }
+              // }
+
+              // Timer.periodic(
+              //   Duration(seconds: 40),
+              //   (Timer timer) {
+              //     print('Available Reminders Check!');
+              //     getNotification();
+              //   },
+              // );
+
+              return InkWell(
+                splashColor: Theme.of(context).backgroundColor,
+                onTap: () {
+                  //Navigate to screen with single reminder i.e the on user clicked on
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SingleFitnessScreen(
+                                data: e,
+                              )));
+                },
+                child: Column(
+                  children: <Widget>[
+                    Divider(
+                        thickness: 0.7,
+                        color:
+                            Theme.of(context).primaryColorDark.withOpacity(.4),
+                        indent: Config.xMargin(context, 0.5),
+                        endIndent: Config.xMargin(context, 2.5)),
+
+                    SizedBox(height: Config.yMargin(context, .5)),
+                    Container(
+                      width: width,
+                      height: height * .22,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(Config.xMargin(context, 8)),
+                      ),
+                      child: e.fitnesstype == '0'
+                          ? image('images/cycle.png')
+                          : e.fitnesstype == '1'
+                              ? image('images/sprint.png')
+                              : image('images/swim.png'),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 2)),
+                    //Type of fitness exercise goes here
+                    Text(e.name,
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 6),
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColor)),
+                    SizedBox(height: Config.yMargin(context, 1)),
+                    Text(e.minsperday.toString() + ' minutes daily',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 4.5),
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).primaryColorDark)),
+                  ],
                 ),
-              ),
-              SizedBox(height: Config.yMargin(context, 2)),
-              //Type of fitness exercise goes here
-              Text('Running',
-                  style: TextStyle(
-                      fontSize: Config.textSize(context, 6),
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).primaryColor)),
-              SizedBox(height: Config.yMargin(context, 1)),
-              Text('30 minutes daily',
-                  style: TextStyle(
-                      fontSize: Config.textSize(context, 4.5),
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).primaryColorDark)),
-            ]),
-      ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    });
+  }
+
+  image(String image) {
+    return Image(
+      image: AssetImage(image),
+      fit: BoxFit.contain,
     );
   }
 }
+
+// class CustomDateButton extends StatelessWidget {
+//   final DateTime date;
+
+//   CustomDateButton({this.date});
+//   @override
+//   Widget build(BuildContext context) {
+//     var model = Provider.of<FitnessSchedulesModel>(context, listen: false);
+//     return Container(
+//       margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
+//       width: Config.xMargin(context, 19),
+//       alignment: Alignment.center,
+//       child: FlatButton(
+//         onPressed: () => model.changeDay(date),
+
+//         //functionality for finding out if selected date (defaults to present day) equals the date passed in the constructor
+//         //I'm using this to determine the color of the container
+//         color: model.getButtonColor(context, date),
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(Config.xMargin(context, 11)),
+//         ),
+//         child: Container(
+//           alignment: Alignment.center,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: <Widget>[
+//               //Day in integer goes here
+//               Text(
+//                 '${date.day}',
+//                 style: TextStyle(
+//                     fontSize: Config.textSize(context, 8),
+//                     fontWeight: FontWeight.w600,
+//                     color: model.getTextColor(context, date)),
+//               ),
+
+//               SizedBox(
+//                 height: Config.yMargin(context, 3),
+//               ),
+
+//               //Day in shortened words goes here
+//               Text(
+//                 model.getWeekday(date),
+//                 style: TextStyle(
+//                     fontSize: Config.textSize(context, 4.8),
+//                     fontWeight: FontWeight.w500,
+//                     color: model.getTextColor(context, date)),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
