@@ -1,6 +1,10 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
+import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 
 class MedicationCard extends StatefulWidget {
   final String drugName;
@@ -117,7 +121,9 @@ class _MedicationCardState extends State<MedicationCard> {
                           FlatButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.medicationView);
+                                context,
+                                RouteNames.medicationView,
+                              );
                             },
                             child: Text(
                               'View',
