@@ -1,3 +1,6 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
@@ -17,33 +20,34 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   @override
   void initState() {
     super.initState();
+    Provider.of<DietReminderDB>(context, listen: false).getAlldiets();
     _tabController = new TabController(vsync: this, length: 2);
   }
 
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  // final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   ScrollController controller = ScrollController();
-  List<Widget> _dietReminder = [];
-  Widget _buildItem(Widget item, Animation animation) {
-    return SizeTransition(
-      sizeFactor: animation,
-      child: SingleChildScrollView(
-          controller: controller, child: DietReminderCard()),
-    );
-  }
+  // List<Widget> _dietReminder = [];
+  // Widget _buildItem(DietModel diet, Animation animation) {
+  //   return SizeTransition(
+  //     sizeFactor: animation,
+  //     child: SingleChildScrollView(
+  //         controller: controller, child: DietReminderCard(diet: diet)),
+  //   );
+  // }
 
-  void _insertNewDiet() {
-    Widget newDiet = DietReminderCard();
-    int insertIndex = 0;
-    _dietReminder.insert(insertIndex, newDiet);
-    _listKey.currentState.insertItem(insertIndex);
-  }
+  // void _insertNewDiet() {
+  //   Widget newDiet = DietReminderCard();
+  //   int insertIndex = 0;
+  //   _dietReminder.insert(insertIndex, newDiet);
+  //   _listKey.currentState.insertItem(insertIndex);
+  // }
 
-  void removeDiet() {
-    // Widget newDiet = DietReminderCard();
-    int insertIndex = 0;
-    _dietReminder.removeLast();
-    _listKey.currentState.insertItem(insertIndex);
-  }
+  // void removeDiet() {
+  //   // Widget newDiet = DietReminderCard();
+  //   int insertIndex = 0;
+  //   _dietReminder.removeLast();
+  //   _listKey.currentState.insertItem(insertIndex);
+  // }
 
   TabController _tabController;
 
@@ -59,11 +63,14 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
         Provider.of<DietReminderModel>(context).updateVisibility(false);
       }
     });
-
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    var db = Provider.of<DietReminderDB>(context);
     var model = Provider.of<DietReminderModel>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
+        elevation: 0.5,
         backgroundColor: Theme.of(context).primaryColorLight,
         bottom: TabBar(
           isScrollable: true,
@@ -90,7 +97,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
               color: Theme.of(context).primaryColorDark,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, 'homePage');
+              Navigator.pushNamed(context, RouteNames.homePage);
             }),
         actions: <Widget>[
           Padding(
@@ -114,31 +121,57 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              height: 300,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  AnimatedList(
-                    key: _listKey,
-                    initialItemCount: _dietReminder.length,
-                    itemBuilder: (context, index, animation) {
-                      return _buildItem(_dietReminder[index], animation);
-                    },
-                  ),
-                  Container(
-                    child: Center(
-                      child: Text('NO PAST REMINDER'),
-                    ),
-                  )
-                ],
-              ),
+      body: WillPopScope(
+        onWillPop: () {
+          Navigator.pushReplacementNamed(context, RouteNames.homePage);
+          return Future.value(false);
+        },
+        child: TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            ListView.builder(
+              itemCount: db.upcomingDiets.length,
+              itemBuilder: (context, index) {
+                var diets = db.upcomingDiets;
+                var item = diets[index];
+                return diets.length > 1
+                    ? DietReminderCard(diet: item)
+                    : Container(
+                        height: height,
+                        width: width,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                              'No diet reminder.\nClick the button to add one',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.xMargin(context, 5.55))),
+                        ),
+                      );
+              },
             ),
-          ),
-        ],
+            ListView.builder(
+              itemCount: db.pastDiets.length,
+              itemBuilder: (context, index) {
+                var diets = db.pastDiets;
+                var item = diets[index];
+                return diets.length > 1
+                    ? DietReminderCard(diet: item)
+                    : Container(
+                        height: height,
+                        width: width,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text('NO PAST REMINDER',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.xMargin(context, 5.55))),
+                        ),
+                      );
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: AnimatedOpacity(
         duration: Duration(milliseconds: 500),
@@ -151,14 +184,16 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
               child: Icon(
                 Icons.add,
                 color: Theme.of(context).primaryColorLight,
-                size: Config.xMargin(context, 7),
+                size: Config.xMargin(context, 5),
               ),
               backgroundColor: Theme.of(context).primaryColor,
               splashColor: Theme.of(context).primaryColor.withOpacity(.9),
               onPressed: () {
-                setState(() {
-                  _insertNewDiet();
-                });
+                Navigator.pushNamed(
+                    context, RouteNames.scheduleDietReminderScreen);
+                // setState(() {
+                //   _insertNewDiet();
+                // });
               },
             ),
           ),
@@ -169,22 +204,31 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
 }
 
 class DietReminderCard extends StatelessWidget {
+  final DietModel diet;
+
+  const DietReminderCard({Key key, this.diet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print(diet.foodClasses);
+    var model = Provider.of<DietReminderModel>(context);
     return Padding(
-      padding: EdgeInsets.only(left: 8, right: 8, top: 20),
+      padding: EdgeInsets.only(
+          left: Config.xMargin(context, 2.22),
+          right: Config.xMargin(context, 2.22),
+          top: Config.xMargin(context, 5.55)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Center(
             child: Container(
-              padding: EdgeInsets.all(8),
-              height: 150.0,
-              width: 380.0,
+              padding: EdgeInsets.all(Config.xMargin(context, 2.22)),
+              height: Config.yMargin(context, 24.3),
+              width: Config.xMargin(context, 105.55),
               decoration: BoxDecoration(
-                  color: appThemeLight.primaryColorLight,
+                  color: Theme.of(context).primaryColorLight,
                   shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius:
+                      BorderRadius.circular(Config.xMargin(context, 4.17)),
                   boxShadow: [
                     BoxShadow(
                       color: Color(0xFFEDEFF2),
@@ -197,18 +241,18 @@ class DietReminderCard extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('6:00PM'),
+                      Text('${diet.time[0]}:${diet.time[1]}'),
                       SizedBox(
                         height: Config.yMargin(context, 2),
                       ),
-                      Text('July'),
+                      Text(model.monthFromInt(diet.startDate.month)),
                       Text(
-                        '12',
+                        '${diet.startDate.day}',
                         style: TextStyle(
                             fontSize: 30,
                             color: Theme.of(context).primaryColor),
                       ),
-                      Text('Thurs'),
+                      Text(model.weekayFromInt(diet.startDate.weekday)),
                     ],
                   ),
                   SizedBox(
@@ -232,7 +276,8 @@ class DietReminderCard extends StatelessWidget {
                         height: Config.xMargin(context, 7),
                       ),
                       Text(
-                        'Carbohydrate, Protein and Drinks',
+                        diet.dietName,
+                        // model.foodClassesFromDietModel(diet.foodClasses ?? []),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(

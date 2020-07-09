@@ -28,13 +28,12 @@ class ScrollableCalendar extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      height: height * 0.12,
+      height: height * 0.18,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
             //without specifying this height, flutter throws an error because of the grid
-            height: height * 0.095,
+            height: height * 0.15,
             child: ScrollablePositionedList.builder(
               physics: BouncingScrollPhysics(),
               //sets default selected day to the index of Date.now() date
@@ -72,58 +71,79 @@ class ScrollableCalendar extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: useButtonColor
                           ? model.getButtonColor(context, index)
-                          : Theme.of(context).primaryColorLight,
+                          : Theme.of(context).backgroundColor,
                       borderRadius: BorderRadius.circular(height * 0.04),
                     ),
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: Config.xMargin(context, 2)),
                     // padding: EdgeInsets.symmetric(
                     //     horizontal: Config.xMargin(context, 4.5)),
-                    child: Stack(fit: StackFit.expand, children: [
-                      Positioned(
-                        top: height * .5,
-                        child: Divider(
-                          color: Theme.of(context).primaryColor,
-                          thickness: 2,
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              time.length > 1 ? time : '0$time',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColorDark,
-                                  fontSize: Config.textSize(context, 7.2),
-                                  fontWeight: FontWeight.w500),
+                    child: useButtonColor
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                (index + 1).toString(),
+                                // style: model.calendarTextStyle(
+                                //     context, index),
+                              ),
+                              SizedBox(height: Config.yMargin(context, 1.5)),
+                              Text(
+                                model.getWeekDay(index),
+                                // style: model.calendarSubTextStyle(
+                                //     context, index),
+                              ),
+                            ],
+                          )
+                        : Stack(fit: StackFit.expand, children: [
+                            Positioned(
+                              top: height * .5,
+                              child: Divider(
+                                color: Theme.of(context).primaryColor,
+                                thickness: 2,
+                              ),
                             ),
-                            SizedBox(height: Config.yMargin(context, .5)),
-                            Text(model.getWeekDay(index),
-                                style: TextStyle(
-                                  letterSpacing: 1.2,
-                                  color: Theme.of(context).hintColor,
-                                  fontSize: Config.textSize(context, 4.2),
-                                  //fontWeight: FontWeight.w500
-                                )),
-                            //Divider that will show which date is tapped
-                            !useButtonColor && index + 1 == model.selectedDay
-                                ? Divider(
-                                    endIndent: Config.xMargin(context, 11),
-                                    color: Theme.of(context).primaryColor,
-                                    thickness: 2,
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                      ),
-                    ]),
+                            SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    time.length > 1 ? time : '0$time',
+                                    style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        fontSize: Config.textSize(context, 7.2),
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: Config.yMargin(context, .5)),
+                                  Text(model.getWeekDay(index),
+                                      style: TextStyle(
+                                        letterSpacing: 1.2,
+                                        color: Theme.of(context).hintColor,
+                                        fontSize: Config.textSize(context, 4.2),
+                                        //fontWeight: FontWeight.w500
+                                      )),
+                                  //Divider that will show which date is tapped
+                                  !useButtonColor &&
+                                          index + 1 == model.selectedDay
+                                      ? Divider(
+                                          endIndent:
+                                              Config.xMargin(context, 11),
+                                          color: Theme.of(context).primaryColor,
+                                          thickness: 2,
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                            ),
+                          ]),
                   ),
                 );
               },
             ),
           ),
+          SizedBox(height: Config.yMargin(context, 1)),
           hideDivider
               ? Container()
               : Divider(

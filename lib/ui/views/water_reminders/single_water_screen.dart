@@ -1,10 +1,11 @@
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
-import 'package:MedBuzz/ui/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
+
+import '../../../core/notifications/water_notification_manager.dart';
 
 class SingleWater extends StatefulWidget {
   SingleWater({this.water});
@@ -71,7 +72,7 @@ class _SingleWaterState extends State<SingleWater> {
                     Container(
                       width: Config.xMargin(context, 44),
                       child: Text(
-                        'Drink 1000 ml of water',
+                        'Drink ml of water',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 5.3),

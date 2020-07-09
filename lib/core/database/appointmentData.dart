@@ -14,6 +14,10 @@ class AppointmentData extends ChangeNotifier {
   bool isEditing = false;
 
   List<Appointment> _appointment = [];
+  List<Appointment> _sortedAppointment = [];
+
+  List<Appointment> get appointment => _appointment;
+  List<Appointment> get sortedAppointment => _sortedAppointment;
 
   Appointment _activeAppointment;
 
