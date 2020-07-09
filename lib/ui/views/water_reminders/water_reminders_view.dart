@@ -179,7 +179,7 @@ class _WaterScheduleViewState extends State<WaterScheduleView> {
                         children: <Widget>[
                           //Proper data will be fetched from DB
                           Text(
-                            '$currentLevel' + 'ml',
+                            '${waterReminderDB.currentLevel}' + 'ml',
                             style: TextStyle(
                                 fontSize: Config.textSize(context, 7),
                                 fontWeight: FontWeight.bold),

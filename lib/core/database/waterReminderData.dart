@@ -26,6 +26,14 @@ class WaterReminderData extends ChangeNotifier {
     return _waterReminders[index];
   }
 
+  int get currentLevel => _waterReminders
+      .map((e) => e.ml)
+      .reduce((value, element) => value + element);
+
+  int get totalLevel => _waterReminders
+      .map((e) => e.ml)
+      .reduce((value, element) => value + element);
+
   void addWaterReminder(WaterReminder waterReminder) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
 
