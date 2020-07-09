@@ -35,7 +35,8 @@ class _WaterCardState extends State<WaterReminderCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
-    var waterReminder = Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    var waterReminder =
+        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     WaterNotificationManager waterNotificationManager =
         WaterNotificationManager();
     return Container(
@@ -104,21 +105,21 @@ class _WaterCardState extends State<WaterReminderCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Drink ${widget.waterReminder.ml ?? 150}ml of water',
+                                'Drink ${widget.waterReminder.ml ?? 0}ml of water',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: widget.height * 0.005),
                               Text(
-                                _skip == true
+                                widget.waterReminder.isSkipped == true
                                     ? 'Skipped'
                                     : _done == true
                                         // ||
                                         //         widget.waterReminder.dateTime
                                         //             .isAfter(DateTime.now())
                                         ? 'Completed'
-                                        : 'Upcoming',
+                                        : 'Pending',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),
@@ -136,8 +137,8 @@ class _WaterCardState extends State<WaterReminderCard> {
                                 onPressed: () {
                                   waterReminderDB.deleteWaterReminder(
                                       widget.waterReminder.id);
-                                  waterNotificationManager
-                                      .removeReminder(waterReminder.selectedDay);
+                                  waterNotificationManager.removeReminder(
+                                      waterReminder.selectedDay);
                                 },
                                 icon: Icon(Icons.delete),
                                 color: Colors.red,
@@ -176,6 +177,7 @@ class _WaterCardState extends State<WaterReminderCard> {
   }
 
   Widget flatButton(String text) {
+    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     return FlatButton(
       onPressed: () {
         if (text == 'View') {
