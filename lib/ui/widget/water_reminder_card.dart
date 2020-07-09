@@ -28,8 +28,20 @@ class WaterReminderCard extends StatefulWidget {
 
 class _WaterCardState extends State<WaterReminderCard> {
   bool isSelected = false;
-  bool _skip = false;
-  bool _done = false;
+
+  String _status(waterReminder) {
+    String value = 'Pending';
+    if (waterReminder.isSkipped) {
+      value = 'Skipped';
+    } else if (waterReminder.isTaken) {
+      value = 'Completed';
+    } else if (waterReminder.dateTime.isBefore(DateTime.now()) &&
+        !waterReminder.isTaken &&
+        !waterReminder.isSkipped) {
+      value = 'Missed';
+    }
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +124,7 @@ class _WaterCardState extends State<WaterReminderCard> {
                               ),
                               SizedBox(height: widget.height * 0.005),
                               Text(
-                                widget.waterReminder.isSkipped == true
-                                    ? 'Skipped'
-                                    : widget.waterReminder.isTaken == true &&
-                                            widget.waterReminder.dateTime
-                                                .isAfter(DateTime.now())
-                                        ? 'Completed'
-                                        : 'Pending',
+                                _status(widget.waterReminder),
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),

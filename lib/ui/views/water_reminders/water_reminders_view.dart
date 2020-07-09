@@ -12,24 +12,22 @@ import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
 class WaterScheduleViewScreen extends StatelessWidget {
   final Navigation navigation = Navigation();
   final String payload;
   WaterScheduleViewScreen({this.payload});
 
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
   @override
   Widget build(BuildContext context) {
     // var waterReminder =
     //     Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (waterReminderDB.waterRemindersCount > 0)
-    //     waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
-    // });
-    // String formattedTime = DateFormat.jm().format(time);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -38,6 +36,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
             bottom: Config.yMargin(context, 2),
             right: Config.xMargin(context, 4)),
         child: SizedBox(
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
           height: height * 0.08,
           width: height * 0.08,
           child: FloatingActionButton(
@@ -87,6 +86,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                     child: Stack(
                       children: <Widget>[
                         SizedBox(
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
                           height: height * 0.37,
                           width: height * 0.37,
                           child: CircularProgressIndicator(
@@ -138,6 +138,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               //Proper data will be fetched from DB
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
                               Text(
                                 '${waterReminderDB.currentLevel} ' + 'ml',
                                 style: TextStyle(
