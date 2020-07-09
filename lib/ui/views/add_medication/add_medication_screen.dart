@@ -61,10 +61,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               .headline6 //REMOVED THE 6
               .copyWith(
                 color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.w500,
               ),
         ),
         backgroundColor: Theme.of(context).primaryColorLight,
-        elevation: 1.0,
+        elevation: 0,
       ),
       body: Container(
         color: Theme.of(context).primaryColorLight,

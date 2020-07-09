@@ -27,12 +27,7 @@ void main() async {
   Hive.registerAdapter(FitnessReminderAdapter());
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox('onboarding');
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

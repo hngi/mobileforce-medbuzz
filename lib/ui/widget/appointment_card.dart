@@ -72,9 +72,7 @@ class AppointmentCard extends StatelessWidget {
                               'Delete',
                               textAlign: TextAlign.center,
                             ),
-                            onTap: () {
-                              asyncConfirmDialog(context);
-                            },
+                            onTap: () {},
                           )),
                         ].toList();
                       }),
