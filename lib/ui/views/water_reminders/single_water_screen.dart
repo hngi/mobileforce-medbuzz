@@ -1,17 +1,30 @@
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
-import 'package:MedBuzz/ui/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 
-class SingleWater extends StatelessWidget {
-  SingleWater({this.waterReminder});
-  final WaterReminder waterReminder;
+import '../../../core/notifications/water_notification_manager.dart';
 
-  final WaterNotificationManager waterNotificationManager =
+class SingleWater extends StatefulWidget {
+  SingleWater({this.water});
+
+  final WaterReminder water;
+
+  @override
+  _SingleWaterState createState() => _SingleWaterState();
+}
+
+class _SingleWaterState extends State<SingleWater> {
+  WaterReminder waterReminder;
+  WaterNotificationManager waterNotificationManager =
       WaterNotificationManager();
-  final WaterReminderData waterReminderData = WaterReminderData();
+
+  Navigation navigation = Navigation();
+
+  final db = WaterReminderData();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +72,7 @@ class SingleWater extends StatelessWidget {
                     Container(
                       width: Config.xMargin(context, 44),
                       child: Text(
-                        'Drink 250ml of Water',
+                        'Drink ml of water',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 5.3),
@@ -126,7 +139,7 @@ class SingleWater extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '8:00AM',
+                              "10:00AM",
                               style: TextStyle(
                                 color: Theme.of(context).primaryColor,
                                 fontSize: Config.textSize(context, 3.6),

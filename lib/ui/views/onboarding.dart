@@ -1,8 +1,10 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/dot_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class Onboard extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class Onboard extends StatefulWidget {
 }
 
 class _OnboardState extends State<Onboard> {
+  
   PageController _controller;
   int currentIndex = 0;
   @override
@@ -28,31 +31,7 @@ class _OnboardState extends State<Onboard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(Config.yMargin(context, 1));
-    print(Config.xMargin(context, 1));
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: appThemeLight.primaryColorLight,
-        actions: <Widget>[
-          Container(
-            padding: const EdgeInsetsDirectional.only(top: 30),
-            child: FlatButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'signup');
-              }, //navigate to the sign up page
-              child: Text(
-                "Skip",
-                style: TextStyle(
-                    color: appThemeLight.primaryColorDark,
-                    fontSize: Config.textSize(context, 3.7),
-                    fontWeight: FontWeight.normal),
-              ),
-              color: Colors.transparent,
-            ),
-          ),
-        ],
-      ),
       body: Container(
         height: height,
         width: width,
@@ -110,55 +89,60 @@ class _OnboardState extends State<Onboard> {
             ),
             Positioned(
               bottom: Config.yMargin(context, 8.7),
-              left: Config.xMargin(context, 14),
+              left: Config.xMargin(context, 37),
               child: Container(
-                child: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   //     crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      height: Config.yMargin(context, 6),
-                      width: Config.xMargin(context, 27),
-                      decoration: BoxDecoration(
-                          color: appThemeLight.primaryColor,
-                          border: Border.all(color: appThemeLight.primaryColor),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, 'signup');
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                              color: appThemeLight.primaryColorLight,
-                              fontWeight: FontWeight.bold),
+                    Center(
+                      child: Container(
+                        height: Config.yMargin(context, 6),
+                        width: Config.xMargin(context, 27),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, 'signup');
+                          },
+                          child: Text(
+                            "Next",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColorLight,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: Config.xMargin(context, 17),
-                    ),
-                    Container(
-                      height: Config.yMargin(context, 6),
-                      width: Config.xMargin(context, 27),
-                      decoration: BoxDecoration(
-                          color: appThemeLight.primaryColorLight,
-                          border: Border.all(color: appThemeLight.primaryColor),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, 'login');
-                        },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              color: appThemeLight.primaryColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: Config.xMargin(context, 17),
+                    // ),
+                    // Container(
+                    //   height: Config.yMargin(context, 6),
+                    //   width: Config.xMargin(context, 27),
+                    //   decoration: BoxDecoration(
+                    //       color: Theme.of(context).primaryColorLight,
+                    //       border:
+                    //           Border.all(color: Theme.of(context).primaryColor),
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: FlatButton(
+                    //     onPressed: () {
+                    //       box.put('status', 'true');
+                    //       Navigator.pushReplacementNamed(
+                    //           context, RouteNames.login);
+                    //     },
+                    //     child: Text(
+                    //       "Login",
+                    //       style: TextStyle(
+                    //           color: Theme.of(context).primaryColor,
+                    //           fontWeight: FontWeight.bold),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -178,7 +162,6 @@ class _OnboardState extends State<Onboard> {
 
 // class to display the screens
 class FirstScreen extends StatelessWidget {
-  final Config config = Config();
   final image;
   final description;
 
@@ -188,8 +171,9 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var box = Hive.box('onboarding');
     return Scaffold(
-      backgroundColor: appThemeLight.primaryColorLight,
+      backgroundColor: Theme.of(context).primaryColorLight,
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: Config.xMargin(context, 6),
@@ -199,14 +183,34 @@ class FirstScreen extends StatelessWidget {
           width: width,
           child: Column(
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      
+                      Navigator.pushReplacementNamed(
+                          context, RouteNames.signup);
+                    }, //navigate to the sign up page
+                    child: Text(
+                      "Skip",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
+                          fontWeight: FontWeight.normal),
+                    ),
+                    color: Colors.transparent,
+                  ),
+                ],
+              ),
               Container(
-                height: height * .45,
+                height: height * .4,
                 width: width,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(image), fit: BoxFit.contain)),
               ),
-              SizedBox(height: Config.yMargin(context, 3.4)),
+              SizedBox(height: Config.yMargin(context, 3)),
               Container(
                 child: ForwardAnimation(
                   milliseconds: 500,
@@ -214,7 +218,7 @@ class FirstScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 3.7),
+                          fontSize: Config.textSize(context, 6.5),
                           fontWeight: FontWeight.bold)),
                 ),
               ),

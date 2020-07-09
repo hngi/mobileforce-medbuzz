@@ -1,10 +1,10 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'all_medications_reminder_model.dart';
 
 class MedicationScreen extends StatefulWidget {
   @override
@@ -19,9 +19,9 @@ class _MedicationScreenState extends State<MedicationScreen> {
     //This makes the FAB disappear as you scroll down
     controller.addListener(() {
       if (controller.offset < 120) {
-        Provider.of<MedicationsSchedulesModel>(context).updateVisibility(true);
+        Provider.of<MedicationData>(context).updateVisibility(true);
       } else {
-        Provider.of<MedicationsSchedulesModel>(context).updateVisibility(false);
+        Provider.of<MedicationData>(context).updateVisibility(false);
       }
     });
   }
@@ -33,12 +33,13 @@ class _MedicationScreenState extends State<MedicationScreen> {
   var _height = 80;
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context);
+    Provider.of<MedicationData>(context).getMedicationReminder();
+    var model = Provider.of<MedicationData>(context);
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).primaryColorLight,
       floatingActionButton: AnimatedOpacity(
         duration: Duration(milliseconds: 500),
         opacity: model.isVisible ? 1 : 0,
@@ -56,16 +57,15 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 splashColor: Theme.of(context).buttonColor.withOpacity(.9),
                 //Navigate to fitness reminder creation screen
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMedicationScreen()));
+                  final medModel = Provider.of<MedicationData>(context);
+
+                  medModel.newMedicine(context);
                 }),
           ),
         ),
       ),
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
           'My Medications',
@@ -80,7 +80,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
 
             //Function to navigate to previous screen or home screen (as the case maybe) goes here
             onPressed: () {
-              Navigator.pushNamed(context, 'homePage');
+              Navigator.popAndPushNamed(context, RouteNames.homePage);
             }),
       ),
       body: SingleChildScrollView(
@@ -139,10 +139,47 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 SizedBox(height: Config.yMargin(context, 5)),
                 //Here the already saved reminders will be loaded dynamically
 
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
-                FitnessCard(),
+                Container(
+                  margin: EdgeInsets.only(bottom: Config.yMargin(context, 2)),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return MedicationCard(
+                        values: model.medicationReminder[index],
+                        drugName: model.medicationReminder[index].drugName,
+                        drugType: model.medicationReminder[index].drugType ==
+                                'Injection'
+                            ? "images/injection.png"
+                            : model.medicationReminder[index].drugType ==
+                                    'Tablets'
+                                ? "images/tablets.png"
+                                : model.medicationReminder[index].drugType ==
+                                        'Drops'
+                                    ? "images/drops.png"
+                                    : model.medicationReminder[index]
+                                                .drugType ==
+                                            'Pills'
+                                        ? "images/pills.png"
+                                        : model.medicationReminder[index]
+                                                    .drugType ==
+                                                'Ointment'
+                                            ? "images/ointment.png"
+                                            : model.medicationReminder[index]
+                                                        .drugType ==
+                                                    'Syrup'
+                                                ? "images/syrup.png"
+                                                : "images/inhaler.png",
+                        time: model.medicationReminder[index].firstTime
+                            .toString(),
+                        dosage: model.medicationReminder[index].dosage,
+                        selectedFreq: model.medicationReminder[index].frequency,
+                      );
+                    },
+                    itemCount: model.medicationReminder.length,
+                  ),
+                )
               ],
             )),
       ),
@@ -156,7 +193,7 @@ class CustomDateButton extends StatelessWidget {
   CustomDateButton({this.date});
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context, listen: false);
+    var model = Provider.of<MedicationData>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
       width: Config.xMargin(context, 15.5),
@@ -202,152 +239,241 @@ class CustomDateButton extends StatelessWidget {
     );
   }
 }
-//class MyExpand extends StatelessWidget {
-//  var _color = Colors.grey;
-//  var _height = 80.0;
-//  @override
-//  Widget build(BuildContext context) {
-//    var model = Provider.of<MedicationsSchedulesModel>(context);
-//    return GestureDetector(
-//      onTap: model.animateContainer(),
-//      child: Container(
-//        padding: EdgeInsets.all(10),
-//        child: Column(
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            AnimatedContainer(duration: Duration(seconds: 1),
-//            color: _color,
-//            height: _height)
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}
 
-class FitnessCard extends StatelessWidget {
+class MedicationCard extends StatefulWidget {
+  final double height;
+  final double width;
+  final String drugName;
+  final String drugType;
+  final String time;
+  final int dosage;
+  final String selectedFreq;
+  final MedicationReminder values;
+
+  MedicationCard(
+      {this.values,
+      this.drugName,
+      this.drugType,
+      this.time,
+      this.height,
+      this.width,
+      this.dosage,
+      this.selectedFreq});
+
+  @override
+  _MedicationCardState createState() => _MedicationCardState();
+}
+
+class _MedicationCardState extends State<MedicationCard> {
+  bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<MedicationsSchedulesModel>(context);
+    final medModel = Provider.of<MedicationData>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width,
-      height: height * .35,
-      child: InkWell(
-        //Navigate to screen with single reminder i.e the on user clicked on
-        onTap: () {},
-        splashColor: Colors.transparent,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "8:00 AM",
-                style: TextStyle(fontSize: Config.textSize(context, 5)),
-              ),
-              Divider(
-                  thickness: 0.7,
-                  color: Theme.of(context).primaryColorDark.withOpacity(.4),
-                  indent: Config.xMargin(context, 2.5),
-                  endIndent: Config.xMargin(context, 2.5)),
-              SizedBox(height: Config.yMargin(context, 2)),
-              Container(
+//    print(height);
+//    print(width);
+    return GestureDetector(
+      //Navigate to screen with single reminder i.e the on user clicked on
+      onTap: () {
+        setState(() => isSelected = !isSelected);
+      },
+
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              medModel
+                  .convertTimeBack(widget.values.firstTime)
+                  .format(context)
+                  .toString(),
+            ),
+            SizedBox(height: height * 0.02),
+            Container(
                 width: width,
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 3),
+                    vertical: Config.yMargin(context, 1)),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).hintColor,
+                  color: isSelected
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).backgroundColor,
                   borderRadius:
-                      BorderRadius.circular(Config.xMargin(context, 8)),
+                      BorderRadius.circular(Config.xMargin(context, 5)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColorLight,
+                      spreadRadius: Config.xMargin(context, 2),
+                    ),
+                  ],
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: ExpansionTile(
-                      title: Text(
-                        "Chloroquine Injection",
-                        style: TextStyle(
-                            fontSize: Config.textSize(context, 5),
-                            fontWeight: FontWeight.bold,
-                            color: model.isExpanded
-                                ? Theme.of(context).primaryColorLight
-                                : Theme.of(context).primaryColorDark),
-                      ),
-                      leading: Image.asset(
-                        "images/injection.png",
-                        color: Theme.of(context).primaryColorLight,
-                        width: 50,
-                        height: 50,
-                      ),
-                      subtitle: Text("1 shots once daily",
-                          style: TextStyle(
-                              fontSize: Config.textSize(context, 5),
-                              color: model.isExpanded
-                                  ? Theme.of(context).primaryColorLight
-                                  : Theme.of(context).primaryColorDark)),
-                      backgroundColor: model.isExpanded
-                          ? Theme.of(context).hintColor
-                          : Theme.of(context).primaryColor,
+                child: Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Divider(
-                            thickness: 1,
-                            color: Theme.of(context).primaryColorLight,
-                            indent: Config.xMargin(context, 2.0),
-                            endIndent: Config.xMargin(context, 2.0)),
-                        Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Row(
-                            children: <Widget>[
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, RouteNames.medicationView);
-                                },
-                                child: Text(
-                                  "View",
-                                  style: TextStyle(
-                                      fontSize: Config.textSize(context, 5),
-                                      color:
-                                          Theme.of(context).primaryColorLight),
-                                ),
-                              ),
-                              FlatButton.icon(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.cancel,
-                                  color: Theme.of(context).primaryColorLight,
-                                ),
-                                label: Text(
-                                  "Skip",
-                                  style: TextStyle(
-                                      fontSize: Config.textSize(context, 5),
-                                      color:
-                                          Theme.of(context).primaryColorLight),
-                                ),
-                              ),
-                              FlatButton.icon(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.check,
-                                  color: Theme.of(context).primaryColorLight,
-                                ),
-                                label: Text(
-                                  "Done",
-                                  style: TextStyle(
-                                      fontSize: Config.textSize(context, 5),
-                                      color:
-                                          Theme.of(context).primaryColorLight),
-                                ),
-                              ),
-                            ],
-                          ),
+                        Image.asset(
+                          medModel.images[int.parse(widget.values.index)],
+//                            color: Theme.of(context).primaryColorLight,
+                          width: width * 0.2,
+                          height: height * 0.1,
+                        ),
+                        SizedBox(
+                          width: Config.xMargin(context, 8.5),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              widget.values.drugName,
+                              style: TextStyle(
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColorLight
+                                      : Theme.of(context).primaryColorDark,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Text(
+                              '${widget.dosage} - ${widget.selectedFreq} per day',
+                              style: TextStyle(
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColorLight
+                                      : Theme.of(context).primaryColorDark),
+                            ),
+                          ],
                         ),
                       ],
-                      onExpansionChanged: (changed) {
-                        model.expandTile(changed);
-                      }),
-                ),
-              ),
-            ]),
-      ),
+                    ),
+                    SizedBox(
+                      height: Config.yMargin(context, 1),
+                      width: double.infinity,
+                    ),
+                    Divider(
+                      color: Theme.of(context).primaryColorLight,
+                      height: height * 0.02,
+//indent: 50.0,
+                      // endIndent: 10.0,
+                    ),
+                    Visibility(
+                      visible: isSelected,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              var medModel =
+                                  Provider.of<MedicationData>(context);
+                              print('----All Medication Reminder info ------');
+                              print(medModel.updateSelectedDrugType(
+                                  widget.values.drugType));
+                              print(medModel
+                                  .updateDrugName(widget.values.drugName));
+                              print("id = " +
+                                  medModel.updateId(widget.values.id));
+                              print(
+                                  medModel.updateDosage(widget.values.dosage));
+                              medModel.updateStartDate(widget.values.startAt);
+                              medModel.updateEndDate(widget.values.endAt);
+                              print(
+                                  medModel.updateFreq(widget.values.frequency));
+                              print(medModel.updateDescription(
+                                  widget.values.description));
+
+                              if (medModel.selectedFreq == 'Once') {
+                                print(medModel.updateFirstTime(medModel
+                                    .convertTimeBack(widget.values.firstTime)));
+                              } else if (medModel.selectedFreq == 'Twice') {
+                                print(medModel.updateFirstTime(medModel
+                                    .convertTimeBack(widget.values.firstTime)));
+                                print(medModel.updateSecondTime(
+                                    medModel.convertTimeBack(
+                                        widget.values.secondTime)));
+                              } else if (medModel.selectedFreq == 'Thrice') {
+                                print(medModel.updateFirstTime(medModel
+                                    .convertTimeBack(widget.values.firstTime)));
+                                print(medModel.updateSecondTime(
+                                    medModel.convertTimeBack(
+                                        widget.values.secondTime)));
+                                print(medModel.updateThirdTime(medModel
+                                    .convertTimeBack(widget.values.thirdTime)));
+                              }
+                              print(medModel.updateSelectedIndex(
+                                  int.parse(widget.values.index)));
+
+                              print('-------------------------------');
+
+                              Navigator.pushNamed(
+                                context,
+                                RouteNames.medicationView,
+                              );
+                            },
+                            child: Text(
+                              'View',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColorLight
+                                      : Theme.of(context).primaryColorDark),
+                            ),
+                          ),
+                          FlatButton(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.close,
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColorLight
+                                      : Theme.of(context).primaryColorDark,
+                                  size: Config.textSize(context, 3),
+                                ),
+                                SizedBox(
+                                  width: Config.xMargin(context, 2),
+                                ),
+                                Text(
+                                  'Skip',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? Theme.of(context).primaryColorLight
+                                          : Theme.of(context).primaryColorDark),
+                                )
+                              ],
+                            ),
+                            onPressed: () {},
+                          ),
+                          FlatButton(
+                            onPressed: () {},
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.done,
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColorLight
+                                      : Theme.of(context).primaryColorDark,
+                                  size: Config.textSize(context, 3),
+                                ),
+                                SizedBox(
+                                  width: Config.xMargin(context, 2),
+                                ),
+                                Text(
+                                  'Done',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? Theme.of(context).primaryColorLight
+                                          : Theme.of(context).primaryColorDark),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          ]),
     );
   }
 }

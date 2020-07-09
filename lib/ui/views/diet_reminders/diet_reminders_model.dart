@@ -9,6 +9,8 @@ class DietReminderModel extends ChangeNotifier {
   static DateTime __today = DateTime.now();
   static int __month = __today.month;
 
+  List<String> _selectedFoodClasses = [];
+
   int _currentDay = DateTime.now().day;
   String _selectedFoodClass;
   bool _isProtein = false;
@@ -24,6 +26,111 @@ class DietReminderModel extends ChangeNotifier {
   int _daysInMonth = DateUtil().daysInMonth(__month, __today.year);
 
   int get currentDay => _currentDay;
+  List<String> get selectedFoodClasses => _selectedFoodClasses;
+
+  int get month => _month;
+
+  DateTime getSelectedDate() =>
+      DateTime.parse('${__today.year}-$_month-$_selectedDay');
+
+  //this function is used on the AllDietReminders screen to convert the foodclasses
+  //retrieved from the diet model from list to string
+  String foodClassesFromDietModel(List<String> list) {
+    if (list.length == 1) {
+      return list[0];
+    }
+    String str = '';
+    for (var i in list) {
+      if (i == list[list.length - 1]) {
+        str += ' and $i.';
+      } else {
+        str += '$i,';
+      }
+    }
+    return str;
+  }
+
+  //this function is used on the AllDietReminders screen to convert the month
+  //retrieved from the date of the reminder from int to string
+  String monthFromInt(int month) {
+    return month == 1
+        ? 'January'
+        : month == 2
+            ? 'February'
+            : month == 3
+                ? 'March'
+                : month == 4
+                    ? 'April'
+                    : month == 5
+                        ? 'May'
+                        : month == 6
+                            ? 'June'
+                            : month == 7
+                                ? 'July'
+                                : month == 8
+                                    ? 'August'
+                                    : month == 9
+                                        ? 'September'
+                                        : month == 10
+                                            ? 'October'
+                                            : month == 11
+                                                ? 'November'
+                                                : 'December';
+  }
+
+  //this function is used on the AllDietReminders screen to convert the weekday
+  //retrieved from the date of the reminder from int to string
+
+  String weekayFromInt(int weekday) {
+    return weekday == 1
+        ? 'Mon'
+        : weekday == 2
+            ? 'Tue'
+            : weekday == 3
+                ? 'Wed'
+                : weekday == 4
+                    ? 'Thur'
+                    : weekday == 5 ? 'Fri' : weekday == 6 ? 'Sat' : 'Sun';
+  }
+
+  DateTime getStartDate() {
+    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+    String weekday =
+        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+    return DateTime.parse('${__today.year}-$month-$weekday');
+  }
+
+  DateTime getDateTime() {
+    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+    String weekday =
+        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+    return DateTime.parse(
+        '${__today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
+  }
+
+  bool isActive(index) {
+    //increment index to match day index and compare
+    return index + 1 == _selectedDay;
+  }
+
+  Color getButtonColor(BuildContext context, index) {
+    return isActive(index)
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).primaryColorDark.withOpacity(0.05);
+  }
+
+  void updatesSelectedFoodClasses(String foodClass) {
+    if (_selectedFoodClasses.contains(foodClass)) {
+      this._selectedFoodClasses.remove(foodClass);
+      notifyListeners();
+      return;
+    }
+    if (!_selectedFoodClasses.contains(foodClass)) {
+      this._selectedFoodClasses.add(foodClass);
+      notifyListeners();
+      return;
+    }
+  }
 
   void getDaysInMonth() {
     this._daysInMonth = DateUtil().daysInMonth(_month, _today.year);
@@ -137,6 +244,9 @@ class DietReminderModel extends ChangeNotifier {
 
   void updateSelectedTime(dynamic time) {
     this._selectedTime = time;
+    print(time);
+    print(time);
+    notifyListeners();
   }
 
   void _getCurrentMonth() {
