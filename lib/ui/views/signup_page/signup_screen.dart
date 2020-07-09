@@ -60,7 +60,7 @@ class Signup extends StatelessWidget {
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
                     fontSize: Config.xMargin(context, 5.5)),
-                decoration: InputDecoration.collapsed(hintText: 'Your name')),
+                decoration: InputDecoration(hintText: 'Your name')),
           ),
         ),
         InkWell(
@@ -71,9 +71,8 @@ class Signup extends StatelessWidget {
                   id: DateTime.now().toString(), name: nameController.text);
               userDb.adduser(newuser);
               box.put('status', 'true');
-              Future.delayed(Duration(seconds: 2), () {
-                Navigator.pushReplacementNamed(context, RouteNames.homePage);
-              });
+              Provider.of<UserCrud>(context, listen: false).getuser();
+              Navigator.pushReplacementNamed(context, RouteNames.homePage);
             } else {
               showSnackBar(context);
             }

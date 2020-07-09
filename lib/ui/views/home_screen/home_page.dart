@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    Provider.of<UserCrud>(context, listen: false).getuser();
     _menuPositionController = MenuPositionController(initPosition: 0);
     _pageController = PageController(
       initialPage: 0,
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         Config.xMargin(context, 6),
                         Config.yMargin(context, 2),
                         Config.xMargin(context, 6),
-                        Config.yMargin(context, 4),
+                        Config.yMargin(context, 8.5),
                       ),
                       child: Column(
                         children: [
