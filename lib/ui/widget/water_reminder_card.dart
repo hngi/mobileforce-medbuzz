@@ -114,10 +114,9 @@ class _WaterCardState extends State<WaterReminderCard> {
                               Text(
                                 widget.waterReminder.isSkipped == true
                                     ? 'Skipped'
-                                    : _done == true
-                                        // ||
-                                        //         widget.waterReminder.dateTime
-                                        //             .isAfter(DateTime.now())
+                                    : widget.waterReminder.isTaken == true &&
+                                            widget.waterReminder.dateTime
+                                                .isAfter(DateTime.now())
                                         ? 'Completed'
                                         : 'Pending',
                                 style: TextStyle(
@@ -180,16 +179,41 @@ class _WaterCardState extends State<WaterReminderCard> {
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     return FlatButton(
       onPressed: () {
-        if (text == 'View') {
-          Navigator.pushNamed(context, RouteNames.singleWater,
-              arguments: SingleWater(water: widget.waterReminder));
-          print('Clicked');
+        switch (text) {
+          case 'Skip':
+            waterReminderDB.editWaterReminder(
+                waterReminder: WaterReminder(
+                    ml: widget.waterReminder.ml,
+                    dateTime: widget.waterReminder.dateTime,
+                    id: widget.waterReminder.id,
+                    isSkipped: true,
+                    isTaken: false),
+                waterReminderKey: widget.waterReminder.id);
+            break;
+          case 'Done':
+            waterReminderDB.editWaterReminder(
+                waterReminder: WaterReminder(
+                    ml: widget.waterReminder.ml,
+                    dateTime: widget.waterReminder.dateTime,
+                    id: widget.waterReminder.id,
+                    isSkipped: false,
+                    isTaken: true),
+                waterReminderKey: widget.waterReminder.id);
+            break;
+          case 'View':
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SingleWater(water: widget.waterReminder)));
+            break;
+          default:
         }
-        setState(() {
-          text == 'Skip' ? _skip = true : _skip = false;
-          text == 'Done' ? _done = true : _done = false;
-          text == 'View' ? _done = false : _done = true;
-        });
+
+        // setState(() {
+        //   text == 'Skip' ? waterRe = true : _skip = false;
+        //   text == 'Done' ? _done = true : _done = false;
+        // });
       },
       child: Row(
         children: <Widget>[

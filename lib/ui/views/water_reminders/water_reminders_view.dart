@@ -95,9 +95,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                                   ? AlwaysStoppedAnimation(Colors.red)
                                   : AlwaysStoppedAnimation(
                                       Theme.of(context).primaryColor),
-                              value: waterReminderDB.done == true
-                                  ? waterReminderDB.progress
-                                  : 0,
+                              value: waterReminderDB.progress,
                               strokeWidth: width * 0.04),
                         ),
                         Container(
@@ -141,7 +139,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                             children: <Widget>[
                               //Proper data will be fetched from DB
                               Text(
-                                '${waterReminderDB.totalLevel} ' + 'ml',
+                                '${waterReminderDB.currentLevel} ' + 'ml',
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 7),
                                     fontWeight: FontWeight.bold),
@@ -149,7 +147,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                               SizedBox(
                                 height: Config.yMargin(context, 0.7),
                               ),
-                              Text('of 3500 ml',
+                              Text('of ${waterReminderDB.totalLevel} ml',
                                   style: TextStyle(
                                       fontSize: Config.textSize(context, 4.5),
                                       color: Color(0xff4F4F4F)))
