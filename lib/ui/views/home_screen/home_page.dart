@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                               IconButton(
                                 padding: EdgeInsets.only(
                                     bottom: Config.xMargin(context, 8.33)),
-                                icon: Icon(Icons.notifications_none),
+                                icon: Icon(Icons.invert_colors),
                                 iconSize: Config.xMargin(context, 8.33),
                                 color: Theme.of(context).primaryColorDark,
                                 onPressed: () {
@@ -336,11 +336,11 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: model.currentIndex != 0
             ? Container()
             : WillPopScope(
-              onWillPop: (){
-                Navigator.pushReplacementNamed(context, RouteNames.homePage);
-                return Future.value(false);
-              },
-              child: SpeedDial(
+                onWillPop: () {
+                  Navigator.pushReplacementNamed(context, RouteNames.homePage);
+                  return Future.value(false);
+                },
+                child: SpeedDial(
                   backgroundColor: Theme.of(context).primaryColor,
                   onOpen: () {
                     setState(() {
@@ -452,7 +452,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-            ),
+              ),
         //Crazelu extracted BottomNavigationBar widget to Widgets folder
 
         bottomNavigationBar: isPressed == true
