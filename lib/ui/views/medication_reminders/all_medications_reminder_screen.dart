@@ -466,6 +466,7 @@ class _MedicationCardState extends State<MedicationCard> {
                     )
                   ],
                 )),
+            SizedBox(height: height * 0.03),
           ]),
     );
   }
