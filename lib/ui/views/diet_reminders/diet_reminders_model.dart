@@ -34,8 +34,8 @@ class DietReminderModel extends ChangeNotifier {
 
   int get month => _month;
 
-  DateTime getSelectedDate() =>
-      DateTime.parse('${__today.year}-$_month-$_selectedDay');
+  DateTime getSelectedDate() => DateTime.parse(
+      '${__today.year}-${_month.toString().padLeft(2, '0')}-${_selectedDay.toString().padLeft(2, '0')} $_selectedTime');
 
   //this function is used on the AllDietReminders screen to convert the foodclasses
   //retrieved from the diet model from list to string
@@ -98,19 +98,19 @@ class DietReminderModel extends ChangeNotifier {
   }
 
   DateTime getStartDate() {
-    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+    String month = _month.toString().padLeft(2, '0');
     String weekday =
         _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse('${__today.year}-$month-$weekday');
+    return DateTime.parse('${__today.year}-$month-$weekday $_selectedTime');
   }
 
-  DateTime getDateTime() {
-    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
-    String weekday =
-        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse(
-        '${__today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
-  }
+  // DateTime getDateTime() {
+  //   String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+  //   String weekday =
+  //       _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+  //   return DateTime.parse(
+  //       '${__today.year}-$month-$weekday ${_selectedTime.substring(0, 2)} : ${selectedTime.substring(3, 5)}');
+  // }
 
   bool isActive(index) {
     //increment index to match day index and compare
