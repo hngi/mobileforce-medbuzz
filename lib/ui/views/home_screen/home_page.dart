@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                                     height: Config.yMargin(context, 2),
                                   ),
                                   Text(
-                                    userDb.user.name ?? '',
+                                    userDb.user?.name ?? '',
                                     style: TextStyle(
                                       fontSize: Config.xMargin(context, 6.66),
                                       fontWeight: FontWeight.w600,
