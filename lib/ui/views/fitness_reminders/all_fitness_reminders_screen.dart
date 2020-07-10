@@ -60,19 +60,28 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 800),
           height: model.isVisible ? Config.yMargin(context, 10) : 0,
-          child: FloatingActionButton(
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).primaryColorLight,
-                size: Config.xMargin(context, 9),
-              ),
-              backgroundColor: Theme.of(context).buttonColor,
-              splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-              //Navigate to fitness reminder creation screen
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, RouteNames.fitnessDescriptionScreen);
-              }),
+          child: Container(
+                margin: EdgeInsets.only(
+                bottom: Config.yMargin(context, 2),
+                right: Config.xMargin(context, 4)),
+            child: SizedBox(
+              height: height * 0.08,
+              width: height * 0.08,
+              child: FloatingActionButton(
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).primaryColorLight,
+                  size: Config.xMargin(context, 9),
+                ),
+                backgroundColor: Theme.of(context).buttonColor,
+                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                //Navigate to fitness reminder creation screen
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, RouteNames.fitnessDescriptionScreen);
+                }),
+          ),
+          ),
         ),
       ),
       appBar: AppBar(
