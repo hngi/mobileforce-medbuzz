@@ -69,11 +69,11 @@ class Signup extends StatelessWidget {
               print('${nameController.text}');
               var newuser = User(
                   id: DateTime.now().toString(), name: nameController.text);
-              await userDb.adduser(newuser);
+              await userDb.adduser(newuser).then((value) =>
+                  Navigator.pushReplacementNamed(context, RouteNames.homePage));
               //  await box.put('status', 'true');
-              Future.delayed(Duration(seconds: 2), () {
-                Navigator.pushReplacementNamed(context, RouteNames.homePage);
-              });
+              // Future.delayed(Duration(seconds: 2), () {
+              // });
             } else {
               showSnackBar(context);
             }

@@ -11,14 +11,14 @@ class UserCrud extends ChangeNotifier {
   void getuser() async {
     var box = await Hive.openBox<User>(_boxName);
     _user = box.get('userName');
-    box.close();
+    // box.close();
     notifyListeners();
   }
 
-  Future<void> adduser(User user) async {
+  Future<void> adduser(User usernew) async {
     var box = await Hive.openBox<User>(_boxName);
 
-    await box.put('userName', user);
+    await box.put('userName', usernew);
     box.close();
 
     notifyListeners();
