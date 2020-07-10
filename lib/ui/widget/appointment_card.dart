@@ -64,22 +64,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       padding: EdgeInsets.only(right: 58),
                       icon: Icon(Icons.more_vert,
                           size: Config.textSize(context, 5)),
-                      onSelected: (_) {
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('Edit'),
-                          onTap: () {},
-                        ));
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('Delete'),
-                          onTap: () {
-                            notificationManager
-                                .removeReminder(scheduleModel.selectedDay);
-                            db.deleteAppointment(widget.appointment.dateTime);
-                          },
-                        ));
-                      },
+                      onSelected: (_) {},
                       itemBuilder: (BuildContext context) {
                         return [
                           PopupMenuItem(

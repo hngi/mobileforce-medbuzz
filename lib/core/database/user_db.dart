@@ -8,12 +8,8 @@ class UserCrud extends ChangeNotifier {
   User _user;
 
   void getuser() async {
-    try {
-      var box = await Hive.openBox<User>(_boxName);
-      _user = box.get('userName');
-    } catch (e) {
-      print(e);
-    }
+    var box = await Hive.openBox<User>(_boxName);
+    _user = box.get('userName');
 
     notifyListeners();
   }
@@ -27,5 +23,5 @@ class UserCrud extends ChangeNotifier {
     notifyListeners();
   }
 
-  User get user => _user;
+  User get newuser => _user;
 }
