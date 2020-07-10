@@ -1,5 +1,7 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
@@ -70,7 +72,18 @@ class _AppointmentCardState extends State<AppointmentCard> {
                           PopupMenuItem(
                               child: GestureDetector(
                             child: Text('Edit'),
-                            onTap: () {},
+                            onTap: () {
+                              db.deleteAppointment(widget.appointment.dateTime);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ScheduleAppointmentScreen(
+                                          appointment: widget.appointment,
+                                          buttonText: 'Update',
+                                        )),
+                              );
+                            },
                           )),
                           PopupMenuItem(
                               child: GestureDetector(

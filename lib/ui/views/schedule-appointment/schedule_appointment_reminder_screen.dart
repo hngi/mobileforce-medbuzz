@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
@@ -15,8 +16,12 @@ import 'schedule_appointment_screen_model.dart';
 class ScheduleAppointmentScreen extends StatefulWidget {
   static const routeName = 'schedule-appointment-reminder';
   final String payload;
+  final Appointment appointment;
+  final String buttonText;
 
-  ScheduleAppointmentScreen({Key key, this.payload}) : super(key: key);
+  ScheduleAppointmentScreen(
+      {Key key, this.payload, this.appointment, this.buttonText})
+      : super(key: key);
 
   @override
   _ScheduleAppointmentScreenState createState() =>
@@ -26,19 +31,26 @@ class ScheduleAppointmentScreen extends StatefulWidget {
 class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
 
-  final TextEditingController _typeOfAppointmentController =
-      TextEditingController();
+  TextEditingController _typeOfAppointmentController = TextEditingController();
 
-  final TextEditingController _noteController = TextEditingController();
+  TextEditingController _noteController = TextEditingController();
 
   ScheduleAppointmentModel appointmentModel = ScheduleAppointmentModel();
 
   String _updateMonth;
+  FocusNode myFocusNode = FocusNode();
 
   @override
   void initState() {
     _updateMonth = appointmentModel.currentMonth;
+    myFocusNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,9 +72,15 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    if (widget.buttonText == 'Update') {
+      _typeOfAppointmentController.text =
+          appointmentReminder.typeOfAppointment ?? '';
+      _noteController.text = appointmentReminder.note ?? '';
+    }
 
     var model = Provider.of<ScheduleAppointmentModel>(context);
     Color bgColor = Theme.of(context).backgroundColor;
+
     return Scaffold(
       appBar: appBar(context: context, title: 'Add your appointment'),
       backgroundColor: bgColor,
@@ -212,6 +230,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                           TextField(
                             // Input for type of appointment
                             controller: _typeOfAppointmentController,
+                            focusNode: myFocusNode,
                           ),
                           SizedBox(
                             height: Config.yMargin(context, 2.43),
@@ -266,7 +285,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(width * 0.03)),
                     child: Text(
-                      'Save',
+                      widget.buttonText,
                       style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: Config.textSize(context, 5.5),
@@ -279,24 +298,63 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                             appointmentReminder.typeOfAppointment != null &&
                             appointmentReminder.note != null
                         ? () async {
-                            appointmentReminder
-                                .setSelectedNote(_noteController.text);
-                            appointmentReminder.setSelectedTypeOfAppointment(
-                                _typeOfAppointmentController.text);
-                            if (appointmentReminder.selectedDay ==
-                                    DateTime.now().day &&
-                                appointmentReminder.selectedMonth ==
-                                    DateTime.now().month) {
-                              notificationManager
-                                  .showAppointmentNotificationOnce(
-                                      appointmentModel.selectedDay,
-                                      'Hey, you\' got somewhere to go',
-                                      ' ${_typeOfAppointmentController.text} ',
-                                      appointmentReminder.getDateTime());
+                            switch (widget.buttonText) {
+                              case 'Save':
+                                await appointmentReminderDB.addAppointment(
+                                    appointmentReminder.createSchedule());
+
+                                appointmentReminder
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminder
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+                                appointmentReminderDB
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminderDB
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+                                if (appointmentReminder.selectedDay ==
+                                        DateTime.now().day &&
+                                    appointmentReminder.selectedMonth ==
+                                        DateTime.now().month) {
+                                  notificationManager
+                                      .showAppointmentNotificationOnce(
+                                          appointmentModel.selectedDay,
+                                          'Hey, you\' got somewhere to go',
+                                          ' ${_typeOfAppointmentController.text} ',
+                                          appointmentReminder.getDateTime());
+                                }
+                                break;
+                              case 'Update':
+                                await appointmentReminderDB.editAppointment(
+                                    appointment:
+                                        appointmentReminder.editSchedule());
+
+                                appointmentReminder
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminder
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+                                appointmentReminderDB
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminderDB
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+                                if (appointmentReminder.selectedDay ==
+                                        DateTime.now().day &&
+                                    appointmentReminder.selectedMonth ==
+                                        DateTime.now().month) {
+                                  notificationManager
+                                      .showAppointmentNotificationOnce(
+                                          appointmentModel.selectedDay,
+                                          'Hey, you\' got somewhere to go',
+                                          ' ${_typeOfAppointmentController.text} ',
+                                          appointmentReminder.getDateTime());
+                                }
                             }
-                            appointmentReminderDB.addAppointment(
-                                appointmentReminder.createSchedule());
-                            Navigator.of(context).pop();
+
+                            Navigator.popAndPushNamed(
+                                context, RouteNames.homePage);
                             //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-D
                           }
                         : null,
