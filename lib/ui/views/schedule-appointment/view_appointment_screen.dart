@@ -19,14 +19,17 @@ class ViewAppointment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appointmentModellerDB = Provider.of<AppointmentData>(context, listen:true);
+    var appointmentModellerDB =
+        Provider.of<AppointmentData>(context, listen: true);
 
-    var appointmentReminder = Provider.of<ScheduleAppointmentModel>(context, listen: true);
+    var appointmentReminder =
+        Provider.of<ScheduleAppointmentModel>(context, listen: true);
 
     final appointmentInfo = appointmentModellerDB.getAppointments();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      appointmentReminder.updateAvailableAppointmentReminder(appointmentModellerDB.appointment);
+      appointmentReminder.updateAvailableAppointmentReminder(
+          appointmentModellerDB.appointment);
     });
 
     formattedTime = DateFormat.jm().format(time);
@@ -39,8 +42,14 @@ class ViewAppointment extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
-            leading: Icon(Icons.arrow_back),
-            elevation: 2.0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, RouteNames.allRemindersScreen);
+              },
+            ),
+            elevation: 0,
             backgroundColor: Theme.of(context).backgroundColor,
           ),
           body: SingleChildScrollView(
@@ -58,7 +67,8 @@ class ViewAppointment extends StatelessWidget {
                         );
                         showSnackBar(context);
                         Future.delayed(Duration(seconds: 1)).then((value) {
-                          appointmentModellerDB.deleteAppointment(appointment.dateTime);
+                          appointmentModellerDB
+                              .deleteAppointment(appointment.dateTime);
                         });
                       },
                       icon: Icon(

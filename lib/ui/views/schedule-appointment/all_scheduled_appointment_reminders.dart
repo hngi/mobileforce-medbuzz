@@ -42,14 +42,16 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
     return DefaultTabController(
       length: 2,
       child: new Scaffold(
-        backgroundColor: appThemeLight.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          backgroundColor: appThemeLight.appBarTheme.color,
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Container(
             child: Container(
               child: new Text(
                 'My Appointments',
-                style: appThemeLight.textTheme.headline6,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                ),
                 textScaleFactor: 1.2,
               ),
             ),
@@ -58,7 +60,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
             child: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: appThemeLight.appBarTheme.iconTheme.color,
+                color: Theme.of(context).primaryColorDark,
               ),
 
               // navigate to add appointments page
@@ -80,14 +82,20 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                 child: Text(
                   'Upcoming',
                   textScaleFactor: 0.85,
-                  style: TextStyle(fontSize: Config.textSize(context, 4)),
+                  style: TextStyle(
+                    fontSize: Config.textSize(context, 4),
+                    color: Theme.of(context).primaryColorDark,
+                  ),
                 ),
               ),
               Tab(
                 child: Text(
                   'Past',
                   textScaleFactor: 0.85,
-                  style: appThemeLight.textTheme.headline5,
+                  style: TextStyle(
+                    fontSize: Config.textSize(context, 4),
+                    color: Theme.of(context).primaryColorDark,
+                  ),
                 ),
               ),
             ],
@@ -108,15 +116,25 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         visible: appointmentReminders.allAppointments.isEmpty,
                         child: Container(
                           child: Center(
-                              child: Text('No Appointments for this date')),
+                              child: Text(
+                            'No Appointments for this date',
+                            style: TextStyle(
+                              fontSize: Config.textSize(context, 4),
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          )),
                         )),
                     for (var appointment
                         in appointmentReminders.allAppointments)
-                      AppointmentCard(
-                        height: height,
-                        width: width,
-                        appointment: appointment,
-                      )
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 5.0)),
+                        child: AppointmentCard(
+                          height: height,
+                          width: width,
+                          appointment: appointment,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -127,7 +145,15 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                     Visibility(
                         visible: appointmentReminders.pastApointments.isEmpty,
                         child: Container(
-                          child: Center(child: Text('No Past Appointments')),
+                          child: Center(
+                            child: Text(
+                              'No Past Appointments',
+                              style: TextStyle(
+                                fontSize: Config.textSize(context, 4),
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
                         )),
                     for (var appointment
                         in appointmentReminders.pastApointments)

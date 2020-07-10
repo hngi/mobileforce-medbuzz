@@ -2,7 +2,6 @@ import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,20 +46,29 @@ class _MedicationScreenState extends State<MedicationScreen> {
           duration: Duration(milliseconds: 500),
           child: Visibility(
             visible: model.isVisible,
-            child: FloatingActionButton(
-                child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColorLight,
-                  size: Config.xMargin(context, 10),
-                ),
-                backgroundColor: Theme.of(context).buttonColor,
-                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                //Navigate to fitness reminder creation screen
-                onPressed: () {
-                  final medModel = Provider.of<MedicationData>(context);
+            child: Container(
+              margin: EdgeInsets.only(
+                  bottom: Config.yMargin(context, 2),
+                  right: Config.xMargin(context, 4)),
+              child: SizedBox(
+                height: height * 0.08,
+                width: height * 0.08,
 
-                  medModel.newMedicine(context);
-                }),
+              child: FloatingActionButton(
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(context).primaryColorLight,
+                    size: Config.xMargin(context, 10),
+                  ),
+                  backgroundColor: Theme.of(context).buttonColor,
+                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                  //Navigate to fitness reminder creation screen
+                  onPressed: () {
+                    final medModel = Provider.of<MedicationData>(context);
+                    medModel.newMedicine(context);
+                  }),
+            ),
+            ),
           ),
         ),
       ),
@@ -300,15 +308,9 @@ class _MedicationCardState extends State<MedicationCard> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Theme.of(context).primaryColor
-                      : Theme.of(context).backgroundColor,
+                      : Theme.of(context).primaryColorLight,
                   borderRadius:
                       BorderRadius.circular(Config.xMargin(context, 5)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).primaryColorLight,
-                      spreadRadius: Config.xMargin(context, 2),
-                    ),
-                  ],
                 ),
                 child: Column(
                   children: <Widget>[
@@ -473,6 +475,7 @@ class _MedicationCardState extends State<MedicationCard> {
                     )
                   ],
                 )),
+            SizedBox(height: height * 0.03),
           ]),
     );
   }

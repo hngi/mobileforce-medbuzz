@@ -1,4 +1,3 @@
-import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/core/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
@@ -77,12 +76,6 @@ class _WaterCardState extends State<WaterReminderCard> {
                     color: Theme.of(context).primaryColorLight,
                     borderRadius:
                         BorderRadius.circular(Config.xMargin(context, 5)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white,
-                        spreadRadius: 5,
-                      ),
-                    ],
                   ),
                   child: Column(
                     children: <Widget>[
