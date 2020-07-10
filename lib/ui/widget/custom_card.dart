@@ -50,7 +50,7 @@ class CustomCard extends StatelessWidget {
                 subtitle,
                 style: TextStyle(
                     fontSize: Config.textSize(context, 3.5),
-                    color: Theme.of(context).primaryColorDark.withOpacity(0.5)),
+                    color: Theme.of(context).primaryColorDark.withOpacity(0.8)),
               ),
             ]));
   }
