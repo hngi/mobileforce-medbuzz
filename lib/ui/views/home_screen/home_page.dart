@@ -8,6 +8,7 @@ import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
 import 'package:MedBuzz/ui/widget/progress_card.dart';
@@ -59,8 +60,6 @@ class _HomePageState extends State<HomePage> {
       _menuPositionController.findNearestTarget(_pageController.page);
     }
   }
-
-  UserCrud user1 = UserCrud();
 
   @override
   Widget build(BuildContext context) {
@@ -368,8 +367,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, RouteNames.scheduleAppointmentScreen);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScheduleAppointmentScreen(
+                                    buttonText: 'Save',
+                                  )),
+                        );
                       },
                     ),
                     SpeedDialChild(
