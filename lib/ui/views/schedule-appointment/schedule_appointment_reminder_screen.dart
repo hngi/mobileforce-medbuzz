@@ -163,7 +163,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                     'Time',
                     style: TextStyle(
                         fontSize: Config.textSize(context, 4.8),
-                        color: Theme.of(context).hintColor),
+                        color: Theme.of(context).primaryColorDark),
                   ),
                   SizedBox(
                     height: Config.yMargin(context, 1),

@@ -6,7 +6,6 @@ import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminde
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
