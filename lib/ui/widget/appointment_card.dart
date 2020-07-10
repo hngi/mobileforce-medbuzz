@@ -50,7 +50,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
               borderRadius: BorderRadius.circular(Config.xMargin(context, 6)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColorLight,
                   spreadRadius: 5,
                 ),
               ],
@@ -66,23 +66,35 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       padding: EdgeInsets.only(right: 58),
                       icon: Icon(Icons.more_vert,
                           size: Config.textSize(context, 5)),
-                      onSelected: (_) {},
+                      
+                      onSelected: (_) {
+                        PopupMenuItem(
+                            child: GestureDetector(
+                          child: Text('View'),
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, RouteNames.viewAppointmentScreen);
+                          },
+                        ));
+                        PopupMenuItem(
+                            child: GestureDetector(
+                          child: Text('Delete'),
+                          onTap: () {
+                            notificationManager
+                                .removeReminder(scheduleModel.selectedDay);
+                            db.deleteAppointment(widget.appointment.dateTime);
+                          },
+                        ));
+                      },
                       itemBuilder: (BuildContext context) {
                         return [
                           PopupMenuItem(
                               child: GestureDetector(
-                            child: Text('Edit'),
+                        
+                            child: Text('View'),
                             onTap: () {
-                              db.deleteAppointment(widget.appointment.dateTime);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ScheduleAppointmentScreen(
-                                          appointment: widget.appointment,
-                                          buttonText: 'Update',
-                                        )),
-                              );
+                              Navigator.pushReplacementNamed(
+                                  context, RouteNames.viewAppointmentScreen);
                             },
                           )),
                           PopupMenuItem(
@@ -162,6 +174,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                       widget.appointment.dateTime
                                           .substring(0, 5),
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
                                           fontWeight: FontWeight.w600,
                                           fontSize:
                                               Config.textSize(context, 3.8)),
@@ -185,6 +199,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     Text(
                                       widget.appointment.appointmentType,
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
                                           fontWeight: FontWeight.w600,
                                           fontSize:
                                               Config.textSize(context, 3.8)),
@@ -206,6 +222,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               child: Text(
                                 widget.appointment.note,
                                 style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
                                     fontSize: Config.textSize(context, 3.8)),
                               ),
                             ),

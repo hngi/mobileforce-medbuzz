@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ class DietReminderModel extends ChangeNotifier {
 
   int get currentDay => _currentDay;
   List<String> get selectedFoodClasses => _selectedFoodClasses;
+
+  List<DietModel> _allDiets = [];
+  List<DietModel> get allDiets => _allDiets;
 
   int get month => _month;
 
@@ -467,6 +471,23 @@ class DietReminderModel extends ChangeNotifier {
   ];
   List<String> get months => _months;
   bool isVisible = true;
+
+  List<DietModel> get upcomingDiets {
+    return _allDiets
+        .where((element) => element.startDate.isBefore(_today))
+        .toList();
+  }
+
+  List<DietModel> get pastDiets {
+    return _allDiets
+        .where((element) => element.startDate.isAfter(_today))
+        .toList();
+  }
+
+  void updateAllDietsBasedOnToday(List<DietModel> diets) {
+    _allDiets = diets;
+    notifyListeners();
+  }
 
   //functionality for making the FAB appear and disappear when user scrolls
   void updateVisibility(bool visible) {

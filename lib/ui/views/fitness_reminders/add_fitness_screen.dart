@@ -7,10 +7,8 @@ import 'package:MedBuzz/core/models/fitness_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:provider/provider.dart';
 import '../../../core/database/fitness_reminder.dart';
-import '../../../core/database/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
-import '../../../core/notifications/fitness_notification_manager.dart';
 import '../../../core/notifications/fitness_notification_manager.dart';
 import '../../navigation/app_navigation/app_transition.dart';
 import '../../size_config/config.dart';
@@ -95,8 +93,7 @@ class __AddFitnessState extends State<AddFitness> {
           ),
           onPressed: () {
             navigation.pushFrom(context, FitnessSchedulesScreen());
-            Navigator.pushReplacementNamed(
-                context, RouteNames.fitnessSchedulesScreen);
+            Navigator.pushReplacementNamed(context, RouteNames.homePage);
           },
         ),
       ),
@@ -465,7 +462,7 @@ class __AddFitnessState extends State<AddFitness> {
                           'Save',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: Config.textSize(context, 4),
+                            fontSize: Config.textSize(context, 5.5),
                             color: Theme.of(context).backgroundColor,
                           ),
                         ),

@@ -145,7 +145,7 @@ class AddDietReminderScreen extends StatelessWidget {
                             _title(context, 'Select meal category'),
                             _verticalSpace(context),
                             Container(
-                                height: height * .15,
+                                height: height * .19,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     physics: BouncingScrollPhysics(),
@@ -185,7 +185,8 @@ class AddDietReminderScreen extends StatelessWidget {
                                                                 .contains(
                                                                     foodClass
                                                                         .name)
-                                                            ? 0
+                                                            ? Config.xMargin(
+                                                                context, 3.88)
                                                             : Config.xMargin(
                                                                 context, 3.88),
                                                         left: model
@@ -193,7 +194,8 @@ class AddDietReminderScreen extends StatelessWidget {
                                                                 .contains(
                                                                     foodClass
                                                                         .name)
-                                                            ? 0
+                                                            ? Config.xMargin(
+                                                                context, 3.88)
                                                             : Config.xMargin(
                                                                 context, 3.88),
                                                         child: Image.asset(
@@ -289,8 +291,7 @@ class AddDietReminderScreen extends StatelessWidget {
                                     ]));
 
                                 notificationManager.showDietNotificationOnce(
-                                    num.parse(
-                                        '${model.getStartDate().year}${model.getStartDate().month}${model.getStartDate().day}${model.selectedTime.substring(0, 2)}${model.selectedTime.substring(3, 5)}'),
+                                    DateTime.now().millisecond,
                                     'Its time to take your meal',
                                     '${mealNameController.text}',
                                     model.getDateTime());
@@ -302,7 +303,7 @@ class AddDietReminderScreen extends StatelessWidget {
                             child: Text('Save',
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 5),
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.bold,
                                     color:
                                         Theme.of(context).primaryColorLight))),
                       )

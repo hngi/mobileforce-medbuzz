@@ -3,13 +3,11 @@ import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
-import 'package:MedBuzz/core/models/user_model/user_model.dart';
-import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
+import 'package:MedBuzz/ui/app_theme/app_theme.dart';
+import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/profile_page.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
 import 'package:MedBuzz/ui/widget/progress_card.dart';
@@ -35,6 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    Provider.of<UserCrud>(context, listen: false).getuser();
     _menuPositionController = MenuPositionController(initPosition: 0);
     _pageController = PageController(
       initialPage: 0,
@@ -86,7 +85,7 @@ class _HomePageState extends State<HomePage> {
     final medModel = Provider.of<MedicationData>(context);
 
     return Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Theme.of(context).backgroundColor,
         body: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             checkUserDragging(notification);
@@ -102,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                         Config.xMargin(context, 6),
                         Config.yMargin(context, 2),
                         Config.xMargin(context, 6),
-                        Config.yMargin(context, 4),
+                        Config.yMargin(context, 8.5),
                       ),
                       child: Column(
                         children: [
@@ -117,14 +116,15 @@ class _HomePageState extends State<HomePage> {
                                     model.greeting(),
                                     style: TextStyle(
                                       fontSize: Config.xMargin(context, 5),
-                                      color: color = Color(0xff333333),
+                                      color: color =
+                                          Theme.of(context).primaryColorDark,
                                     ),
                                   ),
                                   SizedBox(
                                     height: Config.yMargin(context, 2),
                                   ),
                                   Text(
-                                    userDb.newuser.name ?? '',
+                                    userDb.user?.name ?? '',
                                     style: TextStyle(
                                       fontSize: Config.xMargin(context, 6.66),
                                       fontWeight: FontWeight.w600,
@@ -136,10 +136,13 @@ class _HomePageState extends State<HomePage> {
                               IconButton(
                                 padding: EdgeInsets.only(
                                     bottom: Config.xMargin(context, 8.33)),
-                                icon: Icon(Icons.notifications_none),
+                                icon: Icon(Icons.invert_colors),
                                 iconSize: Config.xMargin(context, 8.33),
                                 color: Theme.of(context).primaryColorDark,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Provider.of<DarkModeModel>(context)
+                                      .toggleAppTheme();
+                                },
                               ),
                             ],
                           ),
@@ -166,8 +169,7 @@ class _HomePageState extends State<HomePage> {
                                               fontSize:
                                                   Config.textSize(context, 3.5),
                                               color: Theme.of(context)
-                                                  .primaryColorDark
-                                                  .withOpacity(0.5)),
+                                                  .primaryColorDark),
                                         ),
                                         SizedBox(
                                           height: Config.yMargin(context, 1.5),
@@ -177,7 +179,6 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               '${waterReminderDB.currentLevel}ml',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.w600,
                                                 fontSize:
                                                     Config.textSize(context, 4),
                                                 color: Theme.of(context)
@@ -187,8 +188,9 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               ' of ${waterReminderDB.totalLevel}ml',
                                               style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 3.7),
+                                                fontWeight: FontWeight.w600,
+                                                fontSize:
+                                                    Config.textSize(context, 4),
                                                 color: Theme.of(context)
                                                     .primaryColorDark,
                                               ),
@@ -328,121 +330,123 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: model.currentIndex != 0
             ? Container()
-            : SpeedDial(
-                backgroundColor: Theme.of(context).primaryColor,
-                onOpen: () {
-                  setState(() {
-                    isPressed = true;
-                  });
+            : WillPopScope(
+                onWillPop: () {
+                  Navigator.pushReplacementNamed(context, RouteNames.homePage);
+                  return Future.value(false);
                 },
-                onClose: () {
-                  setState(() {
-                    isPressed = false;
-                  });
-                },
-                child: Icon(isPressed == true ? Icons.close : Icons.add),
-                overlayColor: Colors.black,
-                overlayOpacity: 0.7,
-                children: [
-                  SpeedDialChild(
-                    child: Image(image: AssetImage('images/calender.png')),
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    labelWidget: Container(
-                      margin:
-                          EdgeInsets.only(right: Config.xMargin(context, 4)),
-                      child: Text(
-                        'Appointment',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorLight,
+                child: SpeedDial(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onOpen: () {
+                    setState(() {
+                      isPressed = true;
+                    });
+                  },
+                  onClose: () {
+                    setState(() {
+                      isPressed = false;
+                    });
+                  },
+                  child: Icon(isPressed == true ? Icons.close : Icons.add),
+                  overlayColor: appThemeLight.iconTheme.color,
+                  overlayOpacity: 0.7,
+                  children: [
+                    SpeedDialChild(
+                      child: Image(image: AssetImage('images/calender.png')),
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Appointment',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.scheduleAppointmentScreen);
+                      },
                     ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ScheduleAppointmentScreen(
-                                    buttonText: 'Save',
-                                  )));
-                    },
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: Image(image: AssetImage('images/drugoutline.png')),
-                    labelWidget: Container(
-                      margin:
-                          EdgeInsets.only(right: Config.xMargin(context, 4)),
-                      child: Text(
-                        'Medication',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorLight,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/drugoutline.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Medication',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        medModel.newMedicine(context);
+                      },
                     ),
-                    onTap: () {
-                      medModel.newMedicine(context);
-                    },
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: Image(image: AssetImage('images/dumbell.png')),
-                    labelWidget: Container(
-                      margin:
-                          EdgeInsets.only(right: Config.xMargin(context, 4)),
-                      child: Text(
-                        'Fitness',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorLight,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/dumbell.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Fitness',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.fitnessDescriptionScreen);
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, RouteNames.fitnessDescriptionScreen);
-                    },
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: Image(image: AssetImage('images/dropoutline.png')),
-                    labelWidget: Container(
-                      margin:
-                          EdgeInsets.only(right: Config.xMargin(context, 4)),
-                      child: Text(
-                        'Water',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorLight,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/dropoutline.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Water',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.scheduleWaterReminderScreen);
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, RouteNames.scheduleWaterReminderScreen);
-                    },
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: Image(image: AssetImage('images/foood.png')),
-                    labelWidget: Container(
-                      margin:
-                          EdgeInsets.only(right: Config.xMargin(context, 4)),
-                      child: Text(
-                        'Diet',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorLight,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/foood.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Diet',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.scheduleDietReminderScreen);
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, RouteNames.scheduleDietReminderScreen);
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
         //Crazelu extracted BottomNavigationBar widget to Widgets folder
 
