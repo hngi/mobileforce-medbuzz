@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:date_util/date_util.dart';
@@ -39,6 +40,7 @@ class AllRemindersViewModel extends ChangeNotifier {
   dynamic _selectedTime;
   List<WaterReminder> _availableWaterReminders = [];
   List<Appointment> _allAvailableAppointments = [];
+  List<FitnessReminder> _availableFitnessReminders = [];
 
   List<MedicationReminder> _availableMedicationReminders = [];
   AllRemindersViewModel() {
@@ -120,6 +122,11 @@ class AllRemindersViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateAvailableFitnessReminders(List<FitnessReminder> fitnessReminders) {
+    _availableFitnessReminders = fitnessReminders;
+    notifyListeners();
+  }
+
   void updateSelectedDay(int dayIndex) {
     _selectedDay = dayIndex + 1;
     notifyListeners();
@@ -158,6 +165,15 @@ class AllRemindersViewModel extends ChangeNotifier {
   List<MedicationReminder> get medicationReminderBasedOnDateTime {
     return _availableMedicationReminders
         .where((medication) => selectedDateTime.day == medication.startAt.day)
+        .toList();
+  }
+
+  List<FitnessReminder> get fitnessRemindersBasedOnDateTime {
+    // print(_availableFitnessReminders[0].startDate);
+    return _availableFitnessReminders
+        .where((element) =>
+            selectedDateTime.difference(element.startDate).inDays >= 0 &&
+            selectedDateTime.difference(element.endDate).inDays <= 0)
         .toList();
   }
 

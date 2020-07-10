@@ -83,12 +83,16 @@ class MySignUp extends StatelessWidget {
                     var newuser = User(
                         id: DateTime.now().toString(),
                         name: nameController.text);
-                    await userDb.adduser(newuser);
-                    await box.put('status', 'true');
-                    Future.delayed(
-                        Duration(seconds: 2),
-                        () => Navigator.pushReplacementNamed(
-                            context, RouteNames.homePage));
+                    await userDb.adduser(newuser).then((value) async {
+                      await box.put('status', 'true');
+                      Navigator.pushReplacementNamed(
+                          context, RouteNames.homePage);
+                    });
+                    //delaying with a future might not be the best, but waiting to receive the value from the Future is better
+                    // Future.delayed(
+                    //     Duration(seconds: 2),
+                    //     () => Navigator.pushReplacementNamed(
+                    //         context, RouteNames.homePage));
                   } else {
                     showSnackBar(context);
                   }
