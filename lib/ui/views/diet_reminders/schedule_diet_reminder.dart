@@ -304,7 +304,7 @@ class AddDietReminderScreen extends StatelessWidget {
                             child: Text('Save',
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 5),
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.bold,
                                     color:
                                         Theme.of(context).primaryColorLight))),
                       )
