@@ -104,7 +104,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             onPressed: () {
               Navigator.pushNamed(context, RouteNames.homePage);
             }),
-        actions: <Widget>[
+      /*   actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
@@ -124,7 +124,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
               ),
             ),
           )
-        ],
+        ], */
       ),
       body: WillPopScope(
         onWillPop: () {
