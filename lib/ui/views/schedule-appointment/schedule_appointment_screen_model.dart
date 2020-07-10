@@ -150,6 +150,16 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Appointment> get pastApointments {
+    return _availableAppointments
+        .where((appointment) => selectedDateTime.day > appointment.date.day)
+        .toList();
+  }
+
+  List<Appointment> get allAppointments {
+    return _availableAppointments;
+  }
+
   bool isActive(index) {
     //increment index to match day index and compare
     return index + 1 == _selectedDay;

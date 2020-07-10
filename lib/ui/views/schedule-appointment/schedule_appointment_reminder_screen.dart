@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
@@ -272,7 +273,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                   child: RaisedButton(
                     color: appointmentReminder.selectedMonth != null &&
                             appointmentReminder.selectedDay != null &&
-                            // appointmentReminder.selectedTime != null &&
+                            appointmentReminder.selectedTime != null &&
                             appointmentReminder.typeOfAppointment != null &&
                             appointmentReminder.note != null
                         ? Theme.of(context).primaryColor
@@ -299,19 +300,15 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                         ? () async {
                             switch (widget.buttonText) {
                               case 'Save':
+                                appointmentReminder
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminder
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+
                                 await appointmentReminderDB.addAppointment(
                                     appointmentReminder.createSchedule());
 
-                                appointmentReminder
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminder
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
-                                appointmentReminderDB
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminderDB
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
                                 if (appointmentReminder.selectedDay ==
                                         DateTime.now().day &&
                                     appointmentReminder.selectedMonth ==
@@ -325,20 +322,16 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                                 }
                                 break;
                               case 'Update':
+                                appointmentReminder
+                                    .setSelectedNote(_noteController.text);
+                                appointmentReminder
+                                    .setSelectedTypeOfAppointment(
+                                        _typeOfAppointmentController.text);
+
                                 await appointmentReminderDB.editAppointment(
                                     appointment:
                                         appointmentReminder.editSchedule());
 
-                                appointmentReminder
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminder
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
-                                appointmentReminderDB
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminderDB
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
                                 if (appointmentReminder.selectedDay ==
                                         DateTime.now().day &&
                                     appointmentReminder.selectedMonth ==
