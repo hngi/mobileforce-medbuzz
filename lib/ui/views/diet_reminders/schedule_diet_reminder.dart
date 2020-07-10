@@ -145,7 +145,7 @@ class AddDietReminderScreen extends StatelessWidget {
                             _title(context, 'Select meal category'),
                             _verticalSpace(context),
                             Container(
-                                height: height * .15,
+                                height: height * .19,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     physics: BouncingScrollPhysics(),
@@ -185,7 +185,8 @@ class AddDietReminderScreen extends StatelessWidget {
                                                                 .contains(
                                                                     foodClass
                                                                         .name)
-                                                            ? 0
+                                                            ? Config.xMargin(
+                                                                context, 3.88)
                                                             : Config.xMargin(
                                                                 context, 3.88),
                                                         left: model
@@ -193,7 +194,8 @@ class AddDietReminderScreen extends StatelessWidget {
                                                                 .contains(
                                                                     foodClass
                                                                         .name)
-                                                            ? 0
+                                                            ? Config.xMargin(
+                                                                context, 3.88)
                                                             : Config.xMargin(
                                                                 context, 3.88),
                                                         child: Image.asset(
