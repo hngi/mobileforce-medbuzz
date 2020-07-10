@@ -46,20 +46,29 @@ class _MedicationScreenState extends State<MedicationScreen> {
           duration: Duration(milliseconds: 500),
           child: Visibility(
             visible: model.isVisible,
-            child: FloatingActionButton(
-                child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColorLight,
-                  size: Config.xMargin(context, 10),
-                ),
-                backgroundColor: Theme.of(context).buttonColor,
-                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                //Navigate to fitness reminder creation screen
-                onPressed: () {
-                  final medModel = Provider.of<MedicationData>(context);
+            child: Container(
+              margin: EdgeInsets.only(
+                  bottom: Config.yMargin(context, 2),
+                  right: Config.xMargin(context, 4)),
+              child: SizedBox(
+                height: height * 0.08,
+                width: height * 0.08,
 
-                  medModel.newMedicine(context);
-                }),
+              child: FloatingActionButton(
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(context).primaryColorLight,
+                    size: Config.xMargin(context, 10),
+                  ),
+                  backgroundColor: Theme.of(context).buttonColor,
+                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                  //Navigate to fitness reminder creation screen
+                  onPressed: () {
+                    final medModel = Provider.of<MedicationData>(context);
+                    medModel.newMedicine(context);
+                  }),
+            ),
+            ),
           ),
         ),
       ),
