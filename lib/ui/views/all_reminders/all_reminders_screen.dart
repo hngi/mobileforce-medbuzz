@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
@@ -47,6 +48,12 @@ class AllRemindersScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, RouteNames.homePage);
+          },
+        ),
         automaticallyImplyLeading: false,
         centerTitle: true,
         //leading: BackButton(color: Theme.of(context).primaryColorDark),
@@ -183,7 +190,7 @@ class AllRemindersScreen extends StatelessWidget {
                         allReminders.fitnessRemindersBasedOnDateTime.length > 0,
                     child: Container(
                         width: width,
-                        height: height * 0.3,
+                        height: height * 0.31,
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: allReminders
@@ -197,9 +204,9 @@ class AllRemindersScreen extends StatelessWidget {
                                       right: Config.xMargin(context, 3)),
                                   child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: width * 0.7,
@@ -257,7 +264,7 @@ class AllRemindersScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: height * 0.07),
+            SizedBox(height: Config.yMargin(context, 4)),
             Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: Config.xMargin(context, 7)),
