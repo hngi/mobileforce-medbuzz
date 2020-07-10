@@ -13,19 +13,31 @@ class WaterReminderData extends ChangeNotifier {
   List<WaterReminder> get sortedReminders => _sortedReminders;
 
   WaterReminder _activeWaterReminder;
-bool done = false;
-bool skip = false;
+  bool done = false;
+  bool skip = false;
   void getWaterReminders() async {
-    var box = await Hive.openBox<WaterReminder>(_boxName);
+    try {
+      var box = await Hive.openBox<WaterReminder>(_boxName);
 
-    _waterReminders = box.values.toList();
+      _waterReminders = box.values.toList();
 
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 
   WaterReminder getWaterReminder(index) {
     return _waterReminders[index];
   }
+
+  // int get currentLevel => _waterReminders
+  //     .map((e) => e.ml)
+  //     .reduce((value, element) => value + element);
+
+  // int get totalLevel => _waterReminders
+  //     .map((e) => e.ml)
+  //     .reduce((value, element) => value + element);
 
   void addWaterReminder(WaterReminder waterReminder) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
@@ -41,17 +53,21 @@ bool skip = false;
   }
 
   void deleteWaterReminder(key) async {
-    var box = await Hive.openBox<WaterReminder>(_boxName);
+    try {
+      var box = await Hive.openBox<WaterReminder>(_boxName);
 
-    //delete the water reminder
-    await box.delete(key);
+      //delete the water reminder
+      await box.delete(key);
 
-    // then reinitialise the water reminders
-    _waterReminders = box.values.toList();
+      // then reinitialise the water reminders
+      _waterReminders = box.values.toList();
 
-    box.close();
+      box.close();
 
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 
   void editWaterReminder(

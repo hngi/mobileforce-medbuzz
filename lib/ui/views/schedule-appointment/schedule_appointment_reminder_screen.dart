@@ -1,10 +1,8 @@
 import 'dart:ui';
-import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
-import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -270,6 +268,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                       style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: Config.textSize(context, 5.5),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     // When this button is pressed, it saves the appointment to the DB

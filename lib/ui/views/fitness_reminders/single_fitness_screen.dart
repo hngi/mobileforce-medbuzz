@@ -132,7 +132,6 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   Text(
                     widget.data.minsperday.toString() + ' minutes Daily',
                     style: TextStyle(
-                      fontFamily: 'Segoe',
                       color: Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.normal,
                       fontSize: Config.textSize(context, 4),
@@ -143,7 +142,6 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                         ':' +
                         widget.data.activityTime[1].toString(),
                     style: TextStyle(
-                      fontFamily: 'Segoe',
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.normal,
                       fontSize: Config.textSize(context, 3.6),
@@ -155,7 +153,6 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               Text(
                 'Program',
                 style: TextStyle(
-                  fontFamily: 'Segoe',
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
                   fontSize: Config.textSize(context, 4.5),
