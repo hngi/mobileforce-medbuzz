@@ -62,10 +62,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  UserCrud user1 = UserCrud();
+
   @override
   Widget build(BuildContext context) {
     var userDb = Provider.of<UserCrud>(context);
-
+    userDb.getuser();
     var model = Provider.of<HomeScreenModel>(context);
 
     var waterReminderDB = Provider.of<WaterReminderData>(context);

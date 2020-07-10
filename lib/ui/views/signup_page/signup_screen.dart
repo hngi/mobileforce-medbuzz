@@ -7,6 +7,13 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 class Signup extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: MySignUp());
+  }
+}
+
+class MySignUp extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
 
   @override
@@ -28,10 +35,9 @@ class Signup extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           SizedBox(
@@ -52,57 +58,62 @@ class Signup extends StatelessWidget {
             endIndent: MediaQuery.of(context).size.width * 0.25,
           ),
 
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: Config.yMargin(context, 10),
-                left: Config.xMargin(context, 5.3),
-                right: Config.xMargin(context, 6)),
-            child: Container(
-              width: width,
-              child: TextFormField(
-                  controller: nameController,
-                  cursorColor: Theme.of(context).primaryColorDark,
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: Config.xMargin(context, 5.5)),
-                  decoration: InputDecoration(hintText: 'Your name')),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              if (nameController.text.isNotEmpty) {
-                print('${nameController.text}');
-                var newuser = User(
-                    id: DateTime.now().toString(), name: nameController.text);
-                userDb.adduser(newuser);
-                box.put('status', 'true');
-                Provider.of<UserCrud>(context, listen: false).getuser();
-                Navigator.pushReplacementNamed(context, RouteNames.homePage);
-              } else {
-                showSnackBar(context);
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(Config.yMargin(context, 1.28)),
-                ),
-                color: Theme.of(context).primaryColor,
-              ),
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                  left: Config.xMargin(context, 5.33),
-                  right: Config.xMargin(context, 6)), //24,24,27
-              child: Text(
-                'Next',
+          Container(
+            margin: EdgeInsets.only(top: Config.yMargin(context, 10)),
+            padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
+            height: height * .4,
+            width: width,
+            alignment: Alignment.center,
+            child: TextFormField(
+                controller: nameController,
+                cursorColor: Theme.of(context).primaryColorDark,
                 style: TextStyle(
-                  color: Theme.of(context).primaryColorLight,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Config.textSize(context, 3.9),
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: Config.xMargin(context, 5.5)),
+                decoration: InputDecoration(hintText: 'Your name')),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                onTap: () async {
+                  if (nameController.text.isNotEmpty) {
+                    print('${nameController.text}');
+                    var newuser = User(
+                        id: DateTime.now().toString(),
+                        name: nameController.text);
+                    await userDb.adduser(newuser);
+                    await box.put('status', 'true');
+                    Future.delayed(
+                        Duration(seconds: 2),
+                        () => Navigator.pushReplacementNamed(
+                            context, RouteNames.homePage));
+                  } else {
+                    showSnackBar(context);
+                  }
+                },
+                child: Container(
+                  height: Config.yMargin(context, 7),
+                  width: Config.xMargin(context, 40),
+                  padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                      borderRadius:
+                          BorderRadius.circular(Config.xMargin(context, 2.77))),
+                  alignment: Alignment.center, //24,24,27
+                  child: Text(
+                    'Next',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorLight,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Config.textSize(context, 3.85),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
 
           /*
@@ -240,7 +251,7 @@ class Signup extends StatelessWidget {
 
 void showSnackBar(BuildContext context, {String text: 'Name cannot be empty'}) {
   SnackBar snackBar = SnackBar(
-    backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+    backgroundColor: Theme.of(context).primaryColor.withOpacity(.9),
     duration: Duration(seconds: 2),
     content: Text(
       text,

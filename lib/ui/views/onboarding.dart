@@ -17,7 +17,10 @@ class _OnboardState extends State<Onboard> {
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _controller = PageController(
+      initialPage: 0,
+      keepPage: false,
+    );
   }
 
   @override
@@ -34,115 +37,85 @@ class _OnboardState extends State<Onboard> {
       body: Container(
         height: height,
         width: width,
-        child: Stack(
+        child: Column(
           children: <Widget>[
-            PageView(
-              onPageChanged: onChangedFunction,
-              controller: _controller,
-              children: <Widget>[
-                FirstScreen(
-                  image: 'images/schedule.png',
-                  description: 'Book appointments with \ndoctors',
-                ),
-                FirstScreen(
-                  image: 'images/doctor.png',
-                  description:
-                      'Keep track of your medications \nand set reminders for them',
-                ),
-                FirstScreen(
-                  image: 'images/habit.png',
-                  description: 'Monitor your health activities',
-                )
-              ],
-            ),
-            Positioned(
-              bottom: Config.yMargin(context, 21.0),
-              left: Config.xMargin(context, 41.6),
-              child: Container(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Indicator(
-                      positionIndex: 0,
-                      currentIndex: currentIndex,
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 2.63),
-                    ),
-                    Indicator(
-                      positionIndex: 1,
-                      currentIndex: currentIndex,
-                    ),
-                    SizedBox(
-                      width: Config.xMargin(context, 2.63),
-                    ),
-                    Indicator(
-                      positionIndex: 2,
-                      currentIndex: currentIndex,
-                    ),
-                  ],
-                ),
+            Container(
+              height: height * .73,
+              width: width,
+              child: PageView(
+                onPageChanged: onChangedFunction,
+                controller: _controller,
+                children: <Widget>[
+                  FirstScreen(
+                    image: 'images/schedule.png',
+                    description: 'Book appointments with \ndoctors',
+                  ),
+                  FirstScreen(
+                    image: 'images/doctor.png',
+                    description:
+                        'Keep track of your medications \nand set reminders for them',
+                  ),
+                  FirstScreen(
+                    image: 'images/habit.png',
+                    description: 'Monitor your health activities',
+                  )
+                ],
               ),
             ),
-            Positioned(
-              bottom: Config.yMargin(context, 8.7),
-              left: Config.xMargin(context, 37),
-              child: Container(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Center(
-                      child: Container(
-                        height: Config.yMargin(context, 6),
-                        width: Config.xMargin(context, 27),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: FlatButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, 'signup');
-                          },
-                          child: Text(
-                            currentIndex == 2 ? 'Get started' : "Next",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorLight,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // SizedBox(
-                    //   width: Config.xMargin(context, 17),
-                    // ),
-                    // Container(
-                    //   height: Config.yMargin(context, 6),
-                    //   width: Config.xMargin(context, 27),
-                    //   decoration: BoxDecoration(
-                    //       color: Theme.of(context).primaryColorLight,
-                    //       border:
-                    //           Border.all(color: Theme.of(context).primaryColor),
-                    //       borderRadius: BorderRadius.circular(10)),
-                    //   child: FlatButton(
-                    //     onPressed: () {
-                    //       box.put('status', 'true');
-                    //       Navigator.pushReplacementNamed(
-                    //           context, RouteNames.login);
-                    //     },
-                    //     child: Text(
-                    //       "Login",
-                    //       style: TextStyle(
-                    //           color: Theme.of(context).primaryColor,
-                    //           fontWeight: FontWeight.bold),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
+            Container(
+              height: height * .07,
+              margin: EdgeInsets.only(top: Config.yMargin(context, 1)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Indicator(
+                    positionIndex: 0,
+                    currentIndex: currentIndex,
+                  ),
+                  SizedBox(
+                    width: Config.xMargin(context, 2.63),
+                  ),
+                  Indicator(
+                    positionIndex: 1,
+                    currentIndex: currentIndex,
+                  ),
+                  SizedBox(
+                    width: Config.xMargin(context, 2.63),
+                  ),
+                  Indicator(
+                    positionIndex: 2,
+                    currentIndex: currentIndex,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: Config.yMargin(context, 4.5)),
+              height: Config.yMargin(context, 6),
+              width: Config.xMargin(context, 40),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                  borderRadius:
+                      BorderRadius.circular(Config.xMargin(context, 2.77))),
+              child: FlatButton(
+                onPressed: () {
+                  currentIndex == 2
+                      ? Navigator.pushReplacementNamed(context, 'signup')
+                      : _controller.animateToPage(++currentIndex,
+                          duration: Duration(milliseconds: 150),
+                          curve: Curves.easeInOutQuad);
+                },
+                splashColor: Theme.of(context).primaryColor,
+                child: Text(
+                  currentIndex == 2 ? 'Get started' : "Next",
+                  style: TextStyle(
+                      fontSize: Config.textSize(context, 3.85),
+                      color: Theme.of(context).primaryColorLight,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -171,7 +144,7 @@ class FirstScreen extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: Config.xMargin(context, 6),
@@ -202,21 +175,23 @@ class FirstScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                height: height * .4,
+                height: height * .38,
                 width: width,
                 decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor,
                     image: DecorationImage(
                         image: AssetImage(image), fit: BoxFit.contain)),
               ),
               SizedBox(height: Config.yMargin(context, 3)),
               Container(
+                color: Theme.of(context).backgroundColor,
                 child: ForwardAnimation(
                   milliseconds: 500,
                   child: Text(description,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 6.5),
+                          fontSize: Config.textSize(context, 6),
                           fontWeight: FontWeight.bold)),
                 ),
               ),
