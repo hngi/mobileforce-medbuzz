@@ -259,14 +259,14 @@ class AddDietReminderScreen extends StatelessWidget {
 
                             //Functions to save  reminder to db and schedule notification goes here
                             onPressed: () {
-                              if (model
-                                      .getDateTime()
-                                      .difference(DateTime.now())
-                                      .inDays <
-                                  0) {
-                                showSnackbar(context);
-                                return;
-                              }
+                              // if (model
+                              //         .getDateTime()
+                              //         .difference(DateTime.now())
+                              //         .inDays <
+                              //     0) {
+                              //   showSnackbar(context);
+                              //   return;
+                              // }
                               if (mealNameController.text.isEmpty) {
                                 showSnackbar(context, text: 'Enter meal name');
                                 return;
@@ -294,7 +294,7 @@ class AddDietReminderScreen extends StatelessWidget {
                                     DateTime.now().millisecond,
                                     'Its time to take your meal',
                                     '${mealNameController.text}',
-                                    model.getDateTime());
+                                    model.getSelectedDate());
 
                                 Navigator.pushReplacementNamed(
                                     context, RouteNames.dietScheduleScreen);
