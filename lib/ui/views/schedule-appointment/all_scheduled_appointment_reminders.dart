@@ -1,11 +1,12 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'dart:ui';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders_model.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../core/database/appointmentData.dart';
@@ -28,13 +29,13 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   @override
   Widget build(BuildContext context) {
     var appointmentReminders =
-        Provider.of<AppointmentViewModel>(context, listen: true);
+        Provider.of<ScheduleAppointmentModel>(context, listen: true);
 
     var appointmentReminderDB =
         Provider.of<AppointmentData>(context, listen: true);
     appointmentReminderDB.getAppointments();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      appointmentReminders.updateAvailableAppointmentReminders(
+      appointmentReminders.updateAvailableAppointmentReminder(
           appointmentReminderDB.appointment);
     });
     double height = MediaQuery.of(context).size.height;
@@ -42,16 +43,14 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
     return DefaultTabController(
       length: 2,
       child: new Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: appThemeLight.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: appThemeLight.appBarTheme.color,
           title: Container(
             child: Container(
               child: new Text(
                 'My Appointments',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorDark,
-                ),
+                style: appThemeLight.textTheme.headline6,
                 textScaleFactor: 1.2,
               ),
             ),
@@ -60,7 +59,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
             child: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: Theme.of(context).primaryColorDark,
+                color: appThemeLight.appBarTheme.iconTheme.color,
               ),
 
               // navigate to add appointments page
@@ -82,20 +81,14 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                 child: Text(
                   'Upcoming',
                   textScaleFactor: 0.85,
-                  style: TextStyle(
-                    fontSize: Config.textSize(context, 4),
-                    color: Theme.of(context).primaryColorDark,
-                  ),
+                  style: TextStyle(fontSize: Config.textSize(context, 4)),
                 ),
               ),
               Tab(
                 child: Text(
                   'Past',
                   textScaleFactor: 0.85,
-                  style: TextStyle(
-                    fontSize: Config.textSize(context, 4),
-                    color: Theme.of(context).primaryColorDark,
-                  ),
+                  style: appThemeLight.textTheme.headline5,
                 ),
               ),
             ],
@@ -116,13 +109,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         visible: appointmentReminders.allAppointments.isEmpty,
                         child: Container(
                           child: Center(
-                              child: Text(
-                            'No Appointments for this date',
-                            style: TextStyle(
-                              fontSize: Config.textSize(context, 4),
-                              color: Theme.of(context).primaryColorDark,
-                            ),
-                          )),
+                              child: Text('No Appointments for this date')),
                         )),
                     for (var appointment
                         in appointmentReminders.allAppointments)
@@ -145,15 +132,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                     Visibility(
                         visible: appointmentReminders.pastApointments.isEmpty,
                         child: Container(
-                          child: Center(
-                            child: Text(
-                              'No Past Appointments',
-                              style: TextStyle(
-                                fontSize: Config.textSize(context, 4),
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                            ),
-                          ),
+                          child: Center(child: Text('No Past Appointments')),
                         )),
                     for (var appointment
                         in appointmentReminders.pastApointments)

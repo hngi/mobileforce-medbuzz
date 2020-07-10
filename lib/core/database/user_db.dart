@@ -27,4 +27,6 @@ class UserCrud extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  User get newuser => _user;
 }

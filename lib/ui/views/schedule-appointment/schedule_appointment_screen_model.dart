@@ -112,6 +112,29 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     return newAppointment;
   }
 
+  Appointment editSchedule() {
+    var dayValue =
+        selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
+    var monthValue = selectedMonth.toString().length < 2
+        ? '0$selectedMonth'
+        : '$selectedMonth';
+
+    var selectedDateTime = "${_today.year}-$monthValue-$dayValue";
+
+    var appointmentType = _typeOfAppointment.toString().length < 1
+        ? 'empty 0$typeOfAppointment'
+        : '$typeOfAppointment';
+
+    var noteValue = _note.toString().length < 1 ? 'empty 0$note' : '$note';
+
+    Appointment newAppointment = Appointment(
+        date: DateTime.parse(selectedDateTime),
+        appointmentType: appointmentType,
+        note: noteValue,
+        dateTime: _selectedTime);
+    return newAppointment;
+  }
+
   void updateSelectedDay(int dayIndex) {
     _selectedDay = dayIndex + 1;
     notifyListeners();
@@ -125,6 +148,16 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   void updateAvailableAppointmentReminder(appointmentReminder) {
     _availableAppointments = appointmentReminder;
     notifyListeners();
+  }
+
+  List<Appointment> get pastApointments {
+    return _availableAppointments
+        .where((appointment) => selectedDateTime.day > appointment.date.day)
+        .toList();
+  }
+
+  List<Appointment> get allAppointments {
+    return _availableAppointments;
   }
 
   bool isActive(index) {
