@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:intl/intl.dart';
@@ -48,7 +49,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
               borderRadius: BorderRadius.circular(Config.xMargin(context, 6)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColorLight,
                   spreadRadius: 5,
                 ),
               ],
@@ -67,8 +68,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       onSelected: (_) {
                         PopupMenuItem(
                             child: GestureDetector(
-                          child: Text('Edit'),
-                          onTap: () {},
+                          child: Text('View'),
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, RouteNames.viewAppointmentScreen);
+                          },
                         ));
                         PopupMenuItem(
                             child: GestureDetector(
@@ -84,8 +88,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
                         return [
                           PopupMenuItem(
                               child: GestureDetector(
-                            child: Text('Edit'),
-                            onTap: () {},
+                            child: Text('View'),
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, RouteNames.viewAppointmentScreen);
+                            },
                           )),
                           PopupMenuItem(
                               child: GestureDetector(
@@ -164,6 +171,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                       widget.appointment.dateTime
                                           .substring(0, 5),
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
                                           fontWeight: FontWeight.w600,
                                           fontSize:
                                               Config.textSize(context, 3.8)),
@@ -187,6 +196,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     Text(
                                       widget.appointment.appointmentType,
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
                                           fontWeight: FontWeight.w600,
                                           fontSize:
                                               Config.textSize(context, 3.8)),
@@ -208,6 +219,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               child: Text(
                                 widget.appointment.note,
                                 style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
                                     fontSize: Config.textSize(context, 3.8)),
                               ),
                             ),
