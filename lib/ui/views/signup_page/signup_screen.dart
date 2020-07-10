@@ -71,7 +71,7 @@ class Signup extends StatelessWidget {
                   id: DateTime.now().toString(), name: nameController.text);
               await userDb.adduser(newuser);
               //  await box.put('status', 'true');
-              Future.delayed(Duration(seconds: 2), () {
+              Future.delayed(Duration(seconds: 4), () {
                 Navigator.pushReplacementNamed(context, RouteNames.homePage);
               });
             } else {

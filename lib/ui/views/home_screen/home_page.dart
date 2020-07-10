@@ -60,8 +60,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  UserCrud user1 = UserCrud();
-
   @override
   Widget build(BuildContext context) {
     var userDb = Provider.of<UserCrud>(context);

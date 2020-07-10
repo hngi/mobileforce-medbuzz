@@ -6,21 +6,26 @@ class UserCrud extends ChangeNotifier {
   static const String _boxName = "userBoxName";
 
   User _user;
-  User get user => _user;
 
   void getuser() async {
-    var box = await Hive.openBox<User>(_boxName);
-    _user = box.get('userName');
-    box.close();
-    notifyListeners();
-  }
-
-  Future<void> adduser(User user) async {
-    var box = await Hive.openBox<User>(_boxName);
-
-    await box.put('userName', user);
-    box.close();
+    try {
+      var box = await Hive.openBox<User>(_boxName);
+      _user = box.get('userName');
+    } catch (e) {
+      print(e);
+    }
 
     notifyListeners();
   }
+
+  Future<void> adduser(User userNew) async {
+    var box = await Hive.openBox<User>(_boxName);
+
+    await box.put('userName', userNew);
+    box.close();
+
+    notifyListeners();
+  }
+
+  User get user => _user;
 }
