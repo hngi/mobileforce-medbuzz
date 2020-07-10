@@ -4,6 +4,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 
@@ -20,7 +21,6 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   @override
   void initState() {
     super.initState();
-    Provider.of<DietReminderDB>(context, listen: false).getAlldiets();
     _tabController = new TabController(vsync: this, length: 2);
   }
 
@@ -65,8 +65,14 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
     });
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var db = Provider.of<DietReminderDB>(context);
-    var model = Provider.of<DietReminderModel>(context);
+    var db = Provider.of<DietReminderDB>(context, listen: true);
+    db.getAlldiets();
+    var model = Provider.of<DietReminderModel>(context, listen: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      model.updateAllDietsBasedOnToday(db.allDiets);
+    });
+
+    // print(model.upcomingDiets);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -99,7 +105,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             onPressed: () {
               Navigator.pushNamed(context, RouteNames.homePage);
             }),
-        actions: <Widget>[
+        /*   actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
@@ -119,7 +125,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
               ),
             ),
           )
-        ],
+        ], */
       ),
       body: WillPopScope(
         onWillPop: () {
@@ -129,47 +135,43 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
         child: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            ListView.builder(
-              itemCount: db.upcomingDiets.length,
-              itemBuilder: (context, index) {
-                var diets = db.upcomingDiets;
-                var item = diets[index];
-                return diets.length > 1
-                    ? DietReminderCard(diet: item)
-                    : Container(
-                        height: height,
-                        width: width,
-                        alignment: Alignment.center,
-                        child: Center(
-                          child: Text(
-                              'No diet reminder.\nClick the button to add one',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: Config.xMargin(context, 5.55))),
-                        ),
-                      );
-              },
-            ),
-            ListView.builder(
-              itemCount: db.pastDiets.length,
-              itemBuilder: (context, index) {
-                var diets = db.pastDiets;
-                var item = diets[index];
-                return diets.length > 1
-                    ? DietReminderCard(diet: item)
-                    : Container(
-                        height: height,
-                        width: width,
-                        alignment: Alignment.center,
-                        child: Center(
-                          child: Text('NO PAST REMINDER',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: Config.xMargin(context, 5.55))),
-                        ),
-                      );
-              },
-            ),
+            model.upcomingDiets.length > 0
+                ? ListView.builder(
+                    itemCount: model.upcomingDiets.length,
+                    itemBuilder: (context, index) =>
+                        // var diets = db.upcomingDiets;
+                        // var item = diets[index];
+
+                        DietReminderCard(diet: model.upcomingDiets[index]))
+                : Container(
+                    height: height,
+                    width: width,
+                    alignment: Alignment.center,
+                    child: Center(
+                      child: Text(
+                          'No diet reminder.\nClick the button to add one',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: Config.xMargin(context, 5.55))),
+                    ),
+                  ),
+            model.pastDiets.length > 0
+                ? ListView.builder(
+                    itemCount: model.pastDiets.length,
+                    itemBuilder: (context, index) => model.pastDiets.length == 0
+                        ? Text('')
+                        : DietReminderCard(diet: model.pastDiets[index]),
+                  )
+                : Container(
+                    height: height,
+                    width: width,
+                    alignment: Alignment.center,
+                    child: Center(
+                        child: Text('NO PAST REMINDER',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: Config.xMargin(context, 5.55)))),
+                  )
           ],
         ),
       ),
@@ -209,7 +211,7 @@ class DietReminderCard extends StatelessWidget {
   const DietReminderCard({Key key, this.diet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(diet.foodClasses);
+    // print(diet.foodClasses);
     var model = Provider.of<DietReminderModel>(context);
     return Padding(
       padding: EdgeInsets.only(
@@ -241,7 +243,11 @@ class DietReminderCard extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('${diet.time[0]}:${diet.time[1]}'),
+                      Text(
+                        DateFormat.jm().format(diet.startDate).toString(),
+                        style:
+                            TextStyle(fontSize: Config.textSize(context, 3.5)),
+                      ),
                       SizedBox(
                         height: Config.yMargin(context, 2),
                       ),

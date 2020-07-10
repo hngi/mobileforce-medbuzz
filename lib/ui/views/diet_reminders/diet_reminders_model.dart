@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,13 @@ class DietReminderModel extends ChangeNotifier {
   int get currentDay => _currentDay;
   List<String> get selectedFoodClasses => _selectedFoodClasses;
 
+  List<DietModel> _allDiets = [];
+  List<DietModel> get allDiets => _allDiets;
+
   int get month => _month;
 
-  DateTime getSelectedDate() =>
-      DateTime.parse('${__today.year}-$_month-$_selectedDay');
+  DateTime getSelectedDate() => DateTime.parse(
+      '${__today.year}-${_month.toString().padLeft(2, '0')}-${_selectedDay.toString().padLeft(2, '0')} $_selectedTime');
 
   //this function is used on the AllDietReminders screen to convert the foodclasses
   //retrieved from the diet model from list to string
@@ -94,19 +98,19 @@ class DietReminderModel extends ChangeNotifier {
   }
 
   DateTime getStartDate() {
-    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+    String month = _month.toString().padLeft(2, '0');
     String weekday =
         _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse('${__today.year}-$month-$weekday');
+    return DateTime.parse('${__today.year}-$month-$weekday $_selectedTime');
   }
 
-  DateTime getDateTime() {
-    String month = _month.toString().length < 2 ? '0$_month' : '$_month';
-    String weekday =
-        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse(
-        '${__today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
-  }
+  // DateTime getDateTime() {
+  //   String month = _month.toString().length < 2 ? '0$_month' : '$_month';
+  //   String weekday =
+  //       _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+  //   return DateTime.parse(
+  //       '${__today.year}-$month-$weekday ${_selectedTime.substring(0, 2)} : ${selectedTime.substring(3, 5)}');
+  // }
 
   bool isActive(index) {
     //increment index to match day index and compare
@@ -467,6 +471,23 @@ class DietReminderModel extends ChangeNotifier {
   ];
   List<String> get months => _months;
   bool isVisible = true;
+
+  List<DietModel> get upcomingDiets {
+    return _allDiets
+        .where((element) => element.startDate.isBefore(_today))
+        .toList();
+  }
+
+  List<DietModel> get pastDiets {
+    return _allDiets
+        .where((element) => element.startDate.isAfter(_today))
+        .toList();
+  }
+
+  void updateAllDietsBasedOnToday(List<DietModel> diets) {
+    _allDiets = diets;
+    notifyListeners();
+  }
 
   //functionality for making the FAB appear and disappear when user scrolls
   void updateVisibility(bool visible) {

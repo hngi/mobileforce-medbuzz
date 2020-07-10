@@ -98,9 +98,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         color: Theme.of(context).primaryColorDark,
                         fontSize: Config.xMargin(context, 5.5)),
                     decoration: InputDecoration(
-                      hintText: 'Aspirin',
+                      hintText: 'Enter Drug Name',
                       hintStyle: TextStyle(
-                        color: Colors.black38,
+                        color: Theme.of(context).primaryColorDark,
                         fontSize: Config.xMargin(context, 5),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -136,7 +136,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     decoration: InputDecoration(
                       hintText: 'Enter Description here',
                       hintStyle: TextStyle(
-                        color: Colors.black38,
+                        color: Theme.of(context).primaryColorDark,
                         fontSize: Config.xMargin(context, 5),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -291,7 +291,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         '${medModel.dosage}',
                         style: TextStyle(
                             fontSize: Config.textSize(context, 5),
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.normal),
                       ),
                       GestureDetector(
                         onTap: () => medModel.increaseDosage(),
@@ -299,9 +299,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           height: Config.yMargin(context, 4.5),
                           width: Config.xMargin(context, 8.3),
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Config.xMargin(context, 4)))),
+                            color: Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                          ),
                           child: Icon(
                             Icons.add,
                             color: Theme.of(context).primaryColorLight,
@@ -505,7 +505,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           child: Text(
                             'Save',
                             style: TextStyle(
-                              fontSize: Config.textSize(context, 4.5),
+                              fontSize: Config.textSize(context, 5.5),
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColorLight,
                             ),
@@ -650,7 +650,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.firstTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -705,7 +705,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.firstTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -748,7 +748,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.secondTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -800,7 +800,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.firstTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -843,7 +843,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.secondTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -886,7 +886,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               localizations.formatTimeOfDay(medModel.thirdTime),
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -937,7 +937,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               'Start - ${localizations.formatMediumDate(medModel.startDate)}',
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
@@ -990,7 +990,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
               'End - ${localizations.formatMediumDate(medModel.endDate)}',
               style: TextStyle(
                 fontSize: Config.textSize(context, 4.5),
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),

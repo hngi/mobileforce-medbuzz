@@ -33,7 +33,7 @@ class _SingleWaterState extends State<SingleWater> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop()),
-        elevation: 2.0,
+        elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
       ),
       body: ListView(children: [

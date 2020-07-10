@@ -85,74 +85,54 @@ class WaterScheduleViewScreen extends StatelessWidget {
                   Center(
                     child: Stack(
                       children: <Widget>[
-                        SizedBox(
+                        Center(
+                          child: SizedBox(
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-                          height: height * 0.37,
-                          width: height * 0.37,
-                          child: CircularProgressIndicator(
-                              backgroundColor: Color(0xffE5E5E5),
-                              valueColor: waterReminderDB.progress < 0.5
-                                  ? AlwaysStoppedAnimation(Colors.red)
-                                  : AlwaysStoppedAnimation(
-                                      Theme.of(context).primaryColor),
-                              value: waterReminderDB.progress,
-                              strokeWidth: width * 0.04),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: width <= height * .37
-                                  ? Config.xMargin(context, 27)
-                                  : width < height * .5
-                                      ? Config.xMargin(context, 32)
-                                      : Config.xMargin(context, 35),
-                              top: Config.yMargin(context, 9)),
-                          child: Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  Image(
-                                    image: AssetImage('images/bigdrop.png'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: Config.xMargin(context, 6.5),
-                                        top: Config.yMargin(context, 1)),
-                                    child: Image(
-                                      image: AssetImage('images/smalldrop.png'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                            height: height * 0.37,
+                            width: height * 0.37,
+                            child: CircularProgressIndicator(
+                                backgroundColor: Color(0xffE5E5E5),
+                                valueColor: waterReminderDB.progress < 0.5
+                                    ? AlwaysStoppedAnimation(Colors.red)
+                                    : AlwaysStoppedAnimation(
+                                        Theme.of(context).primaryColor),
+                                value: waterReminderDB.progress,
+                                strokeWidth: width * 0.04),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: Config.yMargin(context, 19.8),
-                              left: width <= height * .37
-                                  ? Config.xMargin(context, 25)
-                                  : width < height * .5
-                                      ? Config.xMargin(context, 31)
-                                      : Config.xMargin(context, 33)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              //Proper data will be fetched from DB
-//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-                              Text(
-                                '${waterReminderDB.currentLevel} ' + 'ml',
-                                style: TextStyle(
-                                    fontSize: Config.textSize(context, 7),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: Config.yMargin(context, 0.7),
-                              ),
-                              Text('of ${waterReminderDB.totalLevel} ml',
+                        Center(
+                          child: Container(
+                            //takes same height as sizedbox of progress indicator so that it can align to the center of that height
+                            height: height * 0.37,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Image(
+                                  image: AssetImage('images/waterdrop.png'),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 7)),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      '${waterReminderDB.currentLevel} ' + 'ml',
+                                      style: TextStyle(
+                                          fontSize: Config.textSize(context, 7),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: Config.yMargin(context, 0.7)),
+                                Text(
+                                  'of ${waterReminderDB.totalLevel} ml',
                                   style: TextStyle(
                                       fontSize: Config.textSize(context, 4.5),
-                                      color: Color(0xff4F4F4F)))
-                            ],
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
