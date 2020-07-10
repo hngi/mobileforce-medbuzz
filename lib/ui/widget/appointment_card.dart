@@ -39,6 +39,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final double boxHeight = MediaQuery.of(context).size.height;
     initializeDateFormatting();
     return Container(
       child: Column(
@@ -242,7 +243,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 ),
               ],
             ),
-          )
+          ),
+          SizedBox(height: boxHeight * 0.03),
         ],
       ),
     );

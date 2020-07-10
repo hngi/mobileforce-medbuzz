@@ -113,11 +113,15 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         )),
                     for (var appointment
                         in appointmentReminders.allAppointments)
-                      AppointmentCard(
-                        height: height,
-                        width: width,
-                        appointment: appointment,
-                      )
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 5.0)),
+                        child: AppointmentCard(
+                          height: height,
+                          width: width,
+                          appointment: appointment,
+                        ),
+                      ),
                   ],
                 ),
               ),
