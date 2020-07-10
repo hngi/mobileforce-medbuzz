@@ -3,13 +3,11 @@ import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
-import 'package:MedBuzz/core/models/user_model/user_model.dart';
+import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
-import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
 import 'package:MedBuzz/ui/widget/progress_card.dart';
@@ -173,8 +171,7 @@ class _HomePageState extends State<HomePage> {
                                               fontSize:
                                                   Config.textSize(context, 3.5),
                                               color: Theme.of(context)
-                                                  .primaryColorDark
-                                                  .withOpacity(0.5)),
+                                                  .primaryColorDark),
                                         ),
                                         SizedBox(
                                           height: Config.yMargin(context, 1.5),
@@ -184,7 +181,6 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               '${waterReminderDB.currentLevel}ml',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.w600,
                                                 fontSize:
                                                     Config.textSize(context, 4),
                                                 color: Theme.of(context)
@@ -194,8 +190,9 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               ' of ${waterReminderDB.totalLevel}ml',
                                               style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 3.7),
+                                                fontWeight: FontWeight.w600,
+                                                fontSize:
+                                                    Config.textSize(context, 4),
                                                 color: Theme.of(context)
                                                     .primaryColorDark,
                                               ),
@@ -353,7 +350,7 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                   child: Icon(isPressed == true ? Icons.close : Icons.add),
-                  overlayColor: Colors.black,
+                  overlayColor: appThemeLight.iconTheme.color,
                   overlayOpacity: 0.7,
                   children: [
                     SpeedDialChild(
@@ -366,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                           'Appointment',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -385,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                           'Medication',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -403,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                           'Fitness',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -422,7 +419,7 @@ class _HomePageState extends State<HomePage> {
                           'Water',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -441,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                           'Diet',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Colors.white,
                           ),
                         ),
                       ),

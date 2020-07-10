@@ -23,7 +23,7 @@ class MedicationView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
-            elevation: 2.0,
+            elevation: 0,
             backgroundColor: Theme.of(context).backgroundColor,
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
