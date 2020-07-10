@@ -4,6 +4,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 
@@ -104,7 +105,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             onPressed: () {
               Navigator.pushNamed(context, RouteNames.homePage);
             }),
-      /*   actions: <Widget>[
+        /*   actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
@@ -242,7 +243,11 @@ class DietReminderCard extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('${diet.time[0]}:${diet.time[1]}'),
+                      Text(
+                        DateFormat.jm().format(diet.startDate).toString(),
+                        style:
+                            TextStyle(fontSize: Config.textSize(context, 3.5)),
+                      ),
                       SizedBox(
                         height: Config.yMargin(context, 2),
                       ),
