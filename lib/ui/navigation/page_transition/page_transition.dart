@@ -43,7 +43,7 @@ class _ForwardAnimationState extends State<ForwardAnimation>
         animation: animationController,
         builder: (context, child) {
           return Material(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).backgroundColor,
             child: Transform(
                 transform:
                     Matrix4.translationValues(animation.value * width, 0, 0),
