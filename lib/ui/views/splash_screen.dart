@@ -21,7 +21,7 @@ class StartState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
- Provider.of<UserCrud>(context, listen: false).getuser()   ;
+    Provider.of<UserCrud>(context, listen: false).getuser();
     startTimer();
   }
 

@@ -12,7 +12,6 @@ class Onboard extends StatefulWidget {
 }
 
 class _OnboardState extends State<Onboard> {
-  
   PageController _controller;
   int currentIndex = 0;
   @override
@@ -110,7 +109,7 @@ class _OnboardState extends State<Onboard> {
                             Navigator.pushReplacementNamed(context, 'signup');
                           },
                           child: Text(
-                            "Next",
+                            currentIndex == 2 ? 'Get started' : "Next",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorLight,
                                 fontWeight: FontWeight.bold),
@@ -162,8 +161,8 @@ class _OnboardState extends State<Onboard> {
 
 // class to display the screens
 class FirstScreen extends StatelessWidget {
-  final image;
-  final description;
+  final String image;
+  final String description;
 
   FirstScreen({this.image, this.description});
 
@@ -171,7 +170,6 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var box = Hive.box('onboarding');
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       body: Padding(
@@ -181,6 +179,7 @@ class FirstScreen extends StatelessWidget {
         child: Container(
           height: height,
           width: width,
+          alignment: Alignment.center,
           child: Column(
             children: <Widget>[
               Row(
@@ -188,7 +187,6 @@ class FirstScreen extends StatelessWidget {
                 children: <Widget>[
                   FlatButton(
                     onPressed: () {
-                      
                       Navigator.pushReplacementNamed(
                           context, RouteNames.signup);
                     }, //navigate to the sign up page

@@ -7,6 +7,7 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
+import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -36,23 +37,27 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static final navigatorKey = new GlobalKey<NavigatorState>();    
+  static final navigatorKey = new GlobalKey<NavigatorState>();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: providers,
-      child: MaterialApp(
-        builder: DevicePreview.appBuilder, // <--- Add the builder
-        debugShowCheckedModeBanner: false,
-        title: 'MedBuzz',
-        theme: appThemeLight,
-        initialRoute: RouteNames.splashScreen,
-        //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
-        //in the RouteGenerator class
-        //This update handles page transitions
-        onGenerateRoute: RouteGenerator.generateRoute,
-      ),
+    return MultiProvider(providers: providers, child: MaterialAPP());
+  }
+}
+
+class MaterialAPP extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      builder: DevicePreview.appBuilder, // <--- Add the builder
+      debugShowCheckedModeBanner: false,
+      title: 'MedBuzz',
+      theme: Provider.of<DarkModeModel>(context).appTheme,
+      initialRoute: RouteNames.splashScreen,
+      //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
+      //in the RouteGenerator class
+      //This update handles page transitions
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
