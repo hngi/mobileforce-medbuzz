@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../../core/constants/route_names.dart';
 import '../../../core/database/waterReminderData.dart';
 import '../../../core/notifications/water_notification_manager.dart';
 
@@ -231,6 +230,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         "Save",
                         style: TextStyle(
                             color: Theme.of(context).primaryColorLight,
+                            fontWeight: FontWeight.bold,
                             fontSize: Config.textSize(context, 5)),
                       ),
                     ),

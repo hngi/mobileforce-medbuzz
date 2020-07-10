@@ -505,7 +505,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           child: Text(
                             'Save',
                             style: TextStyle(
-                              fontSize: Config.textSize(context, 4.5),
+                              fontSize: Config.textSize(context, 5.5),
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColorLight,
                             ),

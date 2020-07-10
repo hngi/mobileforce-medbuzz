@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
@@ -20,7 +21,9 @@ class AllRemindersScreen extends StatelessWidget {
     var allReminders = Provider.of<AllRemindersViewModel>(context);
     var waterReminderDB = Provider.of<WaterReminderData>(context);
     var appointmentReminderDB = Provider.of<AppointmentData>(context);
+    var fitnessReminderDB = Provider.of<FitnessReminderCRUD>(context);
     appointmentReminderDB.getAppointments();
+    fitnessReminderDB.getReminders();
 
     waterReminderDB.getWaterReminders();
     var medicationDB = Provider.of<MedicationData>(context);
@@ -33,6 +36,8 @@ class AllRemindersScreen extends StatelessWidget {
           .updateAvailableMedicationReminders(medicationDB.medicationReminder);
       allReminders.updateAvailableAppointmentReminders(
           appointmentReminderDB.appointment);
+      allReminders
+          .updateAvailableFitnessReminders(fitnessReminderDB.fitnessReminder);
     });
 
     double height = MediaQuery.of(context).size.height;
@@ -168,41 +173,86 @@ class AllRemindersScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: height * 0.02),
-                  Container(
-                    width: width,
-                    child: GestureDetector(
-                      //Navigate to screen with single reminder i.e the on user clicked on
-                      onTap: () {},
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width,
-                              height: height * .22,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('images/sprint.png'),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.circular(
-                                    Config.xMargin(context, 6)),
-                              ),
-                            ),
-                            SizedBox(height: Config.yMargin(context, 2)),
-                            //Type of fitness exercise goes here
-                            Text('Running',
-                                style: TextStyle(
-                                    fontSize: Config.textSize(context, 4),
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).primaryColor)),
-                            SizedBox(height: Config.yMargin(context, 0.6)),
-                            Text('30 minutes daily',
-                                style: TextStyle(
-                                    fontSize: Config.textSize(context, 4.5),
-                                    fontWeight: FontWeight.w400,
-                                    color: Theme.of(context).primaryColorDark)),
-                          ]),
-                    ),
+                  Visibility(
+                      visible:
+                          allReminders.fitnessRemindersBasedOnDateTime.length ==
+                              0,
+                      child: Text('No fitness reminders set yet')),
+                  Visibility(
+                    visible:
+                        allReminders.fitnessRemindersBasedOnDateTime.length > 0,
+                    child: Container(
+                        width: width,
+                        height: height * 0.3,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: allReminders
+                                .fitnessRemindersBasedOnDateTime.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                //Navigate to screen with single reminder i.e the on user clicked on
+                                onTap: () {},
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      right: Config.xMargin(context, 3)),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: width * 0.7,
+                                          height: height * .22,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'images/sprint.png'),
+                                                fit: BoxFit.cover),
+                                            borderRadius: BorderRadius.circular(
+                                                Config.xMargin(context, 6)),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            height: Config.yMargin(context, 2)),
+                                        //Type of fitness exercise goes here
+                                        Text(
+                                            allReminders
+                                                .fitnessRemindersBasedOnDateTime[
+                                                    index]
+                                                .name,
+                                            style: TextStyle(
+                                                fontSize:
+                                                    Config.textSize(context, 4),
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(context)
+                                                    .primaryColor)),
+                                        SizedBox(
+                                            height:
+                                                Config.yMargin(context, 0.6)),
+                                        Text(
+                                            allReminders
+                                                    .fitnessRemindersBasedOnDateTime[
+                                                        index]
+                                                    .minsperday
+                                                    .toString() +
+                                                " minutes " +
+                                                allReminders
+                                                    .fitnessRemindersBasedOnDateTime[
+                                                        index]
+                                                    .fitnessfreq
+                                                    .toString()
+                                                    .toLowerCase(),
+                                            style: TextStyle(
+                                                fontSize: Config.textSize(
+                                                    context, 4.5),
+                                                fontWeight: FontWeight.w400,
+                                                color: Theme.of(context)
+                                                    .primaryColorDark)),
+                                      ]),
+                                ),
+                              );
+                            })),
                   ),
                 ],
               ),
