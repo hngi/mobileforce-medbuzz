@@ -289,8 +289,7 @@ class AddDietReminderScreen extends StatelessWidget {
                                     ]));
 
                                 notificationManager.showDietNotificationOnce(
-                                    num.parse(
-                                        '${model.getStartDate().year}${model.getStartDate().month}${model.getStartDate().day}${model.selectedTime.substring(0, 2)}${model.selectedTime.substring(3, 5)}'),
+                                    DateTime.now().millisecond,
                                     'Its time to take your meal',
                                     '${mealNameController.text}',
                                     model.getDateTime());
