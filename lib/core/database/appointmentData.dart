@@ -45,6 +45,15 @@ class AppointmentData extends ChangeNotifier {
     notifyListeners();
   }
 
+  String get typeOfAppointment => appointmentSubject;
+
+  setSelectedTypeOfAppointment(String typeOfAppointment) =>
+      appointmentSubject = typeOfAppointment;
+
+  String get note => appointmentNote;
+
+  setSelectedNote(String note) => appointmentNote = note;
+
   void deleteAppointment(key) async {
     var box = await Hive.openBox<Appointment>(_boxName);
 
@@ -55,7 +64,8 @@ class AppointmentData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editAppointment({Appointment appointment, int appointmentKey}) async {
+  Future<void> editAppointment({Appointment appointment}) async {
+    String appointmentKey = appointment.dateTime;
     var box = await Hive.openBox<Appointment>(_boxName);
 
     await box.put(appointmentKey, appointment);
