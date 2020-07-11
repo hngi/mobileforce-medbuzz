@@ -5,7 +5,9 @@ import '../models/fitness_reminder_model/fitness_reminder.dart';
 
 class FitnessReminderCRUD extends ChangeNotifier {
   static const String _boxName = "fitnessReminderBox";
-
+  bool isEditting = false;
+  final String add = "Add Fitness Reminder ";
+  final String edit = "Edit Fitness Reminder";
   DateTime _today = DateTime.now();
   int _selectedDay;
   int _selectedMonth;
