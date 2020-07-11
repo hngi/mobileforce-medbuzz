@@ -19,11 +19,15 @@ class WaterReminder {
   @HiveField(4)
   bool isSkipped;
 
+  @HiveField(5)
+  String description;
+
   WaterReminder({
     @required this.ml,
     @required this.dateTime,
     @required this.id,
     this.isTaken = false,
     this.isSkipped = false,
+    this.description,
   });
 }
