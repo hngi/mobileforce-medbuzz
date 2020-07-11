@@ -512,6 +512,12 @@ class __AddFitnessState extends State<AddFitness> {
                                           "It's time to go ${nameController.text}",
                                           "For $minDaily minutes",
                                           getDateTime());
+                                  print(id);
+                                  _successDialog();
+                                  Future.delayed(Duration(seconds: 2), () {
+                                    Navigator.pushNamed(context,
+                                        RouteNames.fitnessSchedulesScreen);
+                                  });
                                 }
                               }
                           }
