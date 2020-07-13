@@ -1,11 +1,12 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'dart:ui';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders_model.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../core/database/appointmentData.dart';
@@ -28,13 +29,13 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   @override
   Widget build(BuildContext context) {
     var appointmentReminders =
-        Provider.of<AppointmentViewModel>(context, listen: true);
+        Provider.of<ScheduleAppointmentModel>(context, listen: true);
 
     var appointmentReminderDB =
         Provider.of<AppointmentData>(context, listen: true);
     appointmentReminderDB.getAppointments();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      appointmentReminders.updateAvailableAppointmentReminders(
+      appointmentReminders.updateAvailableAppointmentReminder(
           appointmentReminderDB.appointment);
     });
     double height = MediaQuery.of(context).size.height;
@@ -112,11 +113,15 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         )),
                     for (var appointment
                         in appointmentReminders.allAppointments)
-                      AppointmentCard(
-                        height: height,
-                        width: width,
-                        appointment: appointment,
-                      )
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 5.0)),
+                        child: AppointmentCard(
+                          height: height,
+                          width: width,
+                          appointment: appointment,
+                        ),
+                      ),
                   ],
                 ),
               ),

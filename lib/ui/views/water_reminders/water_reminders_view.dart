@@ -1,16 +1,12 @@
-import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../size_config/config.dart';
 import 'schedule_water_reminder_screen.dart';
 import '../../../core/constants/route_names.dart';
 import '../../../core/database/waterReminderData.dart';
-import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
 //I'm going to touch it small Sir, sorry
@@ -84,155 +80,61 @@ class WaterScheduleViewScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
-                      child: SizedBox(
-                    height: height * 0.37,
-                    width: height * 0.37,
-                    child: CircularStepProgressIndicator(
-                        totalSteps: 100,
-                        currentStep: waterReminderDB.progress.toInt(),
-                        stepSize: 30,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image(
-                                image: AssetImage('images/waterdrop.png'),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  //Proper data will be fetched from DB
+                    child: Stack(
+                      children: <Widget>[
+                        Center(
+                          child: SizedBox(
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-                                  Text(
-                                    '${waterReminderDB.currentLevel} ' + 'ml',
-                                    style: TextStyle(
-                                        fontSize: Config.textSize(context, 7),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                      height: Config.yMargin(context, 0.7)),
-                                  Text('of ${waterReminderDB.totalLevel} ml',
+                            height: height * 0.37,
+                            width: height * 0.37,
+                            child: CircularProgressIndicator(
+                                backgroundColor: Color(0xffE5E5E5),
+                                valueColor: waterReminderDB.progress < 0.5
+                                    ? AlwaysStoppedAnimation(Colors.red)
+                                    : AlwaysStoppedAnimation(
+                                        Theme.of(context).primaryColor),
+                                value: waterReminderDB.progress,
+                                strokeWidth: width * 0.04),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            //takes same height as sizedbox of progress indicator so that it can align to the center of that height
+                            height: height * 0.37,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Image(
+                                  image: AssetImage('images/waterdrop.png'),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 7)),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      '${waterReminderDB.currentLevel} ' + 'ml',
                                       style: TextStyle(
-                                          fontSize:
-                                              Config.textSize(context, 4.5),
-                                          color: Color(0xff4F4F4F)))
-                                ],
-                              ),
-                            ])),
-                  )
-//                     Stack(
-//                       children: <Widget>[
-//                         SizedBox(
-// //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-//                           height: height * 0.37,
-//                           width: height * 0.37,
-//                           child: CircularProgressIndicator(
-//                               backgroundColor: Color(0xffE5E5E5),
-//                               valueColor: waterReminderDB.progress < 0.5
-//                                   ? AlwaysStoppedAnimation(Colors.red)
-//                                   : AlwaysStoppedAnimation(
-//                                       Theme.of(context).primaryColor),
-//                               value: waterReminderDB.progress,
-//                               strokeWidth: width * 0.04),
-//                         ),
-//                         Container(
-//                           margin: EdgeInsets.only(
-//                               left:
-//                                   // Config.xMargin(context, 30),
-//                                   width <= height * .4
-//                                       ? Config.xMargin(context, 27)
-//                                       : width < height * 5
-//                                           ? Config.xMargin(context, 28)
-//                                           : width < height * 6
-//                                               ? Config.xMargin(context, 26)
-//                                               : width < height * 7
-//                                                   ? Config.xMargin(context, 29)
-//                                                   : Config.xMargin(context, 35),
-//                               top:
-//                                   // Config.yMargin(context, 9)
-//                                   width < height * 7
-//                                       ? Config.yMargin(context, 9)
-//                                       : Config.yMargin(context, 9)),
-//                           child: Column(
-//                             children: <Widget>[
-//                               Stack(
-//                                 children: <Widget>[
-//                                   Image(
-//                                     // height: width < height * 7
-//                                     //     ? width * 0.13
-//                                     //     : width,
-//                                     image: AssetImage('images/bigdrop.png'),
-//                                   ),
-//                                   Container(
-//                                     margin: EdgeInsets.only(
-//                                         left:
-//                                             // Config.xMargin(context, 5.5),
-//                                             width < height * 5
-//                                                 ? Config.xMargin(context, 6)
-//                                                 : width < height * 6
-//                                                     ? Config.xMargin(
-//                                                         context, 4.7)
-//                                                     : width < height * 7
-//                                                         ? Config.xMargin(
-//                                                             context, 5.5)
-//                                                         : Config.xMargin(
-//                                                             context, 6.5),
-//                                         top:
-//                                             // Config.yMargin(context, 1)
-//                                             width < height * 5
-//                                                 ? Config.yMargin(context, 1.6)
-//                                                 : width < height * 6
-//                                                     ? Config.yMargin(context, 2)
-//                                                     : width < height * 7
-//                                                         ? Config.yMargin(
-//                                                             context, 1.2)
-//                                                         : Config.yMargin(
-//                                                             context, 1)),
-//                                     child: Image(
-//                                       // height: width < height * 7
-//                                       //     ? width * 0.06
-//                                       //     : width,
-//                                       image: AssetImage('images/smalldrop.png'),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Container(
-//                           margin: EdgeInsets.only(
-//                               top: Config.yMargin(context, 19.8),
-//                               left: width <= height * .37
-//                                   ? Config.xMargin(context, 25)
-//                                   : width < height * 5
-//                                       ? Config.xMargin(context, 26)
-//                                       : width < height * 6
-//                                           ? Config.xMargin(context, 24)
-//                                           : width < height * 7
-//                                               ? Config.xMargin(context, 26)
-//                                               : Config.xMargin(context, 33)),
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: <Widget>[
-//                               //Proper data will be fetched from DB
-// //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-//                               Text(
-//                                 '${waterReminderDB.currentLevel} ' + 'ml',
-//                                 style: TextStyle(
-//                                     fontSize: Config.textSize(context, 7),
-//                                     fontWeight: FontWeight.bold),
-//                               ),
-//                               SizedBox(height: Config.yMargin(context, 0.7)),
-//                               Text('of ${waterReminderDB.totalLevel} ml',
-//                                   style: TextStyle(
-//                                       fontSize: Config.textSize(context, 4.5),
-//                                       color: Color(0xff4F4F4F)))
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-                      ),
+                                          fontSize: Config.textSize(context, 7),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: Config.yMargin(context, 0.7)),
+                                Text(
+                                  'of ${waterReminderDB.totalLevel} ml',
+                                  style: TextStyle(
+                                      fontSize: Config.textSize(context, 4.5),
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     height: Config.yMargin(context, 5),
                   ),
