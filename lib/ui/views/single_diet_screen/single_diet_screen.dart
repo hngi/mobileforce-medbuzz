@@ -36,7 +36,7 @@ class SingleDiet extends StatelessWidget {
                       context: context,
                       child: DeleteDialog() //show Confirmation dialog
                       );
-                  showSnackBar(context);
+                  // showSnackBar(context);
                   Future.delayed(Duration(seconds: 1)).then((value) {
                     db.deleteDiet(diet.id);
                     Navigator.of(context).pop(true);

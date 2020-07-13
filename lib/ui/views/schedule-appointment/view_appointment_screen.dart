@@ -56,7 +56,7 @@ class ViewAppointment extends StatelessWidget {
                           context: context,
                           child: DeleteDialog(),
                         );
-                        showSnackBar(context);
+                        // showSnackBar(context);
                         Future.delayed(Duration(seconds: 1)).then((value) {
                           appointmentModellerDB.deleteAppointment(appointment.dateTime);
                         });

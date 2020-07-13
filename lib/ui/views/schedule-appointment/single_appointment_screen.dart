@@ -36,7 +36,7 @@ class SingleAppointment extends StatelessWidget {
                       context: context,
                       child: DeleteDialog() //show Confirmation dialog
                       );
-                  showSnackBar(context);
+                  // showSnackBar(context);
                   Future.delayed(Duration(seconds: 1)).then((value) {
                     appointmentDB.deleteAppointment(appointment.dateTime);
                     Navigator.of(context).pop(true);
