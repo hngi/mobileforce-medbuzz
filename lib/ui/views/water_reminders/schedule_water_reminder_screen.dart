@@ -13,6 +13,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
   static const routeName = 'schedule-water-reminder';
   final ItemScrollController _scrollController = ItemScrollController();
   ScheduleWaterReminderScreen();
+  TextEditingController descriptionTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Container(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -128,7 +129,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Time'),
+                      Text('Start Time'),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
@@ -146,41 +147,212 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                 ),
                 SizedBox(height: height * 0.01),
                 Container(
-                  height: height * 0.4,
-                  child: GridView.count(
-                    primary: false,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: Config.xMargin(context, 3),
-                        vertical: Config.yMargin(context, 2)),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    children: waterReminder.mls.map((ml) {
-                      return GestureDetector(
-                        onTap: () => waterReminder.updateSelectedMl(ml),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: Config.yMargin(context, 3)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('End Time'),
+                      SizedBox(height: height * 0.01),
+                      Container(
+                        // this also acts like a negative margin to get rid of the excess space from moving the grid up
+                        alignment: Alignment.topCenter,
                         child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context)
-                                    .primaryColorDark
-                                    .withOpacity(0.03),
-                                blurRadius: 2,
-                                spreadRadius: 2,
-                                offset: Offset(0, 3),
-                              )
-                            ],
-                            color: waterReminder.getGridItemColor(context, ml),
-                            borderRadius: BorderRadius.circular(width * 0.03),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '$ml' + 'ml',
-                            style: waterReminder.gridItemTextStyle(context, ml),
+                          // height: height * 0.15,
+                          child: TimeWheel(
+                            updateTimeChanged: (val) =>
+                                waterReminder.updateSelectedTime(val),
                           ),
                         ),
-                      );
-                    }).toList(),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                Container(
+                  padding: EdgeInsets.fromLTRB(
+                    Config.xMargin(context, 3),
+                    0.0,
+                    Config.xMargin(context, 3),
+                    Config.yMargin(context, 6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Time Interval',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: Config.yMargin(context, 1.5)),
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
+                        controller: descriptionTextController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5.5)),
+                        decoration: InputDecoration(
+                          hintText: 'Input intervals for reminder...',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                Container(
+                  padding: EdgeInsets.fromLTRB(
+                    Config.xMargin(context, 3),
+                    0.0,
+                    Config.xMargin(context, 3),
+                    Config.yMargin(context, 6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Quantity of Water',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: Config.yMargin(context, 1.5)),
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
+                        controller: descriptionTextController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5.5)),
+                        decoration: InputDecoration(
+                          hintText: 'Input water quantity for intervals...',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+//                Container(
+//                  height: height * 0.4,
+//                  child: GridView.count(
+//                    primary: false,
+//                    padding: EdgeInsets.symmetric(
+//                        horizontal: Config.xMargin(context, 3),
+//                        vertical: Config.yMargin(context, 2)),
+//                    crossAxisSpacing: 10,
+//                    mainAxisSpacing: 10,
+//                    crossAxisCount: 3,
+//                    children: waterReminder.mls.map((ml) {
+//                      return GestureDetector(
+//                        onTap: () => waterReminder.updateSelectedMl(ml),
+//                        child: Container(
+//                          decoration: BoxDecoration(
+//                            boxShadow: [
+//                              BoxShadow(
+//                                color: Theme.of(context)
+//                                    .primaryColorDark
+//                                    .withOpacity(0.03),
+//                                blurRadius: 2,
+//                                spreadRadius: 2,
+//                                offset: Offset(0, 3),
+//                              )
+//                            ],
+//                            color: waterReminder.getGridItemColor(context, ml),
+//                            borderRadius: BorderRadius.circular(width * 0.03),
+//                          ),
+//                          alignment: Alignment.center,
+//                          child: Text(
+//                            '$ml' + 'ml',
+//                            style: waterReminder.gridItemTextStyle(context, ml),
+//                          ),
+//                        ),
+//                      );
+//                    }).toList(),
+//                  ),
+//                ),
+                //Description Text Input
+                Container(
+                  padding: EdgeInsets.fromLTRB(
+                    Config.xMargin(context, 3),
+                    0.0,
+                    Config.xMargin(context, 3),
+                    Config.yMargin(context, 6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: Config.yMargin(context, 1.5)),
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
+                        controller: descriptionTextController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5.5)),
+                        decoration: InputDecoration(
+                          hintText: 'Optional Description...',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(

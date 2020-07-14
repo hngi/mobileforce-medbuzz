@@ -45,11 +45,12 @@ class _WaterCardState extends State<WaterReminderCard> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
-    var waterReminder =
-        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
-    WaterNotificationManager waterNotificationManager =
-        WaterNotificationManager();
+    double width = MediaQuery.of(context).size.width;
+    // var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    // var waterReminder =
+    //     Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    // WaterNotificationManager waterNotificationManager =
+    //     WaterNotificationManager();
     return Container(
       width: double.infinity,
       child: GestureDetector(
@@ -63,7 +64,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             children: [
               SizedBox(height: widget.height * 0.02),
               Text(
-                DateFormat.jm().format(widget.waterReminder.dateTime) ??
+                DateFormat.jm().format(widget.waterReminder.startTime) ??
                     "10:00 AM",
               ),
               SizedBox(height: widget.height * 0.02),
@@ -96,8 +97,12 @@ class _WaterCardState extends State<WaterReminderCard> {
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
-                                      left: Config.xMargin(context, 4.5),
-                                      top: Config.yMargin(context, 1)),
+                                      left: width < height * 7
+                                          ? Config.xMargin(context, 3.3)
+                                          : Config.xMargin(context, 4.5),
+                                      top: width < height * 7
+                                          ? Config.yMargin(context, 0.8)
+                                          : Config.yMargin(context, 1)),
                                   child: Image(
                                     image: AssetImage('images/smalldrop.png'),
                                     height: height * 0.03,
@@ -126,23 +131,23 @@ class _WaterCardState extends State<WaterReminderCard> {
 
                           //Temporary fix to delete reminders
 
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: Config.xMargin(context, 20),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  waterReminderDB.deleteWaterReminder(
-                                      widget.waterReminder.id);
-                                  waterNotificationManager.removeReminder(
-                                      waterReminder.selectedDay);
-                                },
-                                icon: Icon(Icons.delete),
-                                color: Colors.red,
-                              ),
-                            ),
-                          )
+                          // Expanded(
+                          //   child: Container(
+                          //     margin: EdgeInsets.only(
+                          //       left: Config.xMargin(context, 20),
+                          //     ),
+                          //     child: IconButton(
+                          //       onPressed: () {
+                          //         waterReminderDB.deleteWaterReminder(
+                          //             widget.waterReminder.id);
+                          //         waterNotificationManager.removeReminder(
+                          //             waterReminder.selectedDay);
+                          //       },
+                          //       icon: Icon(Icons.delete),
+                          //       color: Colors.red,
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                       SizedBox(
@@ -183,7 +188,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: true,
                     isTaken: false),
@@ -193,7 +198,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: false,
                     isTaken: true),

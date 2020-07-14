@@ -1,4 +1,6 @@
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
@@ -9,13 +11,21 @@ import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class ViewAppointment extends StatelessWidget {
+class ViewAppointment extends StatefulWidget {
   static const routeName = 'view-schedule-appointment-reminder';
-  DateTime time = DateTime.now();
-  String formattedTime;
   final Appointment appointment;
 
   ViewAppointment({this.appointment});
+
+  @override
+  _ViewAppointmentState createState() => _ViewAppointmentState();
+}
+
+class _ViewAppointmentState extends State<ViewAppointment> {
+  DateTime time = DateTime.now();
+
+  String formattedTime;
+  final appointmentDB = AppointmentData();
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +55,7 @@ class ViewAppointment extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, RouteNames.allRemindersScreen);
+                Navigator.pop(context);
               },
             ),
             elevation: 0,
@@ -63,13 +72,10 @@ class ViewAppointment extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          child: DeleteDialog(),
+                          child: DeleteDialog(
+                            appointment: widget.appointment,
+                          ),
                         );
-                        showSnackBar(context);
-                        Future.delayed(Duration(seconds: 1)).then((value) {
-                          appointmentModellerDB
-                              .deleteAppointment(appointment.dateTime);
-                        });
                       },
                       icon: Icon(
                         Icons.delete,
@@ -88,7 +94,7 @@ class ViewAppointment extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        'Meet John \nLucas',
+                        widget.appointment.appointmentType,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 5.3),
@@ -124,7 +130,7 @@ class ViewAppointment extends StatelessWidget {
                           padding: EdgeInsets.only(
                               top: Config.yMargin(context, 0.5)),
                           child: Text(
-                            'A quick run from home to the estate junction and back home.',
+                            widget.appointment.note,
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontWeight: FontWeight.normal,
@@ -134,7 +140,7 @@ class ViewAppointment extends StatelessWidget {
                         ),
                         SizedBox(height: Config.yMargin(context, 7)),
                         Text(
-                          'Frequency',
+                          'Timing',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -148,15 +154,7 @@ class ViewAppointment extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '30 minutes weekly',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: Config.textSize(context, 4),
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                              Text(
-                                '8:00AM',
+                                widget.appointment.dateTime,
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Theme.of(context).primaryColor,
@@ -168,7 +166,7 @@ class ViewAppointment extends StatelessWidget {
                         ),
                         SizedBox(height: Config.yMargin(context, 7)),
                         Text(
-                          'Length',
+                          'Date',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -179,7 +177,7 @@ class ViewAppointment extends StatelessWidget {
                           padding: EdgeInsets.only(
                               top: Config.yMargin(context, 0.5)),
                           child: Text(
-                            '4 days left out of 30 days',
+                            '${widget.appointment.date.day} - ${widget.appointment.date.month}- ${widget.appointment.date.year}',
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Theme.of(context).primaryColorDark,
@@ -197,8 +195,16 @@ class ViewAppointment extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       appointmentModel.isEditing = true;
-                      Navigator.pushNamed(
-                          context, RouteNames.scheduleAppointmentScreen);
+                      appointmentDB
+                          .deleteAppointment(widget.appointment.dateTime);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScheduleAppointmentScreen(
+                                  appointment: widget.appointment,
+                                  buttonText: 'Update',
+                                )),
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
@@ -228,6 +234,106 @@ class ViewAppointment extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class DeleteDialog extends StatelessWidget {
+  DeleteDialog({this.appointment});
+  final Appointment appointment;
+  final AppointmentData db = AppointmentData();
+  final ScheduleAppointmentModel scheduleModel = ScheduleAppointmentModel();
+  final AppointmentNotificationManager notificationManager =
+      AppointmentNotificationManager();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
+      ),
+      child: Container(
+        height: Config.yMargin(context, 20),
+        width: Config.xMargin(context, 150.0),
+        //width: Config.xMargin(context, 50),
+        child: Padding(
+          padding: EdgeInsets.all(5.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 23.0, bottom: 20.0),
+                child: Text(
+                  'Are you sure you want to delete this?',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: Config.yMargin(context, 6.0),
+                    width: Config.xMargin(context, 30.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      color: Theme.of(context).primaryColorLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Config.xMargin(context, 2.0)),
+                        side: BorderSide(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.4),
+                            width: 1.5),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: Config.yMargin(context, 6.0),
+                    width: Config.xMargin(context, 30.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        notificationManager
+                            .removeReminder(scheduleModel.selectedDay);
+                        db.deleteAppointment(appointment.dateTime);
+                        Navigator.popAndPushNamed(context, RouteNames.homePage);
+                      },
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      color: Theme.of(context).primaryColorLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Config.xMargin(context, 2.0)),
+                        side: BorderSide(
+                            color: Theme.of(context).hintColor.withOpacity(.4),
+                            width: 1.5),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

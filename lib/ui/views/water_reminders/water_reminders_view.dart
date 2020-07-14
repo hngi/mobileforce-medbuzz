@@ -1,18 +1,15 @@
-import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../size_config/config.dart';
 import 'schedule_water_reminder_screen.dart';
 import '../../../core/constants/route_names.dart';
 import '../../../core/database/waterReminderData.dart';
-import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
-import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
+//I'm going to touch it small Sir, sorry
 class WaterScheduleViewScreen extends StatelessWidget {
   final Navigation navigation = Navigation();
   final String payload;
@@ -141,8 +138,6 @@ class WaterScheduleViewScreen extends StatelessWidget {
                   SizedBox(
                     height: Config.yMargin(context, 5),
                   ),
-                  //Tap cards at your own risk :). Proper card display will be done when fetching data from DB
-
                   Visibility(
                       visible: waterReminderDB.waterReminders.isEmpty,
                       child: Container(

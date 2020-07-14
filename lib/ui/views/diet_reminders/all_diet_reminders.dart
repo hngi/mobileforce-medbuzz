@@ -182,26 +182,34 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
           duration: Duration(milliseconds: 500),
           child: Visibility(
             visible: model.isVisible,
-            child: FloatingActionButton(
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).primaryColorLight,
-                size: Config.xMargin(context, 5),
+            child: Container(
+                  margin: EdgeInsets.only(
+                  bottom: Config.yMargin(context, 2),
+                  right: Config.xMargin(context, 4)),
+              child: SizedBox(
+                height: height * 0.08,
+                width: height * 0.08,
+                child: FloatingActionButton(
+                  child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).primaryColorLight,
+                  size: Config.xMargin(context, 5),
+                ),
+                backgroundColor: Theme.of(context).primaryColor,
+                splashColor: Theme.of(context).primaryColor.withOpacity(.9),
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, RouteNames.scheduleDietReminderScreen);
+                  // setState(() {
+                  //   _insertNewDiet();
+                  // });
+                },
               ),
-              backgroundColor: Theme.of(context).primaryColor,
-              splashColor: Theme.of(context).primaryColor.withOpacity(.9),
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, RouteNames.scheduleDietReminderScreen);
-                // setState(() {
-                //   _insertNewDiet();
-                // });
-              },
             ),
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
