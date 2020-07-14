@@ -129,7 +129,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Start Time'),
+                      Text(
+                        'Start Time',
+                        style: TextStyle(
+                          fontSize: Config.textSize(context, 4),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
@@ -153,7 +159,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('End Time'),
+                      Text(
+                        'End Time',
+                        style: TextStyle(
+                          fontSize: Config.textSize(context, 4),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
@@ -169,13 +181,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
+                SizedBox(height: height * 0.05),
                 Container(
                   padding: EdgeInsets.fromLTRB(
                     Config.xMargin(context, 3),
                     0.0,
                     Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
+                    Config.yMargin(context, 3),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,24 +200,23 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
                       TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        controller: descriptionTextController,
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.xMargin(context, 5.5)),
                         decoration: InputDecoration(
-                          hintText: 'Input intervals for reminder...',
+                          hintText: 'Input interval for reminder...',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor,
+                            fontSize: Config.xMargin(context, 4.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
+                                color: Theme.of(context).primaryColor),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -218,94 +229,60 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
                 Container(
+                  alignment: Alignment.centerLeft,
                   padding: EdgeInsets.fromLTRB(
                     Config.xMargin(context, 3),
                     0.0,
                     Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
+                    0.0,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Quantity of Water',
-                        style: TextStyle(
-                            fontSize: Config.textSize(context, 5),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: Config.yMargin(context, 1.5)),
-                      TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        controller: descriptionTextController,
-                        cursorColor: Theme.of(context).primaryColorDark,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5.5)),
-                        decoration: InputDecoration(
-                          hintText: 'Input water quantity for intervals...',
-                          hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(Config.xMargin(context, 5))),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(Config.xMargin(context, 5))),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'Quantity of Water',
+                    style: TextStyle(
+                        fontSize: Config.textSize(context, 5),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: height * 0.01),
-//                Container(
-//                  height: height * 0.4,
-//                  child: GridView.count(
-//                    primary: false,
-//                    padding: EdgeInsets.symmetric(
-//                        horizontal: Config.xMargin(context, 3),
-//                        vertical: Config.yMargin(context, 2)),
-//                    crossAxisSpacing: 10,
-//                    mainAxisSpacing: 10,
-//                    crossAxisCount: 3,
-//                    children: waterReminder.mls.map((ml) {
-//                      return GestureDetector(
-//                        onTap: () => waterReminder.updateSelectedMl(ml),
-//                        child: Container(
-//                          decoration: BoxDecoration(
-//                            boxShadow: [
-//                              BoxShadow(
-//                                color: Theme.of(context)
-//                                    .primaryColorDark
-//                                    .withOpacity(0.03),
-//                                blurRadius: 2,
-//                                spreadRadius: 2,
-//                                offset: Offset(0, 3),
-//                              )
-//                            ],
-//                            color: waterReminder.getGridItemColor(context, ml),
-//                            borderRadius: BorderRadius.circular(width * 0.03),
-//                          ),
-//                          alignment: Alignment.center,
-//                          child: Text(
-//                            '$ml' + 'ml',
-//                            style: waterReminder.gridItemTextStyle(context, ml),
-//                          ),
-//                        ),
-//                      );
-//                    }).toList(),
-//                  ),
-//                ),
+                Container(
+                  height: height * 0.4,
+                  child: GridView.count(
+                    primary: false,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Config.xMargin(context, 3),
+                        vertical: Config.yMargin(context, 2)),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 3,
+                    children: waterReminder.mls.map((ml) {
+                      return GestureDetector(
+                        onTap: () => waterReminder.updateSelectedMl(ml),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context)
+                                    .primaryColorDark
+                                    .withOpacity(0.03),
+                                blurRadius: 2,
+                                spreadRadius: 2,
+                                offset: Offset(0, 3),
+                              )
+                            ],
+                            color: waterReminder.getGridItemColor(context, ml),
+                            borderRadius: BorderRadius.circular(width * 0.03),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '$ml' + 'ml',
+                            style: waterReminder.gridItemTextStyle(context, ml),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: height * 0.03),
                 //Description Text Input
                 Container(
                   padding: EdgeInsets.fromLTRB(
@@ -335,14 +312,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Optional Description...',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor,
+                            fontSize: Config.xMargin(context, 4.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
+                                color: Theme.of(context).primaryColor),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
