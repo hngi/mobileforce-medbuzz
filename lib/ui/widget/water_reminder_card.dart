@@ -64,7 +64,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             children: [
               SizedBox(height: widget.height * 0.02),
               Text(
-                DateFormat.jm().format(widget.waterReminder.dateTime) ??
+                DateFormat.jm().format(widget.waterReminder.startTime) ??
                     "10:00 AM",
               ),
               SizedBox(height: widget.height * 0.02),
@@ -188,7 +188,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: true,
                     isTaken: false),
@@ -198,7 +198,7 @@ class _WaterCardState extends State<WaterReminderCard> {
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: false,
                     isTaken: true),
