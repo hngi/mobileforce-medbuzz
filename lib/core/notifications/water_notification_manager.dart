@@ -33,8 +33,8 @@ class WaterNotificationManager {
   void showWaterNotificationDaily(
       {int id, String title, String body, DateTime dateTime}) async {
     var time = new Time(dateTime.hour, dateTime.minute, 0);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(id + time.minute + 66,
-        title, body, time, getPlatformChannelSpecfics(id));
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        id, title, body, time, getPlatformChannelSpecfics(id));
     print(
         'Notification Succesfully Scheduled at ${time.hour.toString()}:${time.minute.toString()}  with id of $id');
   }

@@ -120,22 +120,22 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  WaterReminder createSchedule({DateTime notifyDateTime}) {
-    var dayValue =
-        selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
-    var monthValue = selectedMonth.toString().length < 2
-        ? '0$selectedMonth'
-        : '$selectedMonth';
-    var selectedDateTime =
-        "${_today.year}-$monthValue-$dayValue $selectedStartTime";
+  WaterReminder createSchedule() {
+    // var dayValue =
+    //     selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
+    // var monthValue = selectedMonth.toString().length < 2
+    //     ? '0$selectedMonth'
+    //     : '$selectedMonth';
+    // var selectedDateTime =
+    //     "${_today.year}-$monthValue-$dayValue $selectedStartTime";
 
     WaterReminder newReminder = WaterReminder(
         id: DateTime.now().toString(),
         ml: _selectedMl,
         interval: _selectedInterval,
         description: _description,
-        startTime: notifyDateTime,
-        endTime: DateTime.parse(selectedDateTime));
+        startTime: getDateTime(),
+        endTime: getEndDateTime());
     // print(newReminder);
     return newReminder;
   }

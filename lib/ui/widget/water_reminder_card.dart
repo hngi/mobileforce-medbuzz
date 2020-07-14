@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/core/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
@@ -28,16 +29,11 @@ class WaterReminderCard extends StatefulWidget {
 class _WaterCardState extends State<WaterReminderCard> {
   bool isSelected = false;
 
-  String _status(waterReminder) {
-    String value = 'Pending';
-    if (waterReminder.isSkipped) {
-      value = 'Skipped';
-    } else if (waterReminder.isTaken) {
+  String _status(waterReminder, progress) {
+    String value = 'Ongoing';
+    if (DateTime.now().difference(waterReminder.startTime).inDays == 0 &&
+        progress >= 1) {
       value = 'Completed';
-    } else if (waterReminder.startTime.isBefore(DateTime.now()) &&
-        !waterReminder.isTaken &&
-        !waterReminder.isSkipped) {
-      value = 'Missed';
     }
     return value;
   }
@@ -46,7 +42,7 @@ class _WaterCardState extends State<WaterReminderCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    // var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
     // var waterReminder =
     //     Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     // WaterNotificationManager waterNotificationManager =
@@ -71,8 +67,8 @@ class _WaterCardState extends State<WaterReminderCard> {
               Container(
                   width: widget.width,
                   padding: EdgeInsets.symmetric(
-                      horizontal: Config.xMargin(context, 3),
-                      vertical: Config.yMargin(context, 1)),
+                      horizontal: Config.xMargin(context, 4),
+                      vertical: Config.yMargin(context, 2)),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorLight,
                     borderRadius:
@@ -122,7 +118,8 @@ class _WaterCardState extends State<WaterReminderCard> {
                               ),
                               SizedBox(height: widget.height * 0.005),
                               Text(
-                                _status(widget.waterReminder),
+                                _status(widget.waterReminder,
+                                    waterTakenDB.progress),
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),
@@ -155,23 +152,24 @@ class _WaterCardState extends State<WaterReminderCard> {
                         width: double.infinity,
                       ),
                       Visibility(
-                        visible: isSelected,
+                        visible: false,
                         child: Divider(
                           color: Theme.of(context).primaryColorDark,
                           height: widget.height * 0.02,
                           endIndent: 10.0,
                         ),
                       ),
-                      Visibility(
-                          visible: isSelected,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(child: flatButton('View')),
-                              Expanded(child: flatButton('Skip')),
-                              Expanded(child: flatButton('Done'))
-                            ],
-                          ))
+                      // Visibility(
+                      //     visible: isSelected,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       children: <Widget>[
+                      //         Expanded(child: flatButton('View')),
+                      //         // Expanded(child: flatButton('Skip')),
+                      //         // Expanded(child: flatButton('Reset'))
+                      //       ],
+                      //     ))
                     ],
                   )),
             ]),
@@ -216,6 +214,13 @@ class _WaterCardState extends State<WaterReminderCard> {
                 MaterialPageRoute(
                     builder: (context) =>
                         SingleWater(water: widget.waterReminder)));
+            break;
+            // case 'Reset':
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) =>
+            //               SingleWater(water: widget.waterReminder)));
             break;
           default:
         }

@@ -1,3 +1,5 @@
+import 'package:MedBuzz/core/database/water_taken_data.dart';
+import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../size_config/config.dart';
@@ -23,6 +25,11 @@ class WaterScheduleViewScreen extends StatelessWidget {
     //     Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
+    var waterReminder =
+        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    waterTakenDB.getWaterTaken();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
@@ -30,28 +37,30 @@ class WaterScheduleViewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(
-                bottom: Config.yMargin(context, 2),
-                right: Config.xMargin(context, 4)),
-            child: SizedBox(
+          Visibility(
+            visible: waterReminderDB.waterRemindersCount > 0,
+            child: Container(
+              margin: EdgeInsets.only(
+                  bottom: Config.yMargin(context, 2),
+                  right: Config.xMargin(context, 4)),
+              child: SizedBox(
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-              height: height * 0.08,
-              width: height * 0.08,
-              child: FloatingActionButton(
-                elevation: 0,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ScheduleWaterReminderScreen()));
-                },
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Icon(
-                  Icons.edit,
-                  size: Config.textSize(context, 7),
+                height: height * 0.07,
+                width: height * 0.07,
+                child: FloatingActionButton(
+                  heroTag: 'edit',
+                  elevation: 0,
+                  onPressed: () {
+                    print('hi');
+                  },
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Icon(
+                    Icons.edit,
+                    size: Config.textSize(context, 7),
+                  ),
                 ),
               ),
             ),
@@ -62,19 +71,26 @@ class WaterScheduleViewScreen extends StatelessWidget {
                 right: Config.xMargin(context, 4)),
             child: SizedBox(
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-              height: height * 0.08,
-              width: height * 0.08,
+              height: height * 0.07,
+              width: height * 0.07,
               child: FloatingActionButton(
+                heroTag: 'add/drink',
                 elevation: 0,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ScheduleWaterReminderScreen()));
+                  waterReminderDB.waterRemindersCount == 0
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ScheduleWaterReminderScreen()))
+                      : waterTakenDB.addWaterTaken(
+                          waterReminderDB.waterReminders[0].ml, DateTime.now());
                 },
                 backgroundColor: Theme.of(context).primaryColor,
                 child: Icon(
-                  Icons.local_drink,
+                  waterReminderDB.waterRemindersCount == 0
+                      ? Icons.add
+                      : Icons.local_drink,
                   size: Config.textSize(context, 7),
                 ),
               ),
@@ -119,11 +135,11 @@ class WaterScheduleViewScreen extends StatelessWidget {
                             width: height * 0.37,
                             child: CircularProgressIndicator(
                                 backgroundColor: Color(0xffE5E5E5),
-                                valueColor: waterReminderDB.progress < 0.5
-                                    ? AlwaysStoppedAnimation(Colors.red)
-                                    : AlwaysStoppedAnimation(
-                                        Theme.of(context).primaryColor),
-                                value: waterReminderDB.progress,
+                                valueColor: AlwaysStoppedAnimation(
+                                    Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(waterTakenDB.progress)),
+                                value: waterTakenDB.progress,
                                 strokeWidth: width * 0.04),
                           ),
                         ),
@@ -143,7 +159,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                                 Column(
                                   children: <Widget>[
                                     Text(
-                                      '${waterReminderDB.currentLevel} ' + 'ml',
+                                      '${waterTakenDB.currentLevel} ' + 'ml',
                                       style: TextStyle(
                                           fontSize: Config.textSize(context, 7),
                                           fontWeight: FontWeight.bold),
@@ -152,7 +168,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: Config.yMargin(context, 0.7)),
                                 Text(
-                                  'of ${waterReminderDB.totalLevel} ml',
+                                  'of ${waterTakenDB.totalLevel} ml',
                                   style: TextStyle(
                                       fontSize: Config.textSize(context, 4.5),
                                       color:
@@ -165,9 +181,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: Config.yMargin(context, 5),
-                  ),
+                  SizedBox(height: Config.yMargin(context, 5)),
                   Visibility(
                       visible: waterReminderDB.waterReminders.isEmpty,
                       child: Container(
@@ -180,11 +194,104 @@ class WaterScheduleViewScreen extends StatelessWidget {
                             '${DateFormat.yMMMEd().format((DateTime.now()))}'),
                       )),
                   for (var waterReminder
-                      in waterReminderDB.getActiveReminders().take(1))
+                      in waterReminderDB.getActiveReminders())
                     WaterReminderCard(
                         height: height,
                         width: width,
-                        waterReminder: waterReminder)
+                        waterReminder: waterReminder),
+                  SizedBox(height: Config.yMargin(context, 5)),
+                  Text('Water Log'),
+                  SizedBox(height: Config.yMargin(context, 0)),
+                  Column(
+                    children: waterTakenDB.waterTaken
+                        .map((ml) => GestureDetector(
+                              onTap: () =>
+                                  waterReminder.updateSelectedMl(ml.ml),
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: Config.yMargin(context, 1.5)),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Config.yMargin(context, 2),
+                                  horizontal: Config.yMargin(context, 3),
+                                ),
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Theme.of(context)
+                                          .primaryColorDark
+                                          .withOpacity(0.03),
+                                      blurRadius: 2,
+                                      spreadRadius: 2,
+                                      offset: Offset(0, 3),
+                                    )
+                                  ],
+                                  color: Theme.of(context).primaryColorLight,
+                                  borderRadius:
+                                      BorderRadius.circular(width * 0.03),
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    // Text(
+                                    //   '${ml.ml}' + 'ml',
+                                    //   style: waterReminder.gridItemTextStyle(
+                                    //       context, ml.ml),
+                                    // ),
+                                    // SizedBox(height: height * 0.01),
+                                    Text(
+                                        // DateFormat.jm()
+                                        //     .format(ml.dateTime)
+                                        //     .toString(),
+                                        ml.dateTime.toString(),
+                                        style: waterReminder
+                                            .gridItemTextStyle(context, ml.ml)
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColorDark
+                                                    .withOpacity(0.7))),
+                                    GestureDetector(
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Theme.of(context)
+                                              .primaryColorDark
+                                              .withOpacity(0.7),
+                                          size: waterReminder
+                                              .gridItemTextStyle(context, ml.ml)
+                                              .fontSize,
+                                        ),
+                                        onTap: () async {
+                                          // print('del');
+                                          await waterTakenDB
+                                              .deleteWaterTaken(
+                                                  ml.dateTime.toString())
+                                              .then((value) =>
+                                                  waterTakenDB.getWaterTaken());
+                                        })
+                                  ],
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                  SizedBox(height: Config.yMargin(context, 20)),
+
+                  // Container(
+                  //   height: height * 0.8,
+                  //   child: GridView.count(
+                  //     primary: true,
+                  //     // padding: EdgeInsets.symmetric(
+                  //     //     horizontal: Config.xMargin(context, 7),
+                  //     //     vertical: Config.yMargin(context, 2)),
+                  //     crossAxisSpacing: 10,
+                  //     mainAxisSpacing: 10,
+                  //     crossAxisCount: 3,
+                  //     children: waterTakenDB.waterTaken.map((ml) {
+                  //       return ;
+                  //     }).toList(),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

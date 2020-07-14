@@ -103,10 +103,11 @@ class WaterReminderData extends ChangeNotifier {
   }
 
   int get totalLevel {
-    if (_waterReminders.isEmpty || getActiveReminders().isEmpty) {
-      return 0;
-    }
-    return getActiveReminders()[0]?.ml ?? 0;
+    // if (_waterReminders.isEmpty || getActiveReminders().isEmpty) {
+    //   return 0;
+    // }
+    // return getActiveReminders()[0]?.ml ?? 0;
+    return 3500;
   }
 
   int get currentLevel {

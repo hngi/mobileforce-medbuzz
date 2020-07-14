@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
@@ -20,6 +21,8 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userDb = Provider.of<UserCrud>(context);
+    userDb.getuser();
     var waterReminder =
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
@@ -217,6 +220,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                             color: Theme.of(context).hintColor,
                             fontSize: Config.xMargin(context, 4.5),
                           ),
+                          suffixText: 'Minutes',
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
@@ -234,14 +238,11 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: height * 0.03),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.fromLTRB(
-                    Config.xMargin(context, 3),
-                    0.0,
-                    Config.xMargin(context, 3),
-                    0.0,
-                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Config.xMargin(context, 7)),
                   child: Text(
                     'Quantity of Water',
                     style: TextStyle(
@@ -250,11 +251,11 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  height: height * 0.4,
+                  height: height * 0.3,
                   child: GridView.count(
                     primary: false,
                     padding: EdgeInsets.symmetric(
-                        horizontal: Config.xMargin(context, 3),
+                        horizontal: Config.xMargin(context, 7),
                         vertical: Config.yMargin(context, 2)),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
@@ -365,45 +366,45 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                               waterReminder.selectedStartTime != null
                           ? () async {
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
-                              // Navigator.of(context).pop();
-                              var diff = waterReminder
-                                  .getEndDateTime()
-                                  .difference(waterReminder.getDateTime())
-                                  .inMinutes;
+                              await waterReminderDB
+                                  .addWaterReminder(
+                                      waterReminder.createSchedule())
+                                  .then((val) {
+                                var diff = waterReminder
+                                    .getEndDateTime()
+                                    .difference(waterReminder.getDateTime())
+                                    .inMinutes;
 
-                              double numb =
-                                  diff / waterReminder.selectedInterval;
-                              for (var i = 1; i < numb + 1; i++) {
-                                if (waterReminder.selectedDay ==
-                                        DateTime.now().day &&
-                                    waterReminder.selectedMonth ==
-                                        DateTime.now().month) {
-                                  var timeValue =
-                                      waterReminder.getDateTime().add(
-                                            Duration(
-                                                minutes: i == 1
-                                                    ? 0
-                                                    : waterReminder
-                                                            .selectedInterval *
-                                                        i),
-                                          );
-                                  await waterReminderDB
-                                      .addWaterReminder(
-                                          waterReminder.createSchedule(
-                                              notifyDateTime: timeValue))
-                                      .then((value) => waterNotificationManager
-                                          .showWaterNotificationDaily(
-                                              id: waterReminder.selectedDay +
-                                                  timeValue.minute,
-                                              title:
-                                                  'It\' s time to take some Waters',
-                                              body:
-                                                  'Take ${waterReminder.selectedMl} ml of Water ',
-                                              dateTime: timeValue));
+                                double numb =
+                                    diff / waterReminder.selectedInterval;
+                                for (var i = 1; i < numb + 1; i++) {
+                                  if (waterReminder.selectedDay ==
+                                          DateTime.now().day &&
+                                      waterReminder.selectedMonth ==
+                                          DateTime.now().month) {
+                                    var timeValue =
+                                        waterReminder.getDateTime().add(
+                                              Duration(
+                                                  minutes: i == 1
+                                                      ? 0
+                                                      : waterReminder
+                                                              .selectedInterval *
+                                                          i),
+                                            );
+                                    waterNotificationManager.showWaterNotificationDaily(
+                                        id: waterReminder.selectedDay +
+                                            timeValue.minute +
+                                            60,
+                                        title:
+                                            'Hi ${userDb.user?.name}, It\' s time to take some water',
+                                        body:
+                                            'Take ${waterReminder.selectedMl} ml of Water ',
+                                        dateTime: timeValue);
+                                  }
                                 }
-                              }
-                              // print(numb.floor());
-                              waterReminder.createSchedule();
+                                // print(numb.floor());
+                                Navigator.of(context).pop();
+                              });
                             }
                           : null,
                       child: Text(
