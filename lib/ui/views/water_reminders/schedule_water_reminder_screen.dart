@@ -13,6 +13,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
   static const routeName = 'schedule-water-reminder';
   final ItemScrollController _scrollController = ItemScrollController();
   ScheduleWaterReminderScreen();
+  TextEditingController descriptionTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Container(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 DropdownButtonHideUnderline(
                   child: DropdownButton(
@@ -181,6 +182,55 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         ),
                       );
                     }).toList(),
+                  ),
+                ),
+                //Description Text Input
+                Container(
+                  padding: EdgeInsets.fromLTRB(
+                    Config.xMargin(context, 3),
+                    0.0,
+                    Config.xMargin(context, 3),
+                    Config.xMargin(context, 6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: Config.yMargin(context, 1.5)),
+                      TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
+                        controller: descriptionTextController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5.5)),
+                        decoration: InputDecoration(
+                          hintText: 'Optional Description...',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.xMargin(context, 5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Config.xMargin(context, 5))),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(

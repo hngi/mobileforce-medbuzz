@@ -49,7 +49,7 @@ class MedicationView extends StatelessWidget {
                                   newReminder: medModel
                                       .getSchedule()) //show Confirmation dialog
                               );
-                          showSnackBar(context);
+                          // showSnackBar(context);
                           Future.delayed(Duration(seconds: 1)).then((value) {
                             medModel.deleteSchedule(key);
                             Navigator.of(context).pop(true);

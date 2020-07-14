@@ -1,15 +1,22 @@
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 
-class SingleAppointment extends StatelessWidget {
+class SingleAppointment extends StatefulWidget {
   final Appointment appointment;
-  final appointmentDB = AppointmentData();
 
   SingleAppointment({this.appointment});
+
+  @override
+  _SingleAppointmentState createState() => _SingleAppointmentState();
+}
+
+class _SingleAppointmentState extends State<SingleAppointment> {
+  final appointmentDB = AppointmentData();
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +43,10 @@ class SingleAppointment extends StatelessWidget {
                       context: context,
                       child: DeleteDialog() //show Confirmation dialog
                       );
-                  showSnackBar(context);
+                  // showSnackBar(context);
                   Future.delayed(Duration(seconds: 1)).then((value) {
-                    appointmentDB.deleteAppointment(appointment.dateTime);
+                    appointmentDB
+                        .deleteAppointment(widget.appointment.dateTime);
                     Navigator.of(context).pop(true);
                   });
                 },
@@ -58,7 +66,7 @@ class SingleAppointment extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  appointment.appointmentType,
+                  widget.appointment.appointmentType,
                   style: TextStyle(
                     color: Color(0xff333333),
                     fontSize: Config.textSize(context, 5.3),
@@ -91,7 +99,7 @@ class SingleAppointment extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: Config.yMargin(context, 0.5)),
                   child: Text(
-                    appointment.note,
+                    widget.appointment.note,
                     style: TextStyle(
                       color: Theme.of(context).primaryColorDark,
                       fontSize: Config.textSize(context, 4),
@@ -113,7 +121,7 @@ class SingleAppointment extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        appointment.date.toString(),
+                        widget.appointment.date.toString(),
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: Config.textSize(context, 3.6),
@@ -130,7 +138,17 @@ class SingleAppointment extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                appointmentDB.deleteAppointment(widget.appointment.dateTime);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ScheduleAppointmentScreen(
+                            appointment: widget.appointment,
+                            buttonText: 'Update',
+                          )),
+                );
+              },
               child: Container(
                 padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
                 decoration: BoxDecoration(
