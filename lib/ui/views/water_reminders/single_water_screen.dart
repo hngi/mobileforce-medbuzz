@@ -1,11 +1,14 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/notifications/water_notification_manager.dart';
+import 'schedule_water_reminder_model.dart';
 
 class SingleWater extends StatefulWidget {
   SingleWater({this.water});
@@ -48,106 +51,7 @@ class _SingleWaterState extends State<SingleWater> {
                 padding: EdgeInsets.only(right: Config.yMargin(context, 1)),
                 child: FlatButton.icon(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        child: DeleteDialog(),
-                      );
-                      builder:
-                      (BuildContext context) {
-                        return Dialog(
-                          child: Container(
-                            height: Config.yMargin(context, 30),
-                            width: Config.xMargin(context, 150.0),
-                            //width: Config.xMargin(context, 50),
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.all(Config.xMargin(context, 3.0)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Config.yMargin(context, 2),
-                                        bottom: Config.yMargin(context, 1)),
-                                    child: Text(
-                                      'Are you sure you want to delete this?',
-                                      style: TextStyle(
-                                        fontSize: Config.textSize(context, 4.5),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () async {
-                                            showSnackBar(context);
-                                            Future.delayed(
-                                                    Duration(milliseconds: 500))
-                                                .then((value) {
-                                              //  waterNotificationManager.removeReminder();
-
-                                              db.deleteWaterReminder(
-                                                  widget.water.id);
-                                            });
-                                            //Navigate to the Water reminder screen and delete from db
-
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          child: Text(
-                                            "Yes",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  Config.textSize(context, 5),
-                                            ),
-                                          ),
-                                          color: Color(0xFF219653),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            "No",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  Config.textSize(context, 5),
-                                            ),
-                                          ),
-                                          color: Color(0xFFEB5757),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      };
+                      _deleteDialog();
                     },
                     icon: Icon(
                       Icons.delete,
@@ -297,20 +201,129 @@ class _SingleWaterState extends State<SingleWater> {
       ]),
     );
   }
-}
 
-void showSnackBar(BuildContext context) {
-  SnackBar snackBar = SnackBar(
-    backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
-    duration: Duration(seconds: 2),
-    content: Text(
-      'Schedule deleted',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          fontSize: Config.textSize(context, 5.3),
-          color: Theme.of(context).primaryColorLight),
-    ),
-  );
+  // void showSnackBar(BuildContext context) {
+  //   SnackBar snackBar = SnackBar(
+  //     backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+  //     duration: Duration(seconds: 2),
+  //     content: Text(
+  //       'Schedule deleted',
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //           fontSize: Config.textSize(context, 5.3),
+  //           color: Theme.of(context).primaryColorLight),
+  //     ),
+  //   );
 
-  Scaffold.of(context).showSnackBar(snackBar);
+  //   Scaffold.of(context).showSnackBar(snackBar);
+  // }
+
+  void _deleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        WaterNotificationManager waterNotificationManager =
+            WaterNotificationManager();
+        var waterReminderDB =
+            Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+        var waterReminderData =
+            Provider.of<WaterReminderData>(context, listen: true);
+        // return object of type Dialog
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
+          ),
+          child: Container(
+            height: Config.yMargin(context, 20),
+            width: Config.xMargin(context, 150.0),
+            //width: Config.xMargin(context, 50),
+            child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 23.0, bottom: 20.0),
+                    child: Text(
+                      'Are you sure you want to delete this?',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: Config.yMargin(context, 6.0),
+                        width: Config.xMargin(context, 30.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColorLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Config.xMargin(context, 2.0)),
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.4),
+                                width: 1.5),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: Config.yMargin(context, 6.0),
+                        width: Config.xMargin(context, 30.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            waterReminderData
+                                .deleteWaterReminder(widget.water.id);
+                            waterNotificationManager
+                                .removeReminder(waterReminderDB.selectedDay);
+                            // showSnackBar(context);
+                            Future.delayed(Duration(seconds: 1), () {
+                              Navigator.pushNamed(
+                                  context, RouteNames.waterScheduleView);
+                            });
+                          },
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColorLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Config.xMargin(context, 2.0)),
+                            side: BorderSide(
+                                color:
+                                    Theme.of(context).hintColor.withOpacity(.4),
+                                width: 1.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

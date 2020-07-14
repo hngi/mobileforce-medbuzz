@@ -181,7 +181,8 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
             child: FlatButton(
               //function to navigate to screen to edit details goes here
               onPressed: () {
-                print(widget.data.id);
+                model.isEditting = true;
+                Navigator.pushNamed(context, RouteNames.fitnessSchedulesScreen);
               },
               child: Text(
                 'Edit',
