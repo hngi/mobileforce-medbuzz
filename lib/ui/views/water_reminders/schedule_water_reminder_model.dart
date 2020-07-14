@@ -117,7 +117,8 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     WaterReminder newReminder = WaterReminder(
         id: DateTime.now().toString(),
         ml: _selectedMl,
-        dateTime: DateTime.parse(selectedDateTime));
+        startTime: DateTime.parse(selectedDateTime),
+        endTime: DateTime.parse(selectedDateTime));
     return newReminder;
   }
 
@@ -170,7 +171,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   List<WaterReminder> get waterRemindersBasedOnDateTime {
     return _availableReminders
-        .where((reminder) => selectedDateTime.year == reminder.dateTime.year)
+        .where((reminder) => selectedDateTime.year == reminder.startTime.year)
         .toList();
   }
 

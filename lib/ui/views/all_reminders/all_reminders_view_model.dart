@@ -152,7 +152,7 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   List<WaterReminder> get waterRemindersBasedOnDateTime {
     return _availableWaterReminders
-        .where((reminder) => selectedDateTime.day == reminder.dateTime.day)
+        .where((reminder) => selectedDateTime.day == reminder.startTime.day)
         .toList();
   }
 

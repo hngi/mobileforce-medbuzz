@@ -9,6 +9,7 @@ part of 'water_reminder.dart';
 class WaterReminderAdapter extends TypeAdapter<WaterReminder> {
   @override
   int get typeId => 8;
+
   @override
   WaterReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();
@@ -17,22 +18,24 @@ class WaterReminderAdapter extends TypeAdapter<WaterReminder> {
     };
     return WaterReminder(
       ml: fields[0] as int,
-      dateTime: fields[1] as DateTime,
+      startTime: fields[1] as DateTime,
       id: fields[2] as String,
       isTaken: fields[3] as bool,
       isSkipped: fields[4] as bool,
       description: fields[5] as String,
+      endTime: fields[6] as DateTime,
+      interval: fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, WaterReminder obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.ml)
       ..writeByte(1)
-      ..write(obj.dateTime)
+      ..write(obj.startTime)
       ..writeByte(2)
       ..write(obj.id)
       ..writeByte(3)
@@ -40,6 +43,10 @@ class WaterReminderAdapter extends TypeAdapter<WaterReminder> {
       ..writeByte(4)
       ..write(obj.isSkipped)
       ..writeByte(5)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(6)
+      ..write(obj.endTime)
+      ..writeByte(7)
+      ..write(obj.interval);
   }
 }
