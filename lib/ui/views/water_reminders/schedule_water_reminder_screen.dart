@@ -129,7 +129,31 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Time'),
+                      Text('Start Time'),
+                      SizedBox(height: height * 0.01),
+                      Container(
+                        // this also acts like a negative margin to get rid of the excess space from moving the grid up
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          // height: height * 0.15,
+                          child: TimeWheel(
+                            updateTimeChanged: (val) =>
+                                waterReminder.updateSelectedTime(val),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: Config.yMargin(context, 3)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('End Time'),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
