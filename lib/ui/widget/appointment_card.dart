@@ -1,6 +1,9 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/single_appointment_screen.dart';
+import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
@@ -36,6 +39,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final double boxHeight = MediaQuery.of(context).size.height;
     initializeDateFormatting();
     return Container(
       child: Column(
@@ -70,8 +74,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             child: GestureDetector(
                           child: Text('View'),
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, RouteNames.viewAppointmentScreen);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewAppointment(
+                                        appointment: widget.appointment,
+                                      )),
+                            );
                           },
                         ));
                         PopupMenuItem(
@@ -90,8 +99,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               child: GestureDetector(
                             child: Text('View'),
                             onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, RouteNames.viewAppointmentScreen);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewAppointment(
+                                          appointment: widget.appointment,
+                                        )),
+                              );
                             },
                           )),
                           PopupMenuItem(
@@ -229,7 +243,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 ),
               ],
             ),
-          )
+          ),
+          SizedBox(height: boxHeight * 0.03),
         ],
       ),
     );

@@ -127,7 +127,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                   //Description Text Input
                   SizedBox(height: Config.yMargin(context, 1.5)),
                   TextField(
-                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 5,
                     controller: descriptionTextController,
                     cursorColor: Theme.of(context).primaryColorDark,
                     style: TextStyle(
