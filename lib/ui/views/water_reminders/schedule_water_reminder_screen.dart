@@ -243,6 +243,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: height * 0.01),
 //                Container(
 //                  height: height * 0.4,
 //                  child: GridView.count(
