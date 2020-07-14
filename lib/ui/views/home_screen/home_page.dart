@@ -144,7 +144,8 @@ class _HomePageState extends State<HomePage> {
                                   Provider.of<DarkModeModel>(context)
                                       .toggleAppTheme();
                                 },
-                              ),
+                              ), 
+                              
                             ],
                           ),
                           SizedBox(height: height * 0.05),

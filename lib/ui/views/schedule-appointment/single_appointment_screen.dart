@@ -43,7 +43,7 @@ class _SingleAppointmentState extends State<SingleAppointment> {
                       context: context,
                       child: DeleteDialog() //show Confirmation dialog
                       );
-                  showSnackBar(context);
+                  // showSnackBar(context);
                   Future.delayed(Duration(seconds: 1)).then((value) {
                     appointmentDB
                         .deleteAppointment(widget.appointment.dateTime);
