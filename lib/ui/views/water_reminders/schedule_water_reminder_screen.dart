@@ -187,7 +187,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     Config.xMargin(context, 3),
                     0.0,
                     Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
+                    Config.yMargin(context, 3),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,6 +282,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     }).toList(),
                   ),
                 ),
+                SizedBox(height: height * 0.03),
                 //Description Text Input
                 Container(
                   padding: EdgeInsets.fromLTRB(
