@@ -129,7 +129,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Start Time'),
+                      Text(
+                        'Start Time',
+                        style: TextStyle(
+                          fontSize: Config.textSize(context, 4),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
@@ -153,7 +159,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('End Time'),
+                      Text(
+                        'End Time',
+                        style: TextStyle(
+                          fontSize: Config.textSize(context, 4),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                       SizedBox(height: height * 0.01),
                       Container(
                         // this also acts like a negative margin to get rid of the excess space from moving the grid up
@@ -169,7 +181,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
+                SizedBox(height: height * 0.05),
                 Container(
                   padding: EdgeInsets.fromLTRB(
                     Config.xMargin(context, 3),
@@ -188,24 +200,23 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
                       TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        controller: descriptionTextController,
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.xMargin(context, 5.5)),
                         decoration: InputDecoration(
-                          hintText: 'Input intervals for reminder...',
+                          hintText: 'Input interval for reminder...',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor,
+                            fontSize: Config.xMargin(context, 4.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
+                                color: Theme.of(context).primaryColor),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -237,8 +248,8 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
                       TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
                         controller: descriptionTextController,
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
@@ -247,14 +258,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Input water quantity for intervals...',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor,
+                            fontSize: Config.xMargin(context, 4.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
+                                color: Theme.of(context).primaryColor),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -335,14 +346,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Optional Description...',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor,
+                            fontSize: Config.xMargin(context, 4.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(Config.xMargin(context, 5))),
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark),
+                                color: Theme.of(context).primaryColor),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
