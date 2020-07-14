@@ -134,7 +134,29 @@ class __AddFitnessState extends State<AddFitness> {
                   children: <Widget>[
                     SizedBox(height: Config.yMargin(context, 1.0)),
                     Text(
-                      'Name of fitness',
+                      'Select Exercise',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w600,
+                          fontSize: Config.xMargin(context, 5)),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
+                    Container(
+                      height: Config.yMargin(context, 12),
+                      color: Theme.of(context).backgroundColor,
+                      child: ListView.builder(
+                        padding:
+                            EdgeInsets.only(left: Config.xMargin(context, 0)),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.fitnessType.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildImageContainer(index);
+                        },
+                      ),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 5)),
+                    Text(
+                      'Description',
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
@@ -152,6 +174,8 @@ class __AddFitnessState extends State<AddFitness> {
                         ),
                       ),
                       child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 5,
                         focusNode: focusNode,
                         controller: nameController,
                         cursorColor: Theme.of(context).primaryColorDark,
@@ -162,7 +186,7 @@ class __AddFitnessState extends State<AddFitness> {
                           contentPadding: EdgeInsets.only(
                             left: Config.yMargin(context, 1.0),
                           ),
-                          hintText: 'Input name',
+                          hintText: 'Input Description',
                           hintStyle: TextStyle(
                               fontSize: Config.xMargin(context, 5),
                               color: Theme.of(context).hintColor),
@@ -170,45 +194,6 @@ class __AddFitnessState extends State<AddFitness> {
                               borderSide: BorderSide(
                                   color: Theme.of(context).primaryColorDark)),
 //
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 5)),
-                    Container(
-                      height: Config.yMargin(context, 12),
-                      color: Theme.of(context).backgroundColor,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: activityType.length,
-                        itemBuilder: (_, index) => Row(
-                          children: <Widget>[
-                            FlatButton(
-                              onPressed: () {
-                                setState(() {
-                                  selectedFitnessType = index;
-                                });
-                              },
-                              child: Container(
-                                child: Stack(children: <Widget>[
-                                  Image.asset('${activityType[index]}'),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 40, horizontal: 50),
-                                    child: Checkbox(
-                                      onChanged: null,
-                                      value: index == selectedFitnessType,
-                                      //value: ,
-                                      checkColor:
-                                          Theme.of(context).backgroundColor,
-                                    ),
-                                  ),
-                                ]),
-
-                                // height: 170,
-                              ),
-                            ),
-                            SizedBox(width: Config.xMargin(context, 1.1))
-                          ],
                         ),
                       ),
                     ),
@@ -223,7 +208,7 @@ class __AddFitnessState extends State<AddFitness> {
                               fontWeight: FontWeight.bold,
                               fontSize: Config.xMargin(context, 5.5)),
                         ),
-                        SizedBox(height: Config.xMargin(context, 4.5)),
+                        SizedBox(height: Config.yMargin(context, 1.0)),
 
 //                      Row(
 //                        //crossAxisAlignment: CrossAxisAlignment.,
@@ -648,6 +633,44 @@ class __AddFitnessState extends State<AddFitness> {
           ),
         );
       },
+    );
+  }
+
+  Widget buildImageContainer(int index) {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
+    return GestureDetector(
+      onTap: () {
+        model.onSelectedFitnessImage(index);
+        print(model.updateSelectedIndex(index));
+      },
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
+              margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
+              height: Config.yMargin(context, 10),
+              width: Config.xMargin(context, 18),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: model.selectedIndex == index
+                    ? Theme.of(context).primaryColor
+                    : Color(0xffFCEDB8),
+              ),
+              child: Image(
+                image: AssetImage(model.activityType[index]),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Expanded(
+              child: Text(
+            model.fitnessType[index],
+            style: TextStyle(fontSize: 12),
+          )),
+        ],
+      ),
     );
   }
 }
