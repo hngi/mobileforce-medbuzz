@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -306,8 +307,54 @@ class MedicationData extends ChangeNotifier {
     var medicationReminderBox =
         await Hive.openBox<MedicationReminder>(_boxName);
 
-    medicationReminder = medicationReminderBox.values.toList();
+    //Magic to remove Schedule from db if schedule is outdated
+    List<MedicationReminder> temp = medicationReminderBox.values.toList();
+
+    temp.removeWhere((element) {
+      DateTime now = DateTime.now();
+      DateTime endDate = element.endAt;
+      var difference = now.difference(endDate);
+      bool boolean = difference.inDays < 0;
+      print(difference.inDays);
+
+      if (boolean) {
+        deleteSchedule(element.id);
+        print('Deleting outdated Schedule: ${element.drugName}');
+        print('Deleting its notifications');
+        switch (element.frequency) {
+          case 'Once':
+            deleteNotification(element, element.firstTime);
+            break;
+          case 'Twice':
+            deleteNotification(element, element.firstTime);
+            deleteNotification(element, element.secondTime);
+            break;
+          case 'Thrice':
+            deleteNotification(element, element.firstTime);
+            deleteNotification(element, element.secondTime);
+            deleteNotification(element, element.thirdTime);
+            break;
+        }
+      }
+
+      return (boolean);
+    });
+
+    //--End of Magic
+
+    medicationReminder = temp;
     notifyListeners();
+  }
+
+  void deleteNotification(MedicationReminder med, List<int> time) {
+    DateTime date = DateTime.parse(med.id);
+    int temp = num.parse('${date.month}${date.day}${time[0]}${time[1]}');
+    int secondTemp = num.parse('${date.year}0000');
+    int id = temp - secondTemp;
+
+    DrugNotificationManager notificationManager = DrugNotificationManager();
+    notificationManager.removeReminder(id);
+    print("Deleted Notification of id $id");
   }
 
   Future<void> addMedicationReminder(MedicationReminder medication) async {
