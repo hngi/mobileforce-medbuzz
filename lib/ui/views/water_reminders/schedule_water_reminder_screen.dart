@@ -13,7 +13,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
   static const routeName = 'schedule-water-reminder';
   final ItemScrollController _scrollController = ItemScrollController();
   ScheduleWaterReminderScreen();
-  TextEditingController descriptionTextController = TextEditingController();
+  final TextEditingController descriptionTextController =
+      TextEditingController();
+  final TextEditingController intervalTextController = TextEditingController();
+  final TextEditingController mlTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +141,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                           // height: height * 0.15,
                           child: TimeWheel(
                             updateTimeChanged: (val) =>
-                                waterReminder.updateSelectedTime(val),
+                                waterReminder.updateSelectedStartTime(val),
                           ),
                         ),
                       )
@@ -162,20 +165,17 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                           // height: height * 0.15,
                           child: TimeWheel(
                             updateTimeChanged: (val) =>
-                                waterReminder.updateSelectedTime(val),
+                                waterReminder.updateSelectedEndTime(val),
                           ),
                         ),
                       )
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
+                SizedBox(height: height * 0.03),
                 Container(
-                  padding: EdgeInsets.fromLTRB(
-                    Config.xMargin(context, 3),
-                    0.0,
-                    Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 7),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,10 +187,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
-                      TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        controller: descriptionTextController,
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
+                        initialValue:
+                            waterReminder.selectedInterval?.toString() ?? '',
+                        onChanged: (val) => waterReminder
+                            .updateSelectedInterval(int.parse(val)),
+                        // controller: intervalTextController,
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
@@ -218,14 +222,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
+                SizedBox(height: height * 0.03),
                 Container(
-                  padding: EdgeInsets.fromLTRB(
-                    Config.xMargin(context, 3),
-                    0.0,
-                    Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
-                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Config.xMargin(context, 7)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -236,10 +236,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
-                      TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        controller: descriptionTextController,
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
+                        initialValue: waterReminder.selectedMl?.toString() ??
+                            3000.toString(),
+                        onChanged: (val) =>
+                            waterReminder.updateSelectedMl(int.parse(val)),
+                        // controller: mlTextController,
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
@@ -267,7 +271,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.01),
+                SizedBox(height: height * 0.03),
 //                Container(
 //                  height: height * 0.4,
 //                  child: GridView.count(
@@ -308,12 +312,8 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
 //                ),
                 //Description Text Input
                 Container(
-                  padding: EdgeInsets.fromLTRB(
-                    Config.xMargin(context, 3),
-                    0.0,
-                    Config.xMargin(context, 3),
-                    Config.yMargin(context, 6),
-                  ),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Config.xMargin(context, 7)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -324,10 +324,13 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: Config.yMargin(context, 1.5)),
-                      TextField(
+                      TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: 5,
-                        controller: descriptionTextController,
+                        initialValue: waterReminder.description ?? '',
+                        // controller: descriptionTextController,
+                        onChanged: (val) =>
+                            waterReminder.updateDescription(val),
                         cursorColor: Theme.of(context).primaryColorDark,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
@@ -355,11 +358,12 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: height * 0.03),
                 Container(
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.only(
-                      left: Config.xMargin(context, 3),
-                      right: Config.xMargin(context, 3),
+                      left: Config.xMargin(context, 3.5),
+                      right: Config.xMargin(context, 3.5),
                       bottom: Config.yMargin(context, 1)),
                   child: SizedBox(
                     width: double.infinity,
@@ -367,7 +371,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       color: waterReminder.selectedMl != null &&
                               waterReminder.selectedMonth != null &&
                               waterReminder.selectedDay != null &&
-                              waterReminder.selectedTime != null
+                              waterReminder.selectedStartTime != null
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).primaryColor.withOpacity(0.7),
                       padding: EdgeInsets.symmetric(
@@ -378,24 +382,50 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(width * 0.03),
                       ),
                       onPressed: waterReminder.selectedMl != null &&
-                              waterReminder.selectedMonth != null &&
-                              waterReminder.selectedDay != null &&
-                              waterReminder.selectedTime != null
+                              // waterReminder.selectedMonth != null &&
+                              // waterReminder.selectedDay != null &&
+                              waterReminder.selectedStartTime != null
                           ? () async {
-                              if (waterReminder.selectedDay ==
-                                      DateTime.now().day &&
-                                  waterReminder.selectedMonth ==
-                                      DateTime.now().month) {
-                                waterNotificationManager.showWaterNotificationOnce(
-                                    waterReminder.selectedDay,
-                                    'It\' s time to take some Waters',
-                                    'Take ${waterReminder.selectedMl} ml of Water ',
-                                    waterReminder.getDateTime());
-                              }
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
-                              waterReminderDB.addWaterReminder(
-                                  waterReminder.createSchedule());
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              var diff = waterReminder
+                                  .getEndDateTime()
+                                  .difference(waterReminder.getDateTime())
+                                  .inMinutes;
+
+                              double numb =
+                                  diff / waterReminder.selectedInterval;
+                              for (var i = 1; i < numb + 1; i++) {
+                                if (waterReminder.selectedDay ==
+                                        DateTime.now().day &&
+                                    waterReminder.selectedMonth ==
+                                        DateTime.now().month) {
+                                  var timeValue =
+                                      waterReminder.getDateTime().add(
+                                            Duration(
+                                                minutes: i == 1
+                                                    ? 0
+                                                    : waterReminder
+                                                            .selectedInterval *
+                                                        i),
+                                          );
+                                  await waterReminderDB
+                                      .addWaterReminder(
+                                          waterReminder.createSchedule(
+                                              notifyDateTime: timeValue))
+                                      .then((value) => waterNotificationManager
+                                          .showWaterNotificationDaily(
+                                              id: waterReminder.selectedDay +
+                                                  timeValue.minute,
+                                              title:
+                                                  'It\' s time to take some Waters',
+                                              body:
+                                                  'Take ${waterReminder.selectedMl} ml of Water ',
+                                              dateTime: timeValue));
+                                }
+                              }
+                              // print(numb.floor());
+                              waterReminder.createSchedule();
                             }
                           : null,
                       child: Text(

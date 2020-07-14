@@ -5,6 +5,7 @@ import 'schedule_water_reminder_screen.dart';
 import '../../../core/constants/route_names.dart';
 import '../../../core/database/waterReminderData.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:MedBuzz/ui/widget/water_reminder_card.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 
@@ -28,29 +29,58 @@ class WaterScheduleViewScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(
-            bottom: Config.yMargin(context, 2),
-            right: Config.xMargin(context, 4)),
-        child: SizedBox(
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(
+                bottom: Config.yMargin(context, 2),
+                right: Config.xMargin(context, 4)),
+            child: SizedBox(
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
-          height: height * 0.08,
-          width: height * 0.08,
-          child: FloatingActionButton(
-            elevation: 0,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ScheduleWaterReminderScreen()));
-            },
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(
-              Icons.add,
-              size: Config.textSize(context, 10),
+              height: height * 0.08,
+              width: height * 0.08,
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScheduleWaterReminderScreen()));
+                },
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Icon(
+                  Icons.edit,
+                  size: Config.textSize(context, 7),
+                ),
+              ),
             ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(
+                bottom: Config.yMargin(context, 2),
+                right: Config.xMargin(context, 4)),
+            child: SizedBox(
+//IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
+              height: height * 0.08,
+              width: height * 0.08,
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScheduleWaterReminderScreen()));
+                },
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Icon(
+                  Icons.local_drink,
+                  size: Config.textSize(context, 7),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       appBar: AppBar(
         elevation: 0,
@@ -143,7 +173,14 @@ class WaterScheduleViewScreen extends StatelessWidget {
                       child: Container(
                         child: Text('No water reminders'),
                       )),
-                  for (var waterReminder in waterReminderDB.waterReminders)
+                  Visibility(
+                      visible: waterReminderDB.waterReminders.isNotEmpty,
+                      child: Container(
+                        child: Text(
+                            '${DateFormat.yMMMEd().format((DateTime.now()))}'),
+                      )),
+                  for (var waterReminder
+                      in waterReminderDB.getActiveReminders().take(1))
                     WaterReminderCard(
                         height: height,
                         width: width,

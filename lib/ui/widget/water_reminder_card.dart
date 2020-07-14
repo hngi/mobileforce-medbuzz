@@ -34,7 +34,7 @@ class _WaterCardState extends State<WaterReminderCard> {
       value = 'Skipped';
     } else if (waterReminder.isTaken) {
       value = 'Completed';
-    } else if (waterReminder.dateTime.isBefore(DateTime.now()) &&
+    } else if (waterReminder.startTime.isBefore(DateTime.now()) &&
         !waterReminder.isTaken &&
         !waterReminder.isSkipped) {
       value = 'Missed';
@@ -187,6 +187,9 @@ class _WaterCardState extends State<WaterReminderCard> {
           case 'Skip':
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
+                    interval: widget.waterReminder.interval,
+                    description: widget.waterReminder.description,
+                    endTime: widget.waterReminder.endTime,
                     ml: widget.waterReminder.ml,
                     startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
@@ -197,6 +200,9 @@ class _WaterCardState extends State<WaterReminderCard> {
           case 'Done':
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
+                    interval: widget.waterReminder.interval,
+                    description: widget.waterReminder.description,
+                    endTime: widget.waterReminder.endTime,
                     ml: widget.waterReminder.ml,
                     startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,

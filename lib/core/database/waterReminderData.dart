@@ -39,7 +39,7 @@ class WaterReminderData extends ChangeNotifier {
   //     .map((e) => e.ml)
   //     .reduce((value, element) => value + element);
 
-  void addWaterReminder(WaterReminder waterReminder) async {
+  Future<void> addWaterReminder(WaterReminder waterReminder) async {
     var box = await Hive.openBox<WaterReminder>(_boxName);
 
     await box.put(waterReminder.id, waterReminder);
@@ -47,7 +47,7 @@ class WaterReminderData extends ChangeNotifier {
     //reinitialise water reminders after write operation
     _waterReminders = box.values.toList();
 
-    box.close();
+    // box.close();
 
     notifyListeners();
   }
@@ -92,8 +92,10 @@ class WaterReminderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  WaterReminder getActiveAppointment() {
-    return _activeWaterReminder;
+  List<WaterReminder> getActiveReminders() {
+    // var today = DateTime.now().add(Duration(days: 5));
+
+    return _waterReminders;
   }
 
   int get waterRemindersCount {
@@ -101,12 +103,10 @@ class WaterReminderData extends ChangeNotifier {
   }
 
   int get totalLevel {
-    if (_waterReminders.isEmpty) {
+    if (_waterReminders.isEmpty || getActiveReminders().isEmpty) {
       return 0;
     }
-    return _waterReminders
-        .map((e) => e.ml)
-        .reduce((value, element) => value + element);
+    return getActiveReminders()[0]?.ml ?? 0;
   }
 
   int get currentLevel {
@@ -120,7 +120,7 @@ class WaterReminderData extends ChangeNotifier {
   }
 
   double get progress {
-    var value = currentLevel / totalLevel;
+    var value = 0 / totalLevel;
     return value.isNaN ? 0.0 : value;
   }
 }
