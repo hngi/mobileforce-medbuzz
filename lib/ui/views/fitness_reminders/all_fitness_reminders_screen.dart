@@ -61,26 +61,26 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
           duration: Duration(milliseconds: 800),
           height: model.isVisible ? Config.yMargin(context, 10) : 0,
           child: Container(
-                margin: EdgeInsets.only(
+            margin: EdgeInsets.only(
                 bottom: Config.yMargin(context, 2),
                 right: Config.xMargin(context, 4)),
             child: SizedBox(
               height: height * 0.08,
               width: height * 0.08,
               child: FloatingActionButton(
-                child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColorLight,
-                  size: Config.xMargin(context, 9),
-                ),
-                backgroundColor: Theme.of(context).buttonColor,
-                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                //Navigate to fitness reminder creation screen
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, RouteNames.fitnessDescriptionScreen);
-                }),
-          ),
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(context).primaryColorLight,
+                    size: Config.xMargin(context, 9),
+                  ),
+                  backgroundColor: Theme.of(context).buttonColor,
+                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                  //Navigate to fitness reminder creation screen
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RouteNames.fitnessDescriptionScreen);
+                  }),
+            ),
           ),
         ),
       ),
@@ -225,7 +225,7 @@ class FitnessCard extends StatelessWidget {
                     ),
                     SizedBox(height: Config.yMargin(context, 2)),
                     //Type of fitness exercise goes here
-                    Text(e.name,
+                    Text(e.description,
                         style: TextStyle(
                             fontSize: Config.textSize(context, 6),
                             fontWeight: FontWeight.w500,

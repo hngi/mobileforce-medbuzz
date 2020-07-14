@@ -14,6 +14,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
   dynamic _selectedTime;
   int selectedIndex = 0;
   String selectedfitnessType = 'images/jogging.png';
+  String description;
 
   dynamic get selectedTime => _selectedTime;
   List<FitnessReminder> _fitnessReminder = [];
@@ -43,6 +44,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
 
   int get reminderLength {
     return _fitnessReminder.length;
+  }
+
+  String updateDescription(String value) {
+    this.description = value;
+    notifyListeners();
+    return description;
   }
 
   void onSelectedFitnessImage(int index) {

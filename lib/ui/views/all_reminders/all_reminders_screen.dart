@@ -227,7 +227,7 @@ class AllRemindersScreen extends StatelessWidget {
                                             allReminders
                                                 .fitnessRemindersBasedOnDateTime[
                                                     index]
-                                                .name,
+                                                .description,
                                             style: TextStyle(
                                                 fontSize:
                                                     Config.textSize(context, 4),
