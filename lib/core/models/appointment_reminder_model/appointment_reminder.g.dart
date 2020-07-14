@@ -9,6 +9,7 @@ part of 'appointment_reminder.dart';
 class AppointmentAdapter extends TypeAdapter<Appointment> {
   @override
   int get typeId => 0;
+
   @override
   Appointment read(BinaryReader reader) {
     var numOfFields = reader.readByte();
