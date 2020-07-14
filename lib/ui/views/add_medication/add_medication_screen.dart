@@ -526,11 +526,12 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
 //Function to set notification
   void setNotification(MedicationReminder med, List<int> time) {
-    //notification id has to be unique so using the the id provided in the model and the time supplied
-    // should work just fine
+    //notification id has to be unique
+    //Small magic to get unique value
     DateTime date = DateTime.parse(med.id);
-    int id =
-        num.parse('${date.year}${date.month}${date.day}${time[0]}${time[1]}');
+    int temp = num.parse('${date.month}${date.day}${time[0]}${time[1]}');
+    int secondTemp = num.parse('${date.year}0000');
+    int id = temp - secondTemp;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
     notificationManager.showDrugNotificationDaily(
