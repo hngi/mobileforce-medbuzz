@@ -28,10 +28,7 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox('onboarding');
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MyApp(),
-    ),
+    MyApp(),
   );
 }
 
