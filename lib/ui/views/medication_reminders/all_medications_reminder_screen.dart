@@ -32,7 +32,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
   var _height = 80;
   @override
   Widget build(BuildContext context) {
+    //Fetch data from DB to List in model
     Provider.of<MedicationData>(context).getMedicationReminder();
+
+    //set model
     var model = Provider.of<MedicationData>(context);
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
@@ -53,21 +56,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
               child: SizedBox(
                 height: height * 0.08,
                 width: height * 0.08,
-
-              child: FloatingActionButton(
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColorLight,
-                    size: Config.xMargin(context, 10),
-                  ),
-                  backgroundColor: Theme.of(context).buttonColor,
-                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                  //Navigate to fitness reminder creation screen
-                  onPressed: () {
-                    final medModel = Provider.of<MedicationData>(context);
-                    medModel.newMedicine(context);
-                  }),
-            ),
+                child: FloatingActionButton(
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).primaryColorLight,
+                      size: Config.xMargin(context, 10),
+                    ),
+                    backgroundColor: Theme.of(context).buttonColor,
+                    splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                    //Navigate to fitness reminder creation screen
+                    onPressed: () {
+                      final medModel = Provider.of<MedicationData>(context);
+                      medModel.newMedicine(context);
+                    }),
+              ),
             ),
           ),
         ),
