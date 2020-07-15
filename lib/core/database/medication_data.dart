@@ -71,6 +71,19 @@ class MedicationData extends ChangeNotifier {
 
   List<MedicationReminder> medicationReminder = [];
 
+  List<MedicationReminder> get allMedications {
+    return medicationReminder;
+  }
+
+  void updateAvailableMedicationReminder(medicationReminders){
+medicationReminder = medicationReminders;
+notifyListeners();
+  }
+
+  List<MedicationReminder> get pastMedications {
+    return medicationReminder.where((medication) => _selectedDay.day > medication.endAt.day).toList();
+  }
+
   List<int> convertTime(TimeOfDay time) {
     List<int> value = new List(2);
     value[0] = time.hour;

@@ -59,7 +59,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
             child: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: appThemeLight.appBarTheme.iconTheme.color,
+                color: appThemeLight.appBarTheme.color,
               ),
 
               // navigate to add appointments page

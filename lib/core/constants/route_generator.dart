@@ -13,6 +13,7 @@ import 'package:MedBuzz/ui/views/health_tips/health_tips_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_mail.dart';
@@ -115,6 +116,9 @@ class RouteGenerator {
         break;
       case RouteNames.medicationScreen:
         return CustomSlideTransition(child: MedicationScreen());
+        break;
+      case RouteNames.medicationPage:
+        return CustomSlideTransition(child: SchedulledMedicationScreen());
         break;
       case RouteNames.dietScheduleScreen:
         return CustomSlideTransition(child: DietScheduleScreen());

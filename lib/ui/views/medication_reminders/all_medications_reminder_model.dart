@@ -11,12 +11,13 @@ class MedicationsSchedulesModel extends ChangeNotifier {
     this.isVisible = visible;
     notifyListeners();
   }
+
+
   
-  void expandTile(bool changed){
+  void expandTile(bool changed) {
     this.isExpanded = !isExpanded;
     notifyListeners();
   }
-
   //Retrieve data from DB
 
   //Get name of weekday
