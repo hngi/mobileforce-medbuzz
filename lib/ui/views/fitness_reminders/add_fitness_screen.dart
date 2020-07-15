@@ -472,7 +472,7 @@ class __AddFitnessState extends State<AddFitness> {
                                       ],
                                       endDate: model.endDate,
                                       startDate: model.startDate,
-                                      index: model.index,
+                                      index: model.selectedIndex,
                                       description: model.updateDescription(
                                           descController.text),
                                       minsperday: model.minDaily,
@@ -557,6 +557,17 @@ class __AddFitnessState extends State<AddFitness> {
 //                                  });
 
                               }
+
+                              print([
+                                model.id,
+                                model.fitnessType[model.selectedIndex],
+                                model.activityType[model.selectedIndex],
+                                model.selectedIndex,
+                                model.startDate,
+                                model.endDate,
+                                model.updateDescription(descController.text),
+                                model.activityTime
+                              ]);
                               Navigator.popAndPushNamed(
                                   context, RouteNames.fitnessSchedulesScreen);
                             }

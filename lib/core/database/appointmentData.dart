@@ -10,6 +10,9 @@ class AppointmentData extends ChangeNotifier {
   DateTime appointmentTime = DateTime.now();
   String appointmentSubject;
   String appointmentNote;
+  Appointment _currentAppointment;
+
+  Appointment get currentAppointment => _currentAppointment;
 
   bool isEditing = false;
 
@@ -31,14 +34,16 @@ class AppointmentData extends ChangeNotifier {
   }
 
   //get a particular appointment
-  Appointment getAppointment(index) {
-    return _appointment[index];
+  void getAppointment(key) async {
+    var box = await Hive.openBox<Appointment>(_boxName);
+    this._currentAppointment = box.get(key);
+    notifyListeners();
   }
 
   Future<void> addAppointment(Appointment appointment) async {
     var box = await Hive.openBox<Appointment>(_boxName);
 
-    await box.put(appointment.dateTime, appointment);
+    await box.put(appointment.id, appointment);
 
     _appointment = box.values.toList();
     box.close();
@@ -65,7 +70,7 @@ class AppointmentData extends ChangeNotifier {
   }
 
   Future<void> editAppointment({Appointment appointment}) async {
-    String appointmentKey = appointment.dateTime;
+    String appointmentKey = appointment.id;
     var box = await Hive.openBox<Appointment>(_boxName);
 
     await box.put(appointmentKey, appointment);

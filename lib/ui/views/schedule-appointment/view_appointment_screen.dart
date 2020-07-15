@@ -10,6 +10,7 @@ import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:MedBuzz/ui/widget/appBar.dart';
 
 class ViewAppointment extends StatefulWidget {
   static const routeName = 'view-schedule-appointment-reminder';
@@ -51,41 +52,50 @@ class _ViewAppointmentState extends State<ViewAppointment> {
       builder: (context, appointmentModel, child) {
         return Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            elevation: 0,
-            backgroundColor: Theme.of(context).backgroundColor,
-          ),
+          appBar: appBar(context: context, actions: [
+            FlatButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    child: DeleteDialog(
+                      appointment: widget.appointment,
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+                label: Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                )),
+          ]),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(Config.yMargin(context, 2.6)),
-                  child: FlatButton.icon(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          child: DeleteDialog(
-                            appointment: widget.appointment,
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      label: Text(
-                        'Delete',
-                        style: TextStyle(color: Colors.red),
-                      )),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.all(Config.yMargin(context, 2.6)),
+                //   child: FlatButton.icon(
+                //       onPressed: () {
+                //         showDialog(
+                //           context: context,
+                //           child: DeleteDialog(
+                //             appointment: widget.appointment,
+                //           ),
+                //         );
+                //       },
+                //       icon: Icon(
+                //         Icons.delete,
+                //         color: Colors.red,
+                //       ),
+                //       label: Text(
+                //         'Delete',
+                //         style: TextStyle(color: Colors.red),
+                //       )),
+                // ),
                 //SizedBox(height: Config.yMargin(context, 3)),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -130,7 +140,9 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                           padding: EdgeInsets.only(
                               top: Config.yMargin(context, 0.5)),
                           child: Text(
-                            widget.appointment.note,
+                            widget.appointment.note.isEmpty
+                                ? 'None'
+                                : widget.appointment.note.trim(),
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontWeight: FontWeight.normal,
@@ -154,11 +166,11 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                widget.appointment.dateTime,
+                                '${widget.appointment.time[0]}:${widget.appointment.time[1]}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Theme.of(context).primaryColor,
-                                  fontSize: Config.textSize(context, 3.6),
+                                  fontSize: Config.textSize(context, 5.33),
                                 ),
                               )
                             ],
@@ -177,7 +189,7 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                           padding: EdgeInsets.only(
                               top: Config.yMargin(context, 0.5)),
                           child: Text(
-                            '${widget.appointment.date.day} - ${widget.appointment.date.month}- ${widget.appointment.date.year}',
+                            '${widget.appointment.date.day} - ${widget.appointment.date.month} - ${widget.appointment.date.year}',
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Theme.of(context).primaryColorDark,
@@ -195,8 +207,7 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                   child: InkWell(
                     onTap: () {
                       appointmentModel.isEditing = true;
-                      appointmentDB
-                          .deleteAppointment(widget.appointment.dateTime);
+                      appointmentDB.deleteAppointment(widget.appointment.id);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -308,7 +319,7 @@ class DeleteDialog extends StatelessWidget {
                       onPressed: () {
                         notificationManager
                             .removeReminder(scheduleModel.selectedDay);
-                        db.deleteAppointment(appointment.dateTime);
+                        db.deleteAppointment(appointment.id);
                         Navigator.popAndPushNamed(context, RouteNames.homePage);
                       },
                       child: Text(

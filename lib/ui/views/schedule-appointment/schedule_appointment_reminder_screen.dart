@@ -12,23 +12,45 @@ import '../../size_config/config.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
 import 'schedule_appointment_screen_model.dart';
 
-class ScheduleAppointmentScreen extends StatefulWidget {
+class ScheduleAppointmentScreen extends StatelessWidget {
   static const routeName = 'schedule-appointment-reminder';
   final String payload;
   final Appointment appointment;
   final String buttonText;
-  final bool refresh;
+  ScheduleAppointmentScreen({
+    Key key,
+    this.payload,
+    this.appointment,
+    this.buttonText,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: MyScheduleAppointmentScreen(
+      payload: payload,
+      appointment: appointment,
+      buttonText: buttonText,
+    ));
+  }
+}
 
-  ScheduleAppointmentScreen(
-      {Key key, this.payload, this.appointment, this.buttonText, this.refresh})
+class MyScheduleAppointmentScreen extends StatefulWidget {
+  static const routeName = 'schedule-appointment-reminder';
+  final String payload;
+  final Appointment appointment;
+  final String buttonText;
+
+  MyScheduleAppointmentScreen(
+      {Key key, this.payload, this.appointment, this.buttonText})
       : super(key: key);
 
   @override
-  _ScheduleAppointmentScreenState createState() =>
-      _ScheduleAppointmentScreenState();
+  _MyScheduleAppointmentScreenState createState() =>
+      _MyScheduleAppointmentScreenState();
 }
 
-class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
+class _MyScheduleAppointmentScreenState
+    extends State<MyScheduleAppointmentScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
 
   TextEditingController _typeOfAppointmentController = TextEditingController();
@@ -44,14 +66,11 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   void initState() {
     _updateMonth = appointmentModel.currentMonth;
     myFocusNode = FocusNode();
-
-    widget.refresh
-        ? Provider.of<ScheduleAppointmentModel>(context, listen: false)
-            .refresh()
-        : Provider.of<ScheduleAppointmentModel>(context, listen: false).preload(
-            _typeOfAppointmentController.text,
-            _noteController.text,
-          );
+    if (widget.buttonText == 'Update') {
+      _typeOfAppointmentController.text =
+          widget.appointment.appointmentType ?? '';
+      _noteController.text = widget.appointment.note ?? '';
+    }
     super.initState();
   }
 
@@ -69,7 +88,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
     var appointmentReminderDB =
         Provider.of<AppointmentData>(context, listen: true);
 
-    appointmentReminderDB.getAppointments();
+    // appointmentReminderDB.getAppointments();
     AppointmentNotificationManager notificationManager =
         AppointmentNotificationManager();
 
@@ -80,17 +99,16 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    if (widget.buttonText == 'Update') {
-      _typeOfAppointmentController.text =
-          appointmentReminder.typeOfAppointment ?? '';
-      _noteController.text = appointmentReminder.note ?? '';
-    }
 
-    var model = Provider.of<ScheduleAppointmentModel>(context);
     Color bgColor = Theme.of(context).backgroundColor;
 
     return Scaffold(
-      appBar: appBar(context: context, title: 'Add your appointment'),
+      appBar: appBar(
+          context: context,
+          title: 'Add your appointment',
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, RouteNames.homePage);
+          }),
       backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Container(
@@ -297,7 +315,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                     child: Text(
                       widget.buttonText,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
+                        color: Colors.white,
                         fontSize: Config.textSize(context, 5.5),
                         fontWeight: FontWeight.bold,
                       ),
@@ -311,25 +329,37 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                         ? () async {
                             switch (widget.buttonText) {
                               case 'Save':
-                                appointmentReminder
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminder
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
+                                print(_typeOfAppointmentController.text);
+                                if (_typeOfAppointmentController
+                                    .text.isNotEmpty) {
+                                  appointmentReminder.setSelectedNote(
+                                      _noteController.text ?? '');
+                                  appointmentReminder
+                                      .setSelectedTypeOfAppointment(
+                                          _typeOfAppointmentController.text);
 
-                                await appointmentReminderDB.addAppointment(
-                                    appointmentReminder.createSchedule());
+                                  await appointmentReminderDB.addAppointment(
+                                      appointmentReminder.createSchedule());
 
-                                if (appointmentReminder.selectedDay ==
-                                        DateTime.now().day &&
-                                    appointmentReminder.selectedMonth ==
-                                        DateTime.now().month) {
-                                  notificationManager
-                                      .showAppointmentNotificationOnce(
-                                          appointmentModel.selectedDay,
-                                          'Hey, you\' got somewhere to go',
-                                          ' ${_typeOfAppointmentController.text} ',
-                                          appointmentReminder.getDateTime());
+                                  if (appointmentReminder.selectedDay ==
+                                          DateTime.now().day &&
+                                      appointmentReminder.selectedMonth ==
+                                          DateTime.now().month) {
+                                    String time =
+                                        appointmentReminder.selectedTime;
+                                    String hour = time.substring(1, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    notificationManager.showAppointmentNotificationOnce(
+                                        num.parse(
+                                            '${now.year}${now.month}${now.day}$hour$minutes'),
+                                        'Hey, you\' got somewhere to go',
+                                        ' ${_typeOfAppointmentController.text} ',
+                                        appointmentReminder.getDateTime());
+                                  }
+                                } else {
+                                  showSnackbar(context);
+                                  return;
                                 }
                                 break;
                               case 'Update':
@@ -347,12 +377,17 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                                         DateTime.now().day &&
                                     appointmentReminder.selectedMonth ==
                                         DateTime.now().month) {
-                                  notificationManager
-                                      .showAppointmentNotificationOnce(
-                                          appointmentModel.selectedDay,
-                                          'Hey, you\' got somewhere to go',
-                                          ' ${_typeOfAppointmentController.text} ',
-                                          appointmentReminder.getDateTime());
+                                  String time =
+                                      appointmentReminder.selectedTime;
+                                  String hour = time.substring(1, 2);
+                                  String minutes = time.substring(3, 5);
+                                  DateTime now = DateTime.now();
+                                  notificationManager.showAppointmentNotificationOnce(
+                                      num.parse(
+                                          '${now.year}${now.month}${now.day}$hour$minutes'),
+                                      'Hey, you\' got somewhere to go',
+                                      ' ${_typeOfAppointmentController.text} ',
+                                      appointmentReminder.getDateTime());
                                 }
                             }
 
@@ -369,6 +404,22 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
         ),
       ),
     );
+  }
+
+  void showSnackbar(BuildContext context,
+      {String text: "Set what appointment you're going for"}) {
+    SnackBar snackBar = SnackBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      duration: Duration(seconds: 2),
+      content: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: Config.textSize(context, 5.3), color: Colors.white),
+      ),
+    );
+
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 
