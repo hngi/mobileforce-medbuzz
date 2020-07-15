@@ -12,19 +12,61 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int _selectedDay;
   int _selectedMonth;
   dynamic _selectedTime;
+  int selectedIndex = 0;
+  String selectedfitnessType = 'images/jogging.png';
+  String description;
 
   dynamic get selectedTime => _selectedTime;
   List<FitnessReminder> _fitnessReminder = [];
   List<FitnessReminder> get fitnessReminder => _fitnessReminder;
 
+  final List activityType = [
+    'images/jogging.png',
+    'images/swimming.png',
+    'images/cycling.png',
+    'images/volleyball.png',
+    'images/tabletennis.png',
+    'images/football.png',
+    'images/badminton.png',
+    'images/basketball.png'
+  ];
+
+  List fitnessType = [
+    'Jogging',
+    'Swimming',
+    'Cycling',
+    'Volleyball',
+    'Table Tennis',
+    'Football',
+    'Badminton',
+    'Basketball'
+  ];
+
   int get reminderLength {
     return _fitnessReminder.length;
+  }
+
+  String updateDescription(String value) {
+    this.description = value;
+    notifyListeners();
+    return description;
+  }
+
+  void onSelectedFitnessImage(int index) {
+    selectedIndex = index;
+    notifyListeners();
   }
 
   void getReminders() async {
     var box = await Hive.openBox<FitnessReminder>(_boxName);
     _fitnessReminder = box.values.toList();
     notifyListeners();
+  }
+
+  int updateSelectedIndex(int index) {
+    this.selectedIndex = index;
+    notifyListeners();
+    return this.selectedIndex;
   }
 
   getOneReminder(index) {
