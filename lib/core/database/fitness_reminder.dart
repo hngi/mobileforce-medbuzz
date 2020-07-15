@@ -7,7 +7,7 @@ import '../models/fitness_reminder_model/fitness_reminder.dart';
 class FitnessReminderCRUD extends ChangeNotifier {
   static const String _boxName = "fitnessReminderBox";
   bool isEditting = false;
-  final String add = "Add Fitness Reminder ";
+  final String add = "Add Fitness Reminder";
   final String edit = "Edit Fitness Reminder";
   DateTime _today = DateTime.now();
   int _selectedDay;
@@ -68,6 +68,11 @@ class FitnessReminderCRUD extends ChangeNotifier {
   void onSelectedFitnessImage(int index) {
     selectedIndex = index;
     notifyListeners();
+  }
+
+  TimeOfDay convertTimeBack(List<int> list) {
+    TimeOfDay value = TimeOfDay(hour: list[0], minute: list[1]);
+    return value;
   }
 
   void getReminders() async {
