@@ -139,17 +139,19 @@ class RouteGenerator {
   static Route<dynamic> _errorRoute() {
     return CustomSlideTransition(
       child: Scaffold(
-          appBar: AppBar(
-              title: Text(
+        appBar: AppBar(
+          title: Text(
             'Page not found',
             style: TextStyle(color: Colors.red),
-          )),
-          body: Center(
-            child: Text(
-              'Error! Page not found',
-              style: TextStyle(color: Colors.red),
-            ),
-          )),
+          ),
+        ),
+        body: Center(
+          child: Text(
+            'Error! Page not found',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ),
     );
   }
 }
