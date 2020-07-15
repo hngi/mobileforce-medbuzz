@@ -66,7 +66,7 @@ class __AddFitnessState extends State<AddFitness> {
   Config config = Config();
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController descController = TextEditingController();
   FocusNode focusNode = FocusNode();
   int index;
   // int _selectedActivity = 0;
@@ -81,7 +81,7 @@ class __AddFitnessState extends State<AddFitness> {
     String appBar = fitnessDB.isEditting ? fitnessDB.edit : fitnessDB.add;
 
     if (fitnessDB.isEditting && _changed_name == false) {
-      nameController.text = fitnessModel.name;
+      descController.text = fitnessModel.desc;
       _changed_name = true;
     }
 
@@ -132,9 +132,8 @@ class __AddFitnessState extends State<AddFitness> {
                 },
                 child: ListView(
                   children: <Widget>[
-                    SizedBox(height: Config.yMargin(context, 1.0)),
                     Text(
-                      'Name of fitness',
+                      'Select Exercise',
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
@@ -142,126 +141,99 @@ class __AddFitnessState extends State<AddFitness> {
                     ),
                     SizedBox(height: Config.yMargin(context, 1.0)),
                     Container(
+                      height: Config.yMargin(context, 14),
+                      color: Theme.of(context).backgroundColor,
+                      child: ListView.builder(
+                        padding:
+                            EdgeInsets.only(left: Config.xMargin(context, 0)),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.fitnessType.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildImageContainer(index);
+                        },
+                      ),
+                    ),
+//
+                    Text(
+                      'Description',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w600,
+                          fontSize: Config.xMargin(context, 5)),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
+                    TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      focusNode: focusNode,
+                      controller: descController,
+                      cursorColor: Theme.of(context).primaryColorDark,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.xMargin(context, 5.5)),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          left: Config.yMargin(context, 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Config.xMargin(context, 5))),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+
+                        hintText: 'Input Description',
+                        hintStyle: TextStyle(
+                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Config.xMargin(context, 5))),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+//
+                      ),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 4.5)),
+                    Text(
+                      'Reminder Frequency',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Config.xMargin(context, 5.5)),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
+
+//                      Row(
+//                        //crossAxisAlignment: CrossAxisAlignment.,
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        children: <Widget>[
+                    //  Expanded(
+                    Container(
                       width: double.infinity,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           side:
                               BorderSide(width: 1.0, style: BorderStyle.solid),
                           borderRadius:
-                              BorderRadius.all((Radius.circular(5.0))),
+                              BorderRadius.all((Radius.circular(6.0))),
                         ),
                       ),
-                      child: TextFormField(
-                        focusNode: focusNode,
-                        controller: nameController,
-                        cursorColor: Theme.of(context).primaryColorDark,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5.5)),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                            left: Config.yMargin(context, 1.0),
-                          ),
-                          hintText: 'Input name',
-                          hintStyle: TextStyle(
-                              fontSize: Config.xMargin(context, 5),
-                              color: Theme.of(context).hintColor),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColorDark)),
-//
-                        ),
+                      child: Center(
+                        child: DropdownButton<String>(
+                            underline: Text(''),
+                            items: fitnessTime.map((String time) {
+                              return DropdownMenuItem<String>(
+                                  value: time, child: Text(time));
+                            }).toList(),
+                            value: _selectedFreq,
+                            onChanged: (newFreq) {
+                              setState(() {
+                                _selectedFreq = newFreq;
+                              });
+                            }),
                       ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 5)),
-                    Container(
-                      height: Config.yMargin(context, 12),
-                      color: Theme.of(context).backgroundColor,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: activityType.length,
-                        itemBuilder: (_, index) => Row(
-                          children: <Widget>[
-                            FlatButton(
-                              onPressed: () {
-                                setState(() {
-                                  selectedFitnessType = index;
-                                });
-                              },
-                              child: Container(
-                                child: Stack(children: <Widget>[
-                                  Image.asset('${activityType[index]}'),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 40, horizontal: 50),
-                                    child: Checkbox(
-                                      onChanged: null,
-                                      value: index == selectedFitnessType,
-                                      //value: ,
-                                      checkColor:
-                                          Theme.of(context).backgroundColor,
-                                    ),
-                                  ),
-                                ]),
-
-                                // height: 170,
-                              ),
-                            ),
-                            SizedBox(width: Config.xMargin(context, 1.1))
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 4.5)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Reminder Frequency',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Config.xMargin(context, 5.5)),
-                        ),
-                        SizedBox(height: Config.xMargin(context, 4.5)),
-
-//                      Row(
-//                        //crossAxisAlignment: CrossAxisAlignment.,
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        children: <Widget>[
-                        //  Expanded(
-                        Container(
-                          width: double.infinity,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  width: 1.0, style: BorderStyle.solid),
-                              borderRadius:
-                                  BorderRadius.all((Radius.circular(6.0))),
-                            ),
-                          ),
-                          child: Center(
-                            child: DropdownButton<String>(
-                                underline: Text(''),
-                                items: fitnessTime.map((String time) {
-                                  return DropdownMenuItem<String>(
-                                      value: time, child: Text(time));
-                                }).toList(),
-                                value: _selectedFreq,
-                                onChanged: (newFreq) {
-                                  setState(() {
-                                    _selectedFreq = newFreq;
-                                  });
-                                }),
-                          ),
-                        ),
-
-                        // ),
-
-                        //      ]
-                        //    ,
-                        //   )
-                      ],
                     ),
                     SizedBox(height: Config.xMargin(context, 4.5)),
                     Text(
@@ -321,12 +293,12 @@ class __AddFitnessState extends State<AddFitness> {
                         IconButton(
                             color: Theme.of(context).primaryColor,
                             icon: Icon(
-                              Icons.add_circle,
+                              Icons.remove_circle,
                               size: 30,
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily++;
+                                minDaily--;
                               });
                             }),
                         Text(
@@ -338,12 +310,12 @@ class __AddFitnessState extends State<AddFitness> {
                         IconButton(
                             color: Theme.of(context).primaryColor,
                             icon: Icon(
-                              Icons.remove_circle,
+                              Icons.add_circle,
                               size: 30,
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily--;
+                                minDaily++;
                               });
                             }),
                       ],
@@ -429,8 +401,8 @@ class __AddFitnessState extends State<AddFitness> {
                         onPressed: () {
                           switch (appBar) {
                             case 'Add Fitness Reminder':
-                              if (nameController.text.isNotEmpty) {
-                                print('${nameController.text}');
+                              if (descController.text.isNotEmpty) {
+                                print('${descController.text}');
 
                                 var difference =
                                     endDate.difference(startDate).inHours;
@@ -451,7 +423,7 @@ class __AddFitnessState extends State<AddFitness> {
                                       endDate: endDate,
                                       startDate: startDate,
                                       index: index,
-                                      name: nameController.text,
+                                      description: descController.text,
                                       minsperday: minDaily,
                                       fitnessfreq: _selectedFreq,
                                       fitnesstype:
@@ -460,7 +432,7 @@ class __AddFitnessState extends State<AddFitness> {
                                   fitnessNotificationManager
                                       .showFitnessNotificationOnce(
                                           id,
-                                          "It's time to go ${nameController.text}",
+                                          "It's time to go ${descController.text}",
                                           "For $minDaily minutes",
                                           getDateTime());
                                   print(id);
@@ -477,8 +449,8 @@ class __AddFitnessState extends State<AddFitness> {
 
                             ///begining of eedittingi functionality or something like that
                             case 'Edit Fitness Reminder':
-                              if (nameController.text.isNotEmpty) {
-                                print('${nameController.text}');
+                              if (descController.text.isNotEmpty) {
+                                print('${descController.text}');
 
                                 var difference =
                                     endDate.difference(startDate).inHours;
@@ -499,7 +471,7 @@ class __AddFitnessState extends State<AddFitness> {
                                       endDate: endDate,
                                       startDate: startDate,
                                       index: index,
-                                      name: nameController.text,
+                                      description: descController.text,
                                       minsperday: minDaily,
                                       fitnessfreq: _selectedFreq,
                                       fitnesstype:
@@ -509,7 +481,7 @@ class __AddFitnessState extends State<AddFitness> {
                                   fitnessNotificationManager
                                       .showFitnessNotificationOnce(
                                           id,
-                                          "It's time to go ${nameController.text}",
+                                          "It's time to go ${descController.text}",
                                           "For $minDaily minutes",
                                           getDateTime());
                                   print(id);
@@ -648,6 +620,44 @@ class __AddFitnessState extends State<AddFitness> {
           ),
         );
       },
+    );
+  }
+
+  Widget buildImageContainer(int index) {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
+    return GestureDetector(
+      onTap: () {
+        model.onSelectedFitnessImage(index);
+        print(model.updateSelectedIndex(index));
+      },
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
+              margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
+              height: Config.yMargin(context, 10),
+              width: Config.xMargin(context, 18),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: model.selectedIndex == index
+                    ? Theme.of(context).primaryColor
+                    : Color(0xffFCEDB8),
+              ),
+              child: Image(
+                image: AssetImage(model.activityType[index]),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Expanded(
+              child: Text(
+            model.fitnessType[index],
+            style: TextStyle(fontSize: 12),
+          )),
+        ],
+      ),
     );
   }
 }
