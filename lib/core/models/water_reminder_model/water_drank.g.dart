@@ -1,33 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_model.dart';
+part of 'water_drank.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserAdapter extends TypeAdapter<User> {
+class WaterDrankAdapter extends TypeAdapter<WaterDrank> {
   @override
-  int get typeId => 4;
+  int get typeId => 5;
   @override
-  User read(BinaryReader reader) {
+  WaterDrank read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return User(
-      name: fields[0] as String,
-      id: fields[1] as String,
+    return WaterDrank(
+      ml: fields[0] as int,
+      dateTime: fields[1] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(BinaryWriter writer, WaterDrank obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.ml)
       ..writeByte(1)
-      ..write(obj.id);
+      ..write(obj.dateTime);
   }
 }

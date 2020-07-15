@@ -55,7 +55,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.data.name,
+                widget.data.description,
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: Config.textSize(context, 5.3),

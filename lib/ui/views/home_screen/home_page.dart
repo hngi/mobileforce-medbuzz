@@ -3,6 +3,7 @@ import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
@@ -72,7 +73,8 @@ class _HomePageState extends State<HomePage> {
 
     var medicationDB = Provider.of<MedicationData>(context);
     medicationDB.getMedicationReminder();
-
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    waterTakenDB.getWaterTaken();
     var appointmentDB = Provider.of<AppointmentData>(context);
     appointmentDB.getAppointments();
 
@@ -179,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '${waterReminderDB.currentLevel}ml',
+                                              '${waterTakenDB.currentLevel}ml',
                                               style: TextStyle(
                                                 fontSize:
                                                     Config.textSize(context, 4),
@@ -188,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                             Text(
-                                              ' of ${waterReminderDB.totalLevel}ml',
+                                              ' of ${waterTakenDB.totalLevel}ml',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize:
@@ -206,8 +208,8 @@ class _HomePageState extends State<HomePage> {
                                 progressBarColor:
                                     Theme.of(context).primaryColor,
                                 title: 'Water Tracker',
-                                progress: waterReminderDB.currentLevel,
-                                total: waterReminderDB.totalLevel,
+                                progress: waterTakenDB.currentLevel,
+                                total: waterTakenDB.totalLevel,
                                 width: width,
                                 height: height * 0.02),
                           ),

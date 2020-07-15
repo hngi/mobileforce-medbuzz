@@ -48,12 +48,12 @@ class AllRemindersScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamed(context, RouteNames.homePage);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pushNamed(context, RouteNames.homePage);
+        //   },
+        // ),
         automaticallyImplyLeading: false,
         centerTitle: true,
         //leading: BackButton(color: Theme.of(context).primaryColorDark),
@@ -227,7 +227,7 @@ class AllRemindersScreen extends StatelessWidget {
                                             allReminders
                                                 .fitnessRemindersBasedOnDateTime[
                                                     index]
-                                                .name,
+                                                .description,
                                             style: TextStyle(
                                                 fontSize:
                                                     Config.textSize(context, 4),
