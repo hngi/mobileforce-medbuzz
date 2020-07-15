@@ -143,9 +143,10 @@ class WaterScheduleViewScreen extends StatelessWidget {
                             child: CircularProgressIndicator(
                                 backgroundColor: Color(0xffE5E5E5),
                                 valueColor: AlwaysStoppedAnimation(
-                                    Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(waterTakenDB.progress)),
+                                    Theme.of(context).primaryColor.withOpacity(
+                                        waterTakenDB.progress > 1
+                                            ? 1
+                                            : waterTakenDB.progress)),
                                 value: waterTakenDB.progress,
                                 strokeWidth: width * 0.04),
                           ),
@@ -211,78 +212,81 @@ class WaterScheduleViewScreen extends StatelessWidget {
                       visible: waterTakenDB.waterTakenCount > 0,
                       child: Text('Water Log')),
                   SizedBox(height: Config.yMargin(context, 0)),
-                  Column(
-                    children: waterTakenDB.waterTaken
-                        .map((ml) => GestureDetector(
-                              onTap: () =>
-                                  waterReminder.updateSelectedMl(ml.ml),
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    top: Config.yMargin(context, 1.5)),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: Config.yMargin(context, 2),
-                                  horizontal: Config.yMargin(context, 3),
-                                ),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Theme.of(context)
-                                          .primaryColorDark
-                                          .withOpacity(0.03),
-                                      blurRadius: 2,
-                                      spreadRadius: 2,
-                                      offset: Offset(0, 3),
-                                    )
-                                  ],
-                                  color: Theme.of(context).primaryColorLight,
-                                  borderRadius:
-                                      BorderRadius.circular(width * 0.03),
-                                ),
-                                alignment: Alignment.center,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    // Text(
-                                    //   '${ml.ml}' + 'ml',
-                                    //   style: waterReminder.gridItemTextStyle(
-                                    //       context, ml.ml),
-                                    // ),
-                                    // SizedBox(height: height * 0.01),
-                                    Text(
-                                        DateFormat.jm()
-                                            .format(ml.dateTime)
-                                            .toString(),
-                                        // ml.dateTime.toString(),
-                                        style: waterReminder
-                                            .gridItemTextStyle(context, ml.ml)
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .primaryColorDark
-                                                    .withOpacity(0.7))),
-                                    GestureDetector(
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Theme.of(context)
-                                              .primaryColorDark
-                                              .withOpacity(0.7),
-                                          size: waterReminder
+                  Container(
+                    child: Column(
+                      children: waterTakenDB.waterTaken
+                          .map((ml) => GestureDetector(
+                                onTap: () =>
+                                    waterReminder.updateSelectedMl(ml.ml),
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      top: Config.yMargin(context, 1.5)),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: Config.yMargin(context, 2),
+                                    horizontal: Config.yMargin(context, 3),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .primaryColorDark
+                                            .withOpacity(0.03),
+                                        blurRadius: 2,
+                                        spreadRadius: 2,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ],
+                                    color: Theme.of(context).primaryColorLight,
+                                    borderRadius:
+                                        BorderRadius.circular(width * 0.03),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      // Text(
+                                      //   '${ml.ml}' + 'ml',
+                                      //   style: waterReminder.gridItemTextStyle(
+                                      //       context, ml.ml),
+                                      // ),
+                                      // SizedBox(height: height * 0.01),
+                                      Text(
+                                          DateFormat.jm()
+                                              .format(ml.dateTime)
+                                              .toString(),
+                                          // ml.dateTime.toString(),
+                                          style: waterReminder
                                               .gridItemTextStyle(context, ml.ml)
-                                              .fontSize,
-                                        ),
-                                        onTap: () async {
-                                          // print('del');
-                                          await waterTakenDB
-                                              .deleteWaterTaken(
-                                                  ml.dateTime.toString())
-                                              .then((value) =>
-                                                  waterTakenDB.getWaterTaken());
-                                        })
-                                  ],
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColorDark
+                                                      .withOpacity(0.7))),
+                                      GestureDetector(
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Theme.of(context)
+                                                .primaryColorDark
+                                                .withOpacity(0.7),
+                                            size: waterReminder
+                                                .gridItemTextStyle(
+                                                    context, ml.ml)
+                                                .fontSize,
+                                          ),
+                                          onTap: () async {
+                                            // print('del');
+                                            await waterTakenDB
+                                                .deleteWaterTaken(
+                                                    ml.dateTime.toString())
+                                                .then((value) => waterTakenDB
+                                                    .getWaterTaken());
+                                          })
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ))
-                        .toList(),
+                              ))
+                          .toList(),
+                    ),
                   ),
                   SizedBox(height: Config.yMargin(context, 20)),
 
