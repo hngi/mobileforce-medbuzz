@@ -76,18 +76,19 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
               height: height * 0.08,
               width: height * 0.08,
               child: FloatingActionButton(
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColorLight,
-                    size: Config.xMargin(context, 9),
-                  ),
-                  backgroundColor: Theme.of(context).buttonColor,
-                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                  //Navigate to fitness reminder creation screen
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context, RouteNames.fitnessDescriptionScreen);
-                  }),
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).primaryColorLight,
+                  size: Config.xMargin(context, 9),
+                ),
+                backgroundColor: Theme.of(context).buttonColor,
+                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                //Navigate to fitness reminder creation screen
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, RouteNames.fitnessDescriptionScreen);
+                },
+              ),
             ),
           ),
         ),
@@ -98,13 +99,14 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
         title: Text('Fitness',
             style: TextStyle(color: Theme.of(context).primaryColorDark)),
         leading: IconButton(
-            icon: Icon(Icons.keyboard_backspace,
-                color: Theme.of(context).primaryColorDark),
+          icon: Icon(Icons.keyboard_backspace,
+              color: Theme.of(context).primaryColorDark),
 
-            //Function to navigate to previous screen or home screen (as the case maybe) goes here
-            onPressed: () {
-              Navigator.pushNamed(context, RouteNames.homePage);
-            }),
+          //Function to navigate to previous screen or home screen (as the case maybe) goes here
+          onPressed: () {
+            Navigator.pushNamed(context, RouteNames.homePage);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         controller: controller,
@@ -157,13 +159,33 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return FitnessCard(
-                      fitnessReminder: fitnessDB.fitnessReminder[index],
-                      fitnessType: fitnessDB.fitnessReminder[index].fitnesstype,
-                      startDate:
-                          fitnessDB.fitnessReminder[index].startDate.toString(),
-                      endDate:
-                          fitnessDB.fitnessReminder[index].endDate.toString(),
+                    return GestureDetector(
+                      onTap: () {
+                        print('happened');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SingleFitnessScreen(
+                              data: fitnessDB.fitnessReminder[index],
+                            ),
+                          ),
+                          // RouteNames.singleFitnessScreen,
+                          // arguments: SingleFitnessScreen(
+                          //   data: fitnessDB.fitnessReminder[index],
+                          // ),
+                        );
+                      },
+                      child: InkWell(
+                        child: FitnessCard(
+                          fitnessReminder: fitnessDB.fitnessReminder[index],
+                          fitnessType:
+                              fitnessDB.fitnessReminder[index].fitnesstype,
+                          startDate: fitnessDB.fitnessReminder[index].startDate
+                              .toString(),
+                          endDate: fitnessDB.fitnessReminder[index].endDate
+                              .toString(),
+                        ),
+                      ),
                     );
                   },
                   itemCount: fitnessDB.fitnessReminder.length,
