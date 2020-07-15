@@ -8,12 +8,10 @@ import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:device_preview/device_preview.dart';
 
 import 'core/models/water_reminder_model/water_reminder.dart';
 
@@ -47,7 +45,6 @@ class MaterialAPP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: DevicePreview.appBuilder, // <--- Add the builder
       debugShowCheckedModeBanner: false,
       title: 'MedBuzz',
       theme: Provider.of<DarkModeModel>(context).appTheme,
