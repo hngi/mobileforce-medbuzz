@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
+import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../size_config/config.dart';
@@ -54,7 +55,13 @@ class WaterScheduleViewScreen extends StatelessWidget {
                   heroTag: 'edit',
                   elevation: 0,
                   onPressed: () {
-                    print('hi');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScheduleWaterReminderScreen(
+                                selectedWaterReminder:
+                                    waterReminderDB.waterReminders[0],
+                                isEdit: true)));
                   },
                   backgroundColor: Theme.of(context).primaryColor,
                   child: Icon(
@@ -200,7 +207,9 @@ class WaterScheduleViewScreen extends StatelessWidget {
                         width: width,
                         waterReminder: waterReminder),
                   SizedBox(height: Config.yMargin(context, 5)),
-                  Text('Water Log'),
+                  Visibility(
+                      visible: waterTakenDB.waterTakenCount > 0,
+                      child: Text('Water Log')),
                   SizedBox(height: Config.yMargin(context, 0)),
                   Column(
                     children: waterTakenDB.waterTaken
@@ -241,10 +250,10 @@ class WaterScheduleViewScreen extends StatelessWidget {
                                     // ),
                                     // SizedBox(height: height * 0.01),
                                     Text(
-                                        // DateFormat.jm()
-                                        //     .format(ml.dateTime)
-                                        //     .toString(),
-                                        ml.dateTime.toString(),
+                                        DateFormat.jm()
+                                            .format(ml.dateTime)
+                                            .toString(),
+                                        // ml.dateTime.toString(),
                                         style: waterReminder
                                             .gridItemTextStyle(context, ml.ml)
                                             .copyWith(

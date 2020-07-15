@@ -52,7 +52,12 @@ class _WaterCardState extends State<WaterReminderCard> {
       child: GestureDetector(
         //Navigate to screen with single reminder i.e the on user clicked on
         onTap: () {
-          setState(() => isSelected = !isSelected);
+          // setState(() => isSelected = !isSelected);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SingleWater(water: widget.waterReminder)));
         },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/notifications/water_notification_manager.dart';
 import 'schedule_water_reminder_model.dart';
@@ -30,6 +32,8 @@ class _SingleWaterState extends State<SingleWater> {
 
   @override
   Widget build(BuildContext context) {
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    waterTakenDB.getWaterTaken();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -109,7 +113,7 @@ class _SingleWaterState extends State<SingleWater> {
                         padding:
                             EdgeInsets.only(top: Config.yMargin(context, 1.0)),
                         child: Text(
-                          'A quick run from home to the estate junction and back home',
+                          widget.water.description ?? 'No description given',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -131,26 +135,39 @@ class _SingleWaterState extends State<SingleWater> {
                             EdgeInsets.only(top: Config.yMargin(context, 1)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Once Daily',
+                              'Every ${widget.water.interval} minute(s) Daily',
                               style: TextStyle(
                                 fontSize: Config.textSize(context, 4),
                               ),
                             ),
-                            Text(
-                              "10:00AM",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: Config.textSize(context, 3.6),
-                              ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  "Wake Time: ${DateFormat.jm().format(widget.water.startTime)}",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Config.textSize(context, 3.6),
+                                  ),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 2)),
+                                Text(
+                                  "Sleep Time: ${DateFormat.jm().format(widget.water.endTime)}",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Config.textSize(context, 3.6),
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),
                       ),
                       SizedBox(height: Config.yMargin(context, 10)),
                       Text(
-                        'Length',
+                        'Progress',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 4.5),
@@ -161,7 +178,7 @@ class _SingleWaterState extends State<SingleWater> {
                         padding:
                             EdgeInsets.only(top: Config.yMargin(context, 1.0)),
                         child: Text(
-                          '4 days left out of 30 days',
+                          '${waterTakenDB.progress >= 1 ? '0' : waterTakenDB.totalLevel - waterTakenDB.currentLevel} ml left out of ${waterTakenDB.totalLevel} ml',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -224,9 +241,11 @@ class _SingleWaterState extends State<SingleWater> {
       builder: (BuildContext context) {
         WaterNotificationManager waterNotificationManager =
             WaterNotificationManager();
-        var waterReminderDB =
+        var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+        waterTakenDB.getWaterTaken();
+        var waterReminder =
             Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
-        var waterReminderData =
+        var waterReminderDB =
             Provider.of<WaterReminderData>(context, listen: true);
         // return object of type Dialog
         return Dialog(
@@ -287,15 +306,30 @@ class _SingleWaterState extends State<SingleWater> {
                         width: Config.xMargin(context, 30.0),
                         child: FlatButton(
                           onPressed: () {
-                            waterReminderData
-                                .deleteWaterReminder(widget.water.id);
-                            waterNotificationManager
-                                .removeReminder(waterReminderDB.selectedDay);
+                            var diff = widget.water.endTime
+                                .difference(widget.water.startTime)
+                                .inMinutes;
+
+                            double numb = diff / widget.water.interval;
+                            for (var i = 1; i < numb + 1; i++) {
+                              var timeValue = widget.water.startTime.add(
+                                Duration(
+                                    minutes:
+                                        i == 1 ? 0 : widget.water.interval * i),
+                              );
+                              waterNotificationManager.removeReminder(
+                                  widget.water.startTime.day +
+                                      timeValue.minute +
+                                      60);
+                            }
+                            waterTakenDB.deleteAllWaterTaken();
+                            waterReminderDB
+                                .deleteWaterReminder(widget.water.id)
+                                .then((val) => Navigator.pushNamed(
+                                    context, RouteNames.waterScheduleView));
                             // showSnackBar(context);
-                            Future.delayed(Duration(seconds: 1), () {
-                              Navigator.pushNamed(
-                                  context, RouteNames.waterScheduleView);
-                            });
+                            // Future.delayed(Duration(seconds: 1), () {
+                            // });
                           },
                           child: Text(
                             "Delete",

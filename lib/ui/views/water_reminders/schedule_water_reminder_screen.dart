@@ -1,4 +1,6 @@
 import 'package:MedBuzz/core/database/user_db.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
+import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
@@ -12,12 +14,16 @@ import '../../../core/notifications/water_notification_manager.dart';
 class ScheduleWaterReminderScreen extends StatelessWidget {
   //values of water measures - stored as int in case of any need to calculate
   static const routeName = 'schedule-water-reminder';
+  final bool isEdit;
+  final WaterReminder selectedWaterReminder;
   final ItemScrollController _scrollController = ItemScrollController();
-  ScheduleWaterReminderScreen();
+  // ScheduleWaterReminderScreen();
   final TextEditingController descriptionTextController =
       TextEditingController();
   final TextEditingController intervalTextController = TextEditingController();
   final TextEditingController mlTextController = TextEditingController();
+  ScheduleWaterReminderScreen(
+      {this.selectedWaterReminder, this.isEdit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +33,21 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
     var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
     waterReminderDB.getWaterReminders();
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    waterTakenDB.getWaterTaken();
     WaterNotificationManager waterNotificationManager =
         WaterNotificationManager();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       waterReminder.updateAvailableReminders(waterReminderDB.waterReminders);
+      if (isEdit) {
+        // waterReminder.updateSelectedMl(selectedWaterReminder.ml);
+        // waterReminder
+        //     .updateSelectedDay(selectedWaterReminder.startTime.day - 1);
+        // waterReminder.updateSelectedMonth(selectedWaterReminder.startTime.month);
+        // waterReminder.updateSelectedMl(selectedWaterReminder.ml);
+        // waterReminder.updateSelectedMl(selectedWaterReminder.ml);
+        // waterReminder.updateSelectedMl(selectedWaterReminder.ml);
+      }
     });
 
     double height = MediaQuery.of(context).size.height;
@@ -40,7 +57,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
         appBar: AppBar(
           leading: BackButton(color: Theme.of(context).primaryColorDark),
           title: Text(
-            'Add a water reminder',
+            '${!isEdit ? 'Add a' : 'Edit'} water reminder',
             style: TextStyle(color: Theme.of(context).primaryColorDark),
           ),
           elevation: 0,
@@ -55,7 +72,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                   child: DropdownButton(
                     isExpanded: false, icon: Icon(Icons.expand_more),
                     // here sets the value to the selected month and if null, it defaults to the present date month from DateTime.now()
-                    value: waterReminder.currentMonth,
+                    value: isEdit
+                        ? monthValues[selectedWaterReminder.startTime.month - 1]
+                            .month
+                        : waterReminder.currentMonth,
                     hint: Text(
                       'Month',
                       textAlign: TextAlign.center,
@@ -82,7 +102,9 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                   height: height * 0.15,
                   child: ScrollablePositionedList.builder(
                     //sets default selected day to the index of Date.now() date
-                    initialScrollIndex: waterReminder.selectedDay - 1,
+                    initialScrollIndex: isEdit
+                        ? selectedWaterReminder.startTime.day - 1
+                        : waterReminder.selectedDay - 1,
                     itemScrollController: _scrollController,
                     //dynamically sets the itemCount to the number of days in the currently selected month
                     itemCount: waterReminder.daysInMonth,
@@ -99,7 +121,20 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         child: Container(
                           width: width * 0.2,
                           decoration: BoxDecoration(
-                            color: waterReminder.getButtonColor(context, index),
+                            color: isEdit
+                                ? index ==
+                                            selectedWaterReminder
+                                                    .startTime.day -
+                                                1 ||
+                                        waterReminder.isActive(index)
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                        .primaryColorDark
+                                        .withOpacity(0.07)
+                                : waterReminder.getButtonColor(
+                                    context,
+                                    index,
+                                  ),
                             borderRadius: BorderRadius.circular(height * 0.04),
                           ),
                           alignment: Alignment.center,
@@ -136,7 +171,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Start Time',
+                        'Wake Time',
                         style: TextStyle(
                           fontSize: Config.textSize(context, 4),
                           fontWeight: FontWeight.normal,
@@ -149,6 +184,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         child: Container(
                           // height: height * 0.15,
                           child: TimeWheel(
+                            initialValue: selectedWaterReminder?.startTime,
                             updateTimeChanged: (val) =>
                                 waterReminder.updateSelectedStartTime(val),
                           ),
@@ -166,7 +202,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'End Time',
+                        'Sleep Time',
                         style: TextStyle(
                           fontSize: Config.textSize(context, 4),
                           fontWeight: FontWeight.normal,
@@ -179,6 +215,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                         child: Container(
                           // height: height * 0.15,
                           child: TimeWheel(
+                            initialValue: selectedWaterReminder?.endTime,
                             updateTimeChanged: (val) =>
                                 waterReminder.updateSelectedEndTime(val),
                           ),
@@ -205,8 +242,9 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         maxLines: 1,
-                        initialValue:
-                            waterReminder.selectedInterval?.toString() ?? '',
+                        initialValue: !isEdit
+                            ? waterReminder.selectedInterval?.toString() ?? ''
+                            : selectedWaterReminder.interval.toString(),
                         onChanged: (val) => waterReminder
                             .updateSelectedInterval(int.parse(val)),
                         // controller: intervalTextController,
@@ -306,7 +344,9 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                       TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: 5,
-                        initialValue: waterReminder.description ?? '',
+                        initialValue: isEdit
+                            ? selectedWaterReminder.description
+                            : waterReminder.description ?? '',
                         // controller: descriptionTextController,
                         onChanged: (val) =>
                             waterReminder.updateDescription(val),
@@ -367,8 +407,23 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                           ? () async {
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
                               await waterReminderDB
-                                  .addWaterReminder(
-                                      waterReminder.createSchedule())
+                                  .addWaterReminder(!isEdit
+                                      ? waterReminder.createSchedule()
+                                      : WaterReminder(
+                                          description:
+                                              waterReminder.description,
+                                          ml: waterReminder.selectedMl ??
+                                              selectedWaterReminder.ml,
+                                          startTime: waterReminder
+                                                  ?.getDateTime() ??
+                                              selectedWaterReminder.startTime,
+                                          id: DateTime.now().toString(),
+                                          endTime:
+                                              waterReminder?.getEndDateTime() ??
+                                                  selectedWaterReminder.endTime,
+                                          interval: waterReminder
+                                                  ?.selectedInterval ??
+                                              selectedWaterReminder.interval))
                                   .then((val) {
                                 var diff = waterReminder
                                     .getEndDateTime()
@@ -391,6 +446,16 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                                               .selectedInterval *
                                                           i),
                                             );
+                                    if (isEdit) {
+                                      // waterTakenDB.deleteAll();
+                                      // for (var reminder in waterReminderDB.waterReminders) {
+
+                                      waterNotificationManager.removeReminder(
+                                          selectedWaterReminder.startTime.day +
+                                              timeValue.minute +
+                                              60);
+                                      // }
+                                    }
                                     waterNotificationManager.showWaterNotificationDaily(
                                         id: waterReminder.selectedDay +
                                             timeValue.minute +
@@ -402,6 +467,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                         dateTime: timeValue);
                                   }
                                 }
+                                isEdit
+                                    ? waterReminderDB.deleteWaterReminder(
+                                        selectedWaterReminder.id)
+                                    : null;
                                 // print(numb.floor());
                                 Navigator.of(context).pop();
                               });

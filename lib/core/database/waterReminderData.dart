@@ -52,7 +52,7 @@ class WaterReminderData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteWaterReminder(key) async {
+  Future<void> deleteWaterReminder(key) async {
     try {
       var box = await Hive.openBox<WaterReminder>(_boxName);
 

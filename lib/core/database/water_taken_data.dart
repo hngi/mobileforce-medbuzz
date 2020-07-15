@@ -71,6 +71,27 @@ class WaterTakenData extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteAllWaterTaken() async {
+    try {
+      await Hive.openBox<WaterDrank>(_boxName).then((value) async {
+        for (var item in _waterTaken) {
+          await deleteWaterTaken(item.dateTime.toString());
+        }
+      });
+
+      //delete the water reminder
+      // print(box.get(key));
+      // box.close();
+      // getWaterTaken();
+      // then reinitialise the water reminders
+      // _waterTaken = box.values.toList();
+
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void editWaterReminder({WaterDrank waterDrank, String waterDrankKey}) async {
     var box = await Hive.openBox<WaterDrank>(_boxName);
 

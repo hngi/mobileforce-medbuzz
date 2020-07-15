@@ -69,7 +69,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   DateTime get selectedDateTime =>
       DateTime(_today.year, _selectedMonth, _selectedDay);
 
-  Color getButtonColor(BuildContext context, index) {
+  Color getButtonColor(BuildContext context, index, {bool override = false}) {
     return isActive(index)
         ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColorDark.withOpacity(0.05);
