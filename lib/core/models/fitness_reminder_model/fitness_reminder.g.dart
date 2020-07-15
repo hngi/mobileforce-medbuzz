@@ -8,7 +8,7 @@ part of 'fitness_reminder.dart';
 
 class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
   @override
-  int get typeId => 3;
+  int get typeId => 2;
   @override
   FitnessReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();

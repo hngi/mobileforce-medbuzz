@@ -48,12 +48,12 @@ class AllRemindersScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamed(context, RouteNames.homePage);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pushNamed(context, RouteNames.homePage);
+        //   },
+        // ),
         automaticallyImplyLeading: false,
         centerTitle: true,
         //leading: BackButton(color: Theme.of(context).primaryColorDark),
