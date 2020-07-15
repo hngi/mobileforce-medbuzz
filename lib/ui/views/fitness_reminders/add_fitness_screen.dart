@@ -156,7 +156,53 @@ class __AddFitnessState extends State<AddFitness> {
                       ),
                     ),
 //
-                    Text(
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Config.xMargin(context, 7)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Description',
+                            style: TextStyle(
+                                fontSize: Config.textSize(context, 5),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: Config.yMargin(context, 1.5)),
+                          TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 5,
+
+                            // controller: descriptionTextController,
+                            controller: descController,
+                            cursorColor: Theme.of(context).primaryColorDark,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: Config.xMargin(context, 5.5)),
+                            decoration: InputDecoration(
+                              hintText: 'Optional Description...',
+                              hintStyle: TextStyle(
+                                color: Theme.of(context).hintColor,
+                                fontSize: Config.xMargin(context, 4.5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                    Config.xMargin(context, 5))),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                    Config.xMargin(context, 5))),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColorDark),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /* Text(
                       'Description',
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
@@ -196,7 +242,7 @@ class __AddFitnessState extends State<AddFitness> {
                         ),
 //
                       ),
-                    ),
+                    ), */
                     SizedBox(height: Config.yMargin(context, 4.5)),
                     Text(
                       'Reminder Frequency',
