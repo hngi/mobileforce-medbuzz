@@ -313,11 +313,65 @@ class MedicationData extends ChangeNotifier {
     temp.removeWhere((element) {
       DateTime now = DateTime.now();
       DateTime endDate = element.endAt;
-      var difference = now.difference(endDate);
-      bool boolean = difference.inDays < 0;
-      print(difference.inDays);
+
+      DateTime endDateWithHourAndMin;
+      //Magic to add hour and minute to Element.endDate and assign to
+      switch (element.frequency) {
+        case 'Once':
+          endDateWithHourAndMin = DateTime.utc(endDate.year, endDate.month,
+              endDate.day, element.firstTime[0], element.firstTime[1]);
+          break;
+        case 'Twice':
+          List<int> latestTime;
+          //Code to check which time is the latest time
+          if (element.secondTime[0] > element.firstTime[0]) {
+            latestTime = element.secondTime;
+          } else if (element.secondTime[0] == element.firstTime[0]) {
+            if (element.secondTime[1] >= element.firstTime[1]) {
+              latestTime = element.secondTime;
+            } else {
+              latestTime = element.firstTime;
+            }
+          } else {
+            latestTime = element.firstTime;
+          }
+
+          endDateWithHourAndMin = DateTime.utc(endDate.year, endDate.month,
+              endDate.day, latestTime[0], latestTime[1]);
+          break;
+        case 'Thrice':
+          List<int> latest;
+          int first =
+              num.parse('${element.firstTime[0]}${element.firstTime[1]}');
+          int second =
+              num.parse('${element.secondTime[0]}${element.secondTime[1]}');
+          int third =
+              num.parse('${element.thirdTime[0]}${element.thirdTime[1]}');
+
+          latest = first > second
+              ? first > third ? element.firstTime : element.thirdTime
+              : second > third ? element.secondTime : element.thirdTime;
+
+          endDateWithHourAndMin = DateTime.utc(
+              endDate.year, endDate.month, endDate.day, latest[0], latest[1]);
+          break;
+        default:
+          throw Exception(
+              "Could not get frequency to use to add Hour & Minute");
+      }
+
+      //Code to make outdated schedule wait an hour before being deleted.
+      //So that notification can be seen before schedule is deleted
+      endDateWithHourAndMin = endDateWithHourAndMin.add(Duration(hours: 1));
+
+      bool boolean = now
+          .isAfter(endDateWithHourAndMin); //if true then schedule is outdated
 
       if (boolean) {
+        //TODO implement code to add outdated schdule to History db
+        //Whoever is doing the history stuff... dont touch any other logic here abeg. I use God beg you
+
+        //delete outdated schedule from medication database
         deleteSchedule(element.id);
         print('Deleting outdated Schedule: ${element.drugName}');
         print('Deleting its notifications');
@@ -341,7 +395,7 @@ class MedicationData extends ChangeNotifier {
     });
 
     //--End of Magic
-
+    // print(temp);
     medicationReminder = temp;
     notifyListeners();
   }
@@ -387,7 +441,7 @@ class MedicationData extends ChangeNotifier {
 
     medicationReminder = medicationReminderBox.values.toList();
     medicationReminderBox.delete(key);
-    medicationReminderBox.close();
+    // medicationReminderBox.close();
 
     notifyListeners();
   }
