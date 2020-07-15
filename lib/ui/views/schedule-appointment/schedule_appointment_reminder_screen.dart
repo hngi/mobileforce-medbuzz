@@ -17,9 +17,10 @@ class ScheduleAppointmentScreen extends StatefulWidget {
   final String payload;
   final Appointment appointment;
   final String buttonText;
+  final bool refresh;
 
   ScheduleAppointmentScreen(
-      {Key key, this.payload, this.appointment, this.buttonText})
+      {Key key, this.payload, this.appointment, this.buttonText, this.refresh})
       : super(key: key);
 
   @override
@@ -43,6 +44,14 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   void initState() {
     _updateMonth = appointmentModel.currentMonth;
     myFocusNode = FocusNode();
+
+    widget.refresh
+        ? Provider.of<ScheduleAppointmentModel>(context, listen: false)
+            .refresh()
+        : Provider.of<ScheduleAppointmentModel>(context, listen: false).preload(
+            _typeOfAppointmentController.text,
+            _noteController.text,
+          );
     super.initState();
   }
 
@@ -230,6 +239,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                             // Input for type of appointment
                             controller: _typeOfAppointmentController,
                             focusNode: myFocusNode,
+                            autofocus: true,
                           ),
                           SizedBox(
                             height: Config.yMargin(context, 2.43),
@@ -246,6 +256,7 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
                           TextField(
                             //Input field for additional notes
                             controller: _noteController,
+                            autofocus: true,
                             selectionHeightStyle: BoxHeightStyle.tight,
                             keyboardType: TextInputType.multiline,
                             maxLines: 9,

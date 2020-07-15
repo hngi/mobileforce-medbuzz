@@ -203,6 +203,7 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                             builder: (context) => ScheduleAppointmentScreen(
                                   appointment: widget.appointment,
                                   buttonText: 'Update',
+                                  refresh: false,
                                 )),
                       );
                     },

@@ -112,6 +112,18 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     return newAppointment;
   }
 
+  void refresh() {
+    this._typeOfAppointment = '';
+    this._note = '';
+    this._selectedTime = DateTime.now();
+  }
+
+  void preload(String typeOfAppointment, String note) {
+    this._typeOfAppointment = createSchedule().appointmentType;
+    this._note = createSchedule().note;
+    this._selectedTime = createSchedule().date;
+  }
+
   Appointment editSchedule() {
     var dayValue =
         selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
