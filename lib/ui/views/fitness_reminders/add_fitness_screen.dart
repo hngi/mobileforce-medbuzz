@@ -47,6 +47,15 @@ class __AddFitnessState extends State<AddFitness> {
     focusNode.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      //Get updated data from database
+      Provider.of<FitnessReminderCRUD>(context).getReminders();
+    });
+  }
+
   Navigation navigation = Navigation();
   final List activityType = [
     'images/cycle.png',
@@ -62,18 +71,11 @@ class __AddFitnessState extends State<AddFitness> {
   final FitnessModel fitnessModel;
 
 //Instantiating a SizeConfig object to handle responsiveness
-  String _selectedFreq = "Daily";
+
   Config config = Config();
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+
   TextEditingController descController = TextEditingController();
   FocusNode focusNode = FocusNode();
-  int index;
-  // int _selectedActivity = 0;
-  int selectedFitnessType = 0;
-  int minDaily = 60;
-  TimeOfDay activityTime = TimeOfDay.now();
-  int id = Random().nextInt(100);
 
   @override
   Widget build(BuildContext context) {
@@ -227,10 +229,10 @@ class __AddFitnessState extends State<AddFitness> {
                               return DropdownMenuItem<String>(
                                   value: time, child: Text(time));
                             }).toList(),
-                            value: _selectedFreq,
+                            value: model.selectedFreq,
                             onChanged: (newFreq) {
                               setState(() {
-                                _selectedFreq = newFreq;
+                                model.selectedFreq = newFreq;
                               });
                             }),
                       ),
@@ -259,7 +261,8 @@ class __AddFitnessState extends State<AddFitness> {
                                 focusColor: Theme.of(context).primaryColorLight,
                                 splashColor: Theme.of(context).primaryColor,
                                 child: Text(
-                                  localizations.formatTimeOfDay(activityTime),
+                                  localizations
+                                      .formatTimeOfDay(model.activityTime),
                                   style: TextStyle(
                                       fontSize: Config.xMargin(context, 4.2)),
                                 ),
@@ -298,11 +301,11 @@ class __AddFitnessState extends State<AddFitness> {
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily--;
+                                model.minDaily--;
                               });
                             }),
                         Text(
-                          '$minDaily',
+                          '${model.minDaily}',
                           style: TextStyle(
                             fontSize: Config.textSize(context, 4),
                           ),
@@ -315,7 +318,7 @@ class __AddFitnessState extends State<AddFitness> {
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily++;
+                                model.minDaily++;
                               });
                             }),
                       ],
@@ -334,7 +337,7 @@ class __AddFitnessState extends State<AddFitness> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Start - ${localizations.formatShortDate(startDate)}',
+                              'Start - ${localizations.formatShortDate(model.startDate)}',
                               style: TextStyle(
                                 fontSize: Config.xMargin(context, 4),
                               ),
@@ -363,7 +366,7 @@ class __AddFitnessState extends State<AddFitness> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'End  -  ${localizations.formatShortDate(endDate)}',
+                              'End  -  ${localizations.formatShortDate(model.endDate)}',
                               style: TextStyle(
                                   fontSize: Config.xMargin(context, 4)),
                             ),
@@ -393,122 +396,128 @@ class __AddFitnessState extends State<AddFitness> {
                       height: Config.yMargin(context, 5),
                     ),
                     Center(
-                        child: Container(
-                      height: Config.yMargin(context, 6.5),
-                      width: MediaQuery.of(context).size.width,
-                      child: FlatButton(
-                        //Navigate to home screen after saving details in db
-                        onPressed: () {
-                          switch (appBar) {
-                            case 'Add Fitness Reminder':
-                              if (descController.text.isNotEmpty) {
-                                print('${descController.text}');
-
-                                var difference =
-                                    endDate.difference(startDate).inHours;
-
-                                if (difference == 0) {
-                                  showSnackBar(context,
-                                      text:
-                                          "Start date should be different from end date");
-                                } else {
-//                                 navigation.pushFrom(
-//                                     context, );
-                                  var newReminder = FitnessReminder(
-                                      id: id.toString(),
-                                      activityTime: [
-                                        activityTime.hour,
-                                        activityTime.minute
-                                      ],
-                                      endDate: endDate,
-                                      startDate: startDate,
-                                      index: index,
-                                      description: descController.text,
-                                      minsperday: minDaily,
-                                      fitnessfreq: _selectedFreq,
-                                      fitnesstype:
-                                          selectedFitnessType.toString());
-                                  fitnessDB.addReminder(newReminder);
-                                  fitnessNotificationManager
-                                      .showFitnessNotificationOnce(
-                                          id,
-                                          "It's time to go ${descController.text}",
-                                          "For $minDaily minutes",
-                                          getDateTime());
-                                  print(id);
-                                  _successDialog();
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    Navigator.pushNamed(context,
-                                        RouteNames.fitnessSchedulesScreen);
-                                  });
-                                }
-                              } else {
-                                showSnackBar(context);
-                              }
-                              break;
-
-                            ///begining of eedittingi functionality or something like that
-                            case 'Edit Fitness Reminder':
-                              if (descController.text.isNotEmpty) {
-                                print('${descController.text}');
-
-                                var difference =
-                                    endDate.difference(startDate).inHours;
-
-                                if (difference == 0) {
-                                  showSnackBar(context,
-                                      text:
-                                          "Start date should be different from end date");
-                                } else {
-//                                 navigation.pushFrom(
-//                                     context, );
-                                  var newReminder = FitnessReminder(
-                                      id: id.toString(),
-                                      activityTime: [
-                                        activityTime.hour,
-                                        activityTime.minute
-                                      ],
-                                      endDate: endDate,
-                                      startDate: startDate,
-                                      index: index,
-                                      description: descController.text,
-                                      minsperday: minDaily,
-                                      fitnessfreq: _selectedFreq,
-                                      fitnesstype:
-                                          selectedFitnessType.toString());
-                                  fitnessDB.editReminder(newReminder);
-                                  fitnessNotificationManager.removeReminder(id);
-                                  fitnessNotificationManager
-                                      .showFitnessNotificationOnce(
-                                          id,
-                                          "It's time to go ${descController.text}",
-                                          "For $minDaily minutes",
-                                          getDateTime());
-                                  print(id);
-                                  _successDialog();
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    Navigator.pushNamed(context,
-                                        RouteNames.fitnessSchedulesScreen);
-                                  });
-                                }
-                              }
-                          }
-                        },
-                        child: Text(
-                          'Save',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Config.textSize(context, 5.5),
-                            color: Theme.of(context).backgroundColor,
+                      child: Container(
+                        height: Config.yMargin(context, 6.5),
+                        width: MediaQuery.of(context).size.width,
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  Config.xMargin(context, 3))),
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: Config.textSize(context, 5.5),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        color: Theme.of(context).primaryColor,
+                          //Navigate to home screen after saving details in db
+                          onPressed: () async {
+                            if (descController.text.isNotEmpty) {
+                              switch (appBar) {
+                                case 'Add Fitness Reminder':
+                                  print('${descController.text}');
+                                  FitnessReminder newReminder = FitnessReminder(
+                                      id: model.id.toString(),
+                                      activityTime: [
+                                        model.activityTime.hour,
+                                        model.activityTime.minute
+                                      ],
+                                      endDate: model.endDate,
+                                      startDate: model.startDate,
+                                      index: model.index,
+                                      description: model.updateDescription(
+                                          descController.text),
+                                      minsperday: model.minDaily,
+                                      fitnessfreq: model.selectedFreq,
+                                      fitnesstype: model
+                                          .fitnessType[model.selectedIndex]);
+                                  await fitnessDB.addReminder(newReminder);
 
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                Config.xMargin(context, 4.0))),
+//                                var difference =
+//                                    model.endDate.difference(model.startDate).inHours;
+//
+//                                if (difference == 0) {
+//                                  showSnackBar(context,
+//                                      text:
+//                                          "Start date should be different from end date");
+//                                } else
+////                                  {
+//////                                 navigation.pushFrom(
+//////                                     context, );
+////
+////                                  fitnessNotificationManager
+////                                      .showFitnessNotificationOnce(
+////                                          model.id,
+////                                          "It's time to go ${descController.text}",
+////                                          "For ${model.minDaily} minutes",
+////                                          getDateTime());
+////                                  print(id);
+////                                  _successDialog();
+////                                  Future.delayed(Duration(seconds: 2), () {
+////                                    Navigator.pushNamed(context,
+////                                        RouteNames.fitnessSchedulesScreen);
+////                                  });
+////                                }
+//                              } else {
+//                                showSnackBar(context);
+                                  break;
+
+//                            ///begining of eedittingi functionality or something like that
+//                            case 'Edit Fitness Reminder':
+//                              if (descController.text.isNotEmpty) {
+//                                print('${descController.text}');
+//
+//                                var difference =
+//                                    model.endDate.difference(model.startDate).inHours;
+//
+//                                if (difference == 0) {
+//                                  showSnackBar(context,
+//                                      text:
+//                                          "Start date should be different from end date");
+//                                } else {
+////                                 navigation.pushFrom(
+////                                     context, );
+//                                  var newReminder = FitnessReminder(
+//                                      id: model.id.toString(),
+//                                      activityTime: [
+//                                        model.activityTime.hour,
+//                                        model.activityTime.minute
+//                                      ],
+//                                      endDate: model.endDate,
+//                                      startDate: model.startDate,
+//                                      index: model.index,
+//                                      description: descController.text,
+//                                      minsperday: model.minDaily,
+//                                      fitnessfreq: model.selectedFreq,
+//                                      fitnesstype:
+//                                          model.fitnessType[model.selectedIndex]);
+//                                  fitnessDB.editReminder(newReminder);
+//    break;
+//                                  fitnessNotificationManager.removeReminder(id);
+//                                  fitnessNotificationManager
+//                                      .showFitnessNotificationOnce(
+//                                          id,
+//                                          "It's time to go ${descController.text}",
+//                                          "For $minDaily minutes",
+//                                          getDateTime());
+//                                  print(id);
+
+//                                  _successDialog();
+//                                  Future.delayed(Duration(seconds: 2), () {
+//                                    Navigator.pushNamed(context,
+//                                        RouteNames.fitnessSchedulesScreen);
+//                                  });
+
+                              }
+                              Navigator.popAndPushNamed(
+                                  context, RouteNames.fitnessSchedulesScreen);
+                            }
+                          },
+                        ),
                       ),
-                    )),
+                    ),
                     SizedBox(
                       height: Config.yMargin(context, 5),
                     ),
@@ -522,25 +531,26 @@ class __AddFitnessState extends State<AddFitness> {
     );
   }
 
-  getDateTime() {
-    final now = new DateTime.now();
-    return DateTime(
-        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
-  }
+//  getDateTime() {
+//    final now = new DateTime.now();
+//    return DateTime(
+//        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
+//  }
 
   Future<Null> selectTime(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
     TimeOfDay currentTime = TimeOfDay.now();
     TimeOfDay selectedTime = await showTimePicker(
       context: context,
-      initialTime: activityTime,
+      initialTime: model.activityTime,
     );
-    bool today = startDate.difference(DateTime.now()) == 0;
+    bool today = model.startDate.difference(DateTime.now()) == 0;
     if (today && selectedTime.hour < currentTime.hour) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedTime != null && selectedTime != activityTime) {
+      if (selectedTime != null && selectedTime != model.activityTime) {
         setState(() {
-          activityTime = selectedTime;
+          model.activityTime = selectedTime;
         });
       }
     }
@@ -563,39 +573,43 @@ class __AddFitnessState extends State<AddFitness> {
   }
 
   Future<Null> selectStartDate(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
     final DateTime selectedDate = await showDatePicker(
         context: context,
-        initialDate: startDate,
-        firstDate: DateTime(startDate.year),
-        lastDate: DateTime(startDate.year + 1));
-    if (selectedDate.difference(startDate).inDays < 0) {
+        initialDate: model.startDate,
+        firstDate: DateTime(model.startDate.year),
+        lastDate: DateTime(model.startDate.year + 1));
+    if (selectedDate.difference(model.startDate).inDays < 0) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedDate != null && selectedDate != startDate) {
+      if (selectedDate != null && selectedDate != model.startDate) {
         setState(() {
-          startDate = selectedDate;
+          model.startDate = selectedDate;
         });
 
-        print('$startDate');
+        print('${model.startDate}');
       }
     }
   }
 
   Future<Null> selectEndDate(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
     final DateTime selectedDate = await showDatePicker(
         context: context,
-        initialDate: endDate,
-        firstDate: DateTime(endDate.year),
-        lastDate: DateTime(endDate.year + 1));
-    if (selectedDate.difference(endDate).inDays < 0) {
+        initialDate: model.endDate,
+        firstDate: DateTime(model.endDate.year),
+        lastDate: DateTime(model.endDate.year + 1));
+    if (selectedDate.difference(model.endDate).inDays < 0) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedDate != null && selectedDate != endDate) {
+      if (selectedDate != null && selectedDate != model.endDate) {
         setState(() {
-          endDate = selectedDate;
+          model.endDate = selectedDate;
         });
 
-        print('$startDate');
+        print('${model.startDate}');
       }
     }
   }
