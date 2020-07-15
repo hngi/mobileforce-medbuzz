@@ -1,3 +1,4 @@
+import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/fitness_reminder_model/fitness_reminder.dart';
@@ -15,6 +16,18 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int selectedIndex = 0;
   String selectedfitnessType = 'images/jogging.png';
   String description;
+
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  int index;
+  // int _selectedActivity = 0;
+  int selectedFitnessType = 0;
+  int minDaily = 60;
+  TimeOfDay activityTime = TimeOfDay.now();
+//  int id = Random().nextInt(100);
+  DateTime id = DateTime.now();
+
+  String selectedFreq = "Daily";
 
   dynamic get selectedTime => _selectedTime;
   List<FitnessReminder> _fitnessReminder = [];
@@ -73,7 +86,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
     return _fitnessReminder[index];
   }
 
-  void addReminder(FitnessReminder reminder) async {
+  Future<void> addReminder(FitnessReminder reminder) async {
     var box = await Hive.openBox<FitnessReminder>(_boxName);
     await box.put(reminder.id, reminder);
     _fitnessReminder = box.values.toList();
