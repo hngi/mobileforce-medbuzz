@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
+import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,7 @@ void main() async {
   Hive.registerAdapter(DietModelAdapter());
   Hive.registerAdapter(FitnessReminderAdapter());
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(WaterDrankAdapter());
   await Hive.openBox('onboarding');
   runApp(
     MyApp(),
