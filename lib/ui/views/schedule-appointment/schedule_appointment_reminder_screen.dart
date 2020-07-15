@@ -310,7 +310,7 @@ class _MyScheduleAppointmentScreenState
                     child: Text(
                       widget.buttonText,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
+                        color: Colors.white,
                         fontSize: Config.textSize(context, 5.5),
                         fontWeight: FontWeight.bold,
                       ),
@@ -410,8 +410,7 @@ class _MyScheduleAppointmentScreenState
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-            fontSize: Config.textSize(context, 5.3),
-            color: Theme.of(context).primaryColorLight),
+            fontSize: Config.textSize(context, 5.3), color: Colors.white),
       ),
     );
 
