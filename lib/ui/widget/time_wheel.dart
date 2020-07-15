@@ -6,7 +6,9 @@ typedef void StringCallback(String val);
 
 class TimeWheel extends StatefulWidget {
   final StringCallback updateTimeChanged;
-  TimeWheel({Key key, this.updateTimeChanged}) : super(key: key);
+  final DateTime initialValue;
+  TimeWheel({Key key, this.updateTimeChanged, this.initialValue})
+      : super(key: key);
 
   @override
   _TimeWheelState createState() => _TimeWheelState();
@@ -42,6 +44,7 @@ class _TimeWheelState extends State<TimeWheel> {
   void initState() {
     super.initState();
     //converts to 12 hour format
+    _now = widget.initialValue ?? DateTime.now();
     int hour = initHour > 12 ? initHour - 12 : initHour;
 
     //initialise the time to the current time for 'today'
