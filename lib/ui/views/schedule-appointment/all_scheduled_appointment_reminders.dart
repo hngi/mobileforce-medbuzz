@@ -3,7 +3,6 @@ import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_scree
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'dart:ui';
 import 'package:MedBuzz/ui/size_config/config.dart';
 
@@ -43,14 +42,14 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
     return DefaultTabController(
       length: 2,
       child: new Scaffold(
-        backgroundColor: appThemeLight.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          backgroundColor: appThemeLight.appBarTheme.color,
+          backgroundColor: Theme.of(context).appBarTheme.color,
           title: Container(
             child: Container(
               child: new Text(
                 'My Appointments',
-                style: appThemeLight.textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6,
                 textScaleFactor: 1.2,
               ),
             ),
@@ -59,7 +58,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
             child: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: appThemeLight.appBarTheme.iconTheme.color,
+                color: Theme.of(context).appBarTheme.iconTheme.color,
               ),
 
               // navigate to add appointments page
@@ -71,10 +70,10 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
           ),
           bottom: TabBar(
             indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: appThemeLight.primaryColor,
-            labelColor: appThemeLight.primaryColorDark.withOpacity(0.9),
+            indicatorColor: Theme.of(context).primaryColor,
+            labelColor: Theme.of(context).primaryColorDark.withOpacity(0.9),
             unselectedLabelColor:
-                appThemeLight.primaryColorDark.withOpacity(0.9),
+                Theme.of(context).primaryColorDark.withOpacity(0.9),
             indicatorWeight: 2.0,
             tabs: [
               Tab(
@@ -88,7 +87,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                 child: Text(
                   'Past',
                   textScaleFactor: 0.85,
-                  style: appThemeLight.textTheme.headline5,
+                  style: TextStyle(fontSize: Config.textSize(context, 4)),
                 ),
               ),
             ],
@@ -113,6 +112,8 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         )),
                     for (var appointment
                         in appointmentReminders.allAppointments)
+//                      if (DateTime.now()
+//                          .isBefore(appointmentReminders.selectedDateTime))
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: Config.xMargin(context, 5.0)),
@@ -136,11 +137,15 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         )),
                     for (var appointment
                         in appointmentReminders.pastApointments)
-                      AppointmentCard(
-                        height: height,
-                        width: width,
-                        appointment: appointment,
-                      )
+                      for (var appointment
+                          in appointmentReminders.allAppointments)
+//                        if (DateTime.now()
+//                            .isAfter(appointmentReminders.selectedDateTime))
+                        AppointmentCard(
+                          height: height,
+                          width: width,
+                          appointment: appointment,
+                        )
                   ],
                 ),
               ),
@@ -162,7 +167,7 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
       return AlertDialog(
         title: Text(
           'One appointment will be deleted.',
-          style: appThemeLight.textTheme.headline6,
+          style: Theme.of(context).textTheme.headline6,
         ),
         actions: <Widget>[
           FlatButton(
@@ -174,7 +179,7 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
                 color: Colors.grey,
               ),
             ),
-            color: appThemeLight.primaryColorDark.withOpacity(0.2),
+            color: Theme.of(context).primaryColorDark.withOpacity(0.2),
             onPressed: () {
               // go back to scheduled appointments page
               Navigator.of(context).pop(ConfirmAction.Cancel);
@@ -189,7 +194,7 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
                 color: Colors.red,
               ),
             ),
-            color: appThemeLight.primaryColorDark.withOpacity(0.2),
+            color: Theme.of(context).primaryColorDark.withOpacity(0.2),
             onPressed: () {
               // delete action
               var currentAppointment;
