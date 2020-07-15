@@ -34,6 +34,7 @@ class MedicationData extends ChangeNotifier {
   String drugName;
   String id;
   String description = "Enter Anything Here";
+  MedicationReminder reminder;
 
   bool isEditing = false;
 
@@ -47,19 +48,10 @@ class MedicationData extends ChangeNotifier {
     'images/inhaler.png'
   ];
 
-  MedicationReminder getSchedule() {
-    print("first print - ${this.firstTime}");
-    MedicationReminder schedule = MedicationReminder(
-        id: this.id,
-        firstTime: convertTime(this.firstTime),
-        // secondTime:
-        //     this.secondTime != null ? convertTime(this.secondTime) : null,
-        // thirdTime: this.thirdTime != null ? convertTime(this.thirdTime) : null,
-        frequency: this.selectedFreq);
-    print(this.firstTime);
-    print("Trying to create schedule");
-
-    return schedule;
+  MedicationReminder setReminder(MedicationReminder val) {
+    this.reminder = val;
+    notifyListeners();
+    return this.reminder;
   }
 
   void newMedicine(BuildContext context) {

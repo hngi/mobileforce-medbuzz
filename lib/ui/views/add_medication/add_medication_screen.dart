@@ -361,6 +361,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                                   endAt: medModel.endDate,
                                   description: medModel.description,
                                   index: medModel.selectedIndex.toString());
+                              print(med.frequency);
 
                               await medModel.addMedicationReminder(med);
                               switch (medModel.selectedFreq) {
@@ -554,8 +555,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     int id = temp - secondTemp;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
+
     notificationManager.removeReminder(id);
     print("Deleted Notification of id $id");
+
+    print("Failed: Notification has been deleted before or doesnt exist");
   }
 
   Widget titleAdd() {
