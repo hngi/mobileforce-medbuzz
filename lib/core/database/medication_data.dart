@@ -75,10 +75,28 @@ class MedicationData extends ChangeNotifier {
     return medicationReminder;
   }
 
+  List<MedicationReminder> get pastReminders {
+    return medicationReminder.where((element) => element.endAt.isBefore(DateTime.now())).toList();
+
+  }
+  List<MedicationReminder> get myPastMedication{
+    return medicationReminder.where((element) => _selectedDay.day > element.endAt.day).toList();
+  }
+
+  void deleteAllMedicationSchedule(){
+    for (var medication in pastReminders){
+
+      deleteSchedule(medication.id);
+    }
+  }
+
+
   void updateAvailableMedicationReminder(medicationReminders){
 medicationReminder = medicationReminders;
 notifyListeners();
   }
+
+
 
   List<MedicationReminder> get pastMedications {
     return medicationReminder.where((medication) => _selectedDay.day > medication.endAt.day).toList();

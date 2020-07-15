@@ -150,11 +150,10 @@ class _SchedulledMedicationScreenState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Visibility(
-                        visible: model.pastMedications.isEmpty,
+                        visible: model.pastReminders.isEmpty,
                         child: Container(
                           child: Center(child: Text('No Past Medication')),
                         )),
-
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: Config.xMargin(context, 5.0)),
@@ -164,37 +163,37 @@ class _SchedulledMedicationScreenState
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return MedicationCard(
-                            values: model.medicationReminder[index],
-                            drugName: model.medicationReminder[index].drugName,
-                            drugType: model.medicationReminder[index].drugType ==
+                            values: model.pastReminders[index],
+                            drugName:model.pastReminders[index].drugName,
+                            drugType: model.pastReminders[index].drugType ==
                                 'Injection'
                                 ? "images/injection.png"
-                                : model.medicationReminder[index].drugType ==
+                                : model.pastReminders[index].drugType ==
                                 'Tablets'
                                 ? "images/tablets.png"
-                                : model.medicationReminder[index].drugType ==
+                                : model.pastReminders[index].drugType ==
                                 'Drops'
                                 ? "images/drops.png"
-                                : model.medicationReminder[index]
+                                : model.pastReminders[index]
                                 .drugType ==
                                 'Pills'
                                 ? "images/pills.png"
-                                : model.medicationReminder[index]
+                                : model.pastReminders[index]
                                 .drugType ==
                                 'Ointment'
                                 ? "images/ointment.png"
-                                : model.medicationReminder[index]
+                                : model.pastReminders[index]
                                 .drugType ==
                                 'Syrup'
                                 ? "images/syrup.png"
                                 : "images/inhaler.png",
-                            time: model.medicationReminder[index].firstTime
+                            time: model.pastReminders[index].firstTime
                                 .toString(),
-                            dosage: model.medicationReminder[index].dosage,
-                            selectedFreq: model.medicationReminder[index].frequency,
+                            dosage: model.pastReminders[index].dosage,
+                            selectedFreq: model.pastReminders[index].frequency,
                           );
                         },
-                        itemCount: model.medicationReminder.length,
+                        itemCount: model.pastReminders.length,
                       ),
                     ),
                   ],

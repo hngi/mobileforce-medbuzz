@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:math';
 
 import 'package:MedBuzz/core/models/medication_history_model/medication_history.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,35 @@ class MedicationHistoryData extends ChangeNotifier {
 
   List<MedicationHistory> get medicationHistory => _medicationHistory;
 
+
+  Future<void> addMedicationReminderHistory(MedicationHistory history) async {
+    var box = await Hive.openBox<MedicationHistory>(_boxName);
+
+    await box.put(history.id.toString(), history);
+
+    _medicationHistory = box.values.toList();
+
+    box.close();
+
+    notifyListeners();
+  }
+
+  void deleteScheduleHistory(key) async {
+    var box = await Hive.openBox<MedicationHistory>(_boxName);
+
+    _medicationHistory = box.values.toList();
+    box.delete(key);
+    box.close();
+
+    notifyListeners();
+  }
+
   void getMedicationHistory() async {
     var box = await Hive.openBox<MedicationHistory>(_boxName);
 
     _medicationHistory = box.values.toList();
+
+    box.close();
 
     notifyListeners();
   }

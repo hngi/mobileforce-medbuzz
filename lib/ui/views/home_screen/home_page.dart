@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                               FlatButton(
                                 onPressed: () {
                                   Navigator.popAndPushNamed(
-                                      context, RouteNames.medicationScreen);
+                                      context, RouteNames.medicationPage);
                                 },
                                 child: Text(
                                   'See all',
