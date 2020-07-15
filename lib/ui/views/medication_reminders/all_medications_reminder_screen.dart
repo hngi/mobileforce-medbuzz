@@ -282,8 +282,7 @@ class _MedicationCardState extends State<MedicationCard> {
     final medModel = Provider.of<MedicationData>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-//    print(height);
-//    print(width);
+
     return GestureDetector(
       //Navigate to screen with single reminder i.e the on user clicked on
       onTap: () {
@@ -370,14 +369,12 @@ class _MedicationCardState extends State<MedicationCard> {
                               var medModel =
                                   Provider.of<MedicationData>(context);
                               print('----All Medication Reminder info ------');
-                              print(medModel.updateSelectedDrugType(
-                                  widget.values.drugType));
-                              print(medModel
-                                  .updateDrugName(widget.values.drugName));
+                              medModel.updateSelectedDrugType(
+                                  widget.values.drugType);
+                              medModel.updateDrugName(widget.values.drugName);
                               print("id = " +
                                   medModel.updateId(widget.values.id));
-                              print(
-                                  medModel.updateDosage(widget.values.dosage));
+                              medModel.updateDosage(widget.values.dosage);
                               medModel.updateStartDate(widget.values.startAt);
                               medModel.updateEndDate(widget.values.endAt);
                               print(
@@ -405,6 +402,24 @@ class _MedicationCardState extends State<MedicationCard> {
                               }
                               print(medModel.updateSelectedIndex(
                                   int.parse(widget.values.index)));
+
+                              MedicationReminder reminder = MedicationReminder(
+                                  drugName: medModel.drugName,
+                                  id: medModel.id,
+                                  frequency: medModel.selectedFreq,
+                                  firstTime:
+                                      medModel.convertTime(medModel.firstTime),
+                                  secondTime:
+                                      medModel.selectedFreq == "Twice" ||
+                                              medModel.selectedFreq == "Thrice"
+                                          ? medModel
+                                              .convertTime(medModel.secondTime)
+                                          : null,
+                                  thirdTime: medModel.selectedFreq == "Thrice"
+                                      ? medModel.convertTime(medModel.thirdTime)
+                                      : null);
+
+                              medModel.setReminder(reminder);
 
                               print('-------------------------------');
 
