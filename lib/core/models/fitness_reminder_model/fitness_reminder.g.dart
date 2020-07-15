@@ -8,7 +8,7 @@ part of 'fitness_reminder.dart';
 
 class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
   @override
-  int get typeId => 3;
+  int get typeId => 2;
   @override
   FitnessReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();
@@ -17,7 +17,7 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
     };
     return FitnessReminder(
       index: fields[0] as int,
-      name: fields[1] as String,
+      description: fields[1] as String,
       fitnesstype: fields[2] as String,
       fitnessfreq: fields[3] as String,
       activityTime: (fields[4] as List)?.cast<int>(),
@@ -35,7 +35,7 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj.description)
       ..writeByte(2)
       ..write(obj.fitnesstype)
       ..writeByte(3)

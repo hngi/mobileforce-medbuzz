@@ -43,10 +43,9 @@ class _SingleAppointmentState extends State<SingleAppointment> {
                       context: context,
                       child: DeleteDialog() //show Confirmation dialog
                       );
-                  showSnackBar(context);
+                  // showSnackBar(context);
                   Future.delayed(Duration(seconds: 1)).then((value) {
-                    appointmentDB
-                        .deleteAppointment(widget.appointment.dateTime);
+                    appointmentDB.deleteAppointment(widget.appointment.id);
                     Navigator.of(context).pop(true);
                   });
                 },
@@ -139,7 +138,7 @@ class _SingleAppointmentState extends State<SingleAppointment> {
             padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
             child: GestureDetector(
               onTap: () {
-                appointmentDB.deleteAppointment(widget.appointment.dateTime);
+                appointmentDB.deleteAppointment(widget.appointment.id);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

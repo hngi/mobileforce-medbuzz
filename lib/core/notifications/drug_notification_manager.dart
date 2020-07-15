@@ -30,6 +30,9 @@ class DrugNotificationManager {
 
   void showDrugNotificationDaily(
       {int id, String title, String body, int hour, int minute}) async {
+    print('Attempting to create notification \n-----------------------');
+
+    print(getPlatformChannelSpecfics(id).toString());
     var time = new Time(hour, minute, 0);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         id, title, body, time, getPlatformChannelSpecfics(id));

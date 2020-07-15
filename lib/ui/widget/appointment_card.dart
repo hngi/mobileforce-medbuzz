@@ -89,7 +89,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                           onTap: () {
                             notificationManager
                                 .removeReminder(scheduleModel.selectedDay);
-                            db.deleteAppointment(widget.appointment.dateTime);
+                            db.deleteAppointment(widget.appointment.id);
                           },
                         ));
                       },
@@ -114,7 +114,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             onTap: () {
                               notificationManager
                                   .removeReminder(scheduleModel.selectedDay);
-                              db.deleteAppointment(widget.appointment.dateTime);
+                              db.deleteAppointment(widget.appointment.id);
                             },
                           )),
                         ];
@@ -182,8 +182,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                       height: Config.yMargin(context, 1),
                                     ),
                                     Text(
-                                      widget.appointment.dateTime
-                                          .substring(0, 5),
+                                      '${widget.appointment.time[0]}:${widget.appointment.time[1]}',
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColorDark,

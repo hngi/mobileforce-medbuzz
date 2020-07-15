@@ -8,7 +8,7 @@ part of 'medication_reminder.dart';
 
 class MedicationReminderAdapter extends TypeAdapter<MedicationReminder> {
   @override
-  int get typeId => 9;
+  int get typeId => 3;
   @override
   MedicationReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();
