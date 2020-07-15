@@ -1,11 +1,16 @@
+import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/notifications/water_notification_manager.dart';
+import 'schedule_water_reminder_model.dart';
 
 class SingleWater extends StatefulWidget {
   SingleWater({this.water});
@@ -27,6 +32,8 @@ class _SingleWaterState extends State<SingleWater> {
 
   @override
   Widget build(BuildContext context) {
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    waterTakenDB.getWaterTaken();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -48,106 +55,7 @@ class _SingleWaterState extends State<SingleWater> {
                 padding: EdgeInsets.only(right: Config.yMargin(context, 1)),
                 child: FlatButton.icon(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        child: DeleteDialog(),
-                      );
-                      builder:
-                      (BuildContext context) {
-                        return Dialog(
-                          child: Container(
-                            height: Config.yMargin(context, 30),
-                            width: Config.xMargin(context, 150.0),
-                            //width: Config.xMargin(context, 50),
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.all(Config.xMargin(context, 3.0)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Config.yMargin(context, 2),
-                                        bottom: Config.yMargin(context, 1)),
-                                    child: Text(
-                                      'Are you sure you want to delete this?',
-                                      style: TextStyle(
-                                        fontSize: Config.textSize(context, 4.5),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () async {
-                                            showSnackBar(context);
-                                            Future.delayed(
-                                                    Duration(milliseconds: 500))
-                                                .then((value) {
-                                              //  waterNotificationManager.removeReminder();
-
-                                              db.deleteWaterReminder(
-                                                  widget.water.id);
-                                            });
-                                            //Navigate to the Water reminder screen and delete from db
-
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          child: Text(
-                                            "Yes",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  Config.textSize(context, 5),
-                                            ),
-                                          ),
-                                          color: Color(0xFF219653),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: Config.yMargin(context, 6.0),
-                                        width: Config.xMargin(context, 30.0),
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            "No",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  Config.textSize(context, 5),
-                                            ),
-                                          ),
-                                          color: Color(0xFFEB5757),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Config.xMargin(
-                                                          context, 2.0))),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      };
+                      _deleteDialog();
                     },
                     icon: Icon(
                       Icons.delete,
@@ -205,7 +113,7 @@ class _SingleWaterState extends State<SingleWater> {
                         padding:
                             EdgeInsets.only(top: Config.yMargin(context, 1.0)),
                         child: Text(
-                          'A quick run from home to the estate junction and back home',
+                          widget.water.description ?? 'No description given',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -227,26 +135,39 @@ class _SingleWaterState extends State<SingleWater> {
                             EdgeInsets.only(top: Config.yMargin(context, 1)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Once Daily',
+                              'Every ${widget.water.interval} minute(s) Daily',
                               style: TextStyle(
                                 fontSize: Config.textSize(context, 4),
                               ),
                             ),
-                            Text(
-                              "10:00AM",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: Config.textSize(context, 3.6),
-                              ),
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  "Wake Time: ${DateFormat.jm().format(widget.water.startTime)}",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Config.textSize(context, 3.6),
+                                  ),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 2)),
+                                Text(
+                                  "Sleep Time: ${DateFormat.jm().format(widget.water.endTime)}",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Config.textSize(context, 3.6),
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),
                       ),
                       SizedBox(height: Config.yMargin(context, 10)),
                       Text(
-                        'Length',
+                        'Progress',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Config.textSize(context, 4.5),
@@ -257,7 +178,7 @@ class _SingleWaterState extends State<SingleWater> {
                         padding:
                             EdgeInsets.only(top: Config.yMargin(context, 1.0)),
                         child: Text(
-                          '4 days left out of 30 days',
+                          '${waterTakenDB.progress >= 1 ? '0' : waterTakenDB.totalLevel - waterTakenDB.currentLevel} ml left out of ${waterTakenDB.totalLevel} ml',
                           style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontSize: Config.textSize(context, 4),
@@ -297,20 +218,146 @@ class _SingleWaterState extends State<SingleWater> {
       ]),
     );
   }
-}
 
-void showSnackBar(BuildContext context) {
-  SnackBar snackBar = SnackBar(
-    backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
-    duration: Duration(seconds: 2),
-    content: Text(
-      'Schedule deleted',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          fontSize: Config.textSize(context, 5.3),
-          color: Theme.of(context).primaryColorLight),
-    ),
-  );
+  // void showSnackBar(BuildContext context) {
+  //   SnackBar snackBar = SnackBar(
+  //     backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+  //     duration: Duration(seconds: 2),
+  //     content: Text(
+  //       'Schedule deleted',
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //           fontSize: Config.textSize(context, 5.3),
+  //           color: Theme.of(context).primaryColorLight),
+  //     ),
+  //   );
 
-  Scaffold.of(context).showSnackBar(snackBar);
+  //   Scaffold.of(context).showSnackBar(snackBar);
+  // }
+
+  void _deleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        WaterNotificationManager waterNotificationManager =
+            WaterNotificationManager();
+        var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+        waterTakenDB.getWaterTaken();
+        var waterReminder =
+            Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+        var waterReminderDB =
+            Provider.of<WaterReminderData>(context, listen: true);
+        // return object of type Dialog
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
+          ),
+          child: Container(
+            height: Config.yMargin(context, 20),
+            width: Config.xMargin(context, 150.0),
+            //width: Config.xMargin(context, 50),
+            child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 23.0, bottom: 20.0),
+                    child: Text(
+                      'Are you sure you want to delete this?',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: Config.yMargin(context, 6.0),
+                        width: Config.xMargin(context, 30.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColorLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Config.xMargin(context, 2.0)),
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.4),
+                                width: 1.5),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: Config.yMargin(context, 6.0),
+                        width: Config.xMargin(context, 30.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            var diff = widget.water.endTime
+                                .difference(widget.water.startTime)
+                                .inMinutes;
+
+                            double numb = diff / widget.water.interval;
+                            for (var i = 1; i < numb + 1; i++) {
+                              var timeValue = widget.water.startTime.add(
+                                Duration(
+                                    minutes:
+                                        i == 1 ? 0 : widget.water.interval * i),
+                              );
+                              waterNotificationManager.removeReminder(
+                                  widget.water.startTime.day +
+                                      timeValue.minute +
+                                      60);
+                            }
+                            waterTakenDB.deleteAllWaterTaken();
+                            waterReminderDB
+                                .deleteWaterReminder(widget.water.id)
+                                .then((val) => Navigator.pushNamed(
+                                    context, RouteNames.waterScheduleView));
+                            // showSnackBar(context);
+                            // Future.delayed(Duration(seconds: 1), () {
+                            // });
+                          },
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColorLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Config.xMargin(context, 2.0)),
+                            side: BorderSide(
+                                color:
+                                    Theme.of(context).hintColor.withOpacity(.4),
+                                width: 1.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

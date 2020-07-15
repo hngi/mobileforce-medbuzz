@@ -55,7 +55,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.data.name,
+                widget.data.description,
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: Config.textSize(context, 5.3),
@@ -181,7 +181,8 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
             child: FlatButton(
               //function to navigate to screen to edit details goes here
               onPressed: () {
-                print(widget.data.id);
+                model.isEditting = true;
+                Navigator.pushNamed(context, RouteNames.fitnessSchedulesScreen);
               },
               child: Text(
                 'Edit',

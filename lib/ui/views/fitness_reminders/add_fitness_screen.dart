@@ -31,6 +31,10 @@ class AddFitness extends StatefulWidget {
 }
 
 class __AddFitnessState extends State<AddFitness> {
+  // ignore: non_constant_identifier_names
+  bool _changed_name = false;
+
+  __AddFitnessState({this.fitnessModel});
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -41,6 +45,15 @@ class __AddFitnessState extends State<AddFitness> {
   void dispose() {
     super.dispose();
     focusNode.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      //Get updated data from database
+      Provider.of<FitnessReminderCRUD>(context).getReminders();
+    });
   }
 
   Navigation navigation = Navigation();
@@ -55,23 +68,25 @@ class __AddFitnessState extends State<AddFitness> {
     'Every 3 days',
     'Every 4 days'
   ];
+  final FitnessModel fitnessModel;
+
 //Instantiating a SizeConfig object to handle responsiveness
-  String _selectedFreq = "Daily";
+
   Config config = Config();
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
-  TextEditingController nameController = TextEditingController();
+
+  TextEditingController descController = TextEditingController();
   FocusNode focusNode = FocusNode();
-  int index;
-  // int _selectedActivity = 0;
-  int selectedFitnessType = 0;
-  int minDaily = 60;
-  TimeOfDay activityTime = TimeOfDay.now();
-  int id = Random().nextInt(100);
 
   @override
   Widget build(BuildContext context) {
     var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
+    String appBar = fitnessDB.isEditting ? fitnessDB.edit : fitnessDB.add;
+
+    if (fitnessDB.isEditting && _changed_name == false) {
+      descController.text = fitnessModel.desc;
+      _changed_name = true;
+    }
+
     FitnessNotificationManager fitnessNotificationManager =
         FitnessNotificationManager();
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
@@ -81,7 +96,7 @@ class __AddFitnessState extends State<AddFitness> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
-        title: Text('Add Fitness Reminder',
+        title: Text(appBar,
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
             )),
@@ -119,9 +134,8 @@ class __AddFitnessState extends State<AddFitness> {
                 },
                 child: ListView(
                   children: <Widget>[
-                    SizedBox(height: Config.yMargin(context, 1.0)),
                     Text(
-                      'Name of fitness',
+                      'Select Exercise',
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontWeight: FontWeight.w600,
@@ -129,126 +143,145 @@ class __AddFitnessState extends State<AddFitness> {
                     ),
                     SizedBox(height: Config.yMargin(context, 1.0)),
                     Container(
+                      height: Config.yMargin(context, 14),
+                      color: Theme.of(context).backgroundColor,
+                      child: ListView.builder(
+                        padding:
+                            EdgeInsets.only(left: Config.xMargin(context, 0)),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: model.fitnessType.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildImageContainer(index);
+                        },
+                      ),
+                    ),
+//
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Config.xMargin(context, 7)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Description',
+                            style: TextStyle(
+                                fontSize: Config.textSize(context, 5),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: Config.yMargin(context, 1.5)),
+                          TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 5,
+
+                            // controller: descriptionTextController,
+                            controller: descController,
+                            cursorColor: Theme.of(context).primaryColorDark,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: Config.xMargin(context, 5.5)),
+                            decoration: InputDecoration(
+                              hintText: 'Optional Description...',
+                              hintStyle: TextStyle(
+                                color: Theme.of(context).hintColor,
+                                fontSize: Config.xMargin(context, 4.5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                    Config.xMargin(context, 5))),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                    Config.xMargin(context, 5))),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColorDark),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /* Text(
+                      'Description',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w600,
+                          fontSize: Config.xMargin(context, 5)),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
+                    TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      focusNode: focusNode,
+                      controller: descController,
+                      cursorColor: Theme.of(context).primaryColorDark,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.xMargin(context, 5.5)),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          left: Config.yMargin(context, 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Config.xMargin(context, 5))),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+
+                        hintText: 'Input Description',
+                        hintStyle: TextStyle(
+                            fontSize: Config.xMargin(context, 5),
+                            color: Theme.of(context).hintColor),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Config.xMargin(context, 5))),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+//
+                      ),
+                    ), */
+                    SizedBox(height: Config.yMargin(context, 4.5)),
+                    Text(
+                      'Reminder Frequency',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Config.xMargin(context, 5.5)),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 1.0)),
+
+//                      Row(
+//                        //crossAxisAlignment: CrossAxisAlignment.,
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        children: <Widget>[
+                    //  Expanded(
+                    Container(
                       width: double.infinity,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           side:
                               BorderSide(width: 1.0, style: BorderStyle.solid),
                           borderRadius:
-                              BorderRadius.all((Radius.circular(5.0))),
+                              BorderRadius.all((Radius.circular(6.0))),
                         ),
                       ),
-                      child: TextFormField(
-                        focusNode: focusNode,
-                        controller: nameController,
-                        cursorColor: Theme.of(context).primaryColorDark,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.xMargin(context, 5.5)),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                            left: Config.yMargin(context, 1.0),
-                          ),
-                          hintText: 'Input name',
-                          hintStyle: TextStyle(
-                              fontSize: Config.xMargin(context, 5),
-                              color: Theme.of(context).hintColor),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColorDark)),
-//
-                        ),
+                      child: Center(
+                        child: DropdownButton<String>(
+                            underline: Text(''),
+                            items: fitnessTime.map((String time) {
+                              return DropdownMenuItem<String>(
+                                  value: time, child: Text(time));
+                            }).toList(),
+                            value: model.selectedFreq,
+                            onChanged: (newFreq) {
+                              setState(() {
+                                model.selectedFreq = newFreq;
+                              });
+                            }),
                       ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 5)),
-                    Container(
-                      height: Config.yMargin(context, 12),
-                      color: Theme.of(context).backgroundColor,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: activityType.length,
-                        itemBuilder: (_, index) => Row(
-                          children: <Widget>[
-                            FlatButton(
-                              onPressed: () {
-                                setState(() {
-                                  selectedFitnessType = index;
-                                });
-                              },
-                              child: Container(
-                                child: Stack(children: <Widget>[
-                                  Image.asset('${activityType[index]}'),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 40, horizontal: 50),
-                                    child: Checkbox(
-                                      onChanged: null,
-                                      value: index == selectedFitnessType,
-                                      //value: ,
-                                      checkColor:
-                                          Theme.of(context).backgroundColor,
-                                    ),
-                                  ),
-                                ]),
-
-                                // height: 170,
-                              ),
-                            ),
-                            SizedBox(width: Config.xMargin(context, 1.1))
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 4.5)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Reminder Frequency',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Config.xMargin(context, 5.5)),
-                        ),
-                        SizedBox(height: Config.xMargin(context, 4.5)),
-
-//                      Row(
-//                        //crossAxisAlignment: CrossAxisAlignment.,
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        children: <Widget>[
-                        //  Expanded(
-                        Container(
-                          width: double.infinity,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  width: 1.0, style: BorderStyle.solid),
-                              borderRadius:
-                                  BorderRadius.all((Radius.circular(6.0))),
-                            ),
-                          ),
-                          child: Center(
-                            child: DropdownButton<String>(
-                                underline: Text(''),
-                                items: fitnessTime.map((String time) {
-                                  return DropdownMenuItem<String>(
-                                      value: time, child: Text(time));
-                                }).toList(),
-                                value: _selectedFreq,
-                                onChanged: (newFreq) {
-                                  setState(() {
-                                    _selectedFreq = newFreq;
-                                  });
-                                }),
-                          ),
-                        ),
-
-                        // ),
-
-                        //      ]
-                        //    ,
-                        //   )
-                      ],
                     ),
                     SizedBox(height: Config.xMargin(context, 4.5)),
                     Text(
@@ -274,7 +307,8 @@ class __AddFitnessState extends State<AddFitness> {
                                 focusColor: Theme.of(context).primaryColorLight,
                                 splashColor: Theme.of(context).primaryColor,
                                 child: Text(
-                                  localizations.formatTimeOfDay(activityTime),
+                                  localizations
+                                      .formatTimeOfDay(model.activityTime),
                                   style: TextStyle(
                                       fontSize: Config.xMargin(context, 4.2)),
                                 ),
@@ -308,16 +342,16 @@ class __AddFitnessState extends State<AddFitness> {
                         IconButton(
                             color: Theme.of(context).primaryColor,
                             icon: Icon(
-                              Icons.add_circle,
+                              Icons.remove_circle,
                               size: 30,
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily++;
+                                model.minDaily--;
                               });
                             }),
                         Text(
-                          '$minDaily',
+                          '${model.minDaily}',
                           style: TextStyle(
                             fontSize: Config.textSize(context, 4),
                           ),
@@ -325,12 +359,12 @@ class __AddFitnessState extends State<AddFitness> {
                         IconButton(
                             color: Theme.of(context).primaryColor,
                             icon: Icon(
-                              Icons.remove_circle,
+                              Icons.add_circle,
                               size: 30,
                             ),
                             onPressed: () {
                               setState(() {
-                                minDaily--;
+                                model.minDaily++;
                               });
                             }),
                       ],
@@ -349,7 +383,7 @@ class __AddFitnessState extends State<AddFitness> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Start - ${localizations.formatShortDate(startDate)}',
+                              'Start - ${localizations.formatShortDate(model.startDate)}',
                               style: TextStyle(
                                 fontSize: Config.xMargin(context, 4),
                               ),
@@ -378,7 +412,7 @@ class __AddFitnessState extends State<AddFitness> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'End  -  ${localizations.formatShortDate(endDate)}',
+                              'End  -  ${localizations.formatShortDate(model.endDate)}',
                               style: TextStyle(
                                   fontSize: Config.xMargin(context, 4)),
                             ),
@@ -408,71 +442,128 @@ class __AddFitnessState extends State<AddFitness> {
                       height: Config.yMargin(context, 5),
                     ),
                     Center(
-                        child: Container(
-                      height: Config.yMargin(context, 6.5),
-                      width: MediaQuery.of(context).size.width,
-                      child: FlatButton(
-                        //Navigate to home screen after saving details in db
-                        onPressed: () {
-                          if (nameController.text.isNotEmpty) {
-                            print('${nameController.text}');
-
-                            var difference =
-                                endDate.difference(startDate).inHours;
-
-                            if (difference == 0) {
-                              showSnackBar(context,
-                                  text:
-                                      "Start date should be different from end date");
-                            } else {
-//                                 navigation.pushFrom(
-//                                     context, );
-                              var newReminder = FitnessReminder(
-                                  id: id.toString(),
-                                  activityTime: [
-                                    activityTime.hour,
-                                    activityTime.minute
-                                  ],
-                                  endDate: endDate,
-                                  startDate: startDate,
-                                  index: index,
-                                  name: nameController.text,
-                                  minsperday: minDaily,
-                                  fitnessfreq: _selectedFreq,
-                                  fitnesstype: selectedFitnessType.toString());
-                              fitnessDB.addReminder(newReminder);
-                              fitnessNotificationManager
-                                  .showFitnessNotificationOnce(
-                                      id,
-                                      "It's time to go ${nameController.text}",
-                                      "For $minDaily minutes",
-                                      getDateTime());
-                              print(id);
-                              _successDialog();
-                              Future.delayed(Duration(seconds: 2), () {
-                                Navigator.pushNamed(
-                                    context, RouteNames.fitnessSchedulesScreen);
-                              });
-                            }
-                          } else {
-                            showSnackBar(context);
-                          }
-                        },
-                        child: Text(
-                          'Save',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Config.textSize(context, 5.5),
-                            color: Theme.of(context).backgroundColor,
+                      child: Container(
+                        height: Config.yMargin(context, 6.5),
+                        width: MediaQuery.of(context).size.width,
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  Config.xMargin(context, 3))),
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: Config.textSize(context, 5.5),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        color: Theme.of(context).primaryColor,
+                          //Navigate to home screen after saving details in db
+                          onPressed: () async {
+                            if (descController.text.isNotEmpty) {
+                              switch (appBar) {
+                                case 'Add Fitness Reminder':
+                                  print('${descController.text}');
+                                  FitnessReminder newReminder = FitnessReminder(
+                                      id: model.id.toString(),
+                                      activityTime: [
+                                        model.activityTime.hour,
+                                        model.activityTime.minute
+                                      ],
+                                      endDate: model.endDate,
+                                      startDate: model.startDate,
+                                      index: model.index,
+                                      description: model.updateDescription(
+                                          descController.text),
+                                      minsperday: model.minDaily,
+                                      fitnessfreq: model.selectedFreq,
+                                      fitnesstype: model
+                                          .fitnessType[model.selectedIndex]);
+                                  await fitnessDB.addReminder(newReminder);
 
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                Config.xMargin(context, 4.0))),
+//                                var difference =
+//                                    model.endDate.difference(model.startDate).inHours;
+//
+//                                if (difference == 0) {
+//                                  showSnackBar(context,
+//                                      text:
+//                                          "Start date should be different from end date");
+//                                } else
+////                                  {
+//////                                 navigation.pushFrom(
+//////                                     context, );
+////
+////                                  fitnessNotificationManager
+////                                      .showFitnessNotificationOnce(
+////                                          model.id,
+////                                          "It's time to go ${descController.text}",
+////                                          "For ${model.minDaily} minutes",
+////                                          getDateTime());
+////                                  print(id);
+////                                  _successDialog();
+////                                  Future.delayed(Duration(seconds: 2), () {
+////                                    Navigator.pushNamed(context,
+////                                        RouteNames.fitnessSchedulesScreen);
+////                                  });
+////                                }
+//                              } else {
+//                                showSnackBar(context);
+                                  break;
+
+//                            ///begining of eedittingi functionality or something like that
+//                            case 'Edit Fitness Reminder':
+//                              if (descController.text.isNotEmpty) {
+//                                print('${descController.text}');
+//
+//                                var difference =
+//                                    model.endDate.difference(model.startDate).inHours;
+//
+//                                if (difference == 0) {
+//                                  showSnackBar(context,
+//                                      text:
+//                                          "Start date should be different from end date");
+//                                } else {
+////                                 navigation.pushFrom(
+////                                     context, );
+//                                  var newReminder = FitnessReminder(
+//                                      id: model.id.toString(),
+//                                      activityTime: [
+//                                        model.activityTime.hour,
+//                                        model.activityTime.minute
+//                                      ],
+//                                      endDate: model.endDate,
+//                                      startDate: model.startDate,
+//                                      index: model.index,
+//                                      description: descController.text,
+//                                      minsperday: model.minDaily,
+//                                      fitnessfreq: model.selectedFreq,
+//                                      fitnesstype:
+//                                          model.fitnessType[model.selectedIndex]);
+//                                  fitnessDB.editReminder(newReminder);
+//    break;
+//                                  fitnessNotificationManager.removeReminder(id);
+//                                  fitnessNotificationManager
+//                                      .showFitnessNotificationOnce(
+//                                          id,
+//                                          "It's time to go ${descController.text}",
+//                                          "For $minDaily minutes",
+//                                          getDateTime());
+//                                  print(id);
+
+//                                  _successDialog();
+//                                  Future.delayed(Duration(seconds: 2), () {
+//                                    Navigator.pushNamed(context,
+//                                        RouteNames.fitnessSchedulesScreen);
+//                                  });
+
+                              }
+                              Navigator.popAndPushNamed(
+                                  context, RouteNames.fitnessSchedulesScreen);
+                            }
+                          },
+                        ),
                       ),
-                    )),
+                    ),
                     SizedBox(
                       height: Config.yMargin(context, 5),
                     ),
@@ -486,25 +577,26 @@ class __AddFitnessState extends State<AddFitness> {
     );
   }
 
-  getDateTime() {
-    final now = new DateTime.now();
-    return DateTime(
-        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
-  }
+//  getDateTime() {
+//    final now = new DateTime.now();
+//    return DateTime(
+//        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
+//  }
 
   Future<Null> selectTime(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
     TimeOfDay currentTime = TimeOfDay.now();
     TimeOfDay selectedTime = await showTimePicker(
       context: context,
-      initialTime: activityTime,
+      initialTime: model.activityTime,
     );
-    bool today = startDate.difference(DateTime.now()) == 0;
+    bool today = model.startDate.difference(DateTime.now()) == 0;
     if (today && selectedTime.hour < currentTime.hour) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedTime != null && selectedTime != activityTime) {
+      if (selectedTime != null && selectedTime != model.activityTime) {
         setState(() {
-          activityTime = selectedTime;
+          model.activityTime = selectedTime;
         });
       }
     }
@@ -527,39 +619,43 @@ class __AddFitnessState extends State<AddFitness> {
   }
 
   Future<Null> selectStartDate(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
     final DateTime selectedDate = await showDatePicker(
         context: context,
-        initialDate: startDate,
-        firstDate: DateTime(startDate.year),
-        lastDate: DateTime(startDate.year + 1));
-    if (selectedDate.difference(startDate).inDays < 0) {
+        initialDate: model.startDate,
+        firstDate: DateTime(model.startDate.year),
+        lastDate: DateTime(model.startDate.year + 1));
+    if (selectedDate.difference(model.startDate).inDays < 0) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedDate != null && selectedDate != startDate) {
+      if (selectedDate != null && selectedDate != model.startDate) {
         setState(() {
-          startDate = selectedDate;
+          model.startDate = selectedDate;
         });
 
-        print('$startDate');
+        print('${model.startDate}');
       }
     }
   }
 
   Future<Null> selectEndDate(BuildContext context) async {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
     final DateTime selectedDate = await showDatePicker(
         context: context,
-        initialDate: endDate,
-        firstDate: DateTime(endDate.year),
-        lastDate: DateTime(endDate.year + 1));
-    if (selectedDate.difference(endDate).inDays < 0) {
+        initialDate: model.endDate,
+        firstDate: DateTime(model.endDate.year),
+        lastDate: DateTime(model.endDate.year + 1));
+    if (selectedDate.difference(model.endDate).inDays < 0) {
       showSnackBar(context, text: "Cannot set reminder in the past");
     } else {
-      if (selectedDate != null && selectedDate != endDate) {
+      if (selectedDate != null && selectedDate != model.endDate) {
         setState(() {
-          endDate = selectedDate;
+          model.endDate = selectedDate;
         });
 
-        print('$startDate');
+        print('${model.startDate}');
       }
     }
   }
@@ -584,6 +680,44 @@ class __AddFitnessState extends State<AddFitness> {
           ),
         );
       },
+    );
+  }
+
+  Widget buildImageContainer(int index) {
+    var model = Provider.of<FitnessReminderCRUD>(context);
+
+    return GestureDetector(
+      onTap: () {
+        model.onSelectedFitnessImage(index);
+        print(model.updateSelectedIndex(index));
+      },
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
+              margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
+              height: Config.yMargin(context, 10),
+              width: Config.xMargin(context, 18),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: model.selectedIndex == index
+                    ? Theme.of(context).primaryColor
+                    : Color(0xffFCEDB8),
+              ),
+              child: Image(
+                image: AssetImage(model.activityType[index]),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Expanded(
+              child: Text(
+            model.fitnessType[index],
+            style: TextStyle(fontSize: 12),
+          )),
+        ],
+      ),
     );
   }
 }

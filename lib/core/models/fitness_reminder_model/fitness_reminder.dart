@@ -8,7 +8,7 @@ class FitnessReminder {
   int index;
 
   @HiveField(1)
-  String name;
+  String description;
 
   @HiveField(2)
   String fitnesstype;
@@ -31,9 +31,10 @@ class FitnessReminder {
   @HiveField(8)
   final String id;
 
+
   FitnessReminder(
       {this.index,
-      this.name,
+      this.description,
       this.fitnesstype,
       this.fitnessfreq,
       this.activityTime,

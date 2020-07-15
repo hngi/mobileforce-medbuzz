@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/database/waterReminderData.dart';
+import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/core/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
@@ -28,16 +29,11 @@ class WaterReminderCard extends StatefulWidget {
 class _WaterCardState extends State<WaterReminderCard> {
   bool isSelected = false;
 
-  String _status(waterReminder) {
-    String value = 'Pending';
-    if (waterReminder.isSkipped) {
-      value = 'Skipped';
-    } else if (waterReminder.isTaken) {
+  String _status(waterReminder, progress) {
+    String value = 'Ongoing';
+    if (DateTime.now().difference(waterReminder.startTime).inDays == 0 &&
+        progress >= 1) {
       value = 'Completed';
-    } else if (waterReminder.dateTime.isBefore(DateTime.now()) &&
-        !waterReminder.isTaken &&
-        !waterReminder.isSkipped) {
-      value = 'Missed';
     }
     return value;
   }
@@ -45,17 +41,23 @@ class _WaterCardState extends State<WaterReminderCard> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    var waterReminderDB = Provider.of<WaterReminderData>(context, listen: true);
-    var waterReminder =
-        Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
-    WaterNotificationManager waterNotificationManager =
-        WaterNotificationManager();
+    double width = MediaQuery.of(context).size.width;
+    var waterTakenDB = Provider.of<WaterTakenData>(context, listen: true);
+    // var waterReminder =
+    //     Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
+    // WaterNotificationManager waterNotificationManager =
+    //     WaterNotificationManager();
     return Container(
       width: double.infinity,
       child: GestureDetector(
         //Navigate to screen with single reminder i.e the on user clicked on
         onTap: () {
-          setState(() => isSelected = !isSelected);
+          // setState(() => isSelected = !isSelected);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SingleWater(water: widget.waterReminder)));
         },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -63,15 +65,15 @@ class _WaterCardState extends State<WaterReminderCard> {
             children: [
               SizedBox(height: widget.height * 0.02),
               Text(
-                DateFormat.jm().format(widget.waterReminder.dateTime) ??
+                DateFormat.jm().format(widget.waterReminder.startTime) ??
                     "10:00 AM",
               ),
               SizedBox(height: widget.height * 0.02),
               Container(
                   width: widget.width,
                   padding: EdgeInsets.symmetric(
-                      horizontal: Config.xMargin(context, 3),
-                      vertical: Config.yMargin(context, 1)),
+                      horizontal: Config.xMargin(context, 4),
+                      vertical: Config.yMargin(context, 2)),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorLight,
                     borderRadius:
@@ -96,8 +98,12 @@ class _WaterCardState extends State<WaterReminderCard> {
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
-                                      left: Config.xMargin(context, 4.5),
-                                      top: Config.yMargin(context, 1)),
+                                      left: width < height * 7
+                                          ? Config.xMargin(context, 3.3)
+                                          : Config.xMargin(context, 4.5),
+                                      top: width < height * 7
+                                          ? Config.yMargin(context, 0.8)
+                                          : Config.yMargin(context, 1)),
                                   child: Image(
                                     image: AssetImage('images/smalldrop.png'),
                                     height: height * 0.03,
@@ -117,7 +123,8 @@ class _WaterCardState extends State<WaterReminderCard> {
                               ),
                               SizedBox(height: widget.height * 0.005),
                               Text(
-                                _status(widget.waterReminder),
+                                _status(widget.waterReminder,
+                                    waterTakenDB.progress),
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),
@@ -126,23 +133,23 @@ class _WaterCardState extends State<WaterReminderCard> {
 
                           //Temporary fix to delete reminders
 
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: Config.xMargin(context, 20),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  waterReminderDB.deleteWaterReminder(
-                                      widget.waterReminder.id);
-                                  waterNotificationManager.removeReminder(
-                                      waterReminder.selectedDay);
-                                },
-                                icon: Icon(Icons.delete),
-                                color: Colors.red,
-                              ),
-                            ),
-                          )
+                          // Expanded(
+                          //   child: Container(
+                          //     margin: EdgeInsets.only(
+                          //       left: Config.xMargin(context, 20),
+                          //     ),
+                          //     child: IconButton(
+                          //       onPressed: () {
+                          //         waterReminderDB.deleteWaterReminder(
+                          //             widget.waterReminder.id);
+                          //         waterNotificationManager.removeReminder(
+                          //             waterReminder.selectedDay);
+                          //       },
+                          //       icon: Icon(Icons.delete),
+                          //       color: Colors.red,
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                       SizedBox(
@@ -150,23 +157,24 @@ class _WaterCardState extends State<WaterReminderCard> {
                         width: double.infinity,
                       ),
                       Visibility(
-                        visible: isSelected,
+                        visible: false,
                         child: Divider(
                           color: Theme.of(context).primaryColorDark,
                           height: widget.height * 0.02,
                           endIndent: 10.0,
                         ),
                       ),
-                      Visibility(
-                          visible: isSelected,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(child: flatButton('View')),
-                              Expanded(child: flatButton('Skip')),
-                              Expanded(child: flatButton('Done'))
-                            ],
-                          ))
+                      // Visibility(
+                      //     visible: isSelected,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       children: <Widget>[
+                      //         Expanded(child: flatButton('View')),
+                      //         // Expanded(child: flatButton('Skip')),
+                      //         // Expanded(child: flatButton('Reset'))
+                      //       ],
+                      //     ))
                     ],
                   )),
             ]),
@@ -182,8 +190,11 @@ class _WaterCardState extends State<WaterReminderCard> {
           case 'Skip':
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
+                    interval: widget.waterReminder.interval,
+                    description: widget.waterReminder.description,
+                    endTime: widget.waterReminder.endTime,
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: true,
                     isTaken: false),
@@ -192,8 +203,11 @@ class _WaterCardState extends State<WaterReminderCard> {
           case 'Done':
             waterReminderDB.editWaterReminder(
                 waterReminder: WaterReminder(
+                    interval: widget.waterReminder.interval,
+                    description: widget.waterReminder.description,
+                    endTime: widget.waterReminder.endTime,
                     ml: widget.waterReminder.ml,
-                    dateTime: widget.waterReminder.dateTime,
+                    startTime: widget.waterReminder.startTime,
                     id: widget.waterReminder.id,
                     isSkipped: false,
                     isTaken: true),
@@ -205,6 +219,13 @@ class _WaterCardState extends State<WaterReminderCard> {
                 MaterialPageRoute(
                     builder: (context) =>
                         SingleWater(water: widget.waterReminder)));
+            break;
+            // case 'Reset':
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) =>
+            //               SingleWater(water: widget.waterReminder)));
             break;
           default:
         }

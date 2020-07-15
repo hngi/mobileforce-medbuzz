@@ -31,13 +31,17 @@ class WaterNotificationManager {
   }
 
   void showWaterNotificationDaily(
-      {int id, String title, String body, int hour, int minute}) async {
-    var time = new Time(hour, minute, 0);
+      {int id, String title, String body, DateTime dateTime}) async {
+    var time = new Time(dateTime.hour, dateTime.minute, 0);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         id, title, body, time, getPlatformChannelSpecfics(id));
     print(
-        'Notification Succesfully Scheduled at ${time.toString()} with id of $id');
+        'Notification Succesfully Scheduled at ${time.hour.toString()}:${time.minute.toString()}  with id of $id');
   }
+
+  dynamic pendingNotificationRequests() async =>
+      await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+  // 28
 
   void showWaterNotificationOnce(
       int id, String title, String body, DateTime time) async {

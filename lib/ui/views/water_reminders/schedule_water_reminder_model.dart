@@ -32,40 +32,44 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   List<int> _mls = [150, 250, 350, 500, 750, 1000];
   DateTime _today = DateTime.now();
   int _selectedMl;
+  int _selectedInterval = 30;
   int _selectedDay;
   int _selectedMonth;
-  dynamic _selectedTime;
+  dynamic _selectedStartTime;
+  dynamic _selectedEndTime;
+  String _description = '';
   List<WaterReminder> _availableReminders = [];
 
   ScheduleWaterReminderViewModel() {
     this._selectedMl = null;
     this._selectedMonth = _today.month;
     this._selectedDay = _today.day;
-    this._selectedTime = null;
+    this._selectedStartTime = null;
   }
 
   getMesures() => _mls;
   DateTime get today => _today;
 
   int get selectedMl => _selectedMl;
-  setSelectedMl(int selectedMl) => _selectedMl = selectedMl;
 
   int get selectedDay => _selectedDay;
-  setSelectedDay(int selectedDay) => _selectedDay = selectedDay;
 
   int get selectedMonth => _selectedMonth;
-  setSelectedMonth(int selectedMonth) => _selectedMonth = selectedMonth;
+
+  String get description => _description;
+
+  int get selectedInterval => _selectedInterval;
 
   List<int> get mls => _mls;
   List<WaterReminder> get availableReminders => _availableReminders;
 
-  dynamic get selectedTime => _selectedTime;
-  setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
+  dynamic get selectedStartTime => _selectedStartTime;
+  dynamic get selectedEndTime => _selectedEndTime;
 
   DateTime get selectedDateTime =>
       DateTime(_today.year, _selectedMonth, _selectedDay);
 
-  Color getButtonColor(BuildContext context, index) {
+  Color getButtonColor(BuildContext context, index, {bool override = false}) {
     return isActive(index)
         ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColorDark.withOpacity(0.05);
@@ -106,18 +110,33 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSelectedInterval(int val) {
+    _selectedInterval = val;
+    notifyListeners();
+  }
+
+  void updateDescription(String val) {
+    _description = val;
+    notifyListeners();
+  }
+
   WaterReminder createSchedule() {
-    var dayValue =
-        selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
-    var monthValue = selectedMonth.toString().length < 2
-        ? '0$selectedMonth'
-        : '$selectedMonth';
-    var selectedDateTime = "${_today.year}-$monthValue-$dayValue $selectedTime";
+    // var dayValue =
+    //     selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
+    // var monthValue = selectedMonth.toString().length < 2
+    //     ? '0$selectedMonth'
+    //     : '$selectedMonth';
+    // var selectedDateTime =
+    //     "${_today.year}-$monthValue-$dayValue $selectedStartTime";
 
     WaterReminder newReminder = WaterReminder(
         id: DateTime.now().toString(),
         ml: _selectedMl,
-        dateTime: DateTime.parse(selectedDateTime));
+        interval: _selectedInterval,
+        description: _description,
+        startTime: getDateTime(),
+        endTime: getEndDateTime());
+    // print(newReminder);
     return newReminder;
   }
 
@@ -127,8 +146,16 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
         : '$_selectedMonth';
     String weekday =
         _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse(
-        '${_today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
+    return DateTime.parse('${_today.year}-$month-$weekday $_selectedStartTime');
+  }
+
+  DateTime getEndDateTime() {
+    String month = _selectedMonth.toString().length < 2
+        ? '0$_selectedMonth'
+        : '$_selectedMonth';
+    String weekday =
+        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+    return DateTime.parse('${_today.year}-$month-$weekday $_selectedEndTime');
   }
 
   void updateSelectedDay(int dayIndex) {
@@ -137,7 +164,17 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
   }
 
   void updateSelectedTime(dynamic time) {
-    _selectedTime = time;
+    _selectedStartTime = time;
+    // notifyListeners();
+  }
+
+  void updateSelectedStartTime(dynamic time) {
+    _selectedStartTime = time;
+    // notifyListeners();
+  }
+
+  void updateSelectedEndTime(dynamic time) {
+    _selectedEndTime = time;
     // notifyListeners();
   }
 
@@ -170,7 +207,7 @@ class ScheduleWaterReminderViewModel extends ChangeNotifier {
 
   List<WaterReminder> get waterRemindersBasedOnDateTime {
     return _availableReminders
-        .where((reminder) => selectedDateTime.year == reminder.dateTime.year)
+        .where((reminder) => selectedDateTime.year == reminder.startTime.year)
         .toList();
   }
 

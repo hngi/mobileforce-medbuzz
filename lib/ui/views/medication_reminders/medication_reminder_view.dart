@@ -49,11 +49,7 @@ class MedicationView extends StatelessWidget {
                                   newReminder: medModel
                                       .getSchedule()) //show Confirmation dialog
                               );
-                          showSnackBar(context);
-                          Future.delayed(Duration(seconds: 1)).then((value) {
-                            medModel.deleteSchedule(key);
-                            Navigator.of(context).pop(true);
-                          });
+                          //Do not write any code here
                         },
                         icon: Icon(
                           Icons.delete,
@@ -372,8 +368,9 @@ class DeleteBox extends StatelessWidget {
 
 void deleteNotification(MedicationReminder med, List<int> time) {
   DateTime date = DateTime.parse(med.id);
-  int id =
-      num.parse('${date.year}${date.month}${date.day}${time[0]}${time[1]}');
+  int temp = num.parse('${date.month}${date.day}${time[0]}${time[1]}');
+  int secondTemp = num.parse('${date.year}0000');
+  int id = temp - secondTemp;
 
   DrugNotificationManager notificationManager = DrugNotificationManager();
   notificationManager.removeReminder(id);
