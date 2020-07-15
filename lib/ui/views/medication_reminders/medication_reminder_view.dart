@@ -3,6 +3,7 @@ import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,10 +51,22 @@ class MedicationView extends StatelessWidget {
                                       .getSchedule()) //show Confirmation dialog
                               );
                           showSnackBar(context);
-                          Future.delayed(Duration(seconds: 1)).then((value) {
+                          Future.delayed(Duration(seconds: 3)).then((value) {
                             medModel.deleteSchedule(key);
                             Navigator.of(context).pop(true);
                           });
+                          SnackBar(
+                            backgroundColor:
+                                Theme.of(context).buttonColor.withOpacity(.9),
+                            duration: Duration(seconds: 2),
+                            content: Text(
+                              'Schedule deleted',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.textSize(context, 5.3),
+                                  color: Theme.of(context).primaryColorLight),
+                            ),
+                          );
                         },
                         icon: Icon(
                           Icons.delete,

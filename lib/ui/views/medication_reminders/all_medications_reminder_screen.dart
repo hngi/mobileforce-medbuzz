@@ -53,21 +53,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
               child: SizedBox(
                 height: height * 0.08,
                 width: height * 0.08,
-
-              child: FloatingActionButton(
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColorLight,
-                    size: Config.xMargin(context, 10),
-                  ),
-                  backgroundColor: Theme.of(context).buttonColor,
-                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                  //Navigate to fitness reminder creation screen
-                  onPressed: () {
-                    final medModel = Provider.of<MedicationData>(context);
-                    medModel.newMedicine(context);
-                  }),
-            ),
+                child: FloatingActionButton(
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).primaryColorLight,
+                      size: Config.xMargin(context, 10),
+                    ),
+                    backgroundColor: Theme.of(context).buttonColor,
+                    splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                    //Navigate to fitness reminder creation screen
+                    onPressed: () {
+                      final medModel = Provider.of<MedicationData>(context);
+                      medModel.newMedicine(context);
+                    }),
+              ),
             ),
           ),
         ),
@@ -100,7 +99,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: height * .27,
+                  //height: height * .27,
                   width: width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,18 +132,26 @@ class _MedicationScreenState extends State<MedicationScreen> {
                           ],
                         ),
                       ),
+                      SizedBox(height: Config.yMargin(context, 4)),
                       //Text widget to display current date in MONTH Year format
-                      Text(
-                        'JUN 2020',
-                        style: TextStyle(
-                            letterSpacing: 2,
-                            fontSize: Config.textSize(context, 4)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'JUN 2020',
+                            style: TextStyle(
+                                letterSpacing: 2,
+                                fontSize: Config.textSize(context, 4)),
+                          ),
+                          SizedBox(height: Config.yMargin(context, 2)),
+                          Text('Today'),
+                        ],
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: Config.yMargin(context, 5)),
+                SizedBox(height: Config.yMargin(context, 1)),
                 //Here the already saved reminders will be loaded dynamically
 
                 Container(
@@ -293,13 +300,7 @@ class _MedicationCardState extends State<MedicationCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
-              medModel
-                  .convertTimeBack(widget.values.firstTime)
-                  .format(context)
-                  .toString(),
-            ),
-            SizedBox(height: height * 0.02),
+            //SizedBox(height: height * 0.02),
             Container(
                 width: width,
                 padding: EdgeInsets.symmetric(
@@ -361,7 +362,7 @@ class _MedicationCardState extends State<MedicationCard> {
                     Visibility(
                       visible: isSelected,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           FlatButton(
                             onPressed: () {
@@ -420,62 +421,62 @@ class _MedicationCardState extends State<MedicationCard> {
                                       : Theme.of(context).primaryColorDark),
                             ),
                           ),
-                          FlatButton(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.close,
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColorLight
-                                      : Theme.of(context).primaryColorDark,
-                                  size: Config.textSize(context, 3),
-                                ),
-                                SizedBox(
-                                  width: Config.xMargin(context, 2),
-                                ),
-                                Text(
-                                  'Skip',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: isSelected
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context).primaryColorDark),
-                                )
-                              ],
-                            ),
-                            onPressed: () {},
-                          ),
-                          FlatButton(
-                            onPressed: () {},
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.done,
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColorLight
-                                      : Theme.of(context).primaryColorDark,
-                                  size: Config.textSize(context, 3),
-                                ),
-                                SizedBox(
-                                  width: Config.xMargin(context, 2),
-                                ),
-                                Text(
-                                  'Done',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: isSelected
-                                          ? Theme.of(context).primaryColorLight
-                                          : Theme.of(context).primaryColorDark),
-                                )
-                              ],
-                            ),
-                          )
+                          // FlatButton(
+                          //   child: Row(
+                          //     children: <Widget>[
+                          //       Icon(
+                          //         Icons.close,
+                          //         color: isSelected
+                          //             ? Theme.of(context).primaryColorLight
+                          //             : Theme.of(context).primaryColorDark,
+                          //         size: Config.textSize(context, 3),
+                          //       ),
+                          //       SizedBox(
+                          //         width: Config.xMargin(context, 2),
+                          //       ),
+                          //       Text(
+                          //         'Skip',
+                          //         style: TextStyle(
+                          //             fontWeight: FontWeight.bold,
+                          //             color: isSelected
+                          //                 ? Theme.of(context).primaryColorLight
+                          //                 : Theme.of(context).primaryColorDark),
+                          //       )
+                          //     ],
+                          //   ),
+                          //   onPressed: () {},
+                          // ),
+                          // FlatButton(
+                          //   onPressed: () {},
+                          //   child: Row(
+                          //     children: <Widget>[
+                          //       Icon(
+                          //         Icons.done,
+                          //         color: isSelected
+                          //             ? Theme.of(context).primaryColorLight
+                          //             : Theme.of(context).primaryColorDark,
+                          //         size: Config.textSize(context, 3),
+                          //       ),
+                          //       SizedBox(
+                          //         width: Config.xMargin(context, 2),
+                          //       ),
+                          //       Text(
+                          //         'Done',
+                          //         style: TextStyle(
+                          //             fontWeight: FontWeight.bold,
+                          //             color: isSelected
+                          //                 ? Theme.of(context).primaryColorLight
+                          //                 : Theme.of(context).primaryColorDark),
+                          //       )
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     )
                   ],
                 )),
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.01),
           ]),
     );
   }
