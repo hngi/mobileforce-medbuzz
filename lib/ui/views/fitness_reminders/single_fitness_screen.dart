@@ -19,8 +19,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
   @override
   Widget build(BuildContext context) {
     var model = Provider.of<FitnessReminderCRUD>(context);
-    FitnessNotificationManager fitnessNotificationManager =
-        FitnessNotificationManager();
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -54,13 +53,18 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.data.description,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorDark,
-                  fontSize: Config.textSize(context, 5.3),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Segoe',
+              Container(
+                height: 45,
+                width: 200,
+                child: Text(
+                  widget.data.description,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: Config.textSize(context, 5.3),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Segoe',
+                  ),
+                  textWidthBasis: TextWidthBasis.parent,
                 ),
               ),
               FlatButton.icon(
@@ -78,14 +82,16 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   ),
                 ),
                 onPressed: () {
-                  print(widget.data.id);
-                  model.deleteReminder(widget.data.id);
-                  fitnessNotificationManager
-                      .removeReminder(int.parse(widget.data.id));
-                  showDialog(
-                    context: context,
-                    child: DeleteDialog(),
-                  );
+                  print("deleting");
+                  // model.deleteReminder(model.id.toString());
+                  // print(int.parse(widget.data.id).toInt());
+                  // model.deleteReminder(widget.data.id);
+                  // showDialog(
+                  //   context: context,
+                  //   child: DeleteDialog(),
+                  // );
+                  Navigator.pushNamed(
+                      context, RouteNames.fitnessSchedulesScreen);
                 },
               ),
             ],
@@ -215,6 +221,10 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
 class DeleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final FitnessReminder some = FitnessReminder();
+    var model = Provider.of<FitnessReminderCRUD>(context);
+    final FitnessNotificationManager fitnessNotificationManager =
+        FitnessNotificationManager();
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
@@ -272,10 +282,17 @@ class DeleteDialog extends StatelessWidget {
                     width: Config.xMargin(context, 30.0),
                     child: FlatButton(
                       onPressed: () {
-                        Future.delayed(Duration(seconds: 1), () {
-                          Navigator.pushReplacementNamed(
-                              context, RouteNames.fitnessSchedulesScreen);
-                        });
+                        print("deleted");
+                        // deleting the reminder works
+                        model.deleteReminder(some.id.toString());
+                        // TODO: Give feedback if this is not working
+                        // deleting the notification am not so sure
+                        fitnessNotificationManager
+                            .removeReminder(some.id.length);
+                        // Future.delayed(Duration(seconds: 1), () {
+                        Navigator.pushReplacementNamed(
+                            context, RouteNames.fitnessSchedulesScreen);
+                        // });
                       },
                       child: Text(
                         "Delete",

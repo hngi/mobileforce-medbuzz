@@ -32,7 +32,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   DateTime _today = DateTime.now();
   int _selectedDay;
   int _selectedMonth;
-  var _selectedTime;
+  String _selectedTime;
   String _typeOfAppointment;
   String _note;
   List<Appointment> _availableAppointments = [];
@@ -55,7 +55,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
   setSelectedMonth(int selectedMonth) => _selectedMonth = selectedMonth;
 
-  dynamic get selectedTime => _selectedTime;
+  String get selectedTime => _selectedTime;
 
   setSelectedTime(dynamic selectedTime) => _selectedTime = selectedTime;
 
@@ -98,17 +98,20 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
     var selectedDateTime = "${_today.year}-$monthValue-$dayValue";
 
-    var appointmentType = _typeOfAppointment.toString().length < 1
-        ? 'empty 0$typeOfAppointment'
-        : '$typeOfAppointment';
+    var appointmentType =
+        _typeOfAppointment.toString().length < 1 ? '' : '$typeOfAppointment';
 
-    var noteValue = _note.toString().length < 1 ? 'empty 0$note' : '$note';
+    var noteValue = _note.toString().length < 1 ? '' : '$note';
 
     Appointment newAppointment = Appointment(
+        id: DateTime.now().toString(),
         date: DateTime.parse(selectedDateTime),
         appointmentType: appointmentType,
         note: noteValue,
-        dateTime: _selectedTime);
+        time: [
+          num.parse(_selectedTime.substring(1, 2)),
+          num.parse(_selectedTime.substring(3, 5))
+        ]);
     return newAppointment;
   }
 
@@ -121,17 +124,20 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
     var selectedDateTime = "${_today.year}-$monthValue-$dayValue";
 
-    var appointmentType = _typeOfAppointment.toString().length < 1
-        ? 'empty 0$typeOfAppointment'
-        : '$typeOfAppointment';
+    var appointmentType =
+        _typeOfAppointment.toString().length < 1 ? '' : '$typeOfAppointment';
 
-    var noteValue = _note.toString().length < 1 ? 'empty 0$note' : '$note';
+    var noteValue = _note.toString().length < 1 ? '' : '$note';
 
     Appointment newAppointment = Appointment(
+        id: DateTime.now().toString(),
         date: DateTime.parse(selectedDateTime),
         appointmentType: appointmentType,
         note: noteValue,
-        dateTime: _selectedTime);
+        time: [
+          num.parse(_selectedTime.substring(1, 3)),
+          num.parse(_selectedTime.substring(3, 5))
+        ]);
     return newAppointment;
   }
 
@@ -140,7 +146,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedTime(dynamic time) {
+  void updateSelectedTime(String time) {
     _selectedTime = time;
     //notifyListeners();
   }
@@ -151,9 +157,71 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   }
 
   List<Appointment> get pastApointments {
-    return _availableAppointments
-        .where((appointment) => selectedDateTime.day > appointment.date.day)
-        .toList();
+    List<Appointment> appointments = [];
+    //2020-07-16 00:30:48.163023
+
+    // DateTime newDate = DateTime.parse(
+    //     '${selectedDateTime.year}-$month-$day ${selectedTime.substring(1, 2)}:${selectedTime.substring(3, 5)}');
+    // print(newDate);
+    // return _availableAppointments
+    //     .where((appointment) => selectedDateTime.day > appointment.date.day)
+    //     .toList();
+    _availableAppointments.forEach((appointment) {
+      String month = '${appointment.date.month}'.trim().length == 1
+          ? '0${appointment.date.month}'
+          : '${appointment.date.month}';
+      String day = '${appointment.date.day}'.trim().length == 1
+          ? '0${appointment.date.day}'
+          : '${appointment.date.day}';
+      String hour = '${appointment.time[0]}'.trim().length == 1
+          ? '0${appointment.time[0]}'
+          : '${appointment.time[0]}';
+      String minutes = '${appointment.time[1]}'.trim().length == 1
+          ? '0${appointment.time[1]}'
+          : '${appointment.time[1]}';
+
+      DateTime newDate =
+          DateTime.parse('${appointment.date.year}-$month-$day $hour:$minutes');
+      //print(newDate);
+      if (newDate.isBefore(DateTime.now())) {
+        appointments.add(appointment);
+      }
+    });
+    return appointments;
+  }
+
+  List<Appointment> get upcomingApointments {
+    List<Appointment> appointments = [];
+    //2020-07-16 00:30:48.163023
+
+    // DateTime newDate = DateTime.parse(
+    //     '${selectedDateTime.year}-$month-$day ${selectedTime.substring(1, 2)}:${selectedTime.substring(3, 5)}');
+    // print(newDate);
+    // return _availableAppointments
+    //     .where((appointment) => selectedDateTime.day > appointment.date.day)
+    //     .toList();
+    _availableAppointments.forEach((appointment) {
+      String month = '${appointment.date.month}'.trim().length == 1
+          ? '0${appointment.date.month}'
+          : '${appointment.date.month}';
+      String day = '${appointment.date.day}'.trim().length == 1
+          ? '0${appointment.date.day}'
+          : '${appointment.date.day}';
+      String hour = '${appointment.time[0]}'.trim().length == 1
+          ? '0${appointment.time[0]}'
+          : '${appointment.time[0]}';
+      String minutes = '${appointment.time[1]}'.trim().length == 1
+          ? '0${appointment.time[1]}'
+          : '${appointment.time[1]}';
+
+      DateTime newDate =
+          DateTime.parse('${appointment.date.year}-$month-$day $hour:$minutes');
+      //print(newDate);
+      if (newDate.isAfter(DateTime.now())) {
+        appointments.add(appointment);
+      }
+    });
+    return appointments;
   }
 
   List<Appointment> get allAppointments {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
+import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/notifications/fitness_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_model.dart';
@@ -31,6 +32,18 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
 
   @override
   void initState() {
+    controller.addListener(() {
+      if (controller.offset < 120) {
+        Provider.of<FitnessSchedulesModel>(context).updateVisibility(true);
+      } else {
+        Provider.of<FitnessSchedulesModel>(context).updateVisibility(false);
+      }
+    });
+
+    Future.delayed(Duration.zero, () {
+      print(Provider.of<FitnessReminderCRUD>(context).fitnessReminder);
+    });
+
     notificationManager.initNotifications();
     super.initState();
   }
@@ -39,13 +52,8 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
   Widget build(BuildContext context) {
     //Some sweet magic to animate FAB
     //This makes the FAB disappear as you scroll down
-    controller.addListener(() {
-      if (controller.offset < 120) {
-        Provider.of<FitnessSchedulesModel>(context).updateVisibility(true);
-      } else {
-        Provider.of<FitnessSchedulesModel>(context).updateVisibility(false);
-      }
-    });
+
+    Provider.of<FitnessReminderCRUD>(context).getReminders();
 
     var model = Provider.of<FitnessSchedulesModel>(context);
     var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
@@ -68,18 +76,19 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
               height: height * 0.08,
               width: height * 0.08,
               child: FloatingActionButton(
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColorLight,
-                    size: Config.xMargin(context, 9),
-                  ),
-                  backgroundColor: Theme.of(context).buttonColor,
-                  splashColor: Theme.of(context).buttonColor.withOpacity(.9),
-                  //Navigate to fitness reminder creation screen
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context, RouteNames.fitnessDescriptionScreen);
-                  }),
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).primaryColorLight,
+                  size: Config.xMargin(context, 9),
+                ),
+                backgroundColor: Theme.of(context).buttonColor,
+                splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                //Navigate to fitness reminder creation screen
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, RouteNames.fitnessDescriptionScreen);
+                },
+              ),
             ),
           ),
         ),
@@ -90,13 +99,14 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
         title: Text('Fitness',
             style: TextStyle(color: Theme.of(context).primaryColorDark)),
         leading: IconButton(
-            icon: Icon(Icons.keyboard_backspace,
-                color: Theme.of(context).primaryColorDark),
+          icon: Icon(Icons.keyboard_backspace,
+              color: Theme.of(context).primaryColorDark),
 
-            //Function to navigate to previous screen or home screen (as the case maybe) goes here
-            onPressed: () {
-              Navigator.pushNamed(context, RouteNames.homePage);
-            }),
+          //Function to navigate to previous screen or home screen (as the case maybe) goes here
+          onPressed: () {
+            Navigator.pushNamed(context, RouteNames.homePage);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         controller: controller,
@@ -143,7 +153,43 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                 //         fontSize: Config.textSize(context, 6)),
                 //   ),
                 // ),
-                FitnessCard()
+                Text('Test'),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        print('happened');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SingleFitnessScreen(
+                              data: fitnessDB.fitnessReminder[index],
+                            ),
+                          ),
+                          // RouteNames.singleFitnessScreen,
+                          // arguments: SingleFitnessScreen(
+                          //   data: fitnessDB.fitnessReminder[index],
+                          // ),
+                        );
+                      },
+                      child: InkWell(
+                        child: FitnessCard(
+                          fitnessReminder: fitnessDB.fitnessReminder[index],
+                          fitnessType:
+                              fitnessDB.fitnessReminder[index].fitnesstype,
+                          startDate: fitnessDB.fitnessReminder[index].startDate
+                              .toString(),
+                          endDate: fitnessDB.fitnessReminder[index].endDate
+                              .toString(),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: fitnessDB.fitnessReminder.length,
+                )
               ],
             )),
       ),
@@ -151,13 +197,152 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
   }
 }
 
-class FitnessCard extends StatelessWidget {
+class FitnessCard extends StatefulWidget {
+  final double height;
+  final double width;
+  final String fitnessType;
+  final String activityType;
+  final String startDate;
+  final String endDate;
+//  final String activityType;
+//  final
+  final FitnessReminder fitnessReminder;
+
+  FitnessCard(
+      {this.height,
+      this.width,
+      this.fitnessType,
+      this.activityType,
+      this.startDate,
+      this.endDate,
+      this.fitnessReminder});
+
+  @override
+  _FitnessCardState createState() => _FitnessCardState();
+}
+
+class _FitnessCardState extends State<FitnessCard> {
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
+    var fitnessModel = Provider.of<FitnessReminderCRUD>(context);
+
+    return Container(
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {},
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: height * 0.02),
+              Text(
+                fitnessModel
+                    .convertTimeBack(widget.fitnessReminder.activityTime)
+                    .format(context)
+                    .toString(),
+              ),
+              SizedBox(height: height * 0.02),
+              Container(
+                  width: width,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Config.xMargin(context, 4),
+                      vertical: Config.yMargin(context, 2)),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius:
+                        BorderRadius.circular(Config.xMargin(context, 5)),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(
+                                right: Config.xMargin(context, 7),
+                              ),
+                              child: Image.asset(fitnessModel
+                                  .activityType[widget.fitnessReminder.index])),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                '${fitnessModel.fitnessType[widget.fitnessReminder.index]} ${fitnessModel.selectedFreq}',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: height * 0.005),
+                              Text(
+                                '${fitnessModel.startDate}',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark),
+                              ),
+                            ],
+                          ),
+
+                          //Temporary fix to delete reminders
+
+                          // Expanded(
+                          //   child: Container(
+                          //     margin: EdgeInsets.only(
+                          //       left: Config.xMargin(context, 20),
+                          //     ),
+                          //     child: IconButton(
+                          //       onPressed: () {
+                          //         waterReminderDB.deleteWaterReminder(
+                          //             widget.waterReminder.id);
+                          //         waterNotificationManager.removeReminder(
+                          //             waterReminder.selectedDay);
+                          //       },
+                          //       icon: Icon(Icons.delete),
+                          //       color: Colors.red,
+                          //     ),
+                          //   ),
+                          // )
+                        ],
+                      ),
+                      SizedBox(
+                        height: Config.yMargin(context, 1),
+                        width: double.infinity,
+                      ),
+                      Visibility(
+                        visible: false,
+                        child: Divider(
+                          color: Theme.of(context).primaryColorDark,
+                          height: height * 0.02,
+                          endIndent: 10.0,
+                        ),
+                      ),
+                      // Visibility(
+                      //     visible: isSelected,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       children: <Widget>[
+                      //         Expanded(child: flatButton('View')),
+                      //         // Expanded(child: flatButton('Skip')),
+                      //         // Expanded(child: flatButton('Reset'))
+                      //       ],
+                      //     ))
+                    ],
+                  )),
+            ]),
+      ),
+    );
+  }
+}
+
+class FitnessCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     // FitnessNotificationManager fitnessNotificationManager =
     //     FitnessNotificationManager();
+    var fitnessModel = Provider.of<FitnessReminderCRUD>(context);
     return Consumer<FitnessReminderCRUD>(builder: (context, data, child) {
       return Container(
         width: width,

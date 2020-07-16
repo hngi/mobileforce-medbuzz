@@ -15,7 +15,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:device_preview/device_preview.dart';
 
 import 'core/models/water_reminder_model/water_reminder.dart';
 
@@ -51,7 +50,6 @@ class MaterialAPP extends StatelessWidget {
   Widget build(BuildContext context) {
     return FeatureDiscovery(
       child: MaterialApp(
-        builder: DevicePreview.appBuilder, // <--- Add the builder
         debugShowCheckedModeBanner: false,
         title: 'MedBuzz',
         theme: Provider.of<DarkModeModel>(context).appTheme,

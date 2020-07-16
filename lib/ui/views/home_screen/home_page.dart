@@ -87,6 +87,7 @@ class _HomePageState extends State<HomePage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final medModel = Provider.of<MedicationData>(context);
+    Provider.of<MedicationData>(context).getMedicationReminder();
 
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -270,27 +271,73 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           Visibility(
-                            visible:
-                                model.medicationReminderBasedOnDateTime.isEmpty,
+                            visible: medModel.medicationReminder.isEmpty,
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
                                   'No Medication Reminder Set for this Date'),
                             ),
                           ),
-                          for (var medicationReminder
-                              in model.medicationReminderBasedOnDateTime)
-                            MedicationCard(
-                              height: height,
-                              width: width,
-                              values: medicationReminder,
-                              drugName: medicationDB.drugName,
-                              drugType: medicationDB
-                                  .drugTypes[medicationDB.selectedIndex],
-                              dosage: medicationDB.dosage,
-                              selectedFreq: medicationDB.selectedFreq,
+                          Container(
+                            //margin: EdgeInsets.only(
+                            //  bottom: Config.yMargin(context, 2)),
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: medModel.medicationReminder.length > 3
+                                  ? 3
+                                  : medModel.medicationReminder.length,
+                              itemBuilder: (context, index) {
+                                return MedicationCard(
+                                  height: height,
+                                  width: width,
+                                  values: medModel.medicationReminder[index],
+                                  drugName: medModel
+                                      .medicationReminder[index].drugName,
+                                  drugType: medModel.medicationReminder[index]
+                                              .drugType ==
+                                          'Injection'
+                                      ? "images/injection.png"
+                                      : medModel.medicationReminder[index]
+                                                  .drugType ==
+                                              'Tablets'
+                                          ? "images/tablets.png"
+                                          : medModel.medicationReminder[index]
+                                                      .drugType ==
+                                                  'Drops'
+                                              ? "images/drops.png"
+                                              : medModel
+                                                          .medicationReminder[
+                                                              index]
+                                                          .drugType ==
+                                                      'Pills'
+                                                  ? "images/pills.png"
+                                                  : medModel
+                                                              .medicationReminder[
+                                                                  index]
+                                                              .drugType ==
+                                                          'Ointment'
+                                                      ? "images/ointment.png"
+                                                      : medModel
+                                                                  .medicationReminder[
+                                                                      index]
+                                                                  .drugType ==
+                                                              'Syrup'
+                                                          ? "images/syrup.png"
+                                                          : "images/inhaler.png",
+                                  time: medModel
+                                      .medicationReminder[index].firstTime
+                                      .toString(),
+                                  dosage:
+                                      medModel.medicationReminder[index].dosage,
+                                  selectedFreq: medModel
+                                      .medicationReminder[index].frequency,
+                                );
+                              },
                             ),
-                          SizedBox(height: height * 0.05),
+                          ),
+                          SizedBox(height: height * 0.03),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
