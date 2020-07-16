@@ -1,6 +1,5 @@
 import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
-import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';

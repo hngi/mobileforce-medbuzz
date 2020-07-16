@@ -20,6 +20,14 @@ class ScheduledAppointmentsPage extends StatefulWidget {
 
 class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   @override
+  void initState() {
+    Provider.of<ScheduleAppointmentModel>(context, listen: false)
+        .updateAvailableAppointmentReminder(
+            Provider.of<AppointmentData>(context, listen: false).appointment);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var appointmentReminders =
         Provider.of<ScheduleAppointmentModel>(context, listen: true);
@@ -27,10 +35,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
     var appointmentReminderDB =
         Provider.of<AppointmentData>(context, listen: true);
     appointmentReminderDB.getAppointments();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      appointmentReminders.updateAvailableAppointmentReminder(
-          appointmentReminderDB.appointment);
-    });
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return DefaultTabController(

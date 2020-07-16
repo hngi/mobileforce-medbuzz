@@ -14,7 +14,18 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
+    version: "0.39.12"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.13"
+=======
     version: "0.39.13"
+>>>>>>> upstream/dev
   args:
     dependency: transitive
     description:
@@ -120,13 +131,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  clock:
-    dependency: transitive
-    description:
-      name: clock
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   code_builder:
     dependency: transitive
     description:
@@ -189,13 +193,21 @@ packages:
       name: device_preview
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
+    version: "0.4.5"
+  feature_discovery:
+    dependency: "direct main"
+=======
     version: "0.4.7"
   fake_async:
     dependency: transitive
+>>>>>>> upstream/dev
     description:
-      name: fake_async
+      name: feature_discovery
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
+=======
     version: "1.1.0"
   feature_discovery:
     dependency: "direct main"
@@ -203,6 +215,7 @@ packages:
       name: feature_discovery
       url: "https://pub.dartlang.org"
     source: hosted
+>>>>>>> upstream/dev
     version: "0.6.0"
   file:
     dependency: transitive
@@ -331,6 +344,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.12"
   intl:
     dependency: "direct main"
     description:
@@ -414,7 +434,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.6.4"
   path_provider:
     dependency: "direct main"
     description:
@@ -450,6 +470,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.0"
   platform:
     dependency: transitive
     description:
@@ -657,7 +684,11 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
+    version: "0.2.15"
+=======
     version: "0.2.17"
+>>>>>>> upstream/dev
   timing:
     dependency: transitive
     description:
@@ -700,6 +731,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.6.1"
   yaml:
     dependency: transitive
     description:
