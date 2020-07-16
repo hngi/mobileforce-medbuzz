@@ -12,7 +12,6 @@ class MedicationHistoryData extends ChangeNotifier {
 
   List<MedicationHistory> get medicationHistory => _medicationHistory;
 
-
   Future<void> addMedicationReminderHistory(MedicationHistory history) async {
     var box = await Hive.openBox<MedicationHistory>(_boxName);
 
@@ -22,6 +21,11 @@ class MedicationHistoryData extends ChangeNotifier {
 
     box.close();
 
+    notifyListeners();
+  }
+
+  void updateAvailableMedicationHistory(medicationHistory) {
+    _medicationHistory = medicationHistory;
     notifyListeners();
   }
 
@@ -44,6 +48,4 @@ class MedicationHistoryData extends ChangeNotifier {
 
     notifyListeners();
   }
-
-
 }

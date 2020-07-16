@@ -34,6 +34,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   Widget build(BuildContext context) {
     //Fetch data from DB to List in model
     Provider.of<MedicationData>(context).getMedicationReminder();
+    //Where did you write code to get data from Your History database?
 
     //set model
     var model = Provider.of<MedicationData>(context);
@@ -92,6 +93,14 @@ class _MedicationScreenState extends State<MedicationScreen> {
             onPressed: () {
               Navigator.popAndPushNamed(context, RouteNames.homePage);
             }),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.show_chart),
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, RouteNames.medicationHistoryPage);
+              }),
+        ],
       ),
       body: SingleChildScrollView(
         controller: controller,

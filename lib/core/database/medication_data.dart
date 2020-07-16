@@ -1,3 +1,5 @@
+import 'package:MedBuzz/core/database/medication_history.dart';
+import 'package:MedBuzz/core/models/medication_history_model/medication_history.dart';
 import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,31 +69,39 @@ class MedicationData extends ChangeNotifier {
     return medicationReminder;
   }
 
+  MedicationHistoryData medicationHistoryData;
+
+//  List<MedicationReminder> get pastReminders {
+//    return medicationReminder.where((element) => element.endAt.isBefore(DateTime.now())).toList();
+//
+//  }
+  List<MedicationReminder> get myPastMedication {
+    return medicationReminder
+        .where((element) => _selectedDay.day > element.endAt.day)
+        .toList();
+  }
+
   List<MedicationReminder> get pastReminders {
-    return medicationReminder.where((element) => element.endAt.isBefore(DateTime.now())).toList();
-
-  }
-  List<MedicationReminder> get myPastMedication{
-    return medicationReminder.where((element) => _selectedDay.day > element.endAt.day).toList();
+    return medicationReminder
+        .where((element) => DateTime.now().difference(element.endAt).inDays > 0)
+        .toList();
   }
 
-  void deleteAllMedicationSchedule(){
-    for (var medication in pastReminders){
-
+  void deleteAllMedicationSchedule() {
+    for (var medication in pastReminders) {
       deleteSchedule(medication.id);
     }
   }
 
-
-  void updateAvailableMedicationReminder(medicationReminders){
-medicationReminder = medicationReminders;
-notifyListeners();
+  void updateAvailableMedicationReminder(medicationReminders) {
+    medicationReminder = medicationReminders;
+    notifyListeners();
   }
 
-
-
   List<MedicationReminder> get pastMedications {
-    return medicationReminder.where((medication) => _selectedDay.day > medication.endAt.day).toList();
+    return medicationReminder
+        .where((medication) => _selectedDay.day > medication.endAt.day)
+        .toList();
   }
 
   List<int> convertTime(TimeOfDay time) {
@@ -149,6 +159,23 @@ notifyListeners();
   TimeOfDay convertTimeBack(List<int> list) {
     TimeOfDay value = TimeOfDay(hour: list[0], minute: list[1]);
     return value;
+  }
+
+  MedicationHistory convertReminderToHistory(MedicationReminder reminder) {
+    MedicationHistory history = MedicationHistory(
+      drugName: reminder.drugName,
+      drugType: reminder.drugType,
+      dosage: reminder.dosage,
+      frequency: reminder.frequency,
+      firstTime: reminder.firstTime,
+      secondTime: reminder.secondTime,
+      thirdTime: reminder.thirdTime,
+      startAt: reminder.startAt,
+      endAt: reminder.endAt,
+      id: reminder.id,
+      description: reminder.description,
+    );
+    return history;
   }
 
   void onSelectedDrugImage(int index) {
@@ -391,8 +418,10 @@ notifyListeners();
           .isAfter(endDateWithHourAndMin); //if true then schedule is outdated
 
       if (boolean) {
-        //TODO implement code to add outdated schdule to History db
-        //Whoever is doing the history stuff... dont touch any other logic here abeg. I use God beg you
+        //code to add Outdated Medication Reminder to History db before deleting
+
+        medicationHistoryData
+            .addMedicationReminderHistory(convertReminderToHistory(reminder));
 
         //delete outdated schedule from medication database
         deleteSchedule(element.id);

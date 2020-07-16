@@ -12,6 +12,7 @@ import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_mail.dart';
@@ -64,6 +65,7 @@ class RouteNames {
   static const String addMedicationScreen = 'addMedicationScreen';
   static const String medicationScreen = 'medicationScreen';
   static const String medicationPage = 'medicationPage';
+  static const String medicationHistoryPage = 'medicationHistoryPage';
   static const String dietScheduleScreen = 'dietScheduleScreen';
   static const String singleWater = 'singleWater';
   static const String deleteDialog = 'deleteDialog';
@@ -104,6 +106,7 @@ class RouteNames {
     RouteNames.addMedicationScreen: (context) => AddMedicationScreen(),
     RouteNames.medicationScreen: (context) => MedicationScreen(),
     RouteNames.medicationPage: (context) => SchedulledMedicationScreen(),
+    RouteNames.medicationHistoryPage: (context) => MedicationHistoryPage(),
     RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
     RouteNames.singleWater: (context) => SingleWater(),
     RouteNames.healthTips: (context) => HealthTips(),
