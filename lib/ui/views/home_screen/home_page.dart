@@ -13,6 +13,7 @@ import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_remin
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
 import 'package:MedBuzz/ui/widget/progress_card.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:bubbled_navigation_bar/bubbled_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,8 +152,16 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: height * 0.05),
                           GestureDetector(
-                            onTap: () => Navigator.pushNamed(
-                                context, RouteNames.waterScheduleView),
+                            onTap: () {
+                              FeatureDiscovery.discoverFeatures(
+                                  context, const <String>{
+                                'feature7',
+                                'feature1',
+                                'feature2',
+                              });
+                              Navigator.pushReplacementNamed(
+                                  context, RouteNames.waterScheduleView);
+                            },
                             child: ProgressCard(
                                 child: Row(
                                   children: [

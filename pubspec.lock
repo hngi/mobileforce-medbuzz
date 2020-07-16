@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.5"
+  feature_discovery:
+    dependency: "direct main"
+    description:
+      name: feature_discovery
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   file:
     dependency: transitive
     description:
