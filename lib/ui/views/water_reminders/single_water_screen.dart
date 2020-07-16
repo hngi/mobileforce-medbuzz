@@ -1,6 +1,7 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
+import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_screen.dart';
 import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
@@ -189,25 +190,36 @@ class _SingleWaterState extends State<SingleWater> {
               ),
               SizedBox(height: Config.yMargin(context, 10)),
 
-              Padding(
-                padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
-                child: Container(
-                  padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(Config.yMargin(context, 1.28))),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(
-                      left: Config.xMargin(context, 5.33),
-                      right: Config.xMargin(context, 6)), //24,24,27
-                  child: Text(
-                    'Edit',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorLight,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Config.textSize(context, 4),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScheduleWaterReminderScreen(
+                              selectedWaterReminder: widget.water,
+                              isEdit: true)));
+                },
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
+                  child: Container(
+                    padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Config.yMargin(context, 1.28))),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(
+                        left: Config.xMargin(context, 5.33),
+                        right: Config.xMargin(context, 6)), //24,24,27
+                    child: Text(
+                      'Edit',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Config.textSize(context, 4),
+                      ),
                     ),
                   ),
                 ),
