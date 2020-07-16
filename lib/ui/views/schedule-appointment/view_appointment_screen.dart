@@ -30,6 +30,8 @@ class _ViewAppointmentState extends State<ViewAppointment> {
 
   @override
   Widget build(BuildContext context) {
+    final AppointmentNotificationManager notificationManager =
+        AppointmentNotificationManager();
     var appointmentModellerDB =
         Provider.of<AppointmentData>(context, listen: true);
 
@@ -207,6 +209,8 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                   child: InkWell(
                     onTap: () {
                       appointmentModel.isEditing = true;
+                      notificationManager
+                          .removeReminder(appointmentReminder.selectedDay);
                       // appointmentDB.deleteAppointment(widget.appointment.id);
                       Navigator.push(
                         context,

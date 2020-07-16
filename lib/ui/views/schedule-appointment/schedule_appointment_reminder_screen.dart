@@ -354,44 +354,45 @@ class _MyScheduleAppointmentScreenState
                                     notificationManager.showAppointmentNotificationOnce(
                                         num.parse(
                                             '${now.year}${now.month}${now.day}$hour$minutes'),
-                                        'Hey, you\' got somewhere to go',
+                                        'Hey, you\'ve got somewhere to go',
                                         ' ${_typeOfAppointmentController.text} ',
                                         appointmentReminder.getDateTime());
                                   }
-                                } else {
-                                  showSnackbar(context);
-                                  return;
                                 }
                                 break;
                               case 'Update':
-                                appointmentReminder
-                                    .setSelectedNote(_noteController.text);
-                                appointmentReminder
-                                    .setSelectedTypeOfAppointment(
-                                        _typeOfAppointmentController.text);
+                                print(_typeOfAppointmentController.text);
+                                if (_typeOfAppointmentController
+                                    .text.isNotEmpty) {
+                                  appointmentReminder.setSelectedNote(
+                                      _noteController.text ?? '');
+                                  appointmentReminder
+                                      .setSelectedTypeOfAppointment(
+                                          _typeOfAppointmentController.text);
 
-                                await appointmentReminderDB.editAppointment(
-                                    appointment:
-                                        appointmentReminder.editSchedule());
+                                  await appointmentReminderDB.editAppointment(
+                                      appointment:
+                                          appointmentReminder.createSchedule());
 
-                                if (appointmentReminder.selectedDay ==
-                                        DateTime.now().day &&
-                                    appointmentReminder.selectedMonth ==
-                                        DateTime.now().month) {
-                                  String time =
-                                      appointmentReminder.selectedTime;
-                                  String hour = time.substring(1, 2);
-                                  String minutes = time.substring(3, 5);
-                                  DateTime now = DateTime.now();
-                                  notificationManager
-                                      .showAppointmentNotificationOnce(
-                                          num.parse(
-                                              '${now.year}${now.month}${now.day}$hour$minutes'),
-                                          'Hey, you\' got somewhere to go',
-                                          ' ${_typeOfAppointmentController.text} ',
-                                          //[num.parse(hour), num.parse(minutes)]
-                                          appointmentReminder.getDateTime());
+                                  if (appointmentReminder.selectedDay ==
+                                          DateTime.now().day &&
+                                      appointmentReminder.selectedMonth ==
+                                          DateTime.now().month) {
+                                    String time =
+                                        appointmentReminder.selectedTime;
+                                    String hour = time.substring(1, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    print(now);
+                                    notificationManager.showAppointmentNotificationOnce(
+                                        num.parse(
+                                            '${now.year}${now.month}${now.day}$hour$minutes'),
+                                        'Hey, you\'ve got somewhere to go',
+                                        ' ${_typeOfAppointmentController.text} ',
+                                        appointmentReminder.getDateTime());
+                                  }
                                 }
+                                break;
                             }
 
                             Navigator.popAndPushNamed(

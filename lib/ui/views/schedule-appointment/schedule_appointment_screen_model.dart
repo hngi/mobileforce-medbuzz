@@ -158,13 +158,13 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
   List<Appointment> get pastApointments {
     return _availableAppointments
-        .where((appointment) => DateTime.now().isAfter(selectedDateTime))
+        .where((appointment) => DateTime.now().isBefore(selectedDateTime))
         .toList();
   }
 
   List<Appointment> get upcomingApointments {
     return _availableAppointments
-        .where((appointment) => DateTime.now().isBefore(selectedDateTime))
+        .where((appointment) => DateTime.now().isAfter(selectedDateTime))
         .toList();
   }
 
