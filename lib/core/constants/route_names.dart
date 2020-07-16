@@ -18,7 +18,7 @@ import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/single_appointment_screen.dart';
+
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
@@ -104,7 +104,6 @@ class RouteNames {
     RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
     RouteNames.singleWater: (context) => SingleWater(),
     RouteNames.healthTips: (context) => HealthTips(),
-    RouteNames.singleAppointment: (context) => SingleAppointment(),
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };

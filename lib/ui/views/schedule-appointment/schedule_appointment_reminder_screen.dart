@@ -17,9 +17,12 @@ class ScheduleAppointmentScreen extends StatelessWidget {
   final String payload;
   final Appointment appointment;
   final String buttonText;
-  ScheduleAppointmentScreen(
-      {Key key, this.payload, this.appointment, this.buttonText})
-      : super(key: key);
+  ScheduleAppointmentScreen({
+    Key key,
+    this.payload,
+    this.appointment,
+    this.buttonText,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,6 +257,7 @@ class _MyScheduleAppointmentScreenState
                             // Input for type of appointment
                             controller: _typeOfAppointmentController,
                             focusNode: myFocusNode,
+                            autofocus: true,
                           ),
                           SizedBox(
                             height: Config.yMargin(context, 2.43),
@@ -270,6 +274,7 @@ class _MyScheduleAppointmentScreenState
                           TextField(
                             //Input field for additional notes
                             controller: _noteController,
+                            autofocus: true,
                             selectionHeightStyle: BoxHeightStyle.tight,
                             keyboardType: TextInputType.multiline,
                             maxLines: 9,
@@ -403,16 +408,18 @@ class _MyScheduleAppointmentScreenState
                                 }
                                 break;
                               case 'Update':
-                                try {
-                                  appointmentReminder
-                                      .setSelectedNote(_noteController.text);
+                                print(_typeOfAppointmentController.text);
+                                if (_typeOfAppointmentController
+                                    .text.isNotEmpty) {
+                                  appointmentReminder.setSelectedNote(
+                                      _noteController.text ?? '');
                                   appointmentReminder
                                       .setSelectedTypeOfAppointment(
                                           _typeOfAppointmentController.text);
 
                                   await appointmentReminderDB.editAppointment(
                                       appointment:
-                                          appointmentReminder.editSchedule());
+                                          appointmentReminder.createSchedule());
 
                                   if (appointmentReminder.selectedDay ==
                                           DateTime.now().day &&
@@ -423,21 +430,16 @@ class _MyScheduleAppointmentScreenState
                                     String hour = time.substring(1, 2);
                                     String minutes = time.substring(3, 5);
                                     DateTime now = DateTime.now();
-                                    notificationManager
-                                        .showAppointmentNotificationOnce(
-                                            num.parse(
-                                                '${now.year}${now.month}${now.day}$hour$minutes'),
-                                            'Hey, you\' got somewhere to go',
-                                            ' ${_typeOfAppointmentController.text} ',
-                                            //[num.parse(appointmentReminder.selectedTime.substring(0,2)), num.parse(minutes)]
-                                            appointmentReminder.getDateTime());
-
-                                    Navigator.popAndPushNamed(
-                                        context, RouteNames.homePage);
+                                    print(now);
+                                    notificationManager.showAppointmentNotificationOnce(
+                                        num.parse(
+                                            '${now.year}${now.month}${now.day}$hour$minutes'),
+                                        'Hey, you\'ve got somewhere to go',
+                                        ' ${_typeOfAppointmentController.text} ',
+                                        appointmentReminder.getDateTime());
                                   }
-                                } catch (e) {
-                                  print(e);
                                 }
+                                break;
                             }
 
                             //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-D
