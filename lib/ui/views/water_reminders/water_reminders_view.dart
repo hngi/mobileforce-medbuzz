@@ -1,6 +1,7 @@
 import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../size_config/config.dart';
@@ -80,25 +81,59 @@ class WaterScheduleViewScreen extends StatelessWidget {
 //IF YOU TOUCH ANYTHING IN THIS SCREEN, THUNDER WILL FIRE YOU
               height: height * 0.07,
               width: height * 0.07,
-              child: FloatingActionButton(
-                heroTag: 'add/drink',
-                elevation: 0,
-                onPressed: () {
-                  waterReminderDB.waterRemindersCount == 0
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ScheduleWaterReminderScreen()))
-                      : waterTakenDB.addWaterTaken(
-                          waterReminderDB.waterReminders[0].ml, DateTime.now());
+              child: DescribedFeatureOverlay(
+                featureId: 'feature1',
+                onComplete: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScheduleWaterReminderScreen()));
+                  // FeatureDiscovery.completeCurrentStep(context);
+                  return true;
                 },
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Icon(
-                  waterReminderDB.waterRemindersCount == 0
-                      ? Icons.add
-                      : Icons.local_drink,
-                  size: Config.textSize(context, 7),
+                tapTarget: Icon(
+                    waterReminderDB.waterRemindersCount == 0
+                        ? Icons.add
+                        : Icons.local_drink,
+                    size: Config.textSize(context, 7)),
+                description: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                        'Set your daily goal with your preferred start and end time, the intervals you\'d like to get the reminders at and the capacity of your water cup/bottle'),
+                    SizedBox(
+                      height: Config.yMargin(context, 1),
+                    ),
+                    Icon(
+                        waterReminderDB.waterRemindersCount == 0
+                            ? Icons.add
+                            : Icons.local_drink,
+                        color: Colors.white,
+                        size: Config.textSize(context, 7))
+                  ],
+                ),
+                title: Text('Add a Goal'),
+                child: FloatingActionButton(
+                  heroTag: 'add/drink',
+                  elevation: 0,
+                  onPressed: () {
+                    waterReminderDB.waterRemindersCount == 0
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ScheduleWaterReminderScreen()))
+                        : waterTakenDB.addWaterTaken(
+                            waterReminderDB.waterReminders[0].ml,
+                            DateTime.now());
+                  },
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Icon(
+                    waterReminderDB.waterRemindersCount == 0
+                        ? Icons.add
+                        : Icons.local_drink,
+                    size: Config.textSize(context, 7),
+                  ),
                 ),
               ),
             ),
@@ -189,11 +224,64 @@ class WaterScheduleViewScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+
                   SizedBox(height: Config.yMargin(context, 5)),
                   Visibility(
                       visible: waterReminderDB.waterReminders.isEmpty,
                       child: Container(
-                        child: Text('No water reminders'),
+                        child: DescribedFeatureOverlay(
+                            featureId: 'feature7',
+                            tapTarget: Text('Next'),
+                            description: Column(
+                              children: <Widget>[
+                                Text(
+                                    'Get to know how much water you\'ve had daily matched with the recommended intake. View log of your intake with timestamps '),
+                                SizedBox(
+                                  height: Config.yMargin(context, 1),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(
+                                      Config.yMargin(context, 1)),
+                                  color: Theme.of(context).primaryColorLight,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        '11:00PM',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
+                                      ),
+                                      Icon(Icons.delete),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Config.yMargin(context, 1),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(
+                                      Config.yMargin(context, 1)),
+                                  color: Theme.of(context).primaryColorLight,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        '11:00PM',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
+                                      ),
+                                      Icon(Icons.delete),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            title: Text('View your progress'),
+                            child: Text('No water reminders')),
                       )),
                   Visibility(
                       visible: waterReminderDB.waterReminders.isNotEmpty,

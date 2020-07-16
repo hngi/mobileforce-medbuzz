@@ -1,7 +1,9 @@
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,6 +43,7 @@ class AllRemindersViewModel extends ChangeNotifier {
   List<WaterReminder> _availableWaterReminders = [];
   List<Appointment> _allAvailableAppointments = [];
   List<FitnessReminder> _availableFitnessReminders = [];
+  List<DietModel> _availableDietReminders = [];
 
   List<MedicationReminder> _availableMedicationReminders = [];
   AllRemindersViewModel() {
@@ -111,6 +114,11 @@ class AllRemindersViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateAvailableDietReminders(List<DietModel> dietReminders) {
+    _availableDietReminders = dietReminders;
+    notifyListeners();
+  }
+
   void updateAvailableMedicationReminders(
       List<MedicationReminder> medicationReminders) {
     _availableMedicationReminders = medicationReminders;
@@ -171,6 +179,15 @@ class AllRemindersViewModel extends ChangeNotifier {
   List<FitnessReminder> get fitnessRemindersBasedOnDateTime {
     // print(_availableFitnessReminders[0].startDate);
     return _availableFitnessReminders
+        .where((element) =>
+            selectedDateTime.difference(element.startDate).inDays >= 0 &&
+            selectedDateTime.difference(element.endDate).inDays <= 0)
+        .toList();
+  }
+
+  List<DietModel> get dietRemindersBasedOnDateTime {
+    // print(_availableFitnessReminders[0].startDate);
+    return _availableDietReminders
         .where((element) =>
             selectedDateTime.difference(element.startDate).inDays >= 0 &&
             selectedDateTime.difference(element.endDate).inDays <= 0)

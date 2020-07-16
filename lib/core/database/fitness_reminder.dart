@@ -1,12 +1,10 @@
-import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../models/fitness_reminder_model/fitness_reminder.dart';
 import '../models/fitness_reminder_model/fitness_reminder.dart';
 
 class FitnessReminderCRUD extends ChangeNotifier {
   static const String _boxName = "fitnessReminderBox";
-  bool isEditting = false;
+  bool isEditing = false;
   final String add = "Add Fitness Reminder";
   final String edit = "Edit Fitness Reminder";
   DateTime _today = DateTime.now();
@@ -14,18 +12,18 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int _selectedMonth;
   dynamic _selectedTime;
   int selectedIndex = 0;
-  String selectedfitnessType = 'images/jogging.png';
+  String selectedActivityType = 'images/jogging.png';
   String description;
-
+  FitnessReminder reminder;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   int index;
   // int _selectedActivity = 0;
-  int selectedFitnessType = 0;
+//  int selectedFitnessType = 0;
   int minDaily = 60;
   TimeOfDay activityTime = TimeOfDay.now();
 //  int id = Random().nextInt(100);
-  DateTime id = DateTime.now();
+  String id;
 
   String selectedFreq = "Daily";
 
@@ -44,6 +42,26 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'images/basketball.png'
   ];
 
+  String updateSelectedActivityType(String activity) {
+    this.selectedActivityType = activity == activityType[0]
+        ? activityType[0]
+        : activity == activityType[1]
+            ? activityType[1]
+            : activity == activityType[2]
+                ? activityType[2]
+                : activity == activityType[3]
+                    ? activityType[3]
+                    : activity == activityType[4]
+                        ? activityType[4]
+                        : activity == activityType[5]
+                            ? activityType[5]
+                            : activity == activityType[6]
+                                ? activityType[6]
+                                : activityType[7];
+
+    return selectedActivityType;
+  }
+
   List fitnessType = [
     'Jogging',
     'Swimming',
@@ -54,6 +72,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'Badminton',
     'Basketball'
   ];
+
+  String updateFreq(String freq) {
+    this.selectedFreq = freq;
+    notifyListeners();
+    return selectedFreq;
+  }
 
   int get reminderLength {
     return _fitnessReminder.length;
@@ -68,6 +92,22 @@ class FitnessReminderCRUD extends ChangeNotifier {
   void onSelectedFitnessImage(int index) {
     selectedIndex = index;
     notifyListeners();
+  }
+
+  void updateStartDate(DateTime selectedDate) {
+    this.startDate = selectedDate;
+    notifyListeners();
+  }
+
+  void updateEndDate(DateTime selectedDate) {
+    this.endDate = selectedDate;
+    notifyListeners();
+  }
+
+  TimeOfDay updateActivityTime(TimeOfDay selectedTime) {
+    this.activityTime = selectedTime;
+    notifyListeners();
+    return activityTime;
   }
 
   TimeOfDay convertTimeBack(List<int> list) {

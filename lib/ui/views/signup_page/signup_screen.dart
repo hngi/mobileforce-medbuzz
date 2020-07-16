@@ -1,6 +1,7 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:hive/hive.dart';
@@ -85,6 +86,18 @@ class MySignUp extends StatelessWidget {
                         name: nameController.text);
                     await userDb.adduser(newuser).then((value) async {
                       await box.put('status', 'true');
+                      FeatureDiscovery.discoverFeatures(
+                        context,
+                        const <String>{
+                          'feature7',
+                          'feature1',
+                          // feature2,
+                          // feature3,
+                          // feature4,
+                          // feature6,
+                          // feature5
+                        },
+                      );
                       Navigator.pushReplacementNamed(
                           context, RouteNames.homePage);
                     });

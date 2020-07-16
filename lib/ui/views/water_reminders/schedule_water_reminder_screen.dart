@@ -4,6 +4,7 @@ import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -170,11 +171,30 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        'Wake Time',
-                        style: TextStyle(
-                          fontSize: Config.textSize(context, 4),
-                          fontWeight: FontWeight.normal,
+                      DescribedFeatureOverlay(
+                        featureId: 'feature2',
+                        tapTarget: Text('Get Started!'),
+                        // onComplete: () async {
+
+                        //   return true;
+                        // },
+                        title: Text('Flexible Time Schedules'),
+                        description: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                'Set your preferred time on the timewheel when you want to receive reminders for your goal and the intervals you would want to get them'),
+                            TimeWheel(
+                              updateTimeChanged: (_) => print(_),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          'Wake Time',
+                          style: TextStyle(
+                            fontSize: Config.textSize(context, 4),
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
                       SizedBox(height: height * 0.01),
