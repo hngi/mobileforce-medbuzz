@@ -421,7 +421,6 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(
                               builder: (context) => ScheduleAppointmentScreen(
                                     buttonText: 'Save',
-                                    refresh: true,
                                   )),
                         );
                       },

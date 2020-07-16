@@ -207,14 +207,13 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                   child: InkWell(
                     onTap: () {
                       appointmentModel.isEditing = true;
-                      appointmentDB.deleteAppointment(widget.appointment.id);
+                      // appointmentDB.deleteAppointment(widget.appointment.id);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ScheduleAppointmentScreen(
                                   appointment: widget.appointment,
                                   buttonText: 'Update',
-                                  refresh: false,
                                 )),
                       );
                     },
