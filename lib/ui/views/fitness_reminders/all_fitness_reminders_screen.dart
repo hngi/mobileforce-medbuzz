@@ -210,7 +210,19 @@ class _FitnessCardState extends State<FitnessCard> {
     return Container(
       width: double.infinity,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          print([
+            fitnessModel.updateDescription(widget.fitnessReminder.description),
+            fitnessModel
+                .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
+            fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
+            fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
+            fitnessModel.updateActivityTime(fitnessModel
+                .convertTimeBack(widget.fitnessReminder.activityTime)),
+          ]);
+
+          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
+        },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,26 +272,6 @@ class _FitnessCardState extends State<FitnessCard> {
                               ),
                             ],
                           ),
-
-                          //Temporary fix to delete reminders
-
-                          // Expanded(
-                          //   child: Container(
-                          //     margin: EdgeInsets.only(
-                          //       left: Config.xMargin(context, 20),
-                          //     ),
-                          //     child: IconButton(
-                          //       onPressed: () {
-                          //         waterReminderDB.deleteWaterReminder(
-                          //             widget.waterReminder.id);
-                          //         waterNotificationManager.removeReminder(
-                          //             waterReminder.selectedDay);
-                          //       },
-                          //       icon: Icon(Icons.delete),
-                          //       color: Colors.red,
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                       SizedBox(

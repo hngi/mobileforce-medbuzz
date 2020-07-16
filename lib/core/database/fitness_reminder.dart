@@ -14,14 +14,14 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int _selectedMonth;
   dynamic _selectedTime;
   int selectedIndex = 0;
-  String selectedfitnessType = 'images/jogging.png';
+  String selectedActivityType = 'images/jogging.png';
   String description;
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   int index;
   // int _selectedActivity = 0;
-  int selectedFitnessType = 0;
+//  int selectedFitnessType = 0;
   int minDaily = 60;
   TimeOfDay activityTime = TimeOfDay.now();
 //  int id = Random().nextInt(100);
@@ -44,6 +44,25 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'images/basketball.png'
   ];
 
+  String updateSelectedActivityType(String activity) {
+    this.selectedActivityType = activity == activityType[0]
+        ? activityType[0]
+        : activity == activityType[1]
+            ? activityType[1]
+            : activity == activityType[2]
+                ? activityType[2]
+                : activity == activityType[3]
+                    ? activityType[3]
+                    : activity == activityType[4]
+                        ? activityType[4]
+                        : activity == activityType[5]
+                            ? activityType[5]
+                            : activity == activityType[6]
+                                ? activityType[6]
+                                : activityType[7];
+
+    return selectedActivityType;
+  }
   List fitnessType = [
     'Jogging',
     'Swimming',
@@ -68,6 +87,22 @@ class FitnessReminderCRUD extends ChangeNotifier {
   void onSelectedFitnessImage(int index) {
     selectedIndex = index;
     notifyListeners();
+  }
+
+  void updateStartDate(DateTime selectedDate) {
+    this.startDate = selectedDate;
+    notifyListeners();
+  }
+
+  void updateEndDate(DateTime selectedDate) {
+    this.endDate = selectedDate;
+    notifyListeners();
+  }
+
+  TimeOfDay updateActivityTime(TimeOfDay selectedTime) {
+    this.activityTime = selectedTime;
+    notifyListeners();
+    return activityTime;
   }
 
   TimeOfDay convertTimeBack(List<int> list) {
