@@ -20,12 +20,6 @@ class ScheduledAppointmentsPage extends StatefulWidget {
 }
 
 class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
-  String month = 'July';
-  int dateno = 12;
-  String day = 'Thurs';
-  var items = ['hi', 'hello', 'good', 'new', 'hi', 'now'];
-  dynamic reminderMessage = 'Make sure to make lots of friends.';
-
   @override
   Widget build(BuildContext context) {
     var appointmentReminders =
@@ -58,7 +52,7 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
           leading: Container(
             child: IconButton(
               icon: Icon(
-                Icons.arrow_back,
+                Icons.keyboard_backspace,
                 color: appThemeLight.appBarTheme.iconTheme.color,
               ),
 
@@ -106,13 +100,16 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Visibility(
-                        visible: appointmentReminders.allAppointments.isEmpty,
+                        visible:
+                            appointmentReminders.upcomingApointments.isEmpty,
                         child: Container(
+                          width: width,
+                          height: height * .8,
                           child: Center(
                               child: Text('No Appointments for this date')),
                         )),
                     for (var appointment
-                        in appointmentReminders.allAppointments)
+                        in appointmentReminders.upcomingApointments)
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: Config.xMargin(context, 5.0)),
@@ -132,6 +129,8 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                     Visibility(
                         visible: appointmentReminders.pastApointments.isEmpty,
                         child: Container(
+                          width: width,
+                          height: height * .8,
                           child: Center(child: Text('No Past Appointments')),
                         )),
                     for (var appointment
