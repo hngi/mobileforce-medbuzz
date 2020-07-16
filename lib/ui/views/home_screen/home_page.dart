@@ -164,14 +164,14 @@ class _HomePageState extends State<HomePage> {
                                     Column(
                                       //mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Water Tracker',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize:
-                                              Config.textSize(context, 3.5),
+                                                  Config.textSize(context, 3.5),
                                               color: Theme.of(context)
                                                   .primaryColorDark),
                                         ),
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                                               '${waterTakenDB.currentLevel}ml',
                                               style: TextStyle(
                                                 fontSize:
-                                                Config.textSize(context, 4),
+                                                    Config.textSize(context, 4),
                                                 color: Theme.of(context)
                                                     .primaryColorDark,
                                               ),
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize:
-                                                Config.textSize(context, 4),
+                                                    Config.textSize(context, 4),
                                                 color: Theme.of(context)
                                                     .primaryColorDark,
                                               ),
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                                 progressBarColor:
-                                Theme.of(context).primaryColor,
+                                    Theme.of(context).primaryColor,
                                 title: 'Water Tracker',
                                 progress: waterTakenDB.currentLevel,
                                 total: waterTakenDB.totalLevel,
@@ -287,41 +287,41 @@ class _HomePageState extends State<HomePage> {
                                   drugName: medModel
                                       .medicationReminder[index].drugName,
                                   drugType: medModel.medicationReminder[index]
-                                      .drugType ==
-                                      'Injection'
+                                              .drugType ==
+                                          'Injection'
                                       ? "images/injection.png"
                                       : medModel.medicationReminder[index]
-                                      .drugType ==
-                                      'Tablets'
-                                      ? "images/tablets.png"
-                                      : medModel.medicationReminder[index]
-                                      .drugType ==
-                                      'Drops'
-                                      ? "images/drops.png"
-                                      : medModel
-                                      .medicationReminder[
-                                  index]
-                                      .drugType ==
-                                      'Pills'
-                                      ? "images/pills.png"
-                                      : medModel
-                                      .medicationReminder[
-                                  index]
-                                      .drugType ==
-                                      'Ointment'
-                                      ? "images/ointment.png"
-                                      : medModel
-                                      .medicationReminder[
-                                  index]
-                                      .drugType ==
-                                      'Syrup'
-                                      ? "images/syrup.png"
-                                      : "images/inhaler.png",
+                                                  .drugType ==
+                                              'Tablets'
+                                          ? "images/tablets.png"
+                                          : medModel.medicationReminder[index]
+                                                      .drugType ==
+                                                  'Drops'
+                                              ? "images/drops.png"
+                                              : medModel
+                                                          .medicationReminder[
+                                                              index]
+                                                          .drugType ==
+                                                      'Pills'
+                                                  ? "images/pills.png"
+                                                  : medModel
+                                                              .medicationReminder[
+                                                                  index]
+                                                              .drugType ==
+                                                          'Ointment'
+                                                      ? "images/ointment.png"
+                                                      : medModel
+                                                                  .medicationReminder[
+                                                                      index]
+                                                                  .drugType ==
+                                                              'Syrup'
+                                                          ? "images/syrup.png"
+                                                          : "images/inhaler.png",
                                   time: medModel
                                       .medicationReminder[index].firstTime
                                       .toString(),
                                   dosage:
-                                  medModel.medicationReminder[index].dosage,
+                                      medModel.medicationReminder[index].dosage,
                                   selectedFreq: medModel
                                       .medicationReminder[index].frequency,
                                 );
@@ -363,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text('No Appointment Set for this Date'),
                               )),
                           for (var appointment
-                          in model.appointmentReminderBasedOnDateTime)
+                              in model.appointmentReminderBasedOnDateTime)
                             AppointmentCard(
                               height: height,
                               width: width,
@@ -381,192 +381,192 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: model.currentIndex != 0
             ? Container()
             : WillPopScope(
-          onWillPop: () {
-            Navigator.pushReplacementNamed(context, RouteNames.homePage);
-            return Future.value(false);
-          },
-          child: SpeedDial(
-            backgroundColor: Theme.of(context).primaryColor,
-            onOpen: () {
-              setState(() {
-                isPressed = true;
-              });
-            },
-            onClose: () {
-              setState(() {
-                isPressed = false;
-              });
-            },
-            child: Icon(isPressed == true ? Icons.close : Icons.add),
-            overlayColor: appThemeLight.iconTheme.color,
-            overlayOpacity: 0.7,
-            children: [
-              SpeedDialChild(
-                child: Image(image: AssetImage('images/calender.png')),
-                backgroundColor: Theme.of(context).primaryColorLight,
-                labelWidget: Container(
-                  margin:
-                  EdgeInsets.only(right: Config.xMargin(context, 4)),
-                  child: Text(
-                    'Appointment',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ScheduleAppointmentScreen(
-                          buttonText: 'Save',
-                        )),
-                  );
+                onWillPop: () {
+                  Navigator.pushReplacementNamed(context, RouteNames.homePage);
+                  return Future.value(false);
                 },
-              ),
-              SpeedDialChild(
-                backgroundColor: Theme.of(context).primaryColorLight,
-                child: Image(image: AssetImage('images/drugoutline.png')),
-                labelWidget: Container(
-                  margin:
-                  EdgeInsets.only(right: Config.xMargin(context, 4)),
-                  child: Text(
-                    'Medication',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                child: SpeedDial(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onOpen: () {
+                    setState(() {
+                      isPressed = true;
+                    });
+                  },
+                  onClose: () {
+                    setState(() {
+                      isPressed = false;
+                    });
+                  },
+                  child: Icon(isPressed == true ? Icons.close : Icons.add),
+                  overlayColor: appThemeLight.iconTheme.color,
+                  overlayOpacity: 0.7,
+                  children: [
+                    SpeedDialChild(
+                      child: Image(image: AssetImage('images/calender.png')),
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Appointment',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScheduleAppointmentScreen(
+                                    buttonText: 'Save',
+                                  )),
+                        );
+                      },
                     ),
-                  ),
-                ),
-                onTap: () {
-                  medModel.newMedicine(context);
-                },
-              ),
-              SpeedDialChild(
-                backgroundColor: Theme.of(context).primaryColorLight,
-                child: Image(image: AssetImage('images/dumbell.png')),
-                labelWidget: Container(
-                  margin:
-                  EdgeInsets.only(right: Config.xMargin(context, 4)),
-                  child: Text(
-                    'Fitness',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/drugoutline.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Medication',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        medModel.newMedicine(context);
+                      },
                     ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, RouteNames.fitnessDescriptionScreen);
-                },
-              ),
-              SpeedDialChild(
-                backgroundColor: Theme.of(context).primaryColorLight,
-                child: Image(image: AssetImage('images/dropoutline.png')),
-                labelWidget: Container(
-                  margin:
-                  EdgeInsets.only(right: Config.xMargin(context, 4)),
-                  child: Text(
-                    'Water',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/dumbell.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Fitness',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.fitnessDescriptionScreen);
+                      },
                     ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, RouteNames.scheduleWaterReminderScreen);
-                },
-              ),
-              SpeedDialChild(
-                backgroundColor: Theme.of(context).primaryColorLight,
-                child: Image(image: AssetImage('images/foood.png')),
-                labelWidget: Container(
-                  margin:
-                  EdgeInsets.only(right: Config.xMargin(context, 4)),
-                  child: Text(
-                    'Diet',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/dropoutline.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Water',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.scheduleWaterReminderScreen);
+                      },
                     ),
-                  ),
+                    SpeedDialChild(
+                      backgroundColor: Theme.of(context).primaryColorLight,
+                      child: Image(image: AssetImage('images/foood.png')),
+                      labelWidget: Container(
+                        margin:
+                            EdgeInsets.only(right: Config.xMargin(context, 4)),
+                        child: Text(
+                          'Diet',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.scheduleDietReminderScreen);
+                      },
+                    ),
+                  ],
                 ),
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, RouteNames.scheduleDietReminderScreen);
-                },
               ),
-            ],
-          ),
-        ),
         //Crazelu extracted BottomNavigationBar widget to Widgets folder
 
         bottomNavigationBar: isPressed == true
             ? null
             : BubbledNavigationBar(
-          controller: _menuPositionController,
-          initialIndex: 0,
-          defaultBubbleColor:
-          Theme.of(context).primaryColor.withOpacity(.2),
-          backgroundColor: Theme.of(context).backgroundColor,
-          onTap: (index) {
-            model.updateCurrentIndex(index);
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 150),
-                curve: Curves.easeInOutQuad);
-          },
-          items: <BubbledNavigationBarItem>[
-            BubbledNavigationBarItem(
-              icon: Icon(CupertinoIcons.home,
-                  size: Config.xMargin(context, 8.33),
-                  color: Theme.of(context).hintColor),
-              activeIcon: Icon(CupertinoIcons.home,
-                  size: Config.xMargin(context, 8.33),
-                  color: Theme.of(context).primaryColor),
-              title: Text(
-                'Home',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w500,
-                    fontSize: Config.textSize(context, 3.5)),
-              ),
-            ),
-            BubbledNavigationBarItem(
-              icon: Icon(CupertinoIcons.bell,
-                  size: Config.xMargin(context, 8.33),
-                  color: Theme.of(context).hintColor),
-              activeIcon: Icon(CupertinoIcons.bell,
-                  size: Config.xMargin(context, 8.33),
-                  color: Theme.of(context).primaryColor),
-              title: Text(
-                'Reminders',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w500,
-                    fontSize: Config.textSize(context, 3.5)),
-              ),
-            ),
-            // //Commented out for presentation Purposes
-            // BubbledNavigationBarItem(
-            //   icon: Icon(CupertinoIcons.profile_circled,
-            //       size: Config.xMargin(context, 8.33),
-            //       color: Theme.of(context).hintColor),
-            //   activeIcon: Icon(CupertinoIcons.profile_circled,
-            //       size: Config.xMargin(context, 8.33),
-            //       color: Theme.of(context).primaryColor),
-            //   title: Text(
-            //     'Profile',
-            //     style: TextStyle(
-            //         color: Theme.of(context).primaryColorDark,
-            //         fontWeight: FontWeight.w500,
-            //         fontSize: Config.textSize(context, 3.5)),
-            //   ),
-            // ),
-          ],
-        ));
+                controller: _menuPositionController,
+                initialIndex: 0,
+                defaultBubbleColor:
+                    Theme.of(context).primaryColor.withOpacity(.2),
+                backgroundColor: Theme.of(context).backgroundColor,
+                onTap: (index) {
+                  model.updateCurrentIndex(index);
+                  _pageController.animateToPage(index,
+                      duration: Duration(milliseconds: 150),
+                      curve: Curves.easeInOutQuad);
+                },
+                items: <BubbledNavigationBarItem>[
+                  BubbledNavigationBarItem(
+                    icon: Icon(CupertinoIcons.home,
+                        size: Config.xMargin(context, 8.33),
+                        color: Theme.of(context).hintColor),
+                    activeIcon: Icon(CupertinoIcons.home,
+                        size: Config.xMargin(context, 8.33),
+                        color: Theme.of(context).primaryColor),
+                    title: Text(
+                      'Home',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w500,
+                          fontSize: Config.textSize(context, 3.5)),
+                    ),
+                  ),
+                  BubbledNavigationBarItem(
+                    icon: Icon(CupertinoIcons.bell,
+                        size: Config.xMargin(context, 8.33),
+                        color: Theme.of(context).hintColor),
+                    activeIcon: Icon(CupertinoIcons.bell,
+                        size: Config.xMargin(context, 8.33),
+                        color: Theme.of(context).primaryColor),
+                    title: Text(
+                      'Reminders',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w500,
+                          fontSize: Config.textSize(context, 3.5)),
+                    ),
+                  ),
+                  // //Commented out for presentation Purposes
+                  // BubbledNavigationBarItem(
+                  //   icon: Icon(CupertinoIcons.profile_circled,
+                  //       size: Config.xMargin(context, 8.33),
+                  //       color: Theme.of(context).hintColor),
+                  //   activeIcon: Icon(CupertinoIcons.profile_circled,
+                  //       size: Config.xMargin(context, 8.33),
+                  //       color: Theme.of(context).primaryColor),
+                  //   title: Text(
+                  //     'Profile',
+                  //     style: TextStyle(
+                  //         color: Theme.of(context).primaryColorDark,
+                  //         fontWeight: FontWeight.w500,
+                  //         fontSize: Config.textSize(context, 3.5)),
+                  //   ),
+                  // ),
+                ],
+              ));
   }
 }

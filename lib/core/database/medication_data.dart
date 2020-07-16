@@ -8,6 +8,8 @@ import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminde
 import 'package:hive/hive.dart';
 import 'dart:math';
 
+import 'package:provider/provider.dart';
+
 class MedicationData extends ChangeNotifier {
   static const String _boxName = "medicationReminderBox";
   final String add = "Add Medication";
@@ -37,6 +39,8 @@ class MedicationData extends ChangeNotifier {
   String id;
   String description = "Enter Anything Here";
   MedicationReminder reminder;
+  MedicationHistory newHistory;
+  BuildContext context;
 
   bool isEditing = false;
 
@@ -68,8 +72,6 @@ class MedicationData extends ChangeNotifier {
   List<MedicationReminder> get allMedications {
     return medicationReminder;
   }
-
-  MedicationHistoryData medicationHistoryData;
 
 //  List<MedicationReminder> get pastReminders {
 //    return medicationReminder.where((element) => element.endAt.isBefore(DateTime.now())).toList();
@@ -419,12 +421,12 @@ class MedicationData extends ChangeNotifier {
 
       if (boolean) {
         //code to add Outdated Medication Reminder to History db before deleting
-
-        medicationHistoryData
-            .addMedicationReminderHistory(convertReminderToHistory(reminder));
+        if (newHistory == null) {
+          this.newHistory = convertReminderToHistory(element);
+        }
 
         //delete outdated schedule from medication database
-        deleteSchedule(element.id);
+        addHistoryAndDelete(element.id);
         print('Deleting outdated Schedule: ${element.drugName}');
         print('Deleting its notifications');
         switch (element.frequency) {
@@ -496,6 +498,25 @@ class MedicationData extends ChangeNotifier {
     // medicationReminderBox.close();
 
     notifyListeners();
+  }
+
+  void addHistoryAndDelete(key) async {
+    var medicationReminderBox =
+        await Hive.openBox<MedicationReminder>(_boxName);
+
+    medicationReminder = medicationReminderBox.values.toList();
+    await medicationReminderBox.delete(key);
+    // medicationReminderBox.close();
+    await addMedicationReminderHistory(this.newHistory);
+    this.newHistory = null;
+
+    notifyListeners();
+  }
+
+  Future<void> addMedicationReminderHistory(MedicationHistory history) async {
+    var box = await Hive.openBox<MedicationHistory>("medicationHistoryBox");
+
+    await box.put(history.id.toString(), history);
   }
 
   //model for all medication screen

@@ -43,9 +43,6 @@ class MedicationHistoryData extends ChangeNotifier {
     var box = await Hive.openBox<MedicationHistory>(_boxName);
 
     _medicationHistory = box.values.toList();
-
-    box.close();
-
     notifyListeners();
   }
 }
