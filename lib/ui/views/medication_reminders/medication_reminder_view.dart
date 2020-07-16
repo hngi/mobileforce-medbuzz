@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,12 +45,22 @@ class MedicationView extends StatelessWidget {
                     child: FlatButton.icon(
                         onPressed: () async {
                           showDialog(
-                              context: context,
-                              child: DeleteBox(
-                                  deletion_key: medModel.id,
-                                  newReminder: medModel
-                                      .getSchedule()) //show Confirmation dialog
-                              );
+                                  context: context,
+                                  child: DeleteBox(
+                                      deletion_key: medModel.id,
+                                      newReminder: medModel
+                                          .getSchedule()) //show Confirmation dialog
+                                  )
+                              .then((value) => Flushbar(
+                                    icon: Icon(
+                                      Icons.check_circle,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    message: "Reminder successfully deleted",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context));
                           //Do not write any code here
                         },
                         icon: Icon(

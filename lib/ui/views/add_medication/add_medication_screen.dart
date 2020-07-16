@@ -3,6 +3,7 @@ import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -321,9 +322,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: Config.yMargin(context, 3.0)),
-                  buildStartDate(),
+                  buildStartDate(context),
                   SizedBox(height: Config.yMargin(context, 1.5)),
-                  buildEndDate(),
+                  buildEndDate(context),
                   SizedBox(height: Config.yMargin(context, 10)),
                   InkWell(
                       onTap: () async {
@@ -492,8 +493,26 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           }
                           Navigator.popAndPushNamed(
                               context, RouteNames.medicationScreen);
+                          Flushbar(
+                            icon: Icon(
+                              Icons.check_circle,
+                              size: 28.0,
+                              color: Colors.white,
+                            ),
+                            backgroundColor: Colors.green,
+                            message: "Reminder successfully created",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
                         } else {
-                          //TODO display SnackBar to notify that name is empty
+                          Flushbar(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 28.0,
+                              color: Colors.white,
+                            ),
+                            message: "Please enter the name of the drug",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
                         }
                       },
                       child: Container(
@@ -932,7 +951,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget buildStartDate() {
+  Widget buildStartDate(BuildContext context) {
     var medModel = Provider.of<MedicationData>(context);
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     return Column(
@@ -956,8 +975,21 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                   context: context,
                   initialDate: medModel.startDate,
                 );
-                if (selectedTime != null) {
+                if (selectedTime != null &&
+                        selectedTime.compareTo(DateTime.now()) > 0 ||
+                    DateTime.now().day == selectedTime.day) {
                   medModel.updateStartDate(selectedTime);
+                } else {
+                  Flushbar(
+                    icon: Icon(
+                      Icons.info_outline,
+                      size: 28.0,
+                      color: Colors.black,
+                    ),
+                    backgroundColor: Colors.red[400],
+                    message: "Unable to set a reminder in the past",
+                    duration: Duration(seconds: 3),
+                  )..show(context);
                 }
               },
               child: Container(
@@ -985,7 +1017,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     );
   }
 
-  Widget buildEndDate() {
+  Widget buildEndDate(BuildContext context) {
     var medModel = Provider.of<MedicationData>(context);
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     return Column(
@@ -1009,8 +1041,21 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                   context: context,
                   initialDate: medModel.endDate,
                 );
-                if (selectedTime != null) {
+                if (selectedTime != null &&
+                        selectedTime.compareTo(DateTime.now()) > 0 ||
+                    DateTime.now().day == selectedTime.day) {
                   medModel.updateEndDate(selectedTime);
+                } else {
+                  Flushbar(
+                    icon: Icon(
+                      Icons.info_outline,
+                      size: 28.0,
+                      color: Colors.black,
+                    ),
+                    backgroundColor: Colors.red[400],
+                    message: "Unable to set a reminder in the past",
+                    duration: Duration(seconds: 3),
+                  )..show(context);
                 }
               },
               child: Container(

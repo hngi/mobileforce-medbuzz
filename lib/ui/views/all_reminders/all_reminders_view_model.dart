@@ -164,7 +164,9 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   List<MedicationReminder> get medicationReminderBasedOnDateTime {
     return _availableMedicationReminders
-        .where((medication) => selectedDateTime.day == medication.startAt.day)
+        .where((medication) =>
+            selectedDateTime.day >= medication.startAt.day &&
+            selectedDateTime.day <= medication.startAt.day)
         .toList();
   }
 

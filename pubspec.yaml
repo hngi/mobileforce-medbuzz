@@ -42,7 +42,7 @@ dependencies:
   rflutter_alert: ^1.0.3
   flutter_speed_dial: ^1.2.1
   device_preview: ^0.4.5
-
+  flushbar: ^1.10.4
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,8 @@ import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_model.dart';
+import 'package:MedBuzz/ui/widget/scroll_calender_med.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   @override
   void initState() {
     super.initState();
+
     //Some sweet magic to animate FAB
     //This makes the FAB disappear as you scroll down
     controller.addListener(() {
@@ -32,13 +35,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
   var _height = 80;
   @override
   Widget build(BuildContext context) {
-    Provider.of<MedicationData>(context).getMedicationReminder();
+    var medReminder = Provider.of<MedicationData>(context);
+    medReminder.getMedicationReminder();
     var model = Provider.of<MedicationData>(context);
+    var medsModel = Provider.of<MedicationsSchedulesModel>(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      medsModel
+          .updateAvailableMedicationReminders(medReminder.medicationReminder);
+    });
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: AnimatedOpacity(
         duration: Duration(milliseconds: 500),
         opacity: model.isVisible ? 1 : 0,
@@ -57,7 +67,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     child: Icon(
                       Icons.add,
                       color: Theme.of(context).primaryColorLight,
-                      size: Config.xMargin(context, 10),
+                      size: Config.xMargin(context, 7),
                     ),
                     backgroundColor: Theme.of(context).buttonColor,
                     splashColor: Theme.of(context).buttonColor.withOpacity(.9),
@@ -94,109 +104,125 @@ class _MedicationScreenState extends State<MedicationScreen> {
         controller: controller,
         physics: BouncingScrollPhysics(),
         child: Container(
-            margin: EdgeInsets.fromLTRB(Config.xMargin(context, 3),
-                Config.yMargin(context, 2), Config.xMargin(context, 3), 0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  //height: height * .27,
-                  width: width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //ListView to display all dates with entries in the DB
-                      Container(
-                        height: height * .2,
-                        //To be replaced with a ListView.builder for CustomDateButtons with date range from DB
-                        child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            //Some example (pronounced igzampl, yunno?)
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 1))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 2))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 3))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 4))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 5))),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 6))),
-                            CustomDateButton(date: DateTime.now()),
-                            CustomDateButton(
-                                date: DateTime.now().add(Duration(days: 10))),
-                          ],
+          margin: EdgeInsets.fromLTRB(Config.xMargin(context, 3),
+              Config.yMargin(context, 2), Config.xMargin(context, 3), 0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                //height: height * .27,
+                width: width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    //ListView to display all dates with entries in the DB
+                    Container(
+                        height: Config.yMargin(context, 18),
+                        child: ScrollableCalendar(
+                          model: medsModel,
+                          useButtonColor: true,
+                          hideDivider: true,
+                        )),
+                    SizedBox(height: Config.yMargin(context, 2)),
+                    //Text widget to display current date in MONTH Year format
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          medsModel.selectedMonth,
+                          style: TextStyle(
+                              letterSpacing: 2,
+                              fontSize: Config.textSize(context, 4)),
                         ),
-                      ),
-                      SizedBox(height: Config.yMargin(context, 4)),
-                      //Text widget to display current date in MONTH Year format
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'JUN 2020',
-                            style: TextStyle(
-                                letterSpacing: 2,
-                                fontSize: Config.textSize(context, 4)),
-                          ),
-                          SizedBox(height: Config.yMargin(context, 2)),
-                          Text('Today'),
-                        ],
-                      ),
-                    ],
+                        SizedBox(height: Config.yMargin(context, 2)),
+                        Text(
+                          'Today',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: Config.yMargin(context, 1)),
+              //Here the already saved reminders will be loaded dynamically
+              Visibility(
+                visible: medsModel.medicationReminderBasedOnDateTime.isEmpty,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: Config.yMargin(context, 20.0)),
+                  child: Container(
+                    child: Text('No Medication Reminder Set for this Date'),
                   ),
                 ),
-
-                SizedBox(height: Config.yMargin(context, 1)),
-                //Here the already saved reminders will be loaded dynamically
-
-                Container(
-                  margin: EdgeInsets.only(bottom: Config.yMargin(context, 2)),
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return MedicationCard(
-                        values: model.medicationReminder[index],
-                        drugName: model.medicationReminder[index].drugName,
-                        drugType: model.medicationReminder[index].drugType ==
-                                'Injection'
-                            ? "images/injection.png"
-                            : model.medicationReminder[index].drugType ==
-                                    'Tablets'
-                                ? "images/tablets.png"
-                                : model.medicationReminder[index].drugType ==
-                                        'Drops'
-                                    ? "images/drops.png"
-                                    : model.medicationReminder[index]
-                                                .drugType ==
-                                            'Pills'
-                                        ? "images/pills.png"
-                                        : model.medicationReminder[index]
-                                                    .drugType ==
-                                                'Ointment'
-                                            ? "images/ointment.png"
-                                            : model.medicationReminder[index]
-                                                        .drugType ==
-                                                    'Syrup'
-                                                ? "images/syrup.png"
-                                                : "images/inhaler.png",
-                        time: model.medicationReminder[index].firstTime
-                            .toString(),
-                        dosage: model.medicationReminder[index].dosage,
-                        selectedFreq: model.medicationReminder[index].frequency,
-                      );
-                    },
-                    itemCount: model.medicationReminder.length,
-                  ),
+              ),
+              for (var medicationReminder
+                  in medsModel.medicationReminderBasedOnDateTime)
+                MedicationCard(
+                  values: medicationReminder,
+                  drugName: medicationReminder.drugName,
+                  drugType: medicationReminder.drugType == 'Injection'
+                      ? "images/injection.png"
+                      : medicationReminder.drugType == 'Tablets'
+                          ? "images/tablets.png"
+                          : medicationReminder.drugType == 'Drops'
+                              ? "images/drops.png"
+                              : medicationReminder.drugType == 'Pills'
+                                  ? "images/pills.png"
+                                  : medicationReminder.drugType == 'Ointment'
+                                      ? "images/ointment.png"
+                                      : medicationReminder.drugType == 'Syrup'
+                                          ? "images/syrup.png"
+                                          : "images/inhaler.png",
+                  time: medicationReminder.firstTime.toString(),
+                  dosage: medicationReminder.dosage,
+                  selectedFreq: medicationReminder.frequency,
                 )
-              ],
-            )),
+              // Container(
+              //   margin: EdgeInsets.only(bottom: Config.yMargin(context, 2)),
+              //   child: ListView.builder(
+              //     scrollDirection: Axis.vertical,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     shrinkWrap: true,
+              //     itemBuilder: (context, index) {
+              //       return MedicationCard(
+              //         values: model.medicationReminder[index],
+              //         drugName: model.medicationReminder[index].drugName,
+              //         drugType: model.medicationReminder[index].drugType ==
+              //                 'Injection'
+              //             ? "images/injection.png"
+              //             : model.medicationReminder[index].drugType ==
+              //                     'Tablets'
+              //                 ? "images/tablets.png"
+              //                 : model.medicationReminder[index].drugType ==
+              //                         'Drops'
+              //                     ? "images/drops.png"
+              //                     : model.medicationReminder[index]
+              //                                 .drugType ==
+              //                             'Pills'
+              //                         ? "images/pills.png"
+              //                         : model.medicationReminder[index]
+              //                                     .drugType ==
+              //                                 'Ointment'
+              //                             ? "images/ointment.png"
+              //                             : model.medicationReminder[index]
+              //                                         .drugType ==
+              //                                     'Syrup'
+              //                                 ? "images/syrup.png"
+              //                                 : "images/inhaler.png",
+              //         time: model.medicationReminder[index].firstTime
+              //             .toString(),
+              //         dosage: model.medicationReminder[index].dosage,
+              //         selectedFreq: model.medicationReminder[index].frequency,
+              //       );
+              //     },
+              //     itemCount: model.medicationReminder.length,
+              //   ),
+              // )
+            ],
+          ),
+        ),
       ),
     );
   }
