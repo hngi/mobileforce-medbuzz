@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> {
     Provider.of<MedicationData>(context).getMedicationReminder();
 
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Theme.of(context).backgroundColor,
         body: NotificationListener<ScrollNotification>(
           onNotification: (notification) {

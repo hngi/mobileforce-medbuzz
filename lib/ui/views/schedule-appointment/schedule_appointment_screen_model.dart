@@ -78,7 +78,6 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   }
 
   DateTime getDateTime() {
-    print(_selectedTime.toString());
     String month = _selectedMonth.toString().length < 2
         ? '0$_selectedMonth'
         : '$_selectedMonth';
@@ -90,6 +89,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
 //
   Appointment createSchedule() {
+    print(_selectedTime);
     var dayValue =
         selectedDay.toString().length < 2 ? '0$selectedDay' : '$selectedDay';
     var monthValue = selectedMonth.toString().length < 2
@@ -109,7 +109,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
         appointmentType: appointmentType,
         note: noteValue,
         time: [
-          num.parse(_selectedTime.substring(1, 2)),
+          num.parse(_selectedTime.substring(0, 2)),
           num.parse(_selectedTime.substring(3, 5))
         ]);
     return newAppointment;
@@ -152,6 +152,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   }
 
   void updateAvailableAppointmentReminder(appointmentReminder) {
+    _availableAppointments.clear();
     _availableAppointments = appointmentReminder;
     notifyListeners();
   }
@@ -182,7 +183,6 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
       DateTime newDate =
           DateTime.parse('${appointment.date.year}-$month-$day $hour:$minutes');
-      //print(newDate);
       if (newDate.isBefore(DateTime.now())) {
         appointments.add(appointment);
       }
