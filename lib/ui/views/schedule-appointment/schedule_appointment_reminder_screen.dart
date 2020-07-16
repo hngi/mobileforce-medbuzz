@@ -387,7 +387,6 @@ class _MyScheduleAppointmentScreenState
                                       String notifId = id.length < 11
                                           ? id
                                           : id.substring(0, 10);
-                                      print(now);
                                       notificationManager
                                           .showAppointmentNotificationOnce(
                                               num.parse(notifId),
