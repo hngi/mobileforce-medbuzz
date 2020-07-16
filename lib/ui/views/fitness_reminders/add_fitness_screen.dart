@@ -81,9 +81,9 @@ class __AddFitnessState extends State<AddFitness> {
   Widget build(BuildContext context) {
     var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
 
-    String appBar = fitnessDB.isEditting ? fitnessDB.edit : fitnessDB.add;
+    String appBar = fitnessDB.isEditing ? fitnessDB.edit : fitnessDB.add;
 
-    if (fitnessDB.isEditting && _changed_name == false) {
+    if (fitnessDB.isEditing && _changed_name == false) {
       descController.text = fitnessModel.desc;
       _changed_name = true;
     }
@@ -467,7 +467,7 @@ class __AddFitnessState extends State<AddFitness> {
                                       print('${descController.text}');
                                       FitnessReminder newReminder =
                                           FitnessReminder(
-                                              id: model.id.toString(),
+                                              id: DateTime.now().toString(),
                                               activityTime: [
                                                 model.activityTime.hour,
                                                 model.activityTime.minute
@@ -485,13 +485,13 @@ class __AddFitnessState extends State<AddFitness> {
                                                   model.selectedIndex]);
                                       await fitnessDB.addReminder(newReminder);
 
-                                  fitnessNotificationManager
-                                      .showFitnessNotificationOnce(
-                                          id: Random().nextInt(100),
-                                          title:
-                                              "hey It's time to go ${descController.text}",
-                                          body: "For ${model.minDaily} minutes",
-                                          time: model.getDateTime());
+//                                  fitnessNotificationManager
+//                                      .showFitnessNotificationOnce(
+//                                          id: Random().nextInt(100),
+//                                          title:
+//                                              "hey It's time to go ${descController.text}",
+//                                          body: "For ${model.minDaily} minutes",
+//                                          time: model.getDateTime());
 
 //                                var difference =
 //                                    model.endDate.difference(model.startDate).inHours;

@@ -6,7 +6,7 @@ import '../models/fitness_reminder_model/fitness_reminder.dart';
 
 class FitnessReminderCRUD extends ChangeNotifier {
   static const String _boxName = "fitnessReminderBox";
-  bool isEditting = false;
+  bool isEditing = false;
   final String add = "Add Fitness Reminder";
   final String edit = "Edit Fitness Reminder";
   DateTime _today = DateTime.now();
@@ -16,7 +16,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int selectedIndex = 0;
   String selectedActivityType = 'images/jogging.png';
   String description;
-
+  FitnessReminder reminder;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   int index;
@@ -25,7 +25,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
   int minDaily = 60;
   TimeOfDay activityTime = TimeOfDay.now();
 //  int id = Random().nextInt(100);
-  DateTime id = DateTime.now();
+  String id;
 
   String selectedFreq = "Daily";
 
@@ -63,6 +63,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
 
     return selectedActivityType;
   }
+
   List fitnessType = [
     'Jogging',
     'Swimming',
@@ -73,6 +74,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'Badminton',
     'Basketball'
   ];
+
+  String updateFreq(String freq) {
+    this.selectedFreq = freq;
+    notifyListeners();
+    return selectedFreq;
+  }
 
   int get reminderLength {
     return _fitnessReminder.length;
