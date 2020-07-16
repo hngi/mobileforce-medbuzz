@@ -60,11 +60,12 @@ PreferredSizeWidget appBar(
         String title,
         List<Widget> actions,
         Widget leading,
+        Function onPressed,
         bool useDefaultActions = false}) =>
     AppBar(
       elevation: 0,
       backgroundColor: color ?? Theme.of(context).backgroundColor,
-      title: Text(title,
+      title: Text(title ?? '',
           style: TextStyle(color: Theme.of(context).primaryColorDark)),
       leading: leading ??
           IconButton(
@@ -72,9 +73,10 @@ PreferredSizeWidget appBar(
                   color: Theme.of(context).primaryColorDark),
 
               //Function to navigate to previous screen or home screen (as the case maybe) goes here
-              onPressed: () {
-                Navigator.pop(context);
-              }),
+              onPressed: onPressed ??
+                  () {
+                    Navigator.pop(context);
+                  }),
       actions: actions != null
           ? actions
           : useDefaultActions
