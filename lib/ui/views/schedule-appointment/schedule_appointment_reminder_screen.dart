@@ -345,6 +345,7 @@ class _MyScheduleAppointmentScreenState
                                     String hour = time.substring(1, 2);
                                     String minutes = time.substring(3, 5);
                                     DateTime now = DateTime.now();
+                                    print(now);
                                     notificationManager.showAppointmentNotificationOnce(
                                         num.parse(
                                             '${now.year}${now.month}${now.day}$hour$minutes'),
@@ -377,12 +378,14 @@ class _MyScheduleAppointmentScreenState
                                   String hour = time.substring(1, 2);
                                   String minutes = time.substring(3, 5);
                                   DateTime now = DateTime.now();
-                                  notificationManager.showAppointmentNotificationOnce(
-                                      num.parse(
-                                          '${now.year}${now.month}${now.day}$hour$minutes'),
-                                      'Hey, you\' got somewhere to go',
-                                      ' ${_typeOfAppointmentController.text} ',
-                                      appointmentReminder.getDateTime());
+                                  notificationManager
+                                      .showAppointmentNotificationOnce(
+                                          num.parse(
+                                              '${now.year}${now.month}${now.day}$hour$minutes'),
+                                          'Hey, you\' got somewhere to go',
+                                          ' ${_typeOfAppointmentController.text} ',
+                                          //[num.parse(hour), num.parse(minutes)]
+                                          appointmentReminder.getDateTime());
                                 }
                             }
 
