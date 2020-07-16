@@ -153,39 +153,21 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                 //         fontSize: Config.textSize(context, 6)),
                 //   ),
                 // ),
-                Text('Test'),
+
                 ListView.builder(
                   scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        print('happened');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SingleFitnessScreen(
-                              data: fitnessDB.fitnessReminder[index],
-                            ),
-                          ),
-                          // RouteNames.singleFitnessScreen,
-                          // arguments: SingleFitnessScreen(
-                          //   data: fitnessDB.fitnessReminder[index],
-                          // ),
-                        );
-                      },
-                      child: InkWell(
-                        child: FitnessCard(
-                          fitnessReminder: fitnessDB.fitnessReminder[index],
-                          fitnessType:
-                              fitnessDB.fitnessReminder[index].fitnesstype,
-                          startDate: fitnessDB.fitnessReminder[index].startDate
-                              .toString(),
-                          endDate: fitnessDB.fitnessReminder[index].endDate
-                              .toString(),
-                        ),
-                      ),
+                    return FitnessCard(
+                      fitnessReminder: fitnessDB.fitnessReminder[index],
+                      fitnessType: fitnessDB.fitnessReminder[index].fitnesstype,
+                      startDate:
+                          fitnessDB.fitnessReminder[index].startDate.toString(),
+                      endDate:
+                          fitnessDB.fitnessReminder[index].endDate.toString(),
+                      selectedFreq:
+                          fitnessDB.fitnessReminder[index].fitnessfreq,
                     );
                   },
                   itemCount: fitnessDB.fitnessReminder.length,
@@ -204,6 +186,7 @@ class FitnessCard extends StatefulWidget {
   final String activityType;
   final String startDate;
   final String endDate;
+  final String selectedFreq;
 //  final String activityType;
 //  final
   final FitnessReminder fitnessReminder;
@@ -215,6 +198,7 @@ class FitnessCard extends StatefulWidget {
       this.activityType,
       this.startDate,
       this.endDate,
+      this.selectedFreq,
       this.fitnessReminder});
 
   @override
@@ -232,7 +216,28 @@ class _FitnessCardState extends State<FitnessCard> {
     return Container(
       width: double.infinity,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          print([
+            fitnessModel.updateDescription(widget.fitnessReminder.description),
+            fitnessModel
+                .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
+            fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
+            fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
+            fitnessModel.updateActivityTime(fitnessModel
+                .convertTimeBack(widget.fitnessReminder.activityTime)),
+            fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
+            fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
+          ]);
+
+          FitnessReminder reminder = FitnessReminder(
+            id: fitnessModel.id,
+            fitnessfreq: fitnessModel.selectedFreq,
+            fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
+            minsperday: fitnessModel.minDaily,
+          );
+
+          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
+        },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,39 +274,19 @@ class _FitnessCardState extends State<FitnessCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${fitnessModel.fitnessType[widget.fitnessReminder.index]} ${fitnessModel.selectedFreq}',
+                                '${fitnessModel.fitnessType[widget.fitnessReminder.index]} ${widget.selectedFreq}',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: height * 0.005),
                               Text(
-                                '${fitnessModel.startDate}',
+                                '${widget.startDate}',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),
                             ],
                           ),
-
-                          //Temporary fix to delete reminders
-
-                          // Expanded(
-                          //   child: Container(
-                          //     margin: EdgeInsets.only(
-                          //       left: Config.xMargin(context, 20),
-                          //     ),
-                          //     child: IconButton(
-                          //       onPressed: () {
-                          //         waterReminderDB.deleteWaterReminder(
-                          //             widget.waterReminder.id);
-                          //         waterNotificationManager.removeReminder(
-                          //             waterReminder.selectedDay);
-                          //       },
-                          //       icon: Icon(Icons.delete),
-                          //       color: Colors.red,
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                       SizedBox(
@@ -335,109 +320,109 @@ class _FitnessCardState extends State<FitnessCard> {
   }
 }
 
-class FitnessCards extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    // FitnessNotificationManager fitnessNotificationManager =
-    //     FitnessNotificationManager();
-    var fitnessModel = Provider.of<FitnessReminderCRUD>(context);
-    return Consumer<FitnessReminderCRUD>(builder: (context, data, child) {
-      return Container(
-        width: width,
-        height: height * .80,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: data.fitnessReminder.map((e) {
-              // getNotification() {
-              //   final now = new DateTime.now();
-              //   final time = DateTime(now.year, now.month, now.day,
-              //       e.activityTime[0], e.activityTime[1]);
-              //   if (DateTime(now.year, now.month, now.day, now.hour, now.minute)
-              //           .compareTo(time) ==
-              //       0) {
-              //     fitnessNotificationManager.showFitnessNotificationOnce(
-              //         0,
-              //         "It's time to go ${e.name}",
-              //         "For ${e.minsperday} minutes");
-              //   }
-              // }
-
-              // Timer.periodic(
-              //   Duration(seconds: 40),
-              //   (Timer timer) {
-              //     print('Available Reminders Check!');
-              //     getNotification();
-              //   },
-              // );
-
-              return InkWell(
-                splashColor: Theme.of(context).backgroundColor,
-                onTap: () {
-                  //Navigate to screen with single reminder i.e the on user clicked on
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SingleFitnessScreen(
-                                data: e,
-                              )));
-                },
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                        thickness: 0.7,
-                        color:
-                            Theme.of(context).primaryColorDark.withOpacity(.4),
-                        indent: Config.xMargin(context, 0.5),
-                        endIndent: Config.xMargin(context, 2.5)),
-
-                    SizedBox(height: Config.yMargin(context, .5)),
-                    Container(
-                      width: width,
-                      height: height * .22,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Config.xMargin(context, 8)),
-                      ),
-                      child: e.fitnesstype == '0'
-                          ? image('images/cycle.png')
-                          : e.fitnesstype == '1'
-                              ? image('images/sprint.png')
-                              : image('images/swim.png'),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 2)),
-                    //Type of fitness exercise goes here
-                    Text(e.description,
-                        style: TextStyle(
-                            fontSize: Config.textSize(context, 6),
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).primaryColor)),
-                    SizedBox(height: Config.yMargin(context, 1)),
-                    Text(e.minsperday.toString() + ' minutes daily',
-                        style: TextStyle(
-                            fontSize: Config.textSize(context, 4.5),
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).primaryColorDark)),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      );
-    });
-  }
-
-  image(String image) {
-    return Image(
-      image: AssetImage(image),
-      fit: BoxFit.contain,
-    );
-  }
-}
+//class FitnessCards extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    double height = MediaQuery.of(context).size.height;
+//    double width = MediaQuery.of(context).size.width;
+//    // FitnessNotificationManager fitnessNotificationManager =
+//    //     FitnessNotificationManager();
+//    var fitnessModel = Provider.of<FitnessReminderCRUD>(context);
+//    return Consumer<FitnessReminderCRUD>(builder: (context, data, child) {
+//      return Container(
+//        width: width,
+//        height: height * .80,
+//        child: SingleChildScrollView(
+//          child: Column(
+//            mainAxisAlignment: MainAxisAlignment.start,
+//            crossAxisAlignment: CrossAxisAlignment.start,
+//            children: data.fitnessReminder.map((e) {
+//              // getNotification() {
+//              //   final now = new DateTime.now();
+//              //   final time = DateTime(now.year, now.month, now.day,
+//              //       e.activityTime[0], e.activityTime[1]);
+//              //   if (DateTime(now.year, now.month, now.day, now.hour, now.minute)
+//              //           .compareTo(time) ==
+//              //       0) {
+//              //     fitnessNotificationManager.showFitnessNotificationOnce(
+//              //         0,
+//              //         "It's time to go ${e.name}",
+//              //         "For ${e.minsperday} minutes");
+//              //   }
+//              // }
+//
+//              // Timer.periodic(
+//              //   Duration(seconds: 40),
+//              //   (Timer timer) {
+//              //     print('Available Reminders Check!');
+//              //     getNotification();
+//              //   },
+//              // );
+//
+//              return InkWell(
+//                splashColor: Theme.of(context).backgroundColor,
+//                onTap: () {
+//                  //Navigate to screen with single reminder i.e the on user clicked on
+//                  Navigator.push(
+//                      context,
+//                      MaterialPageRoute(
+//                          builder: (context) => SingleFitnessScreen(
+//                                data: e,
+//                              )));
+//                },
+//                child: Column(
+//                  children: <Widget>[
+//                    Divider(
+//                        thickness: 0.7,
+//                        color:
+//                            Theme.of(context).primaryColorDark.withOpacity(.4),
+//                        indent: Config.xMargin(context, 0.5),
+//                        endIndent: Config.xMargin(context, 2.5)),
+//
+//                    SizedBox(height: Config.yMargin(context, .5)),
+//                    Container(
+//                      width: width,
+//                      height: height * .22,
+//                      decoration: BoxDecoration(
+//                        borderRadius:
+//                            BorderRadius.circular(Config.xMargin(context, 8)),
+//                      ),
+//                      child: e.fitnesstype == '0'
+//                          ? image('images/cycle.png')
+//                          : e.fitnesstype == '1'
+//                              ? image('images/sprint.png')
+//                              : image('images/swim.png'),
+//                    ),
+//                    SizedBox(height: Config.yMargin(context, 2)),
+//                    //Type of fitness exercise goes here
+//                    Text(e.description,
+//                        style: TextStyle(
+//                            fontSize: Config.textSize(context, 6),
+//                            fontWeight: FontWeight.w500,
+//                            color: Theme.of(context).primaryColor)),
+//                    SizedBox(height: Config.yMargin(context, 1)),
+//                    Text(e.minsperday.toString() + ' minutes daily',
+//                        style: TextStyle(
+//                            fontSize: Config.textSize(context, 4.5),
+//                            fontWeight: FontWeight.w400,
+//                            color: Theme.of(context).primaryColorDark)),
+//                  ],
+//                ),
+//              );
+//            }).toList(),
+//          ),
+//        ),
+//      );
+//    });
+//  }
+//
+//  image(String image) {
+//    return Image(
+//      image: AssetImage(image),
+//      fit: BoxFit.contain,
+//    );
+//  }
+//}
 
 // class CustomDateButton extends StatelessWidget {
 //   final DateTime date;
