@@ -211,7 +211,7 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                       appointmentModel.isEditing = true;
                       notificationManager
                           .removeReminder(appointmentReminder.selectedDay);
-                      // appointmentDB.deleteAppointment(widget.appointment.id);
+                      appointmentDB.deleteAppointment(widget.appointment.id);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
