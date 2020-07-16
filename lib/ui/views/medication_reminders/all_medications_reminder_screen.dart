@@ -135,7 +135,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         ),
                         SizedBox(height: Config.yMargin(context, 2)),
                         Text(
-                          'Today',
+                          'Medications',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
