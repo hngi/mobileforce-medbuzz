@@ -485,6 +485,14 @@ class __AddFitnessState extends State<AddFitness> {
                                                   model.selectedIndex]);
                                       await fitnessDB.addReminder(newReminder);
 
+                                  fitnessNotificationManager
+                                      .showFitnessNotificationOnce(
+                                          id: Random().nextInt(100),
+                                          title:
+                                              "hey It's time to go ${descController.text}",
+                                          body: "For ${model.minDaily} minutes",
+                                          time: model.getDateTime());
+
 //                                var difference =
 //                                    model.endDate.difference(model.startDate).inHours;
 //

@@ -40,7 +40,7 @@ class FitnessNotificationManager {
   }
 
   void showFitnessNotificationOnce(
-      int id, String title, String body, DateTime time) async {
+      {int id, String title, String body, DateTime time}) async {
     await flutterLocalNotificationsPlugin.schedule(
         id, title, body, time, getPlatformChannelSpecfics(id));
     print(
@@ -50,9 +50,7 @@ class FitnessNotificationManager {
   getPlatformChannelSpecfics(int id) {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         '$id', 'your channel name', 'your channel description',
-        importance: Importance.Max,
-        priority: Priority.High,
-        ticker: 'ticker');
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
