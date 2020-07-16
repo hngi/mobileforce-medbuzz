@@ -134,15 +134,17 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         )),
                     for (var appointment
                         in appointmentReminders.pastApointments)
-                      for (var appointment
-                          in appointmentReminders.allAppointments)
 //                        if (DateTime.now()
 //                            .isAfter(appointmentReminders.selectedDateTime))
-                        AppointmentCard(
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 5.0)),
+                        child: AppointmentCard(
                           height: height,
                           width: width,
                           appointment: appointment,
-                        )
+                        ),
+                      )
                   ],
                 ),
               ),

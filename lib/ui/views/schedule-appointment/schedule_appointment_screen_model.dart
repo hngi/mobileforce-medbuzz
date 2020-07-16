@@ -157,71 +157,15 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   }
 
   List<Appointment> get pastApointments {
-    List<Appointment> appointments = [];
-    //2020-07-16 00:30:48.163023
-
-    // DateTime newDate = DateTime.parse(
-    //     '${selectedDateTime.year}-$month-$day ${selectedTime.substring(1, 2)}:${selectedTime.substring(3, 5)}');
-    // print(newDate);
-    // return _availableAppointments
-    //     .where((appointment) => selectedDateTime.day > appointment.date.day)
-    //     .toList();
-    _availableAppointments.forEach((appointment) {
-      String month = '${appointment.date.month}'.trim().length == 1
-          ? '0${appointment.date.month}'
-          : '${appointment.date.month}';
-      String day = '${appointment.date.day}'.trim().length == 1
-          ? '0${appointment.date.day}'
-          : '${appointment.date.day}';
-      String hour = '${appointment.time[0]}'.trim().length == 1
-          ? '0${appointment.time[0]}'
-          : '${appointment.time[0]}';
-      String minutes = '${appointment.time[1]}'.trim().length == 1
-          ? '0${appointment.time[1]}'
-          : '${appointment.time[1]}';
-
-      DateTime newDate =
-          DateTime.parse('${appointment.date.year}-$month-$day $hour:$minutes');
-      //print(newDate);
-      if (newDate.isBefore(DateTime.now())) {
-        appointments.add(appointment);
-      }
-    });
-    return appointments;
+    return _availableAppointments
+        .where((appointment) => DateTime.now().isBefore(selectedDateTime))
+        .toList();
   }
 
   List<Appointment> get upcomingApointments {
-    List<Appointment> appointments = [];
-    //2020-07-16 00:30:48.163023
-
-    // DateTime newDate = DateTime.parse(
-    //     '${selectedDateTime.year}-$month-$day ${selectedTime.substring(1, 2)}:${selectedTime.substring(3, 5)}');
-    // print(newDate);
-    // return _availableAppointments
-    //     .where((appointment) => selectedDateTime.day > appointment.date.day)
-    //     .toList();
-    _availableAppointments.forEach((appointment) {
-      String month = '${appointment.date.month}'.trim().length == 1
-          ? '0${appointment.date.month}'
-          : '${appointment.date.month}';
-      String day = '${appointment.date.day}'.trim().length == 1
-          ? '0${appointment.date.day}'
-          : '${appointment.date.day}';
-      String hour = '${appointment.time[0]}'.trim().length == 1
-          ? '0${appointment.time[0]}'
-          : '${appointment.time[0]}';
-      String minutes = '${appointment.time[1]}'.trim().length == 1
-          ? '0${appointment.time[1]}'
-          : '${appointment.time[1]}';
-
-      DateTime newDate =
-          DateTime.parse('${appointment.date.year}-$month-$day $hour:$minutes');
-      //print(newDate);
-      if (newDate.isAfter(DateTime.now())) {
-        appointments.add(appointment);
-      }
-    });
-    return appointments;
+    return _availableAppointments
+        .where((appointment) => DateTime.now().isAfter(selectedDateTime))
+        .toList();
   }
 
   List<Appointment> get allAppointments {
