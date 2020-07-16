@@ -54,13 +54,18 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.data.description,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorDark,
-                  fontSize: Config.textSize(context, 5.3),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Segoe',
+              Container(
+                height: 45,
+                width: 200,
+                child: Text(
+                  widget.data.description,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: Config.textSize(context, 5.3),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Segoe',
+                  ),
+                  textWidthBasis: TextWidthBasis.parent,
                 ),
               ),
               FlatButton.icon(
@@ -78,14 +83,16 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                   ),
                 ),
                 onPressed: () {
-                  print(widget.data.id);
+                  print(int.parse(widget.data.id).toInt());
                   model.deleteReminder(widget.data.id);
                   fitnessNotificationManager
-                      .removeReminder(int.parse(widget.data.id));
+                      .removeReminder(int.parse(widget.data.id).toInt());
                   showDialog(
                     context: context,
                     child: DeleteDialog(),
                   );
+                  Navigator.pushNamed(
+                      context, RouteNames.fitnessSchedulesScreen);
                 },
               ),
             ],

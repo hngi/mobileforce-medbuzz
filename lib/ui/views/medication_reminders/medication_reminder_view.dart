@@ -323,9 +323,6 @@ class DeleteBox extends StatelessWidget {
                     width: Config.xMargin(context, 30.0),
                     child: FlatButton(
                       onPressed: () {
-                        //Code to delete using key
-                        medModel.deleteSchedule(deletion_key);
-
                         //Code to delete notification
                         switch (newReminder.frequency) {
                           case 'Once':
@@ -333,20 +330,38 @@ class DeleteBox extends StatelessWidget {
                                 newReminder, newReminder.firstTime);
                             break;
                           case 'Twice':
+                            print(newReminder.firstTime);
+                            print('secondTime: ${newReminder.secondTime}');
                             deleteNotification(
                                 newReminder, newReminder.firstTime);
-                            deleteNotification(
-                                newReminder, newReminder.secondTime);
+                            if (newReminder.secondTime !=
+                                newReminder.firstTime) {
+                              deleteNotification(
+                                  newReminder, newReminder.secondTime);
+                            }
                             break;
                           case 'Thrice':
                             deleteNotification(
                                 newReminder, newReminder.firstTime);
-                            deleteNotification(
-                                newReminder, newReminder.secondTime);
-                            deleteNotification(
-                                newReminder, newReminder.thirdTime);
+                            if (newReminder.secondTime !=
+                                newReminder.firstTime) {
+                              deleteNotification(
+                                  newReminder, newReminder.secondTime);
+                            }
+                            if (!(newReminder.thirdTime ==
+                                newReminder.firstTime)) {
+                              if (!(newReminder.thirdTime ==
+                                  newReminder.secondTime)) {
+                                deleteNotification(
+                                    newReminder, newReminder.thirdTime);
+                              }
+                            }
                             break;
                         }
+
+                        //Code to delete using key
+                        medModel.deleteSchedule(deletion_key);
+
                         Navigator.of(context)
                             .popAndPushNamed(RouteNames.medicationScreen);
                       },
