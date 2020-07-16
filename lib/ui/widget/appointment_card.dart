@@ -232,7 +232,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     ),
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          .45,
+                                          .4,
                                       child: Text(
                                         widget.appointment.appointmentType,
                                         softWrap: true,

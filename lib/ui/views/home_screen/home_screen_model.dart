@@ -1,7 +1,6 @@
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
 
 class HomeScreenModel extends ChangeNotifier {
   int _initialIndex = 0;
