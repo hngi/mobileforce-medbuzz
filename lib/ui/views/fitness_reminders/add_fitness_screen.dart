@@ -170,7 +170,7 @@ class __AddFitnessState extends State<AddFitness> {
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.xMargin(context, 5.5)),
                             decoration: InputDecoration(
-                              hintText: 'Optional Description...',
+                              hintText: 'Input Description... (Required)',
                               hintStyle: TextStyle(
                                 color: Theme.of(context).hintColor,
                                 fontSize: Config.xMargin(context, 4.5),

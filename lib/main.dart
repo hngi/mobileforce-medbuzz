@@ -52,7 +52,7 @@ class MaterialAPP extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'MedBuzz',
         theme: Provider.of<DarkModeModel>(context).appTheme,
-        initialRoute: RouteNames.fitnessSchedulesScreen,
+        initialRoute: RouteNames.fitnessDescriptionScreen,
         //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
         //in the RouteGenerator class
         //This update handles page transitions
