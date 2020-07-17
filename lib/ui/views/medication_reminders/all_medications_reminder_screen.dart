@@ -32,10 +32,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
     // //Check if features introduction have been viewed before
     // bool value = await haveViewedIntroduction().then((value) => value);
     // if (!value) {
-    //   FeatureDiscovery.discoverFeatures(
-    //     context,
-    //     const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
-    //   );
+    FeatureDiscovery.discoverFeatures(
+      context,
+      const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
+    );
     //   prefs.setBool('haveViewed', true);
     // }
   }
@@ -96,7 +96,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         children: [
                           Text(
                               "You can click here to create a new medication schedule"),
-                          Icon(Icons.add),
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                         ],
                       ),
                       child: Icon(
