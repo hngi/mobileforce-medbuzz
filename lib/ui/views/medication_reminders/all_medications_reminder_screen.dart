@@ -28,6 +28,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
       }
     });
 
+    // FeatureDiscovery.discoverFeatures(
+    //     context, const <String>{'feature_1', 'feature_2', 'feature_3'});
     // // SharedPreferences prefs = await SharedPreferences.getInstance();
     // // //Check if features introduction have been viewed before
     // // bool value = await haveViewedIntroduction().then((value) => value);
@@ -94,19 +96,24 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         // mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              "You can click here to create a new medication schedule"),
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "You can click the add button to create a new medication schedule "),
+                                Icon(Icons.add, color: Colors.white),
+                              ]),
                           SizedBox(height: Config.yMargin(context, 0.5)),
                           Text(
-                              "You can also click on added Medications to expand card and view details"),
+                              "Added schedules display as expandable cards on the screen."),
                           SizedBox(height: Config.yMargin(context, 0.5)),
-                          SizedBox(
-                              width: Config.xMargin(context, 40),
-                              child: Image.asset('images/para_two.png')),
+                          RaisedButton(
+                            onPressed: () {
+                              FeatureDiscovery.dismiss(context);
+                            },
+                            child: Text('SKIP TUTORIAL',
+                                style: TextStyle(color: Colors.white)),
+                          )
                         ],
                       ),
                       child: Icon(

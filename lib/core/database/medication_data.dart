@@ -175,6 +175,7 @@ class MedicationData extends ChangeNotifier {
       startAt: reminder.startAt,
       endAt: reminder.endAt,
       id: reminder.id,
+      index: reminder.index,
       description: reminder.description,
     );
     return history;
