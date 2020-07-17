@@ -50,7 +50,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                 alignment: Alignment.topRight,
                 child: FlatButton.icon(
                     onPressed: () {
-                      print(widget.rem.id.toString());
+                      print(widget.rem.index.toString());
                       // model.deleteReminder(widget.rem.id.toString());
                       // print("deleting");
                       // fitnessNotificationManager
