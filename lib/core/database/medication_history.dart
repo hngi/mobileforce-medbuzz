@@ -12,6 +12,18 @@ class MedicationHistoryData extends ChangeNotifier {
 
   List<MedicationHistory> get medicationHistory => _medicationHistory;
 
+  //-----------------test values -----------------------
+  static MedicationHistory one = MedicationHistory(
+    drugName: "Instagram",
+    frequency: "Once",
+    startAt: DateTime.now(),
+    endAt: DateTime.now(),
+  );
+  List<MedicationHistory> _test = [one, one, one];
+  List<MedicationHistory> get test => _test;
+
+  //-----------------end-----------------
+
   Future<void> addMedicationReminderHistory(MedicationHistory history) async {
     var box = await Hive.openBox<MedicationHistory>(_boxName);
 
