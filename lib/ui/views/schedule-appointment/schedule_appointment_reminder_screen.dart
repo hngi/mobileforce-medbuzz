@@ -393,7 +393,7 @@ class _MyScheduleAppointmentScreenState
                                       notificationManager
                                           .showAppointmentNotificationOnce(
                                               num.parse(notifId),
-                                              'Hey, you\' got somewhere to go',
+                                              'Hey, you\'ve got somewhere to go',
                                               ' ${_typeOfAppointmentController.text} ',
                                               appointmentReminder
                                                   .getDateTime());
@@ -411,6 +411,40 @@ class _MyScheduleAppointmentScreenState
                                 break;
                               case 'Update':
                                 print(_typeOfAppointmentController.text);
+                                DateTime selected =
+                                    appointmentReminder.getDateTime();
+                                DateTime now = DateTime.now();
+                                String month =
+                                    '${selected.month}'.trim().length == 1
+                                        ? '0${selected.month}'
+                                        : '${selected.month}';
+                                String day =
+                                    '${selected.day}'.trim().length == 1
+                                        ? '0${selected.day}'
+                                        : '${selected.day}';
+                                String hour =
+                                    '${appointmentReminder.selectedTime.substring(0, 2)}'
+                                                .trim()
+                                                .length ==
+                                            1
+                                        ? '0${appointmentReminder.selectedTime.substring(0, 2)}'
+                                        : '${appointmentReminder.selectedTime.substring(0, 2)}';
+                                String minutes =
+                                    '${appointmentReminder.selectedTime.substring(3, 5)}'
+                                                .trim()
+                                                .length ==
+                                            1
+                                        ? '0${appointmentReminder.selectedTime.substring(3, 5)}'
+                                        : '${appointmentReminder.selectedTime.substring(3, 5)}';
+
+                                DateTime currentTime = DateTime.parse(
+                                    '${now.year}-$month-$day $hour:$minutes');
+                                if (currentTime.isBefore(now)) {
+                                  showSnackbar(context,
+                                      text:
+                                          'Reminder cannot be set in the past');
+                                  return;
+                                }
                                 if (_typeOfAppointmentController
                                     .text.isNotEmpty) {
                                   appointmentReminder.setSelectedNote(
