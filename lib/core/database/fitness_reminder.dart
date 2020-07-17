@@ -1,7 +1,5 @@
-import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../models/fitness_reminder_model/fitness_reminder.dart';
 import '../models/fitness_reminder_model/fitness_reminder.dart';
 
 class FitnessReminderCRUD extends ChangeNotifier {
@@ -26,7 +24,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
   TimeOfDay activityTime = TimeOfDay.now();
 //  int id = Random().nextInt(100);
   String id;
-
+  final List<String> frequency = [
+    'Daily',
+    'Every 2 days',
+    'Every 3 days',
+    'Every 4 days'
+  ];
   String selectedFreq = "Daily";
 
   dynamic get selectedTime => _selectedTime;
@@ -74,6 +77,13 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'Badminton',
     'Basketball'
   ];
+
+  String updateFrequency(String freq) {
+    this.selectedFreq = freq;
+
+    notifyListeners();
+    return selectedFreq;
+  }
 
   String updateFreq(String freq) {
     this.selectedFreq = freq;

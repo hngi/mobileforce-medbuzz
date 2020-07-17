@@ -69,9 +69,12 @@ android {
             shrinkResources false
             minifyEnabled false
             signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         
         }
     }
+
+
 }
 
 flutter {
