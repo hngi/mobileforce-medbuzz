@@ -257,114 +257,34 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: height * 0.05),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Daily medications',
-                                  style: TextStyle(
-                                    fontSize: Config.textSize(context, 5),
-                                    fontWeight: FontWeight.w600,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Daily medications',
+                                    style: TextStyle(
+                                      fontSize: Config.textSize(context, 5),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Visibility(
-                            visible:
-                                model.medicationReminderBasedOnDateTime.isEmpty,
-                            child: Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  'No Medication Reminder Set for this Date'),
-                            ),
-                          ),
-                          Container(
-                            //margin: EdgeInsets.only(
-                            //  bottom: Config.yMargin(context, 2)),
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: model.medicationReminderBasedOnDateTime
-                                          .length >
-                                      3
-                                  ? 3
-                                  : model
-                                      .medicationReminderBasedOnDateTime.length,
-                              itemBuilder: (context, index) {
-                                return MedicationCard(
-                                  height: height,
-                                  width: width,
-                                  values: model
-                                      .medicationReminderBasedOnDateTime[index],
-                                  drugName: model
-                                      .medicationReminderBasedOnDateTime[index]
-                                      .drugName,
-                                  drugType: model
-                                              .medicationReminderBasedOnDateTime[
-                                                  index]
-                                              .drugType ==
-                                          'Injection'
-                                      ? "images/injection.png"
-                                      : model
-                                                  .medicationReminderBasedOnDateTime[
-                                                      index]
-                                                  .drugType ==
-                                              'Tablets'
-                                          ? "images/tablets.png"
-                                          : model
-                                                      .medicationReminderBasedOnDateTime[
-                                                          index]
-                                                      .drugType ==
-                                                  'Drops'
-                                              ? "images/drops.png"
-                                              : model
-                                                          .medicationReminderBasedOnDateTime[
-                                                              index]
-                                                          .drugType ==
-                                                      'Pills'
-                                                  ? "images/pills.png"
-                                                  : model
-                                                              .medicationReminderBasedOnDateTime[
-                                                                  index]
-                                                              .drugType ==
-                                                          'Ointment'
-                                                      ? "images/ointment.png"
-                                                      : model
-                                                                  .medicationReminderBasedOnDateTime[
-                                                                      index]
-                                                                  .drugType ==
-                                                              'Syrup'
-                                                          ? "images/syrup.png"
-                                                          : "images/inhaler.png",
-                                  time: model
-                                      .medicationReminderBasedOnDateTime[index]
-                                      .firstTime
-                                      .toString(),
-                                  dosage: model
-                                      .medicationReminderBasedOnDateTime[index]
-                                      .dosage,
-                                  selectedFreq: model
-                                      .medicationReminderBasedOnDateTime[index]
-                                      .frequency,
-                                );
-                              },
-                            ),
-                          ),
-                          SizedBox(height: height * 0.03),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Upcoming appointments',
-                                style: TextStyle(
-                                  fontSize: Config.textSize(context, 5),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ],
-                            ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.popAndPushNamed(
+                                          context, RouteNames.medicationScreen);
+                                    },
+                                    child: Text(
+                                      'See all',
+                                      style: TextStyle(
+                                        fontSize: Config.textSize(context, 3.5),
+                                        fontWeight: FontWeight.w600,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ]),
                             Visibility(
-                              visible: medModel.medicationReminder.isEmpty,
+                              visible: model
+                                  .medicationReminderBasedOnDateTime.isEmpty,
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -378,55 +298,74 @@ class _HomePageState extends State<HomePage> {
                                 scrollDirection: Axis.vertical,
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount:
-                                    medModel.medicationReminder.length > 3
-                                        ? 3
-                                        : medModel.medicationReminder.length,
+                                itemCount: model
+                                            .medicationReminderBasedOnDateTime
+                                            .length >
+                                        3
+                                    ? 3
+                                    : model.medicationReminderBasedOnDateTime
+                                        .length,
                                 itemBuilder: (context, index) {
                                   return MedicationCard(
                                     height: height,
                                     width: width,
-                                    values: medModel.medicationReminder[index],
-                                    drugName: medModel
-                                        .medicationReminder[index].drugName,
-                                    drugType: medModel.medicationReminder[index]
+                                    values:
+                                        model.medicationReminderBasedOnDateTime[
+                                            index],
+                                    drugName: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .drugName,
+                                    drugType: model
+                                                .medicationReminderBasedOnDateTime[
+                                                    index]
                                                 .drugType ==
                                             'Injection'
                                         ? "images/injection.png"
-                                        : medModel.medicationReminder[index]
+                                        : model
+                                                    .medicationReminderBasedOnDateTime[
+                                                        index]
                                                     .drugType ==
                                                 'Tablets'
                                             ? "images/tablets.png"
-                                            : medModel.medicationReminder[index]
+                                            : model
+                                                        .medicationReminderBasedOnDateTime[
+                                                            index]
                                                         .drugType ==
                                                     'Drops'
                                                 ? "images/drops.png"
-                                                : medModel
-                                                            .medicationReminder[
+                                                : model
+                                                            .medicationReminderBasedOnDateTime[
                                                                 index]
                                                             .drugType ==
                                                         'Pills'
                                                     ? "images/pills.png"
-                                                    : medModel
-                                                                .medicationReminder[
+                                                    : model
+                                                                .medicationReminderBasedOnDateTime[
                                                                     index]
                                                                 .drugType ==
                                                             'Ointment'
                                                         ? "images/ointment.png"
-                                                        : medModel
-                                                                    .medicationReminder[
+                                                        : model
+                                                                    .medicationReminderBasedOnDateTime[
                                                                         index]
                                                                     .drugType ==
                                                                 'Syrup'
                                                             ? "images/syrup.png"
                                                             : "images/inhaler.png",
-                                    time: medModel
-                                        .medicationReminder[index].firstTime
+                                    time: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .firstTime
                                         .toString(),
-                                    dosage: medModel
-                                        .medicationReminder[index].dosage,
-                                    selectedFreq: medModel
-                                        .medicationReminder[index].frequency,
+                                    dosage: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .dosage,
+                                    selectedFreq: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .frequency,
                                   );
                                 },
                               ),
