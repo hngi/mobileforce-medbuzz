@@ -138,14 +138,6 @@ class _MedicationScreenState extends State<MedicationScreen> {
             onPressed: () {
               Navigator.popAndPushNamed(context, RouteNames.homePage);
             }),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.show_chart),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, RouteNames.medicationHistoryPage);
-              }),
-        ],
       ),
       body: SingleChildScrollView(
         controller: controller,
@@ -201,26 +193,26 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                       letterSpacing: 2,
                                       fontSize: Config.textSize(context, 4)),
                                 ),
-                                GestureDetector(
-                                  //Navigate to history screen
-                                  onTap: () {},
-                                  child: DescribedFeatureOverlay(
-                                    tapTarget: Text("Get Started",
-                                        style:
-                                            TextStyle(color: Colors.grey[800])),
-                                    featureId: "feature_3",
-                                    title: Text("View Medication History"),
-                                    description: Column(
-                                      // mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            "Completed Medications automatically deletes itself, 1hour after it expires. but you can review past Medications by clicking on \"View History.\" "),
-                                        SizedBox(
-                                            height: Config.yMargin(context, 3)),
-                                      ],
-                                    ),
+                                DescribedFeatureOverlay(
+                                  tapTarget: Text("Get Started",
+                                      style:
+                                          TextStyle(color: Colors.grey[800])),
+                                  featureId: "feature_3",
+                                  title: Text("View Medication History"),
+                                  description: Column(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "Completed Medications automatically deletes itself, 1hour after it expires. but you can review past Medications by clicking on \"View History.\" "),
+                                      SizedBox(
+                                          height: Config.yMargin(context, 3)),
+                                    ],
+                                  ),
+                                  child: GestureDetector(
+                                    //Navigate to history screen
+                                    onTap: () {},
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
@@ -236,7 +228,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
                               ]),
                           SizedBox(height: Config.yMargin(context, 2)),
                           Text(
