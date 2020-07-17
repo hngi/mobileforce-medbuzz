@@ -8,6 +8,9 @@ import '../../../core/database/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
 
 class SingleFitnessScreen extends StatefulWidget {
+  final FitnessReminder rem;
+
+  const SingleFitnessScreen({Key key, this.rem}) : super(key: key);
   @override
   _SingleFitnessScreenState createState() => _SingleFitnessScreenState();
 }
@@ -24,6 +27,7 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
         : '$current_day day(s) left out of $no_of_days days';
     FitnessNotificationManager fitnessNotificationManager =
         FitnessNotificationManager();
+    FitnessReminder rem = FitnessReminder();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -45,16 +49,22 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               child: Align(
                 alignment: Alignment.topRight,
                 child: FlatButton.icon(
-                    onPressed: () async {
+                    onPressed: () {
+                      print(widget.rem.id.toString());
+                      // model.deleteReminder(widget.rem.id.toString());
+                      // print("deleting");
+                      // fitnessNotificationManager
+                      //     .removeReminder(widget.rem.index);
                       showDialog(
                           context: context,
-                          child: DeleteBox(
-                            deletion_key: model.id,
-                            newReminder: model.reminder,
+                          child: DeleteDialog(
+                            id: widget.rem.id.toString(),
+                            index: widget.rem.index,
                           )
-                          //show Confirmation dialog
+                          //     //show Confirmation dialog
                           );
                       //Do not write any code here
+                      // Navigator.pop(context);
                     },
                     icon: Icon(
                       Icons.delete,
@@ -231,81 +241,17 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
   }
 }
 
-class DeleteBox extends StatelessWidget {
-  String deletion_key;
-  FitnessReminder newReminder;
-
-  DeleteBox({this.deletion_key, this.newReminder});
-
-  @override
-  Widget build(BuildContext context) {
-    final model = Provider.of<FitnessReminderCRUD>(context);
-
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
-      ),
-      child: Container(
-        height: Config.yMargin(context, 20),
-        width: Config.xMargin(context, 150.0),
-        //width: Config.xMargin(context, 50),
-        child: Padding(
-          padding: EdgeInsets.all(5.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 23.0, bottom: 20.0),
-                child: Text(
-                  'Are you sure you want to delete this?',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    height: Config.yMargin(context, 6.0),
-                    width: Config.xMargin(context, 30.0),
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      color: Theme.of(context).primaryColorLight,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Config.xMargin(context, 2.0)),
-                        side: BorderSide(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(.4),
-                            width: 1.5),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class DeleteDialog extends StatelessWidget {
+  final String id;
+  final int index;
+
+  const DeleteDialog({Key key, this.id, this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // final FitnessReminder some = FitnessReminder();
+    var model = Provider.of<FitnessReminderCRUD>(context);
+    final FitnessNotificationManager fitnessNotificationManager =
+        FitnessNotificationManager();
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Config.xMargin(context, 4.0)),
@@ -363,10 +309,16 @@ class DeleteDialog extends StatelessWidget {
                     width: Config.xMargin(context, 30.0),
                     child: FlatButton(
                       onPressed: () {
-                        Future.delayed(Duration(seconds: 1), () {
-                          Navigator.pushReplacementNamed(
-                              context, RouteNames.fitnessSchedulesScreen);
-                        });
+                        print("deleted $id $index");
+                        // deleting the reminder works
+                        model.deleteReminder(id);
+                        // TODO: Give feedback if this is not working
+                        // deleting the notification am not so sure
+                        fitnessNotificationManager.removeReminder(index);
+                        // Future.delayed(Duration(seconds: 1), () {
+                        Navigator.pushReplacementNamed(
+                            context, RouteNames.fitnessSchedulesScreen);
+                        // });
                       },
                       child: Text(
                         "Delete",

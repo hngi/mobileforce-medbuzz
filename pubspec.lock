@@ -14,7 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
+
     version: "0.39.12"
   archive:
     dependency: transitive
@@ -23,9 +23,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.13"
-=======
-    version: "0.39.13"
->>>>>>> upstream/dev
+
   args:
     dependency: transitive
     description:
@@ -193,29 +191,16 @@ packages:
       name: device_preview
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.4.5"
-  feature_discovery:
-    dependency: "direct main"
-=======
+
     version: "0.4.7"
   fake_async:
     dependency: transitive
->>>>>>> upstream/dev
+
     description:
       name: feature_discovery
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-=======
-    version: "1.1.0"
-  feature_discovery:
-    dependency: "direct main"
-    description:
-      name: feature_discovery
-      url: "https://pub.dartlang.org"
-    source: hosted
->>>>>>> upstream/dev
+
     version: "0.6.0"
   file:
     dependency: transitive
@@ -684,11 +669,9 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.2.15"
-=======
+
     version: "0.2.17"
->>>>>>> upstream/dev
+
   timing:
     dependency: transitive
     description:
