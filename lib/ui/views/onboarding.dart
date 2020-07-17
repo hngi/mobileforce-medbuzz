@@ -46,7 +46,7 @@ class _OnboardState extends State<Onboard> {
                 children: <Widget>[
                   FirstScreen(
                     image: 'images/schedule.png',
-                    description: 'Book appointments with \ndoctors',
+                    description: 'Keep a tab on your appointments',
                   ),
                   FirstScreen(
                     image: 'images/doctor.png',
@@ -173,7 +173,7 @@ class FirstScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                height: height * .38,
+                height: height * .42,
                 width: width,
                 decoration: BoxDecoration(
                     color: Theme.of(context).backgroundColor,

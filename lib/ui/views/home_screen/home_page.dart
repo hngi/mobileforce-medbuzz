@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
@@ -79,6 +80,8 @@ class _HomePageState extends State<HomePage> {
     waterTakenDB.getWaterTaken();
     var appointmentDB = Provider.of<AppointmentData>(context);
     appointmentDB.getAppointments();
+    var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
+    fitnessDB.getReminders();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       model.updateAvailableMedicationReminders(medicationDB.medicationReminder);
@@ -254,33 +257,34 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: height * 0.05),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Daily medications',
-                                  style: TextStyle(
-                                    fontSize: Config.textSize(context, 5),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                FlatButton(
-                                  onPressed: () {
-                                    Navigator.popAndPushNamed(
-                                        context, RouteNames.medicationScreen);
-                                  },
-                                  child: Text(
-                                    'See all',
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Daily medications',
                                     style: TextStyle(
-                                      fontSize: Config.textSize(context, 3.5),
+                                      fontSize: Config.textSize(context, 5),
                                       fontWeight: FontWeight.w600,
-                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.popAndPushNamed(
+                                          context, RouteNames.medicationScreen);
+                                    },
+                                    child: Text(
+                                      'See all',
+                                      style: TextStyle(
+                                        fontSize: Config.textSize(context, 3.5),
+                                        fontWeight: FontWeight.w600,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ]),
                             Visibility(
-                              visible: medModel.medicationReminder.isEmpty,
+                              visible: model
+                                  .medicationReminderBasedOnDateTime.isEmpty,
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -294,55 +298,74 @@ class _HomePageState extends State<HomePage> {
                                 scrollDirection: Axis.vertical,
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount:
-                                    medModel.medicationReminder.length > 3
-                                        ? 3
-                                        : medModel.medicationReminder.length,
+                                itemCount: model
+                                            .medicationReminderBasedOnDateTime
+                                            .length >
+                                        3
+                                    ? 3
+                                    : model.medicationReminderBasedOnDateTime
+                                        .length,
                                 itemBuilder: (context, index) {
                                   return MedicationCard(
                                     height: height,
                                     width: width,
-                                    values: medModel.medicationReminder[index],
-                                    drugName: medModel
-                                        .medicationReminder[index].drugName,
-                                    drugType: medModel.medicationReminder[index]
+                                    values:
+                                        model.medicationReminderBasedOnDateTime[
+                                            index],
+                                    drugName: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .drugName,
+                                    drugType: model
+                                                .medicationReminderBasedOnDateTime[
+                                                    index]
                                                 .drugType ==
                                             'Injection'
                                         ? "images/injection.png"
-                                        : medModel.medicationReminder[index]
+                                        : model
+                                                    .medicationReminderBasedOnDateTime[
+                                                        index]
                                                     .drugType ==
                                                 'Tablets'
                                             ? "images/tablets.png"
-                                            : medModel.medicationReminder[index]
+                                            : model
+                                                        .medicationReminderBasedOnDateTime[
+                                                            index]
                                                         .drugType ==
                                                     'Drops'
                                                 ? "images/drops.png"
-                                                : medModel
-                                                            .medicationReminder[
+                                                : model
+                                                            .medicationReminderBasedOnDateTime[
                                                                 index]
                                                             .drugType ==
                                                         'Pills'
                                                     ? "images/pills.png"
-                                                    : medModel
-                                                                .medicationReminder[
+                                                    : model
+                                                                .medicationReminderBasedOnDateTime[
                                                                     index]
                                                                 .drugType ==
                                                             'Ointment'
                                                         ? "images/ointment.png"
-                                                        : medModel
-                                                                    .medicationReminder[
+                                                        : model
+                                                                    .medicationReminderBasedOnDateTime[
                                                                         index]
                                                                     .drugType ==
                                                                 'Syrup'
                                                             ? "images/syrup.png"
                                                             : "images/inhaler.png",
-                                    time: medModel
-                                        .medicationReminder[index].firstTime
+                                    time: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .firstTime
                                         .toString(),
-                                    dosage: medModel
-                                        .medicationReminder[index].dosage,
-                                    selectedFreq: medModel
-                                        .medicationReminder[index].frequency,
+                                    dosage: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .dosage,
+                                    selectedFreq: model
+                                        .medicationReminderBasedOnDateTime[
+                                            index]
+                                        .frequency,
                                   );
                                 },
                               ),
