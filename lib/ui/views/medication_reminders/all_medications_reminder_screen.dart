@@ -212,7 +212,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                   ),
                                   child: GestureDetector(
                                     //Navigate to history screen
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.pushReplacementNamed(context,
+                                          RouteNames.medicationHistoryPage);
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
