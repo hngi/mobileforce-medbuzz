@@ -563,7 +563,7 @@ class __AddFitnessState extends State<AddFitness> {
 //                                      }
 
                                       print([
-                                        model.id,
+                                        newReminder.id,
                                         model.fitnessType[model.selectedIndex],
                                         model.activityType[model.selectedIndex],
                                         model.selectedIndex,

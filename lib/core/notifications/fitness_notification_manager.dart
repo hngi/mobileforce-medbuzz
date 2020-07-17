@@ -1,5 +1,3 @@
-import 'package:MedBuzz/core/models/fitness_reminder.dart';
-import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

@@ -1,7 +1,5 @@
-import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../models/fitness_reminder_model/fitness_reminder.dart';
 import '../models/fitness_reminder_model/fitness_reminder.dart';
 
 class FitnessReminderCRUD extends ChangeNotifier {

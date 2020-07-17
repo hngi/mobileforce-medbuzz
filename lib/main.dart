@@ -9,7 +9,6 @@ import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';

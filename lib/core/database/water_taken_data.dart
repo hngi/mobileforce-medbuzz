@@ -2,8 +2,6 @@ import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../models/water_reminder_model/water_reminder.dart';
-
 class WaterTakenData extends ChangeNotifier {
   static const String _boxName = "waterTakenBox";
 
