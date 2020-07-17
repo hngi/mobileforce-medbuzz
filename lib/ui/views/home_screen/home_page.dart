@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
@@ -78,6 +79,8 @@ class _HomePageState extends State<HomePage> {
     waterTakenDB.getWaterTaken();
     var appointmentDB = Provider.of<AppointmentData>(context);
     appointmentDB.getAppointments();
+    var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
+    fitnessDB.getReminders();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       model.updateAvailableMedicationReminders(medicationDB.medicationReminder);

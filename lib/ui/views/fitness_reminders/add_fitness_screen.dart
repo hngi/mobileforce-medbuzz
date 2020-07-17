@@ -57,17 +57,6 @@ class __AddFitnessState extends State<AddFitness> {
   }
 
   Navigation navigation = Navigation();
-  final List activityType = [
-    'images/cycle.png',
-    'images/sprint.png',
-    'images/swim.png'
-  ];
-  final List<String> fitnessTime = [
-    'Daily',
-    'Every 2 days',
-    'Every 3 days',
-    'Every 4 days'
-  ];
   final FitnessModel fitnessModel;
 
 //Instantiating a SizeConfig object to handle responsiveness
@@ -84,7 +73,7 @@ class __AddFitnessState extends State<AddFitness> {
     String appBar = fitnessDB.isEditing ? fitnessDB.edit : fitnessDB.add;
 
     if (fitnessDB.isEditing && _changed_name == false) {
-      descController.text = fitnessModel.desc;
+      descController.text = fitnessDB.description;
       _changed_name = true;
     }
 
@@ -272,7 +261,7 @@ class __AddFitnessState extends State<AddFitness> {
                       child: Center(
                         child: DropdownButton<String>(
                             underline: Text(''),
-                            items: fitnessTime.map((String time) {
+                            items: model.frequency.map((String time) {
                               return DropdownMenuItem<String>(
                                   value: time, child: Text(time));
                             }).toList(),
@@ -281,6 +270,7 @@ class __AddFitnessState extends State<AddFitness> {
                               setState(() {
                                 model.selectedFreq = newFreq;
                               });
+                              model.updateFreq(newFreq);
                             }),
                       ),
                     ),
