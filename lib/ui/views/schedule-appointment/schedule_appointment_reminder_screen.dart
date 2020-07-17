@@ -376,31 +376,29 @@ class _MyScheduleAppointmentScreenState
                                     await appointmentReminderDB.addAppointment(
                                         appointmentReminder.createSchedule());
 
-                                    if (appointmentReminder.selectedDay ==
-                                            DateTime.now().day &&
-                                        appointmentReminder.selectedMonth ==
-                                            DateTime.now().month) {
-                                      String time =
-                                          appointmentReminder.selectedTime;
-                                      String hour = time.substring(0, 2);
-                                      String minutes = time.substring(3, 5);
-                                      DateTime now = DateTime.now();
-                                      String id =
-                                          '${now.year}${now.month}${now.day}$hour$minutes';
-                                      String notifId = id.length < 11
-                                          ? id
-                                          : id.substring(0, 10);
-                                      notificationManager
-                                          .showAppointmentNotificationOnce(
-                                              num.parse(notifId),
-                                              'Hey, you\'ve got somewhere to go',
-                                              ' ${_typeOfAppointmentController.text} ',
-                                              appointmentReminder
-                                                  .getDateTime());
+                                    // if (appointmentReminder.selectedDay ==
+                                    //         DateTime.now().day &&
+                                    //     appointmentReminder.selectedMonth ==
+                                    //         DateTime.now().month)
+                                    String time =
+                                        appointmentReminder.selectedTime;
+                                    String hour = time.substring(0, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    String id =
+                                        '${now.year}${now.month}${now.day}$hour$minutes';
+                                    String notifId = id.length < 11
+                                        ? id
+                                        : id.substring(0, 10);
+                                    notificationManager
+                                        .showAppointmentNotificationOnce(
+                                            num.parse(notifId),
+                                            'Hey, you\'ve got somewhere to go',
+                                            ' ${_typeOfAppointmentController.text} ',
+                                            appointmentReminder.getDateTime());
 
-                                      Navigator.popAndPushNamed(
-                                          context, RouteNames.homePage);
-                                    }
+                                    Navigator.popAndPushNamed(
+                                        context, RouteNames.homePage);
                                   } else {
                                     showSnackbar(context);
                                     return;
