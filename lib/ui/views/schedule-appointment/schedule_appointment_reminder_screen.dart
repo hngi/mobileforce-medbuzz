@@ -330,14 +330,17 @@ class _MyScheduleAppointmentScreenState
                             switch (widget.buttonText) {
                               case 'Save':
                                 try {
+                                  DateTime selected =
+                                      appointmentReminder.getDateTime();
                                   DateTime now = DateTime.now();
                                   String month =
-                                      '${now.month}'.trim().length == 1
-                                          ? '0${now.month}'
-                                          : '${now.month}';
-                                  String day = '${now.day}'.trim().length == 1
-                                      ? '0${now.day}'
-                                      : '${now.day}';
+                                      '${selected.month}'.trim().length == 1
+                                          ? '0${selected.month}'
+                                          : '${selected.month}';
+                                  String day =
+                                      '${selected.day}'.trim().length == 1
+                                          ? '0${selected.day}'
+                                          : '${selected.day}';
                                   String hour =
                                       '${appointmentReminder.selectedTime.substring(0, 2)}'
                                                   .trim()
