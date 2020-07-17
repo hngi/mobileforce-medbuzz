@@ -148,7 +148,7 @@ class __AddFitnessState extends State<AddFitness> {
 //
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: Config.xMargin(context, 7)),
+                          horizontal: Config.xMargin(context, 4)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -474,15 +474,24 @@ class __AddFitnessState extends State<AddFitness> {
                                               fitnesstype: model.fitnessType[
                                                   model.selectedIndex]);
                                       await fitnessDB.addReminder(newReminder);
+                                      String time = DateTime.now().toString();
+                                      String hour = time.substring(0, 2);
+                                      String minutes = time.substring(3, 5);
+                                      DateTime now = DateTime.now();
+                                      String id =
+                                          '${now.year}${now.month}${now.day}$hour$minutes';
+                                      String notifId = id.length < 11
+                                          ? id
+                                          : id.substring(0, 10);
 
                                       fitnessNotificationManager
                                           .showFitnessNotificationOnce(
-                                              id: widget.fitnessModel.index,
+                                              id: num.parse(notifId),
                                               title:
                                                   "hey It's time to go ${descController.text}",
                                               body:
                                                   "For ${model.minDaily} minutes",
-                                              time: model.getDateTime());
+                                              time:DateTime.now() );
 
                                       print([
                                         newReminder.id,
@@ -518,17 +527,27 @@ class __AddFitnessState extends State<AddFitness> {
                                                 fitnessfreq: model.selectedFreq,
                                                 fitnesstype: model.fitnessType[
                                                     model.selectedIndex]);
+                                        String time = DateTime.now().toString();
+                                        String hour = time.substring(0, 2);
+                                        String minutes = time.substring(3, 5);
+                                        DateTime now = DateTime.now();
+                                        String id =
+                                            '${now.year}${now.month}${now.day}$hour$minutes';
+                                        String notifId = id.length < 11
+                                            ? id
+                                            : id.substring(0, 10);
                                         fitnessDB.editReminder(newReminder);
                                         fitnessNotificationManager
-                                            .removeReminder(id);
+                                            .removeReminder(num.parse(notifId));
+
                                         fitnessNotificationManager
                                             .showFitnessNotificationOnce(
-                                                id: widget.fitnessModel.index.,
+                                                id: num.parse(notifId),
                                                 title:
                                                     "hey It's time to go ${descController.text}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
-                                                time: model.getDateTime());
+                                                time: DateTime.now());
                                         print([
                                           newReminder.id,
                                           model
