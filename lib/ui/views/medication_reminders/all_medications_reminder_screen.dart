@@ -105,7 +105,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                               "You can also click on added Medications to expand card and view details"),
                           SizedBox(height: Config.yMargin(context, 0.5)),
                           SizedBox(
-                              width: Config.xMargin(context, 80),
+                              width: Config.xMargin(context, 40),
                               child: Image.asset('images/para_two.png')),
                         ],
                       ),
