@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +171,7 @@ class __AddFitnessState extends State<AddFitness> {
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.xMargin(context, 5.5)),
                             decoration: InputDecoration(
-                              hintText: 'Optional Description...',
+                              hintText: 'Input Description... (Required)',
                               hintStyle: TextStyle(
                                 color: Theme.of(context).hintColor,
                                 fontSize: Config.xMargin(context, 4.5),
@@ -451,7 +452,37 @@ class __AddFitnessState extends State<AddFitness> {
                               ),
                               //Navigate to home screen after saving details in db
                               onPressed: () async {
-                                if (descController.text.isNotEmpty) {
+                                var timeSet = DateTime.parse(
+                                    '${DateTime.now().toString().substring(0, 11)}' +
+                                        '${model.activityTime.toString().substring(10, 15)}');
+                                var now = DateTime.parse(
+                                    DateTime.now().toString().substring(0, 16));
+
+                                if (model.startDate.isAfter(model.endDate)) {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message:
+                                        "Start date cannot be after the end date",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
+                                } else if (timeSet.isBefore(now) &&
+                                    model.startDate.day == DateTime.now().day &&
+                                    model.endDate.day == DateTime.now().day) {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message:
+                                        "Cannot set time reminder in the past",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
+                                } else if (descController.text.isNotEmpty) {
                                   switch (appBar) {
                                     case 'Add Fitness Reminder':
                                       print('${descController.text}');
@@ -565,6 +596,16 @@ class __AddFitnessState extends State<AddFitness> {
                                             RouteNames.fitnessSchedulesScreen);
                                       }
                                   }
+                                } else {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message: "Please enter a brief description",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
                                 }
                               })),
                     ),
@@ -631,7 +672,7 @@ class __AddFitnessState extends State<AddFitness> {
         firstDate: DateTime(model.startDate.year),
         lastDate: DateTime(model.startDate.year + 1));
     if (selectedDate.difference(model.startDate).inDays < 0) {
-      showSnackBar(context, text: "Cannot set reminder in the past");
+      showSnackBar(context, text: "Cannot set start date in the past");
     } else {
       if (selectedDate != null && selectedDate != model.startDate) {
         setState(() {
@@ -652,7 +693,7 @@ class __AddFitnessState extends State<AddFitness> {
         firstDate: DateTime(model.endDate.year),
         lastDate: DateTime(model.endDate.year + 1));
     if (selectedDate.difference(model.endDate).inDays < 0) {
-      showSnackBar(context, text: "Cannot set reminder in the past");
+      showSnackBar(context, text: "Cannot set end date in the past");
     } else {
       if (selectedDate != null && selectedDate != model.endDate) {
         setState(() {
