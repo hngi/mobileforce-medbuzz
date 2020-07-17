@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup extends StatelessWidget {
   @override
@@ -19,6 +20,7 @@ class MySignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Set features intro in Medications to false
     return SafeArea(
       child: Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,

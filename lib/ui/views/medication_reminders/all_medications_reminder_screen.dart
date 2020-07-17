@@ -7,6 +7,7 @@ import 'package:MedBuzz/ui/widget/scroll_calender_med.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicationScreen extends StatefulWidget {
   @override
@@ -27,11 +28,24 @@ class _MedicationScreenState extends State<MedicationScreen> {
       }
     });
 
-    FeatureDiscovery.discoverFeatures(
-      context,
-      const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
-    );
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // //Check if features introduction have been viewed before
+    // bool value = await haveViewedIntroduction().then((value) => value);
+    // if (!value) {
+    //   FeatureDiscovery.discoverFeatures(
+    //     context,
+    //     const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
+    //   );
+    //   prefs.setBool('haveViewed', true);
+    // }
   }
+
+  // Future<bool> haveViewedIntroduction() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool value = prefs.getBool('haveViewed');
+
+  //   return value;
+  // }
 
   bool isVisible = true;
   bool isExpanded = false;
@@ -70,7 +84,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 width: height * 0.08,
                 child: FloatingActionButton(
                     child: DescribedFeatureOverlay(
-                      tapTarget: Icon(Icons.add),
+                      tapTarget: Icon(
+                        Icons.add,
+                        color: Colors.grey[800],
+                      ),
                       featureId: "feature_1",
                       title: Text("Add Medication"),
                       description: Column(
@@ -123,7 +140,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
         controller: controller,
         physics: BouncingScrollPhysics(),
         child: DescribedFeatureOverlay(
-          tapTarget: Text("Next"),
+          tapTarget: Text("Next", style: TextStyle(color: Colors.grey[800])),
           featureId: "feature_2",
           title: Text("View Medication for different days"),
           description: Column(
@@ -177,7 +194,9 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                   //Navigate to history screen
                                   onTap: () {},
                                   child: DescribedFeatureOverlay(
-                                    tapTarget: Text("Get Started"),
+                                    tapTarget: Text("Get Started",
+                                        style:
+                                            TextStyle(color: Colors.grey[800])),
                                     featureId: "feature_3",
                                     title: Text("View Medication History"),
                                     description: Column(
