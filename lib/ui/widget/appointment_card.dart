@@ -67,9 +67,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       icon: Icon(Icons.more_vert,
                           size: Config.textSize(context, 5)),
                       onSelected: (_) {
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('View'),
+                        GestureDetector(
+                          child: PopupMenuItem(
+                            child: Text('View'),
+                          ),
                           onTap: () {
                             Navigator.push(
                               context,
@@ -78,17 +79,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                         appointment: widget.appointment,
                                       )),
                             );
+                            Navigator.pop(context);
                           },
-                        ));
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('Delete'),
-                          onTap: () {
-                            notificationManager
-                                .removeReminder(scheduleModel.selectedDay);
-                            db.deleteAppointment(widget.appointment.id);
-                          },
-                        ));
+                        );
+
+                        GestureDetector(
+                            child: PopupMenuItem(
+                              child: Text('Delete'),
+                            ),
+                            onTap: () {
+                              notificationManager
+                                  .removeReminder(scheduleModel.selectedDay);
+                              db.deleteAppointment(widget.appointment.id);
+                              Navigator.pop(context);
+                            });
                       },
                       itemBuilder: (BuildContext context) {
                         return [
@@ -112,6 +116,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               notificationManager
                                   .removeReminder(scheduleModel.selectedDay);
                               db.deleteAppointment(widget.appointment.id);
+                              Navigator.pop(context);
                             },
                           )),
                         ];
