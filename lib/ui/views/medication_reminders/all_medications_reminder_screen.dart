@@ -138,6 +138,14 @@ class _MedicationScreenState extends State<MedicationScreen> {
             onPressed: () {
               Navigator.popAndPushNamed(context, RouteNames.homePage);
             }),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.show_chart),
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, RouteNames.medicationHistoryPage);
+              }),
+        ],
       ),
       body: SingleChildScrollView(
         controller: controller,

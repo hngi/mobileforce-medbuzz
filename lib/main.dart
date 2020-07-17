@@ -15,6 +15,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'core/models/medication_history_model/medication_history.dart';
 import 'core/models/water_reminder_model/water_reminder.dart';
 
 void main() async {
@@ -29,6 +30,7 @@ void main() async {
   Hive.registerAdapter(FitnessReminderAdapter());
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(WaterDrankAdapter());
+  Hive.registerAdapter(MedicationHistoryAdapter());
   await Hive.openBox('onboarding');
   runApp(
     MyApp(),
