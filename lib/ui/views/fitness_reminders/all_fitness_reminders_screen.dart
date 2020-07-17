@@ -159,15 +159,28 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return FitnessCard(
-                      fitnessReminder: fitnessDB.fitnessReminder[index],
-                      fitnessType: fitnessDB.fitnessReminder[index].fitnesstype,
-                      startDate:
-                          fitnessDB.fitnessReminder[index].startDate.toString(),
-                      endDate:
-                          fitnessDB.fitnessReminder[index].endDate.toString(),
-                      selectedFreq:
-                          fitnessDB.fitnessReminder[index].fitnessfreq,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SingleFitnessScreen(
+                              rem: fitnessDB.fitnessReminder[index],
+                            ),
+                          ),
+                        );
+                      },
+                      child: FitnessCard(
+                        fitnessReminder: fitnessDB.fitnessReminder[index],
+                        fitnessType:
+                            fitnessDB.fitnessReminder[index].fitnesstype,
+                        startDate: fitnessDB.fitnessReminder[index].startDate
+                            .toString(),
+                        endDate:
+                            fitnessDB.fitnessReminder[index].endDate.toString(),
+                        selectedFreq:
+                            fitnessDB.fitnessReminder[index].fitnessfreq,
+                      ),
                     );
                   },
                   itemCount: fitnessDB.fitnessReminder.length,
@@ -216,28 +229,28 @@ class _FitnessCardState extends State<FitnessCard> {
     return Container(
       width: double.infinity,
       child: GestureDetector(
-        onTap: () {
-          print([
-            fitnessModel.updateDescription(widget.fitnessReminder.description),
-            fitnessModel
-                .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
-            fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
-            fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
-            fitnessModel.updateActivityTime(fitnessModel
-                .convertTimeBack(widget.fitnessReminder.activityTime)),
-            fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
-            fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
-          ]);
+        // onTap: () {
+        //   print([
+        //     fitnessModel.updateDescription(widget.fitnessReminder.description),
+        //     fitnessModel
+        //         .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
+        //     fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
+        //     fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
+        //     fitnessModel.updateActivityTime(fitnessModel
+        //         .convertTimeBack(widget.fitnessReminder.activityTime)),
+        //     fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
+        //     fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
+        //   ]);
 
-          FitnessReminder reminder = FitnessReminder(
-            id: fitnessModel.id,
-            fitnessfreq: fitnessModel.selectedFreq,
-            fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
-            minsperday: fitnessModel.minDaily,
-          );
+        //   FitnessReminder reminder = FitnessReminder(
+        //     id: fitnessModel.id,
+        //     fitnessfreq: fitnessModel.selectedFreq,
+        //     fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
+        //     minsperday: fitnessModel.minDaily,
+        //   );
 
-          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
-        },
+        //   Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
+        // },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

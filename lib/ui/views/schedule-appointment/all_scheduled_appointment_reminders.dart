@@ -21,6 +21,7 @@ class ScheduledAppointmentsPage extends StatefulWidget {
 class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   @override
   void initState() {
+    Provider.of<AppointmentData>(context, listen: false).getAppointments();
     Provider.of<ScheduleAppointmentModel>(context, listen: false)
         .updateAvailableAppointmentReminder(
             Provider.of<AppointmentData>(context, listen: false).appointment);
@@ -31,10 +32,6 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   Widget build(BuildContext context) {
     var appointmentReminders =
         Provider.of<ScheduleAppointmentModel>(context, listen: true);
-
-    var appointmentReminderDB =
-        Provider.of<AppointmentData>(context, listen: true);
-    appointmentReminderDB.getAppointments();
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -110,7 +107,12 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                           width: width,
                           height: height * .8,
                           child: Center(
-                              child: Text('No Appointments for this date')),
+                              child: Text(
+                            'No upcoming appointments',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: Config.textSize(context, 5.55)),
+                          )),
                         )),
                     for (var appointment
                         in appointmentReminders.upcomingApointments)
@@ -135,7 +137,13 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
                         child: Container(
                           width: width,
                           height: height * .8,
-                          child: Center(child: Text('No Past Appointments')),
+                          child: Center(
+                              child: Text(
+                            'No past Appointments',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: Config.textSize(context, 5.55)),
+                          )),
                         )),
                     for (var appointment
                         in appointmentReminders.pastApointments)
