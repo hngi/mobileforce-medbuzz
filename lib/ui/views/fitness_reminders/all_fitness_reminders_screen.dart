@@ -57,6 +57,10 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
 
     var model = Provider.of<FitnessSchedulesModel>(context);
     var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fitnessDB.updateAvailableFitnessReminders(fitnessDB.fitnessReminder);
+    });
     //MediaQueries for responsiveness
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -143,6 +147,50 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                 ),
 
                 SizedBox(height: Config.yMargin(context, 5)),
+
+//                Column(
+//                  mainAxisAlignment: MainAxisAlignment.start,
+//                  crossAxisAlignment: CrossAxisAlignment.start,
+//                  children: <Widget>[
+//                    Text(
+//                      'Fitness',
+//                      style: TextStyle(
+//                        fontSize: Config.textSize(context, 5),
+//                        fontWeight: FontWeight.w600,
+//                      ),
+//                    ),
+//                    SizedBox(height: height * 0.02),
+//                    Visibility(
+//                        visible:
+//                            fitnessDB.fitnessRemindersBasedOnDateTime.length ==
+//                                0,
+//                        child: Text('No fitness reminders set yet')),
+//                    for (var fitnessReminder
+//                        in fitnessDB.fitnessRemindersBasedOnDateTime)
+//                      FitnessCard(
+//                        height: height,
+//                        width: width,
+//                        fitnessReminder: fitnessReminder,
+//                        selectedFreq: fitnessReminder.fitnessfreq,
+//                        fitnessType: fitnessReminder.index == 0
+//                            ? 'images/jogging.png'
+//                            : fitnessReminder.index == 1
+//                                ? "images/swimming.png"
+//                                : fitnessReminder.index == 2
+//                                    ? "images/cycling.png"
+//                                    : fitnessReminder.index == 3
+//                                        ? "images/volleyball.png"
+//                                        : fitnessReminder.index == 4
+//                                            ? "images/tabletennis.png"
+//                                            : fitnessReminder.index == 5
+//                                                ? "images/football.png"
+//                                                : fitnessReminder.index == 6
+//                                                    ? "images/badminton.png"
+//                                                    : "images/basketball.png",
+//                        startDate: fitnessReminder.startDate.toString(),
+//                      ),
+//                  ],
+//                ),
                 //Here the already saved reminders will be loaded dynamically
                 // Align(
                 //   alignment: Alignment.centerLeft,
@@ -229,28 +277,28 @@ class _FitnessCardState extends State<FitnessCard> {
     return Container(
       width: double.infinity,
       child: GestureDetector(
-        // onTap: () {
-        //   print([
-        //     fitnessModel.updateDescription(widget.fitnessReminder.description),
-        //     fitnessModel
-        //         .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
-        //     fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
-        //     fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
-        //     fitnessModel.updateActivityTime(fitnessModel
-        //         .convertTimeBack(widget.fitnessReminder.activityTime)),
-        //     fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
-        //     fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
-        //   ]);
+        onTap: () {
+          print([
+            fitnessModel.updateDescription(widget.fitnessReminder.description),
+            fitnessModel
+                .updateSelectedActivityType(widget.fitnessReminder.fitnesstype),
+            fitnessModel.updateStartDate(widget.fitnessReminder.startDate),
+            fitnessModel.updateEndDate(widget.fitnessReminder.endDate),
+            fitnessModel.updateActivityTime(fitnessModel
+                .convertTimeBack(widget.fitnessReminder.activityTime)),
+            fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
+            fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
+          ]);
 
-        //   FitnessReminder reminder = FitnessReminder(
-        //     id: fitnessModel.id,
-        //     fitnessfreq: fitnessModel.selectedFreq,
-        //     fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
-        //     minsperday: fitnessModel.minDaily,
-        //   );
+          //   FitnessReminder reminder = FitnessReminder(
+          //     id: fitnessModel.id,
+          //     fitnessfreq: fitnessModel.selectedFreq,
+          //     fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
+          //     minsperday: fitnessModel.minDaily,
+          //   );
 
-        //   Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
-        // },
+          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
+        },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
