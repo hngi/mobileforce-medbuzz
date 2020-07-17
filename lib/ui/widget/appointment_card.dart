@@ -78,8 +78,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                         appointment: widget.appointment,
                                       )),
                             );
+                            Navigator.pop(context);
                           },
                         ));
+
                         PopupMenuItem(
                             child: GestureDetector(
                           child: Text('Delete'),
@@ -87,6 +89,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             notificationManager
                                 .removeReminder(scheduleModel.selectedDay);
                             db.deleteAppointment(widget.appointment.id);
+                            Navigator.pop(context);
                           },
                         ));
                       },
@@ -112,6 +115,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               notificationManager
                                   .removeReminder(scheduleModel.selectedDay);
                               db.deleteAppointment(widget.appointment.id);
+                              Navigator.pop(context);
                             },
                           )),
                         ];

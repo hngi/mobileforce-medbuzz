@@ -440,7 +440,8 @@ class _MyScheduleAppointmentScreenState
                                 }
                                 break;
                             }
-
+                            Navigator.popAndPushNamed(
+                                context, RouteNames.homePage);
                             //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-D
                           }
                         : null,
