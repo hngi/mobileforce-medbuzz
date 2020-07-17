@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_view_model.dart';
+import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/diet_card.dart';
@@ -188,82 +189,17 @@ class AllRemindersScreen extends StatelessWidget {
                           allReminders.fitnessRemindersBasedOnDateTime.length ==
                               0,
                       child: Text('No fitness reminders set yet')),
-                  Visibility(
-                    visible:
-                        allReminders.fitnessRemindersBasedOnDateTime.length > 0,
-                    child: Container(
-                        width: width,
-                        height: height * 0.31,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: allReminders
-                                .fitnessRemindersBasedOnDateTime.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                //Navigate to screen with single reminder i.e the on user clicked on
-                                onTap: () {},
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      right: Config.xMargin(context, 3)),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: width * 0.7,
-                                          height: height * .22,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    'images/sprint.png'),
-                                                fit: BoxFit.cover),
-                                            borderRadius: BorderRadius.circular(
-                                                Config.xMargin(context, 6)),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            height: Config.yMargin(context, 2)),
-                                        //Type of fitness exercise goes here
-                                        Text(
-                                            allReminders
-                                                .fitnessRemindersBasedOnDateTime[
-                                                    index]
-                                                .description,
-                                            style: TextStyle(
-                                                fontSize:
-                                                    Config.textSize(context, 4),
-                                                fontWeight: FontWeight.w600,
-                                                color: Theme.of(context)
-                                                    .primaryColor)),
-                                        SizedBox(
-                                            height:
-                                                Config.yMargin(context, 0.6)),
-                                        Text(
-                                            allReminders
-                                                    .fitnessRemindersBasedOnDateTime[
-                                                        index]
-                                                    .minsperday
-                                                    .toString() +
-                                                " minutes " +
-                                                allReminders
-                                                    .fitnessRemindersBasedOnDateTime[
-                                                        index]
-                                                    .fitnessfreq
-                                                    .toString()
-                                                    .toLowerCase(),
-                                            style: TextStyle(
-                                                fontSize: Config.textSize(
-                                                    context, 4.5),
-                                                fontWeight: FontWeight.w400,
-                                                color: Theme.of(context)
-                                                    .primaryColorDark)),
-                                      ]),
-                                ),
-                              );
-                            })),
-                  ),
+                  for (var fitnessReminder
+                      in allReminders.fitnessRemindersBasedOnDateTime)
+                    FitnessCard(
+                      height: height,
+                      width: width,
+                      fitnessReminder: fitnessReminder,
+                      selectedFreq: fitnessReminderDB.selectedFreq,
+                      fitnessType: fitnessReminderDB
+                          .fitnessType[fitnessReminderDB.selectedIndex],
+                      startDate: fitnessReminderDB.startDate.toString(),
+                    ),
                 ],
               ),
             ),
