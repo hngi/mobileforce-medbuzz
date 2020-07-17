@@ -148,7 +148,7 @@ class __AddFitnessState extends State<AddFitness> {
 //
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: Config.xMargin(context, 7)),
+                          horizontal: Config.xMargin(context, 4)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -491,7 +491,7 @@ class __AddFitnessState extends State<AddFitness> {
                                                   "hey It's time to go ${descController.text}",
                                               body:
                                                   "For ${model.minDaily} minutes",
-                                              time: model.getDateTime());
+                                              time:DateTime.now() );
 
                                       print([
                                         newReminder.id,
@@ -547,7 +547,7 @@ class __AddFitnessState extends State<AddFitness> {
                                                     "hey It's time to go ${descController.text}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
-                                                time: model.getDateTime());
+                                                time: DateTime.now());
                                         print([
                                           newReminder.id,
                                           model
