@@ -474,10 +474,19 @@ class __AddFitnessState extends State<AddFitness> {
                                               fitnesstype: model.fitnessType[
                                                   model.selectedIndex]);
                                       await fitnessDB.addReminder(newReminder);
+                                      String time = DateTime.now().toString();
+                                      String hour = time.substring(0, 2);
+                                      String minutes = time.substring(3, 5);
+                                      DateTime now = DateTime.now();
+                                      String id =
+                                          '${now.year}${now.month}${now.day}$hour$minutes';
+                                      String notifId = id.length < 11
+                                          ? id
+                                          : id.substring(0, 10);
 
                                       fitnessNotificationManager
                                           .showFitnessNotificationOnce(
-                                              id: widget.fitnessModel.index,
+                                              id: num.parse(notifId),
                                               title:
                                                   "hey It's time to go ${descController.text}",
                                               body:
@@ -518,12 +527,22 @@ class __AddFitnessState extends State<AddFitness> {
                                                 fitnessfreq: model.selectedFreq,
                                                 fitnesstype: model.fitnessType[
                                                     model.selectedIndex]);
+                                        String time = DateTime.now().toString();
+                                        String hour = time.substring(0, 2);
+                                        String minutes = time.substring(3, 5);
+                                        DateTime now = DateTime.now();
+                                        String id =
+                                            '${now.year}${now.month}${now.day}$hour$minutes';
+                                        String notifId = id.length < 11
+                                            ? id
+                                            : id.substring(0, 10);
                                         fitnessDB.editReminder(newReminder);
                                         fitnessNotificationManager
-                                            .removeReminder(id);
+                                            .removeReminder(num.parse(notifId));
+
                                         fitnessNotificationManager
                                             .showFitnessNotificationOnce(
-                                                id: widget.fitnessModel.index.,
+                                                id: num.parse(notifId),
                                                 title:
                                                     "hey It's time to go ${descController.text}",
                                                 body:
