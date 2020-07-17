@@ -59,7 +59,9 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                           context: context,
                           child: DeleteDialog(
                             id: widget.rem.id.toString(),
-                            index: widget.rem.index,
+                            index: int.parse(
+                              widget.rem.id.substring(0, 1).toString(),
+                            ),
                           )
                           //     //show Confirmation dialog
                           );
@@ -164,14 +166,14 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                               fontSize: Config.textSize(context, 4),
                             ),
                           ),
-                          Text(
-                            model.activityTime.toString(),
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.normal,
-                              fontSize: Config.textSize(context, 3.6),
-                            ),
-                          ),
+                          // Text(
+                          //   model.activityTime.toString(),
+                          //   style: TextStyle(
+                          //     color: Theme.of(context).primaryColor,
+                          //     fontWeight: FontWeight.normal,
+                          //     fontSize: Config.textSize(context, 3.6),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
