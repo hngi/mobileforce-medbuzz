@@ -475,92 +475,14 @@ class __AddFitnessState extends State<AddFitness> {
                                                   model.selectedIndex]);
                                       await fitnessDB.addReminder(newReminder);
 
-//                                  fitnessNotificationManager
-//                                      .showFitnessNotificationOnce(
-//                                          id: Random().nextInt(100),
-//                                          title:
-//                                              "hey It's time to go ${descController.text}",
-//                                          body: "For ${model.minDaily} minutes",
-//                                          time: model.getDateTime());
-
-//                                var difference =
-//                                    model.endDate.difference(model.startDate).inHours;
-//
-//                                if (difference == 0) {
-//                                  showSnackBar(context,
-//                                      text:
-//                                          "Start date should be different from end date");
-//                                } else
-////                                  {
-//////                                 navigation.pushFrom(
-//////                                     context, );
-////
-////                                  fitnessNotificationManager
-////                                      .showFitnessNotificationOnce(
-////                                          model.id,
-////                                          "It's time to go ${descController.text}",
-////                                          "For ${model.minDaily} minutes",
-////                                          getDateTime());
-////                                  print(id);
-////                                  _successDialog();
-////                                  Future.delayed(Duration(seconds: 2), () {
-////                                    Navigator.pushNamed(context,
-////                                        RouteNames.fitnessSchedulesScreen);
-////                                  });
-////                                }
-//                              } else {
-//                                showSnackBar(context);
-//                                      break;
-
-//                                    /beginning of editing functionality or something like that
-//                                    case 'Edit Fitness Reminder':
-//                                      if (descController.text.isNotEmpty) {
-//                                        print('${descController.text}');
-////
-////                                var difference =
-////                                    model.endDate.difference(model.startDate).inHours;
-////
-////                                if (difference == 0) {
-////                                  showSnackBar(context,
-////                                      text:
-////                                          "Start date should be different from end date");
-////                                } else {
-//////                                 navigation.pushFrom(
-//////                                     context, );
-//                                        FitnessReminder newReminder =
-//                                            FitnessReminder(
-//                                                id: model.id.toString(),
-//                                                activityTime: [
-//                                                  model.activityTime.hour,
-//                                                  model.activityTime.minute
-//                                                ],
-//                                                endDate: model.endDate,
-//                                                startDate: model.startDate,
-//                                                index: model.index,
-//                                                description:
-//                                                    descController.text,
-//                                                minsperday: model.minDaily,
-//                                                fitnessfreq: model.selectedFreq,
-//                                                fitnesstype: model.fitnessType[
-//                                                    model.selectedIndex]);
-//                                        fitnessDB.editReminder(newReminder);
-//                                        break;
-////                                  fitnessNotificationManager.removeReminder(id);
-////                                  fitnessNotificationManager
-////                                      .showFitnessNotificationOnce(
-////                                          id,
-////                                          "It's time to go ${descController.text}",
-////                                          "For $minDaily minutes",
-////                                          getDateTime());
-////                                  print(id);
-//
-////                                  _successDialog();
-////                                  Future.delayed(Duration(seconds: 2), () {
-////                                    Navigator.pushNamed(context,
-////                                        RouteNames.fitnessSchedulesScreen);
-////                                  });
-//
-//                                      }
+                                      fitnessNotificationManager
+                                          .showFitnessNotificationOnce(
+                                              id: widget.fitnessModel.index,
+                                              title:
+                                                  "hey It's time to go ${descController.text}",
+                                              body:
+                                                  "For ${model.minDaily} minutes",
+                                              time: model.getDateTime());
 
                                       print([
                                         newReminder.id,
@@ -575,6 +497,54 @@ class __AddFitnessState extends State<AddFitness> {
                                       ]);
                                       Navigator.popAndPushNamed(context,
                                           RouteNames.fitnessSchedulesScreen);
+                                      break;
+                                    case 'Edit Fitness Reminder':
+                                      if (descController.text.isNotEmpty) {
+                                        print('${descController.text}');
+                                        FitnessReminder newReminder =
+                                            FitnessReminder(
+                                                id: DateTime.now().toString(),
+                                                activityTime: [
+                                                  model.activityTime.hour,
+                                                  model.activityTime.minute
+                                                ],
+                                                endDate: model.endDate,
+                                                startDate: model.startDate,
+                                                index: model.selectedIndex,
+                                                description:
+                                                    model.updateDescription(
+                                                        descController.text),
+                                                minsperday: model.minDaily,
+                                                fitnessfreq: model.selectedFreq,
+                                                fitnesstype: model.fitnessType[
+                                                    model.selectedIndex]);
+                                        fitnessDB.editReminder(newReminder);
+                                        fitnessNotificationManager
+                                            .removeReminder(id);
+                                        fitnessNotificationManager
+                                            .showFitnessNotificationOnce(
+                                                id: widget.fitnessModel.index.,
+                                                title:
+                                                    "hey It's time to go ${descController.text}",
+                                                body:
+                                                    "For ${model.minDaily} minutes",
+                                                time: model.getDateTime());
+                                        print([
+                                          newReminder.id,
+                                          model
+                                              .fitnessType[model.selectedIndex],
+                                          model.activityType[
+                                              model.selectedIndex],
+                                          model.selectedIndex,
+                                          model.startDate,
+                                          model.endDate,
+                                          model.updateDescription(
+                                              descController.text),
+                                          model.activityTime
+                                        ]);
+                                        Navigator.popAndPushNamed(context,
+                                            RouteNames.fitnessSchedulesScreen);
+                                      }
                                   }
                                 }
                               })),
