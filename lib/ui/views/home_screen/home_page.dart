@@ -262,7 +262,8 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           Visibility(
-                            visible: medModel.medicationReminder.isEmpty,
+                            visible:
+                                model.medicationReminderBasedOnDateTime.isEmpty,
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -276,54 +277,68 @@ class _HomePageState extends State<HomePage> {
                               scrollDirection: Axis.vertical,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: medModel.medicationReminder.length > 3
+                              itemCount: model.medicationReminderBasedOnDateTime
+                                          .length >
+                                      3
                                   ? 3
-                                  : medModel.medicationReminder.length,
+                                  : model
+                                      .medicationReminderBasedOnDateTime.length,
                               itemBuilder: (context, index) {
                                 return MedicationCard(
                                   height: height,
                                   width: width,
-                                  values: medModel.medicationReminder[index],
-                                  drugName: medModel
-                                      .medicationReminder[index].drugName,
-                                  drugType: medModel.medicationReminder[index]
+                                  values: model
+                                      .medicationReminderBasedOnDateTime[index],
+                                  drugName: model
+                                      .medicationReminderBasedOnDateTime[index]
+                                      .drugName,
+                                  drugType: model
+                                              .medicationReminderBasedOnDateTime[
+                                                  index]
                                               .drugType ==
                                           'Injection'
                                       ? "images/injection.png"
-                                      : medModel.medicationReminder[index]
+                                      : model
+                                                  .medicationReminderBasedOnDateTime[
+                                                      index]
                                                   .drugType ==
                                               'Tablets'
                                           ? "images/tablets.png"
-                                          : medModel.medicationReminder[index]
+                                          : model
+                                                      .medicationReminderBasedOnDateTime[
+                                                          index]
                                                       .drugType ==
                                                   'Drops'
                                               ? "images/drops.png"
-                                              : medModel
-                                                          .medicationReminder[
+                                              : model
+                                                          .medicationReminderBasedOnDateTime[
                                                               index]
                                                           .drugType ==
                                                       'Pills'
                                                   ? "images/pills.png"
-                                                  : medModel
-                                                              .medicationReminder[
+                                                  : model
+                                                              .medicationReminderBasedOnDateTime[
                                                                   index]
                                                               .drugType ==
                                                           'Ointment'
                                                       ? "images/ointment.png"
-                                                      : medModel
-                                                                  .medicationReminder[
+                                                      : model
+                                                                  .medicationReminderBasedOnDateTime[
                                                                       index]
                                                                   .drugType ==
                                                               'Syrup'
                                                           ? "images/syrup.png"
                                                           : "images/inhaler.png",
-                                  time: medModel
-                                      .medicationReminder[index].firstTime
+                                  time: model
+                                      .medicationReminderBasedOnDateTime[index]
+                                      .firstTime
                                       .toString(),
-                                  dosage:
-                                      medModel.medicationReminder[index].dosage,
-                                  selectedFreq: medModel
-                                      .medicationReminder[index].frequency,
+                                  dosage: model
+                                      .medicationReminderBasedOnDateTime[index]
+                                      .dosage,
+                                  selectedFreq: model
+                                      .medicationReminderBasedOnDateTime[index]
+                                      .frequency,
                                 );
                               },
                             ),

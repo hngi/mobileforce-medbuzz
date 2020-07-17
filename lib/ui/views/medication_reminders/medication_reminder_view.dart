@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MedicationView extends StatelessWidget {
+  final bool showSnackBar = false;
+
   @override
   Widget build(BuildContext context) {
     var medModel = Provider.of<MedicationData>(context);
@@ -16,6 +18,7 @@ class MedicationView extends StatelessWidget {
     String days_left = no_of_days == 0
         ? 'Today is the last day!'
         : '$current_day day(s) left out of $no_of_days days';
+    String durationDays = '$no_of_days days(s)';
 
     //Set Widget to use Provider
     return Consumer<MedicationData>(
@@ -43,22 +46,12 @@ class MedicationView extends StatelessWidget {
                     child: FlatButton.icon(
                         onPressed: () async {
                           showDialog(
-                                  context: context,
-                                  child: DeleteBox(
-                                      deletion_key: medModel.id,
-                                      newReminder: medModel
-                                          .reminder) //show Confirmation dialog
-                                  )
-                              .then((value) => Flushbar(
-                                    icon: Icon(
-                                      Icons.check_circle,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    backgroundColor: Colors.green,
-                                    message: "Reminder successfully deleted",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context));
+                              context: context,
+                              child: DeleteBox(
+                                deletion_key: medModel.id,
+                                newReminder: medModel.reminder,
+                              )); //show Confirmation dialog
+
                           //Do not write any code here
                         },
                         icon: Icon(
@@ -152,7 +145,7 @@ class MedicationView extends StatelessWidget {
                           ),
                           SizedBox(height: Config.yMargin(context, 10)),
                           Text(
-                            'Days Left',
+                            'Duration',
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontSize: Config.textSize(context, 4.5),
@@ -163,7 +156,7 @@ class MedicationView extends StatelessWidget {
                             padding: EdgeInsets.only(
                                 top: Config.yMargin(context, 1.0)),
                             child: Text(
-                              days_left,
+                              durationDays,
                               style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.textSize(context, 4),
@@ -254,14 +247,20 @@ class FrequencyList extends StatelessWidget {
   }
 }
 
-class DeleteBox extends StatelessWidget {
+class DeleteBox extends StatefulWidget {
   String deletion_key;
   MedicationReminder newReminder;
+  BuildContext context;
 
   DeleteBox({this.deletion_key, this.newReminder});
 
   @override
-  Widget build(BuildContext context) {
+  _DeleteBoxState createState() => _DeleteBoxState();
+}
+
+class _DeleteBoxState extends State<DeleteBox> {
+  @override
+  Widget build(context) {
     final medModel = Provider.of<MedicationData>(context);
 
     return Dialog(
@@ -322,46 +321,59 @@ class DeleteBox extends StatelessWidget {
                     child: FlatButton(
                       onPressed: () {
                         //Code to delete notification
-                        switch (newReminder.frequency) {
+                        switch (widget.newReminder.frequency) {
                           case 'Once':
-                            deleteNotification(
-                                newReminder, newReminder.firstTime);
                             break;
                           case 'Twice':
-                            print(newReminder.firstTime);
-                            print('secondTime: ${newReminder.secondTime}');
-                            deleteNotification(
-                                newReminder, newReminder.firstTime);
-                            if (newReminder.secondTime !=
-                                newReminder.firstTime) {
-                              deleteNotification(
-                                  newReminder, newReminder.secondTime);
+                            print(widget.newReminder.firstTime);
+                            print(
+                                'secondTime: ${widget.newReminder.secondTime}');
+                            deleteNotification(widget.newReminder,
+                                widget.newReminder.firstTime);
+                            if (widget.newReminder.secondTime !=
+                                widget.newReminder.firstTime) {
+                              deleteNotification(widget.newReminder,
+                                  widget.newReminder.secondTime);
                             }
                             break;
                           case 'Thrice':
-                            deleteNotification(
-                                newReminder, newReminder.firstTime);
-                            if (newReminder.secondTime !=
-                                newReminder.firstTime) {
-                              deleteNotification(
-                                  newReminder, newReminder.secondTime);
+                            deleteNotification(widget.newReminder,
+                                widget.newReminder.firstTime);
+                            if (widget.newReminder.secondTime !=
+                                widget.newReminder.firstTime) {
+                              deleteNotification(widget.newReminder,
+                                  widget.newReminder.secondTime);
                             }
-                            if (!(newReminder.thirdTime ==
-                                newReminder.firstTime)) {
-                              if (!(newReminder.thirdTime ==
-                                  newReminder.secondTime)) {
-                                deleteNotification(
-                                    newReminder, newReminder.thirdTime);
+                            if (!(widget.newReminder.thirdTime ==
+                                widget.newReminder.firstTime)) {
+                              if (!(widget.newReminder.thirdTime ==
+                                  widget.newReminder.secondTime)) {
+                                deleteNotification(widget.newReminder,
+                                    widget.newReminder.thirdTime);
                               }
                             }
+
                             break;
                         }
 
                         //Code to delete using key
-                        medModel.deleteSchedule(deletion_key);
+                        medModel.deleteSchedule(widget.deletion_key);
 
                         Navigator.of(context)
                             .popAndPushNamed(RouteNames.medicationScreen);
+
+                        deleteNotification(
+                            widget.newReminder, widget.newReminder.firstTime);
+                        Flushbar(
+                          icon: Icon(
+                            Icons.check_circle,
+                            size: 28.0,
+                            color: Colors.white,
+                          ),
+                          backgroundColor: Colors.green,
+                          message: "Reminder successfully deleted",
+                          duration: Duration(seconds: 3),
+                        )..show(context);
                       },
                       child: Text(
                         "Delete",

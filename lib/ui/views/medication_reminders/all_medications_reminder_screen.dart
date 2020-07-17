@@ -326,7 +326,8 @@ class _MedicationCardState extends State<MedicationCard> {
           mainAxisSize: MainAxisSize.max,
           children: [
             //SizedBox(height: height * 0.02),
-            Container(
+            AnimatedContainer(
+                duration: Duration(microseconds: 100),
                 width: width,
                 padding: EdgeInsets.symmetric(
                     horizontal: Config.xMargin(context, 3),
@@ -378,140 +379,156 @@ class _MedicationCardState extends State<MedicationCard> {
                       height: Config.yMargin(context, 1),
                       width: double.infinity,
                     ),
-                    Divider(
-                      color: Theme.of(context).primaryColorLight,
-                      height: height * 0.02,
-//indent: 50.0,
-                      // endIndent: 10.0,
-                    ),
                     Visibility(
                       visible: isSelected,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
                         children: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              var medModel =
-                                  Provider.of<MedicationData>(context);
-                              print('----All Medication Reminder info ------');
-                              medModel.updateSelectedDrugType(
-                                  widget.values.drugType);
-                              medModel.updateDrugName(widget.values.drugName);
-                              print("id = " +
-                                  medModel.updateId(widget.values.id));
-                              medModel.updateDosage(widget.values.dosage);
-                              medModel.updateStartDate(widget.values.startAt);
-                              medModel.updateEndDate(widget.values.endAt);
-                              print(
-                                  medModel.updateFreq(widget.values.frequency));
-                              print(medModel.updateDescription(
-                                  widget.values.description));
-
-                              if (medModel.selectedFreq == 'Once') {
-                                print(medModel.updateFirstTime(medModel
-                                    .convertTimeBack(widget.values.firstTime)));
-                              } else if (medModel.selectedFreq == 'Twice') {
-                                print(medModel.updateFirstTime(medModel
-                                    .convertTimeBack(widget.values.firstTime)));
-                                print(medModel.updateSecondTime(
-                                    medModel.convertTimeBack(
-                                        widget.values.secondTime)));
-                              } else if (medModel.selectedFreq == 'Thrice') {
-                                print(medModel.updateFirstTime(medModel
-                                    .convertTimeBack(widget.values.firstTime)));
-                                print(medModel.updateSecondTime(
-                                    medModel.convertTimeBack(
-                                        widget.values.secondTime)));
-                                print(medModel.updateThirdTime(medModel
-                                    .convertTimeBack(widget.values.thirdTime)));
-                              }
-                              print(medModel.updateSelectedIndex(
-                                  int.parse(widget.values.index)));
-
-                              MedicationReminder reminder = MedicationReminder(
-                                  drugName: medModel.drugName,
-                                  id: medModel.id,
-                                  frequency: medModel.selectedFreq,
-                                  firstTime:
-                                      medModel.convertTime(medModel.firstTime),
-                                  secondTime:
-                                      medModel.selectedFreq == "Twice" ||
-                                              medModel.selectedFreq == "Thrice"
-                                          ? medModel
-                                              .convertTime(medModel.secondTime)
-                                          : null,
-                                  thirdTime: medModel.selectedFreq == "Thrice"
-                                      ? medModel.convertTime(medModel.thirdTime)
-                                      : null);
-
-                              medModel.setReminder(reminder);
-
-                              print('-------------------------------');
-
-                              Navigator.pushNamed(
-                                context,
-                                RouteNames.medicationView,
-                              );
-                            },
-                            child: Text(
-                              'View',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColorLight
-                                      : Theme.of(context).primaryColorDark),
-                            ),
+                          Divider(
+                            color: Theme.of(context).primaryColorLight,
+                            height: height * 0.02,
+//indent: 50.0,
+                            // endIndent: 10.0,
                           ),
-                          // FlatButton(
-                          //   child: Row(
-                          //     children: <Widget>[
-                          //       Icon(
-                          //         Icons.close,
-                          //         color: isSelected
-                          //             ? Theme.of(context).primaryColorLight
-                          //             : Theme.of(context).primaryColorDark,
-                          //         size: Config.textSize(context, 3),
-                          //       ),
-                          //       SizedBox(
-                          //         width: Config.xMargin(context, 2),
-                          //       ),
-                          //       Text(
-                          //         'Skip',
-                          //         style: TextStyle(
-                          //             fontWeight: FontWeight.bold,
-                          //             color: isSelected
-                          //                 ? Theme.of(context).primaryColorLight
-                          //                 : Theme.of(context).primaryColorDark),
-                          //       )
-                          //     ],
-                          //   ),
-                          //   onPressed: () {},
-                          // ),
-                          // FlatButton(
-                          //   onPressed: () {},
-                          //   child: Row(
-                          //     children: <Widget>[
-                          //       Icon(
-                          //         Icons.done,
-                          //         color: isSelected
-                          //             ? Theme.of(context).primaryColorLight
-                          //             : Theme.of(context).primaryColorDark,
-                          //         size: Config.textSize(context, 3),
-                          //       ),
-                          //       SizedBox(
-                          //         width: Config.xMargin(context, 2),
-                          //       ),
-                          //       Text(
-                          //         'Done',
-                          //         style: TextStyle(
-                          //             fontWeight: FontWeight.bold,
-                          //             color: isSelected
-                          //                 ? Theme.of(context).primaryColorLight
-                          //                 : Theme.of(context).primaryColorDark),
-                          //       )
-                          //     ],
-                          //   ),
-                          // )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  var medModel =
+                                      Provider.of<MedicationData>(context);
+                                  print(
+                                      '----All Medication Reminder info ------');
+                                  medModel.updateSelectedDrugType(
+                                      widget.values.drugType);
+                                  medModel
+                                      .updateDrugName(widget.values.drugName);
+                                  print("id = " +
+                                      medModel.updateId(widget.values.id));
+                                  medModel.updateDosage(widget.values.dosage);
+                                  medModel
+                                      .updateStartDate(widget.values.startAt);
+                                  medModel.updateEndDate(widget.values.endAt);
+                                  print(medModel
+                                      .updateFreq(widget.values.frequency));
+                                  print(medModel.updateDescription(
+                                      widget.values.description));
+
+                                  if (medModel.selectedFreq == 'Once') {
+                                    print(medModel.updateFirstTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.firstTime)));
+                                  } else if (medModel.selectedFreq == 'Twice') {
+                                    print(medModel.updateFirstTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.firstTime)));
+                                    print(medModel.updateSecondTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.secondTime)));
+                                  } else if (medModel.selectedFreq ==
+                                      'Thrice') {
+                                    print(medModel.updateFirstTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.firstTime)));
+                                    print(medModel.updateSecondTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.secondTime)));
+                                    print(medModel.updateThirdTime(
+                                        medModel.convertTimeBack(
+                                            widget.values.thirdTime)));
+                                  }
+                                  print(medModel.updateSelectedIndex(
+                                      int.parse(widget.values.index)));
+
+                                  MedicationReminder reminder =
+                                      MedicationReminder(
+                                          drugName: medModel.drugName,
+                                          id: medModel.id,
+                                          frequency: medModel.selectedFreq,
+                                          firstTime: medModel
+                                              .convertTime(medModel.firstTime),
+                                          secondTime: medModel.selectedFreq ==
+                                                      "Twice" ||
+                                                  medModel.selectedFreq ==
+                                                      "Thrice"
+                                              ? medModel.convertTime(
+                                                  medModel.secondTime)
+                                              : null,
+                                          thirdTime: medModel.selectedFreq ==
+                                                  "Thrice"
+                                              ? medModel.convertTime(
+                                                  medModel.thirdTime)
+                                              : null);
+
+                                  medModel.setReminder(reminder);
+
+                                  print('-------------------------------');
+
+                                  Navigator.pushNamed(
+                                    context,
+                                    RouteNames.medicationView,
+                                  );
+                                },
+                                child: Text(
+                                  'View',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? Theme.of(context).primaryColorLight
+                                          : Theme.of(context).primaryColorDark),
+                                ),
+                              ),
+                              // FlatButton(
+                              //   child: Row(
+                              //     children: <Widget>[
+                              //       Icon(
+                              //         Icons.close,
+                              //         color: isSelected
+                              //             ? Theme.of(context).primaryColorLight
+                              //             : Theme.of(context).primaryColorDark,
+                              //         size: Config.textSize(context, 3),
+                              //       ),
+                              //       SizedBox(
+                              //         width: Config.xMargin(context, 2),
+                              //       ),
+                              //       Text(
+                              //         'Skip',
+                              //         style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //             color: isSelected
+                              //                 ? Theme.of(context).primaryColorLight
+                              //                 : Theme.of(context).primaryColorDark),
+                              //       )
+                              //     ],
+                              //   ),
+                              //   onPressed: () {},
+                              // ),
+                              // FlatButton(
+                              //   onPressed: () {},
+                              //   child: Row(
+                              //     children: <Widget>[
+                              //       Icon(
+                              //         Icons.done,
+                              //         color: isSelected
+                              //             ? Theme.of(context).primaryColorLight
+                              //             : Theme.of(context).primaryColorDark,
+                              //         size: Config.textSize(context, 3),
+                              //       ),
+                              //       SizedBox(
+                              //         width: Config.xMargin(context, 2),
+                              //       ),
+                              //       Text(
+                              //         'Done',
+                              //         style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //             color: isSelected
+                              //                 ? Theme.of(context).primaryColorLight
+                              //                 : Theme.of(context).primaryColorDark),
+                              //       )
+                              //     ],
+                              //   ),
+                              // )
+                            ],
+                          ),
                         ],
                       ),
                     )

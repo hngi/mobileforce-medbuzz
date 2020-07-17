@@ -66,11 +66,11 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                 fontWeight: FontWeight.w500,
               ),
         ),
-        backgroundColor: Theme.of(context).primaryColorLight,
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
       ),
       body: Container(
-        color: Theme.of(context).primaryColorLight,
+        color: Theme.of(context).backgroundColor,
         child: ListView(
           addRepaintBoundaries: false,
           children: <Widget>[
@@ -100,10 +100,13 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         color: Theme.of(context).primaryColorDark,
                         fontSize: Config.xMargin(context, 5.5)),
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).primaryColorLight,
                       hintText: 'Enter Drug Name',
                       hintStyle: TextStyle(
                         color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.xMargin(context, 5),
+                        fontSize: Config.xMargin(context, 4.5),
+                        fontWeight: FontWeight.w100,
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -137,10 +140,13 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                         color: Theme.of(context).primaryColorDark,
                         fontSize: Config.xMargin(context, 5.5)),
                     decoration: InputDecoration(
-                      hintText: 'Enter Description here',
+                      filled: true,
+                      fillColor: Theme.of(context).primaryColorLight,
+                      hintText: 'Enter Description here (Optional)',
                       hintStyle: TextStyle(
                         color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.xMargin(context, 5),
+                        fontSize: Config.xMargin(context, 4.5),
+                        fontWeight: FontWeight.w100,
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -208,6 +214,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Theme.of(context).primaryColorLight,
                           hintText: '${medModel.frequency}',
                           hintStyle: TextStyle(
                             color: Colors.black38,
@@ -231,6 +239,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             value: medModel.selectedFreq,
                             isDense: true,
                             onChanged: (String newValue) {
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
                               setState(() {
                                 medModel.selectedFreq = newValue;
                                 state.didChange(newValue);
@@ -328,12 +338,59 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                   SizedBox(height: Config.yMargin(context, 10)),
                   InkWell(
                       onTap: () async {
-                        if (textEditingController.text.isNotEmpty) {
+                        var selecDate1 = DateTime.parse(
+                            '${DateTime.now().toString().substring(0, 11)}' +
+                                '${medModel.firstTime.toString().substring(10, 15)}');
+                        var selecDate2 = medModel.secondTime != null
+                            ? DateTime.parse(
+                                '${DateTime.now().toString().substring(0, 11)}' +
+                                    '${medModel.secondTime.toString().substring(10, 15)}')
+                            : null;
+                        var selecDate3 = medModel.thirdTime != null
+                            ? DateTime.parse(
+                                '${DateTime.now().toString().substring(0, 11)}' +
+                                    '${medModel.thirdTime.toString().substring(10, 15)}')
+                            : null;
+                        var now = DateTime.parse(
+                            DateTime.now().toString().substring(0, 16));
+
+                        if (medModel.startDate.isAfter(medModel.endDate)) {
+                          Flushbar(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 28.0,
+                              color: Colors.white,
+                            ),
+                            message: "Start date cannot be after the end date",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
+                        } else if (selecDate1.isBefore(now) &&
+                                medModel.startDate.day == DateTime.now().day &&
+                                medModel.endDate.day == DateTime.now().day ||
+                            selecDate2 != null &&
+                                selecDate2.isBefore(now) &&
+                                medModel.startDate.day ==
+                                    medModel.endDate.day ||
+                            selecDate3 != null &&
+                                selecDate3.isBefore(now) &&
+                                medModel.startDate.day ==
+                                    medModel.endDate.day) {
+                          Flushbar(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 28.0,
+                              color: Colors.white,
+                            ),
+                            message: "Cannot set time reminder in the past",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
+                        } else if (textEditingController.text.isNotEmpty) {
                           switch (appBarTitle) {
                             case 'Add Medication':
                               print(medModel.updateDescription(
                                   descriptionTextController.text));
                               //Add Medication? create new MedicationReminder with new ID
+
                               MedicationReminder med = MedicationReminder(
                                   id: DateTime.now().toString(),
                                   drugName: medModel.updateDrugName(
