@@ -23,7 +23,7 @@ class Navigation {
   }
 
   ///Exits application
-  pop(BuildContext context) {
+  pop() {
     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 }

@@ -1,10 +1,8 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/dot_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class Onboard extends StatefulWidget {
   @override

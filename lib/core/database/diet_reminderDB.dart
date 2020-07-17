@@ -8,10 +8,6 @@ class DietReminderDB extends ChangeNotifier {
 
   static const String _boxname = "dietReminderBox";
 
-  // Making an emptylist of diets
-
-  List<DietModel> _diet = [];
-
   // List<DietModel> get pastDiets => this._pastDiets;
   // List<DietModel> get upcomingDiets => this._upcomingDiets;
   List<DietModel> _allDiets = [];
