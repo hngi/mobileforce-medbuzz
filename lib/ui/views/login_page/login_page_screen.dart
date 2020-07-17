@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:MedBuzz/core/constants/route_names.dart';
-import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:MedBuzz/main.dart';
-
 
 class NotificationManager {
   var flutterLocalNotificationsPlugin;
@@ -19,7 +17,7 @@ class NotificationManager {
   void initNotifications() {
     // initialise the plugin.
     var initializationSettingsAndroid =
-    new AndroidInitializationSettings('@mipmap/ic_launcher');
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
@@ -42,7 +40,7 @@ class NotificationManager {
     }
   }
 
-  void removeNotification(int notificationId){
+  void removeNotification(int notificationId) {
     flutterLocalNotificationsPlugin.cancel(notificationId);
     print('Notfication with id: $notificationId been removed successfully');
   }
