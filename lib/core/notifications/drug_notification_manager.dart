@@ -43,6 +43,7 @@ class DrugNotificationManager {
   getPlatformChannelSpecfics(int id) {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         '$id', 'your channel name', 'your channel description',
+        //sound: RawResourceAndroidNotificationSound('burna'),
         importance: Importance.Max,
         priority: Priority.High,
         ticker: 'Fitness Reminder');
