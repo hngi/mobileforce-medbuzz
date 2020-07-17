@@ -100,6 +100,11 @@ class MySignUp extends StatelessWidget {
                           // feature5
                         },
                       );
+                      FeatureDiscovery.discoverFeatures(context, const <String>{
+                        'feature_1',
+                        'feature_2',
+                        'feature_3'
+                      });
                       Navigator.pushReplacementNamed(
                           context, RouteNames.homePage);
                     });

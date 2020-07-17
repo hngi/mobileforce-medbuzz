@@ -28,16 +28,16 @@ class _MedicationScreenState extends State<MedicationScreen> {
       }
     });
 
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // //Check if features introduction have been viewed before
-    // bool value = await haveViewedIntroduction().then((value) => value);
-    // if (!value) {
-    FeatureDiscovery.discoverFeatures(
-      context,
-      const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
-    );
-    //   prefs.setBool('haveViewed', true);
-    // }
+    // // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // // //Check if features introduction have been viewed before
+    // // bool value = await haveViewedIntroduction().then((value) => value);
+    // // if (!value) {
+    // FeatureDiscovery.discoverFeatures(
+    //   context,
+    //   const <String>{'feature_1', 'feature_2', 'feature_3'}, //Add Others
+    // );
+    // //   prefs.setBool('haveViewed', true);
+    // // }
   }
 
   // Future<bool> haveViewedIntroduction() async {
@@ -100,6 +100,13 @@ class _MedicationScreenState extends State<MedicationScreen> {
                             Icons.add,
                             color: Colors.white,
                           ),
+                          SizedBox(height: Config.yMargin(context, 0.5)),
+                          Text(
+                              "You can also click on added Medications to expand card and view details"),
+                          SizedBox(height: Config.yMargin(context, 0.5)),
+                          SizedBox(
+                              width: Config.xMargin(context, 80),
+                              child: Image.asset('images/para_two.png')),
                         ],
                       ),
                       child: Icon(
