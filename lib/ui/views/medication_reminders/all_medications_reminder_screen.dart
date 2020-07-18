@@ -96,13 +96,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         // mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "You can click the add button to create a new medication schedule "),
-                                Icon(Icons.add, color: Colors.white),
-                              ]),
+                          Text(
+                              "You can click the add button to create a new medication schedule "),
                           SizedBox(height: Config.yMargin(context, 0.5)),
                           Text(
                               "Added schedules display as expandable cards on the screen."),
@@ -165,7 +160,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  "Select days from the calendar to View medications for the day"),
+                  "Select days from the calendar to View medications for that particular day"),
               SizedBox(height: Config.yMargin(context, 3)),
               SizedBox(
                   height: Config.yMargin(context, 19),

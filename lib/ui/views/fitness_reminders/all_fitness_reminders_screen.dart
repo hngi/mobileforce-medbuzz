@@ -288,14 +288,17 @@ class _FitnessCardState extends State<FitnessCard> {
                 .convertTimeBack(widget.fitnessReminder.activityTime)),
             fitnessModel.updateSelectedIndex(widget.fitnessReminder.index),
             fitnessModel.updateFreq(widget.fitnessReminder.fitnessfreq),
+            fitnessModel.updateMinDaily(widget.fitnessReminder.minsperday),
+            fitnessModel.updateID(widget.fitnessReminder.id)
+//            fitnessModel.updateIndex(widget.fitnessReminder.index)
           ]);
 
-          //   FitnessReminder reminder = FitnessReminder(
-          //     id: fitnessModel.id,
-          //     fitnessfreq: fitnessModel.selectedFreq,
-          //     fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
-          //     minsperday: fitnessModel.minDaily,
-          //   );
+//          FitnessReminder reminder = FitnessReminder(
+//            id: fitnessModel.id,
+//            fitnessfreq: fitnessModel.selectedFreq,
+//            fitnesstype: fitnessModel.fitnessType[widget.fitnessReminder.index],
+//            minsperday: fitnessModel.minDaily,
+//          );
 
           Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
         },
