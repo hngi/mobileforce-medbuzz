@@ -120,6 +120,7 @@ class WaterReminderData extends ChangeNotifier {
     // return val;
   }
 
+
   double get progress {
     var value = 0 / totalLevel;
     return value.isNaN ? 0.0 : value;

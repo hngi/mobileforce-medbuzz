@@ -519,10 +519,10 @@ class __AddFitnessState extends State<AddFitness> {
                                           .showFitnessNotificationOnce(
                                               id: num.parse(notifId),
                                               title:
-                                                  "hey It's time to go ${descController.text}",
+                                                  "Hey It's Time to Go ${newReminder.fitnesstype}",
                                               body:
                                                   "For ${model.minDaily} minutes",
-                                              time: DateTime.now());
+                                              time: model.getDateTime());
 
                                       print([
                                         newReminder.id,
@@ -558,6 +558,9 @@ class __AddFitnessState extends State<AddFitness> {
                                                 fitnessfreq: model.selectedFreq,
                                                 fitnesstype: model.fitnessType[
                                                     model.selectedIndex]);
+
+//
+
                                         String time = DateTime.now().toString();
                                         String hour = time.substring(0, 2);
                                         String minutes = time.substring(3, 5);
@@ -575,12 +578,13 @@ class __AddFitnessState extends State<AddFitness> {
                                             .showFitnessNotificationOnce(
                                                 id: num.parse(notifId),
                                                 title:
-                                                    "hey It's time to go ${descController.text}",
+                                                    "Hey It's Time to Go ${newReminder.fitnesstype}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
                                                 time: DateTime.now());
                                         print([
                                           newReminder.id,
+                                          newReminder.fitnesstype,
                                           model
                                               .fitnessType[model.selectedIndex],
                                           model.activityType[
@@ -621,12 +625,6 @@ class __AddFitnessState extends State<AddFitness> {
       ),
     );
   }
-
-//  getDateTime() {
-//    final now = new DateTime.now();
-//    return DateTime(
-//        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
-//  }
 
   Future<Null> selectTime(BuildContext context) async {
     var model = Provider.of<FitnessReminderCRUD>(context);

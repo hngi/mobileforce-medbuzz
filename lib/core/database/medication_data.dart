@@ -1,3 +1,5 @@
+import 'package:MedBuzz/core/database/medication_history.dart';
+import 'package:MedBuzz/core/models/medication_history_model/medication_history.dart';
 import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:hive/hive.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class MedicationData extends ChangeNotifier {
   static const String _boxName = "medicationReminderBox";
@@ -35,6 +39,8 @@ class MedicationData extends ChangeNotifier {
   String id;
   String description = "Enter Anything Here";
   MedicationReminder reminder;
+  MedicationHistory newHistory;
+  BuildContext context;
 
   bool isEditing = false;
 
@@ -62,6 +68,43 @@ class MedicationData extends ChangeNotifier {
   }
 
   List<MedicationReminder> medicationReminder = [];
+
+  List<MedicationReminder> get allMedications {
+    return medicationReminder;
+  }
+
+//  List<MedicationReminder> get pastReminders {
+//    return medicationReminder.where((element) => element.endAt.isBefore(DateTime.now())).toList();
+//
+//  }
+  List<MedicationReminder> get myPastMedication {
+    return medicationReminder
+        .where((element) => _selectedDay.day > element.endAt.day)
+        .toList();
+  }
+
+  List<MedicationReminder> get pastReminders {
+    return medicationReminder
+        .where((element) => DateTime.now().difference(element.endAt).inDays > 0)
+        .toList();
+  }
+
+  void deleteAllMedicationSchedule() {
+    for (var medication in pastReminders) {
+      deleteSchedule(medication.id);
+    }
+  }
+
+  void updateAvailableMedicationReminder(medicationReminders) {
+    medicationReminder = medicationReminders;
+    notifyListeners();
+  }
+
+  List<MedicationReminder> get pastMedications {
+    return medicationReminder
+        .where((medication) => _selectedDay.day > medication.endAt.day)
+        .toList();
+  }
 
   List<int> convertTime(TimeOfDay time) {
     List<int> value = new List(2);
@@ -118,6 +161,24 @@ class MedicationData extends ChangeNotifier {
   TimeOfDay convertTimeBack(List<int> list) {
     TimeOfDay value = TimeOfDay(hour: list[0], minute: list[1]);
     return value;
+  }
+
+  MedicationHistory convertReminderToHistory(MedicationReminder reminder) {
+    MedicationHistory history = MedicationHistory(
+      drugName: reminder.drugName,
+      drugType: reminder.drugType,
+      dosage: reminder.dosage,
+      frequency: reminder.frequency,
+      firstTime: reminder.firstTime,
+      secondTime: reminder.secondTime,
+      thirdTime: reminder.thirdTime,
+      startAt: reminder.startAt,
+      endAt: reminder.endAt,
+      id: reminder.id,
+      index: reminder.index,
+      description: reminder.description,
+    );
+    return history;
   }
 
   void onSelectedDrugImage(int index) {
@@ -360,11 +421,13 @@ class MedicationData extends ChangeNotifier {
           .isAfter(endDateWithHourAndMin); //if true then schedule is outdated
 
       if (boolean) {
-        //TODO implement code to add outdated schdule to History db
-        //Whoever is doing the history stuff... dont touch any other logic here abeg. I use God beg you
+        //code to add Outdated Medication Reminder to History db before deleting
+        if (newHistory == null) {
+          this.newHistory = convertReminderToHistory(element);
+        }
 
         //delete outdated schedule from medication database
-        deleteSchedule(element.id);
+        addHistoryAndDelete(element.id);
         print('Deleting outdated Schedule: ${element.drugName}');
         print('Deleting its notifications');
         switch (element.frequency) {
@@ -436,6 +499,25 @@ class MedicationData extends ChangeNotifier {
     // medicationReminderBox.close();
 
     notifyListeners();
+  }
+
+  void addHistoryAndDelete(key) async {
+    var medicationReminderBox =
+        await Hive.openBox<MedicationReminder>(_boxName);
+
+    medicationReminder = medicationReminderBox.values.toList();
+    await medicationReminderBox.delete(key);
+    // medicationReminderBox.close();
+    await addMedicationReminderHistory(this.newHistory);
+    this.newHistory = null;
+
+    notifyListeners();
+  }
+
+  Future<void> addMedicationReminderHistory(MedicationHistory history) async {
+    var box = await Hive.openBox<MedicationHistory>("medicationHistoryBox");
+
+    await box.put(history.id.toString(), history);
   }
 
   //model for all medication screen

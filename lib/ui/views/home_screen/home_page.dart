@@ -269,6 +269,20 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   FlatButton(
                                     onPressed: () {
+                                      // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      // //Check if features introduction have been viewed before
+                                      // bool value = await haveViewedIntroduction().then((value) => value);
+                                      // if (!value) {
+                                      // FeatureDiscovery.discoverFeatures(
+                                      //   context,
+                                      //   const <String>{
+                                      //     'feature_1',
+                                      //     'feature_2',
+                                      //     'feature_3'
+                                      //   }, //Add Others
+                                      // );
+                                      //   prefs.setBool('haveViewed', true);
+                                      // }
                                       Navigator.popAndPushNamed(
                                           context, RouteNames.medicationScreen);
                                     },

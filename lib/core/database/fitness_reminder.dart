@@ -35,6 +35,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
   dynamic get selectedTime => _selectedTime;
   List<FitnessReminder> _fitnessReminder = [];
   List<FitnessReminder> get fitnessReminder => _fitnessReminder;
+  List<FitnessReminder> _availableFitnessReminders = [];
 
   final List activityType = [
     'images/jogging.png',
@@ -170,13 +171,42 @@ class FitnessReminderCRUD extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime getDateTime() {
-    String month = _selectedMonth.toString().length < 2
-        ? '0$_selectedMonth'
-        : '$_selectedMonth';
-    String weekday =
-        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse(
-        '${_today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
+  List<FitnessReminder> get fitnessRemindersBasedOnDateTime {
+    return _availableFitnessReminders
+        .where((reminder) => selectedDateTime.day == reminder.startDate.day)
+        .toList();
   }
+
+//  List<FitnessReminder> get fitnessRemindersBasedOnDateTime {
+//    // print(_availableFitnessReminders[0].startDate);
+//    return _availableFitnessReminders
+//        .where((element) =>
+//            selectedDateTime.difference(element.startDate).inDays >= 0 &&
+//            selectedDateTime.difference(element.endDate).inDays <= 0)
+//        .toList();
+//  }
+
+  getDateTime() {
+    final now = new DateTime.now();
+    return DateTime(
+        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
+  }
+
+  DateTime get selectedDateTime =>
+      DateTime(_today.year, _selectedMonth, _selectedDay);
+
+  void updateAvailableFitnessReminders(List<FitnessReminder> fitnessReminders) {
+    _availableFitnessReminders = fitnessReminders;
+    notifyListeners();
+  }
+
+//  DateTime getDateTime() {
+//    String month = _selectedMonth.toString().length < 2
+//        ? '0$_selectedMonth'
+//        : '$_selectedMonth';
+//    String weekday =
+//        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
+//    return DateTime.parse(
+//        '${_today.year}-$month-$weekday ${_selectedTime.substring(0, 2)}:${selectedTime.substring(3, 5)}');
+//  }
 }
