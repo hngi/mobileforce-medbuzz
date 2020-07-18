@@ -102,6 +102,18 @@ class FitnessReminderCRUD extends ChangeNotifier {
     return description;
   }
 
+  int updateMinDaily(int value) {
+    this.minDaily = value;
+    notifyListeners();
+    return minDaily;
+  }
+
+//  int updateIndex(int value) {
+//    this.index = value;
+//    notifyListeners();
+//    return index;
+//  }
+
   void onSelectedFitnessImage(int index) {
     selectedIndex = index;
     notifyListeners();
@@ -121,6 +133,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
     this.activityTime = selectedTime;
     notifyListeners();
     return activityTime;
+  }
+
+  String updateID(String value) {
+    this.id = value;
+    notifyListeners();
+    return id;
   }
 
   TimeOfDay convertTimeBack(List<int> list) {
