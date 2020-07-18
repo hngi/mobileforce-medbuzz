@@ -82,6 +82,22 @@ class __AddFitnessState extends State<AddFitness> {
         FitnessNotificationManager();
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     var model = Provider.of<FitnessReminderCRUD>(context);
+
+    void printStatements() {
+      print([
+//        newReminder.id,
+        model.fitnessType[model.selectedIndex],
+        model.activityType[model.selectedIndex],
+        model.selectedIndex,
+        model.startDate,
+        model.endDate,
+        model.updateDescription(descController.text),
+        model.activityTime
+      ]);
+    }
+
+    ;
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -515,26 +531,17 @@ class __AddFitnessState extends State<AddFitness> {
                                           ? id
                                           : id.substring(0, 10);
 
+                                      printStatements();
+
                                       fitnessNotificationManager
                                           .showFitnessNotificationOnce(
                                               id: num.parse(notifId),
                                               title:
-                                                  "Hey It's Time to Go ${newReminder.fitnesstype}",
+                                                  "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                               body:
                                                   "For ${model.minDaily} minutes",
                                               time: model.getDateTime());
 
-                                      print([
-                                        newReminder.id,
-                                        model.fitnessType[model.selectedIndex],
-                                        model.activityType[model.selectedIndex],
-                                        model.selectedIndex,
-                                        model.startDate,
-                                        model.endDate,
-                                        model.updateDescription(
-                                            descController.text),
-                                        model.activityTime
-                                      ]);
                                       Navigator.popAndPushNamed(context,
                                           RouteNames.fitnessSchedulesScreen);
                                       break;
@@ -578,7 +585,7 @@ class __AddFitnessState extends State<AddFitness> {
                                             .showFitnessNotificationOnce(
                                                 id: num.parse(notifId),
                                                 title:
-                                                    "Hey It's Time to Go ${newReminder.fitnesstype}",
+                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
                                                 time: DateTime.now());

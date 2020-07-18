@@ -50,19 +50,25 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
                 alignment: Alignment.topRight,
                 child: FlatButton.icon(
                     onPressed: () {
-                      print(widget.rem.id.toString());
+                      String time = DateTime.now().toString();
+                      String hour = time.substring(0, 2);
+                      String minutes = time.substring(3, 5);
+                      DateTime now = DateTime.now();
+                      String id =
+                          '${now.year}${now.month}${now.day}$hour$minutes';
+                      String notifId =
+                          id.length < 11 ? id : id.substring(0, 10);
+
+                      print(model.id);
+                      print(model.selectedIndex);
                       // model.deleteReminder(widget.rem.id.toString());
                       // print("deleting");
-                      // fitnessNotificationManager
-                      //     .removeReminder(widget.rem.index);
+                      fitnessNotificationManager
+                          .removeReminder(num.parse(notifId));
                       showDialog(
                           context: context,
                           child: DeleteDialog(
-                            id: widget.rem.id.toString(),
-                            index: int.parse(
-                              widget.rem.id.substring(0, 1).toString(),
-                            ),
-                          )
+                              id: model.id, index: model.selectedIndex)
                           //     //show Confirmation dialog
                           );
                       //Do not write any code here
