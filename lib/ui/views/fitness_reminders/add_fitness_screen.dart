@@ -588,7 +588,7 @@ class __AddFitnessState extends State<AddFitness> {
                                                     "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
-                                                time: DateTime.now());
+                                                time: model.getDateTime());
                                         print([
                                           newReminder.id,
                                           newReminder.fitnesstype,

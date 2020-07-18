@@ -261,17 +261,17 @@ class _HomePageState extends State<HomePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
-                                    onPressed: (){
+                                    onTap: () {
                                       Navigator.popAndPushNamed(
                                           context, RouteNames.medicationScreen);
-                                    }
-                                  child: Text(
-                                    'Daily medications',
-                                    style: TextStyle(
-                                      fontSize: Config.textSize(context, 5),
-                                      fontWeight: FontWeight.w600,
+                                    },
+                                    child: Text(
+                                      'Daily medications',
+                                      style: TextStyle(
+                                        fontSize: Config.textSize(context, 5),
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ).
                                   ),
                                   FlatButton(
                                     onPressed: () {
