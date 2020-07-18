@@ -227,6 +227,7 @@ class _DeleteBoxState extends State<DeleteBox> {
                         //Delete all History here
                         var model = Provider.of<MedicationHistoryData>(context);
                         model.clearHistory();
+                        Navigator.of(context).pop();
 
                         Flushbar(
                           icon: Icon(

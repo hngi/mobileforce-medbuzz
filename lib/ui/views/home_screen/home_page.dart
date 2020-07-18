@@ -260,12 +260,18 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                  GestureDetector(
+                                    onPressed: (){
+                                      Navigator.popAndPushNamed(
+                                          context, RouteNames.medicationScreen);
+                                    }
+                                  child: Text(
                                     'Daily medications',
                                     style: TextStyle(
                                       fontSize: Config.textSize(context, 5),
                                       fontWeight: FontWeight.w600,
                                     ),
+                                  ).
                                   ),
                                   FlatButton(
                                     onPressed: () {
