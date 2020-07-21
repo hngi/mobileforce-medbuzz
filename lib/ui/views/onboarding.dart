@@ -1,10 +1,8 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/dot_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class Onboard extends StatefulWidget {
   @override
@@ -40,7 +38,7 @@ class _OnboardState extends State<Onboard> {
         child: Column(
           children: <Widget>[
             Container(
-              height: height * .73,
+              height: height * .75,
               width: width,
               child: PageView(
                 onPageChanged: onChangedFunction,
@@ -48,7 +46,7 @@ class _OnboardState extends State<Onboard> {
                 children: <Widget>[
                   FirstScreen(
                     image: 'images/schedule.png',
-                    description: 'Book appointments with \ndoctors',
+                    description: 'Keep a tab on your appointments',
                   ),
                   FirstScreen(
                     image: 'images/doctor.png',
@@ -175,7 +173,7 @@ class FirstScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                height: height * .38,
+                height: height * .42,
                 width: width,
                 decoration: BoxDecoration(
                     color: Theme.of(context).backgroundColor,
@@ -191,7 +189,7 @@ class FirstScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 6),
+                          fontSize: Config.textSize(context, 5),
                           fontWeight: FontWeight.bold)),
                 ),
               ),

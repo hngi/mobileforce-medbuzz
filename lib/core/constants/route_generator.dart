@@ -13,6 +13,8 @@ import 'package:MedBuzz/ui/views/health_tips/health_tips_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_mail.dart';
@@ -20,7 +22,7 @@ import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/single_appointment_screen.dart';
+
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
@@ -113,8 +115,14 @@ class RouteGenerator {
       case RouteNames.addMedicationScreen:
         return CustomSlideTransition(child: AddMedicationScreen());
         break;
+      case RouteNames.medicationHistoryPage:
+        return CustomSlideTransition(child: MedicationHistoryPage());
+        break;
       case RouteNames.medicationScreen:
         return CustomSlideTransition(child: MedicationScreen());
+        break;
+      case RouteNames.medicationPage:
+        return CustomSlideTransition(child: SchedulledMedicationScreen());
         break;
       case RouteNames.dietScheduleScreen:
         return CustomSlideTransition(child: DietScheduleScreen());
@@ -125,9 +133,7 @@ class RouteGenerator {
       case RouteNames.healthTips:
         return CustomSlideTransition(child: HealthTips());
         break;
-      case RouteNames.singleAppointment:
-        return CustomSlideTransition(child: SingleAppointment());
-        break;
+
       // case RouteNames.deleteDialog:
       //   return CustomSlideTransition(child: DeleteDialog());
       //   break;

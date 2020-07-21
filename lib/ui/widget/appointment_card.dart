@@ -1,8 +1,5 @@
-import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/single_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -70,9 +67,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       icon: Icon(Icons.more_vert,
                           size: Config.textSize(context, 5)),
                       onSelected: (_) {
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('View'),
+                        GestureDetector(
+                          child: PopupMenuItem(
+                            child: Text('View'),
+                          ),
                           onTap: () {
                             Navigator.push(
                               context,
@@ -81,17 +79,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                         appointment: widget.appointment,
                                       )),
                             );
+                            Navigator.pop(context);
                           },
-                        ));
-                        PopupMenuItem(
-                            child: GestureDetector(
-                          child: Text('Delete'),
-                          onTap: () {
-                            notificationManager
-                                .removeReminder(scheduleModel.selectedDay);
-                            db.deleteAppointment(widget.appointment.id);
-                          },
-                        ));
+                        );
+
+                        GestureDetector(
+                            child: PopupMenuItem(
+                              child: Text('Delete'),
+                            ),
+                            onTap: () {
+                              notificationManager
+                                  .removeReminder(scheduleModel.selectedDay);
+                              db.deleteAppointment(widget.appointment.id);
+                              Navigator.pop(context);
+                            });
                       },
                       itemBuilder: (BuildContext context) {
                         return [
@@ -115,6 +116,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                               notificationManager
                                   .removeReminder(scheduleModel.selectedDay);
                               db.deleteAppointment(widget.appointment.id);
+                              Navigator.pop(context);
                             },
                           )),
                         ];
@@ -182,7 +184,34 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                       height: Config.yMargin(context, 1),
                                     ),
                                     Text(
-                                      '${widget.appointment.time[0]}:${widget.appointment.time[1]}',
+                                      '${widget.appointment.time[0]}'.length >
+                                                  1 &&
+                                              '${widget.appointment.time[1]}'
+                                                      .length >
+                                                  1
+                                          ? '${widget.appointment.time[0]}:${widget.appointment.time[1]}'
+                                          : '${widget.appointment.time[0]}'
+                                                          .length <
+                                                      2 &&
+                                                  '${widget.appointment.time[1]}'
+                                                          .length <
+                                                      2
+                                              ? '0${widget.appointment.time[0]}:0${widget.appointment.time[1]}'
+                                              : '${widget.appointment.time[0]}'
+                                                              .length <
+                                                          2 &&
+                                                      '${widget.appointment.time[1]}'
+                                                              .length >
+                                                          1
+                                                  ? '0${widget.appointment.time[0]}:${widget.appointment.time[1]}'
+                                                  : '${widget.appointment.time[0]}'
+                                                                  .length >
+                                                              1 &&
+                                                          '${widget.appointment.time[1]}'
+                                                                  .length <
+                                                              2
+                                                      ? '${widget.appointment.time[0]}:0${widget.appointment.time[1]}'
+                                                      : '${widget.appointment.time[0]}:${widget.appointment.time[1]}',
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColorDark,
@@ -206,14 +235,20 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     SizedBox(
                                       height: Config.yMargin(context, 1),
                                     ),
-                                    Text(
-                                      widget.appointment.appointmentType,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize:
-                                              Config.textSize(context, 3.8)),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          .4,
+                                      child: Text(
+                                        widget.appointment.appointmentType,
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize:
+                                                Config.textSize(context, 3.8)),
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -2,8 +2,6 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
-import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
-import 'package:MedBuzz/ui/widget/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
@@ -30,6 +28,8 @@ class _ViewAppointmentState extends State<ViewAppointment> {
 
   @override
   Widget build(BuildContext context) {
+    final AppointmentNotificationManager notificationManager =
+        AppointmentNotificationManager();
     var appointmentModellerDB =
         Provider.of<AppointmentData>(context, listen: true);
 
@@ -207,6 +207,8 @@ class _ViewAppointmentState extends State<ViewAppointment> {
                   child: InkWell(
                     onTap: () {
                       appointmentModel.isEditing = true;
+                      notificationManager
+                          .removeReminder(appointmentReminder.selectedDay);
                       appointmentDB.deleteAppointment(widget.appointment.id);
                       Navigator.push(
                         context,

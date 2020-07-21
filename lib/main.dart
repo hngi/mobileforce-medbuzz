@@ -9,13 +9,13 @@ import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'core/models/medication_history_model/medication_history.dart';
 import 'core/models/water_reminder_model/water_reminder.dart';
 
 void main() async {
@@ -30,6 +30,7 @@ void main() async {
   Hive.registerAdapter(FitnessReminderAdapter());
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(WaterDrankAdapter());
+  Hive.registerAdapter(MedicationHistoryAdapter());
   await Hive.openBox('onboarding');
   runApp(
     MyApp(),

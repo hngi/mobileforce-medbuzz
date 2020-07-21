@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/core/database/medication_history.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
@@ -37,7 +38,8 @@ final providers = <SingleChildCloneableWidget>[
   ChangeNotifierProvider(create: (_) => DietReminderDB()),
   ChangeNotifierProvider(create: (_) => FitnessReminderCRUD()),
   ChangeNotifierProvider(create: (_) => DarkModeModel()),
-  ChangeNotifierProvider(create: (_) => UserCrud())
+  ChangeNotifierProvider(create: (_) => UserCrud()),
+  ChangeNotifierProvider(create: (_) => MedicationHistoryData())
 ];
 
 //final dietProviders = <SingleChildCloneableWidget>[

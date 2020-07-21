@@ -11,6 +11,8 @@ import 'package:MedBuzz/ui/views/health_tips/health_tips_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_page.dart';
 import 'package:MedBuzz/ui/views/login_page/login_page_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_mail.dart';
@@ -18,7 +20,7 @@ import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/schedule-appointment/single_appointment_screen.dart';
+
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
@@ -62,6 +64,8 @@ class RouteNames {
   static const String medicationView = 'medicationView';
   static const String addMedicationScreen = 'addMedicationScreen';
   static const String medicationScreen = 'medicationScreen';
+  static const String medicationPage = 'medicationPage';
+  static const String medicationHistoryPage = 'medicationHistoryPage';
   static const String dietScheduleScreen = 'dietScheduleScreen';
   static const String singleWater = 'singleWater';
   static const String deleteDialog = 'deleteDialog';
@@ -101,10 +105,11 @@ class RouteNames {
     RouteNames.medicationView: (context) => MedicationView(),
     RouteNames.addMedicationScreen: (context) => AddMedicationScreen(),
     RouteNames.medicationScreen: (context) => MedicationScreen(),
+    RouteNames.medicationPage: (context) => SchedulledMedicationScreen(),
+    RouteNames.medicationHistoryPage: (context) => MedicationHistoryPage(),
     RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
     RouteNames.singleWater: (context) => SingleWater(),
     RouteNames.healthTips: (context) => HealthTips(),
-    RouteNames.singleAppointment: (context) => SingleAppointment(),
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
