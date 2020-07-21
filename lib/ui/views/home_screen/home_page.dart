@@ -260,15 +260,35 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Daily medications',
-                                    style: TextStyle(
-                                      fontSize: Config.textSize(context, 5),
-                                      fontWeight: FontWeight.w600,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.popAndPushNamed(
+                                          context, RouteNames.medicationScreen);
+                                    },
+                                    child: Text(
+                                      'Daily medications',
+                                      style: TextStyle(
+                                        fontSize: Config.textSize(context, 5),
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                   FlatButton(
                                     onPressed: () {
+                                      // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      // //Check if features introduction have been viewed before
+                                      // bool value = await haveViewedIntroduction().then((value) => value);
+                                      // if (!value) {
+                                      // FeatureDiscovery.discoverFeatures(
+                                      //   context,
+                                      //   const <String>{
+                                      //     'feature_1',
+                                      //     'feature_2',
+                                      //     'feature_3'
+                                      //   }, //Add Others
+                                      // );
+                                      //   prefs.setBool('haveViewed', true);
+                                      // }
                                       Navigator.popAndPushNamed(
                                           context, RouteNames.medicationScreen);
                                     },

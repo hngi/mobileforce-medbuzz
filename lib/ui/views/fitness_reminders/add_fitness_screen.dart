@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,22 @@ class __AddFitnessState extends State<AddFitness> {
         FitnessNotificationManager();
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     var model = Provider.of<FitnessReminderCRUD>(context);
+
+    void printStatements() {
+      print([
+//        newReminder.id,
+        model.fitnessType[model.selectedIndex],
+        model.activityType[model.selectedIndex],
+        model.selectedIndex,
+        model.startDate,
+        model.endDate,
+        model.updateDescription(descController.text),
+        model.activityTime
+      ]);
+    }
+
+    ;
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -148,7 +165,7 @@ class __AddFitnessState extends State<AddFitness> {
 //
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: Config.xMargin(context, 4)),
+                          horizontal: Config.xMargin(context, 0)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -170,7 +187,7 @@ class __AddFitnessState extends State<AddFitness> {
                                 color: Theme.of(context).primaryColorDark,
                                 fontSize: Config.xMargin(context, 5.5)),
                             decoration: InputDecoration(
-                              hintText: 'Optional Description...',
+                              hintText: 'Input Description... (Required)',
                               hintStyle: TextStyle(
                                 color: Theme.of(context).hintColor,
                                 fontSize: Config.xMargin(context, 4.5),
@@ -451,7 +468,37 @@ class __AddFitnessState extends State<AddFitness> {
                               ),
                               //Navigate to home screen after saving details in db
                               onPressed: () async {
-                                if (descController.text.isNotEmpty) {
+                                var timeSet = DateTime.parse(
+                                    '${DateTime.now().toString().substring(0, 11)}' +
+                                        '${model.activityTime.toString().substring(10, 15)}');
+                                var now = DateTime.parse(
+                                    DateTime.now().toString().substring(0, 16));
+
+                                if (model.startDate.isAfter(model.endDate)) {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message:
+                                        "Start date cannot be after the end date",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
+                                } else if (timeSet.isBefore(now) &&
+                                    model.startDate.day == DateTime.now().day &&
+                                    model.endDate.day == DateTime.now().day) {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message:
+                                        "Cannot set time reminder in the past",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
+                                } else if (descController.text.isNotEmpty) {
                                   switch (appBar) {
                                     case 'Add Fitness Reminder':
                                       print('${descController.text}');
@@ -484,26 +531,44 @@ class __AddFitnessState extends State<AddFitness> {
                                           ? id
                                           : id.substring(0, 10);
 
-                                      fitnessNotificationManager
-                                          .showFitnessNotificationOnce(
-                                              id: num.parse(notifId),
-                                              title:
-                                                  "hey It's time to go ${descController.text}",
-                                              body:
-                                                  "For ${model.minDaily} minutes",
-                                              time:DateTime.now() );
+                                      printStatements();
+                                      var diff = model.endDate
+                                          .difference(model.startDate)
+                                          .inDays;
+                                      var selectedInterval =
+                                          model.selectedFreq == 'Daily'
+                                              ? 1
+                                              : model.selectedFreq ==
+                                                      'Every 2 days'
+                                                  ? 2
+                                                  : model.selectedFreq ==
+                                                          'Every 3 days'
+                                                      ? 3
+                                                      : model.selectedFreq ==
+                                                              'Every 4 days'
+                                                          ? 4
+                                                          : 1;
 
-                                      print([
-                                        newReminder.id,
-                                        model.fitnessType[model.selectedIndex],
-                                        model.activityType[model.selectedIndex],
-                                        model.selectedIndex,
-                                        model.startDate,
-                                        model.endDate,
-                                        model.updateDescription(
-                                            descController.text),
-                                        model.activityTime
-                                      ]);
+                                      double numb = diff / selectedInterval;
+                                      for (var i = 1; i < numb + 1; i++) {
+                                        var timeValue = model.getDateTime().add(
+                                              Duration(
+                                                  days: i == 1
+                                                      ? 0
+                                                      : selectedInterval * i),
+                                            );
+                                        fitnessNotificationManager
+                                            .showFitnessNotificationDaily(
+                                                id: model.startDate.day +
+                                                    timeValue.day +
+                                                    8000,
+                                                title:
+                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
+                                                body:
+                                                    "For ${model.minDaily} minutes",
+                                                dateTime: timeValue);
+                                      }
+
                                       Navigator.popAndPushNamed(context,
                                           RouteNames.fitnessSchedulesScreen);
                                       break;
@@ -527,6 +592,9 @@ class __AddFitnessState extends State<AddFitness> {
                                                 fitnessfreq: model.selectedFreq,
                                                 fitnesstype: model.fitnessType[
                                                     model.selectedIndex]);
+
+//
+
                                         String time = DateTime.now().toString();
                                         String hour = time.substring(0, 2);
                                         String minutes = time.substring(3, 5);
@@ -544,12 +612,13 @@ class __AddFitnessState extends State<AddFitness> {
                                             .showFitnessNotificationOnce(
                                                 id: num.parse(notifId),
                                                 title:
-                                                    "hey It's time to go ${descController.text}",
+                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
-                                                time: DateTime.now());
+                                                time: model.getDateTime());
                                         print([
                                           newReminder.id,
+                                          newReminder.fitnesstype,
                                           model
                                               .fitnessType[model.selectedIndex],
                                           model.activityType[
@@ -565,6 +634,16 @@ class __AddFitnessState extends State<AddFitness> {
                                             RouteNames.fitnessSchedulesScreen);
                                       }
                                   }
+                                } else {
+                                  Flushbar(
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      size: 28.0,
+                                      color: Colors.white,
+                                    ),
+                                    message: "Please enter a brief description",
+                                    duration: Duration(seconds: 3),
+                                  )..show(context);
                                 }
                               })),
                     ),
@@ -580,12 +659,6 @@ class __AddFitnessState extends State<AddFitness> {
       ),
     );
   }
-
-//  getDateTime() {
-//    final now = new DateTime.now();
-//    return DateTime(
-//        now.year, now.month, now.day, activityTime.hour, activityTime.minute);
-//  }
 
   Future<Null> selectTime(BuildContext context) async {
     var model = Provider.of<FitnessReminderCRUD>(context);
@@ -631,7 +704,7 @@ class __AddFitnessState extends State<AddFitness> {
         firstDate: DateTime(model.startDate.year),
         lastDate: DateTime(model.startDate.year + 1));
     if (selectedDate.difference(model.startDate).inDays < 0) {
-      showSnackBar(context, text: "Cannot set reminder in the past");
+      showSnackBar(context, text: "Cannot set start date in the past");
     } else {
       if (selectedDate != null && selectedDate != model.startDate) {
         setState(() {
@@ -652,7 +725,7 @@ class __AddFitnessState extends State<AddFitness> {
         firstDate: DateTime(model.endDate.year),
         lastDate: DateTime(model.endDate.year + 1));
     if (selectedDate.difference(model.endDate).inDays < 0) {
-      showSnackBar(context, text: "Cannot set reminder in the past");
+      showSnackBar(context, text: "Cannot set end date in the past");
     } else {
       if (selectedDate != null && selectedDate != model.endDate) {
         setState(() {
