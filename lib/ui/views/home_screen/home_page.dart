@@ -11,6 +11,7 @@ import 'package:MedBuzz/ui/navigation/app_navigation/app_transition.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_screen.dart';
+import 'package:MedBuzz/ui/views/profile_page.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
@@ -449,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   AllRemindersScreen(),
-                  // ProfilePage(), //Rempved fpr presentation purposes
+                  ProfilePage(), //Rempved fpr presentation purposes
                 ]),
           ),
         ],
@@ -606,8 +607,8 @@ class _HomePageState extends State<HomePage> {
                     inactiveColor: Theme.of(context).primaryColorDark,
                     activeColor: Theme.of(context).buttonColor),
                 BottomNavyBarItem(
-                  icon: Icon(Icons.person),
-                  title: Text('Profile'),
+                  icon: Icon(Icons.settings),
+                  title: Text('Settings'),
                   inactiveColor: Theme.of(context).primaryColorDark,
                   activeColor: Theme.of(context).accentColor,
                 ),
