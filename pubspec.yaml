@@ -45,6 +45,8 @@ dependencies:
   flushbar: ^1.10.4
   feature_discovery: ^0.6.0
   shared_preferences:
+  local_auth: ^0.6.2+3
+  
 
 dev_dependencies:
   flutter_test:
