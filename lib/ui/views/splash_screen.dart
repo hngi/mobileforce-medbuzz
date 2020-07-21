@@ -1,5 +1,6 @@
 import 'dart:async';
 //import 'package:MedBuzz/ui/views/Home.dart';
+import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
@@ -31,6 +32,8 @@ class StartState extends State<SplashScreen> {
     var duration = Duration(seconds: 3);
 
     return new Timer(duration, () {
+//      Auth authenticateSession = Auth();
+//      authenticateSession.authSession();
       box.get('status') == 'true'
           ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
           : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
