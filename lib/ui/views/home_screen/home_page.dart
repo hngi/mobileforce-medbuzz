@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
@@ -45,6 +46,9 @@ class _HomePageState extends State<HomePage> {
       keepPage: false,
     );
     _pageController.addListener(handlePageChange);
+
+    Auth authenticateSession = Auth();
+    authenticateSession.authSession();
 
     super.initState();
   }
