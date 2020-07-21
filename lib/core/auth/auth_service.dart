@@ -32,9 +32,9 @@ class Auth {
     bool isAuthenticated = false;
     try {
       isAuthenticated = await _auth.authenticateWithBiometrics(
-        localizedReason: "Please authenticate to view your Awaiting Reminders",
+        localizedReason: "Please authenticate to your sign in",
         useErrorDialogs: true,
-        stickyAuth: false,
+        stickyAuth: true,
       );
     } on PlatformException catch (e) {
       print(e);
@@ -42,6 +42,25 @@ class Auth {
 
     isAuthenticated
         ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
+        : print('User is not authenticated.');
+
+    return isAuthenticated;
+  }
+
+  Future<void> authSession() async {
+    bool isAuthenticated = false;
+    try {
+      isAuthenticated = await _auth.authenticateWithBiometrics(
+        localizedReason: "Please authenticate to start MedBuzz",
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
+    } on PlatformException catch (e) {
+      print(e);
+    }
+
+    isAuthenticated
+        ? print('User is authenticated.')
         : print('User is not authenticated.');
   }
 }

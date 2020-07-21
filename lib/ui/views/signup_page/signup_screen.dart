@@ -85,12 +85,14 @@ class MySignUp extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () async {
-                  if (nameController.text.isNotEmpty) {
+                  authenticateBiometric.authUser(context);
+
+                  if (authenticateBiometric.authUser(context) != null) {
                     print('${nameController.text}');
-                    var newuser = User(
+                    var newUser = User(
                         id: DateTime.now().toString(),
                         name: nameController.text);
-                    await userDb.adduser(newuser).then((value) async {
+                    await userDb.adduser(newUser).then((value) async {
                       await box.put('status', 'true');
                       FeatureDiscovery.discoverFeatures(
                         context,
@@ -112,7 +114,6 @@ class MySignUp extends StatelessWidget {
 
                       authenticateBiometric.isBiometricAvailable();
                       authenticateBiometric.availabeBioTypes();
-                      authenticateBiometric.authUser(context);
 
                       // Navigation comment
 //                      Navigator.pushReplacementNamed(
