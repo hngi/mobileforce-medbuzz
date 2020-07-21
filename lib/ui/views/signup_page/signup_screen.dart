@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
@@ -7,6 +8,8 @@ import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 
 class Signup extends StatelessWidget {
   @override
@@ -35,6 +38,7 @@ class MySignUp extends StatelessWidget {
     var userDb = Provider.of<UserCrud>(context, listen: true);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    Auth authenticateBiometric = Auth();
     return Container(
       height: height,
       width: width,
@@ -105,8 +109,14 @@ class MySignUp extends StatelessWidget {
                         'feature_2',
                         'feature_3'
                       });
-                      Navigator.pushReplacementNamed(
-                          context, RouteNames.homePage);
+
+                      authenticateBiometric.isBiometricAvailable();
+                      authenticateBiometric.availabeBioTypes();
+                      authenticateBiometric.authUser(context);
+
+                      // Navigation comment
+//                      Navigator.pushReplacementNamed(
+//                          context, RouteNames.homePage);
                     });
                     //delaying with a future might not be the best, but waiting to receive the value from the Future is better
                     // Future.delayed(
