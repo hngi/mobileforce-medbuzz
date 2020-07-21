@@ -85,8 +85,6 @@ class MySignUp extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () async {
-                  authenticateBiometric.authUser(context);
-
                   if (authenticateBiometric.authUser(context) != null) {
                     print('${nameController.text}');
                     var newUser = User(
@@ -114,6 +112,7 @@ class MySignUp extends StatelessWidget {
 
                       authenticateBiometric.isBiometricAvailable();
                       authenticateBiometric.availabeBioTypes();
+                      authenticateBiometric.authUser(context);
 
                       // Navigation comment
 //                      Navigator.pushReplacementNamed(
