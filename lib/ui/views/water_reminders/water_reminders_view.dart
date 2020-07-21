@@ -287,7 +287,7 @@ class WaterScheduleViewScreen extends StatelessWidget {
                       visible: waterReminderDB.waterReminders.isNotEmpty,
                       child: Container(
                         child: Text(
-                            '${DateFormat.yMMMEd().format((DateTime.now()))}'),
+                            '${DateFormat.yMMMEd().format(DateTime.now())}'),
                       )),
                   for (var waterReminder
                       in waterReminderDB.getActiveReminders())

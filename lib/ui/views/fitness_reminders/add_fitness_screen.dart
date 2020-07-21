@@ -532,15 +532,42 @@ class __AddFitnessState extends State<AddFitness> {
                                           : id.substring(0, 10);
 
                                       printStatements();
+                                      var diff = model.endDate
+                                          .difference(model.startDate)
+                                          .inDays;
+                                      var selectedInterval =
+                                          model.selectedFreq == 'Daily'
+                                              ? 1
+                                              : model.selectedFreq ==
+                                                      'Every 2 days'
+                                                  ? 2
+                                                  : model.selectedFreq ==
+                                                          'Every 3 days'
+                                                      ? 3
+                                                      : model.selectedFreq ==
+                                                              'Every 4 days'
+                                                          ? 4
+                                                          : 1;
 
-                                      fitnessNotificationManager
-                                          .showFitnessNotificationOnce(
-                                              id: num.parse(notifId),
-                                              title:
-                                                  "Hey It's Time to Go For ${newReminder.fitnesstype}",
-                                              body:
-                                                  "For ${model.minDaily} minutes",
-                                              time: model.getDateTime());
+                                      double numb = diff / selectedInterval;
+                                      for (var i = 1; i < numb + 1; i++) {
+                                        var timeValue = model.getDateTime().add(
+                                              Duration(
+                                                  days: i == 1
+                                                      ? 0
+                                                      : selectedInterval * i),
+                                            );
+                                        fitnessNotificationManager
+                                            .showFitnessNotificationDaily(
+                                                id: model.startDate.day +
+                                                    timeValue.day +
+                                                    8000,
+                                                title:
+                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
+                                                body:
+                                                    "For ${model.minDaily} minutes",
+                                                dateTime: timeValue);
+                                      }
 
                                       Navigator.popAndPushNamed(context,
                                           RouteNames.fitnessSchedulesScreen);

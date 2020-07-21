@@ -10,7 +10,7 @@ import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
+import 'package:intl/intl.dart';
 import '../../../core/constants/route_names.dart';
 import '../../../core/database/fitness_reminder.dart';
 import 'single_fitness_screen.dart';
@@ -300,7 +300,11 @@ class _FitnessCardState extends State<FitnessCard> {
 //            minsperday: fitnessModel.minDaily,
 //          );
 
-          Navigator.pushNamed(context, RouteNames.singleFitnessScreen);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SingleFitnessScreen(rem: widget.fitnessReminder)));
         },
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -345,7 +349,7 @@ class _FitnessCardState extends State<FitnessCard> {
                               ),
                               SizedBox(height: height * 0.005),
                               Text(
-                                '${widget.startDate}',
+                                '${DateFormat.yMMMEd().format(DateTime.parse(widget.startDate))}',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                               ),
