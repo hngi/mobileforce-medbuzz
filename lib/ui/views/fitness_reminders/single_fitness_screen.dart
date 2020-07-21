@@ -20,14 +20,14 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
   @override
   Widget build(BuildContext context) {
     var model = Provider.of<FitnessReminderCRUD>(context);
-    int no_of_days = model.endDate.day - model.startDate.day;
-    int current_day = model.endDate.day - DateTime.now().day - 1;
+    int no_of_days = widget.rem.endDate.day - widget.rem.startDate.day;
+    int current_day = widget.rem.endDate.day - DateTime.now().day - 1;
     String days_left = no_of_days == 0
         ? 'Today is the last day!'
         : '$current_day day(s) left out of $no_of_days days';
     FitnessNotificationManager fitnessNotificationManager =
         FitnessNotificationManager();
-    FitnessReminder rem = FitnessReminder();
+    // FitnessReminder rem = FitnessReminder();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -61,14 +61,17 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
 
                       print(model.id);
                       print(model.selectedIndex);
+
                       // model.deleteReminder(widget.rem.id.toString());
                       // print("deleting");
-                      fitnessNotificationManager
-                          .removeReminder(num.parse(notifId));
+
                       showDialog(
                           context: context,
                           child: DeleteDialog(
-                              id: model.id, index: model.selectedIndex)
+                            id: model.id,
+                            index: model.selectedIndex,
+                            rem: widget.rem,
+                          )
                           //     //show Confirmation dialog
                           );
                       //Do not write any code here
@@ -252,8 +255,10 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
 class DeleteDialog extends StatelessWidget {
   final String id;
   final int index;
+  final FitnessReminder rem;
 
-  const DeleteDialog({Key key, this.id, this.index}) : super(key: key);
+  const DeleteDialog({Key key, this.id, this.index, this.rem})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     // final FitnessReminder some = FitnessReminder();
@@ -319,10 +324,28 @@ class DeleteDialog extends StatelessWidget {
                       onPressed: () {
                         print("deleted $id $index");
                         // deleting the reminder works
-                        model.deleteReminder(id);
+                        model.deleteReminder(rem.id);
                         // TODO: Give feedback if this is not working
                         // deleting the notification am not so sure
-                        fitnessNotificationManager.removeReminder(index);
+                        var diff = rem.endDate.difference(rem.startDate).inDays;
+                        var selectedInterval = rem.fitnessfreq == 'Daily'
+                            ? 1
+                            : model.selectedFreq == 'Every 2 days'
+                                ? 2
+                                : model.selectedFreq == 'Every 3 days'
+                                    ? 3
+                                    : model.selectedFreq == 'Every 4 days'
+                                        ? 4
+                                        : 1;
+
+                        double numb = diff / selectedInterval;
+                        for (var i = 1; i < numb + 1; i++) {
+                          var timeValue = rem.startDate.add(
+                            Duration(days: i == 1 ? 0 : selectedInterval * i),
+                          );
+                          fitnessNotificationManager.removeReminder(
+                              rem.startDate.day + timeValue.day + 8000);
+                        }
                         // Future.delayed(Duration(seconds: 1), () {
                         Navigator.pushReplacementNamed(
                             context, RouteNames.fitnessSchedulesScreen);
