@@ -7,7 +7,6 @@ import 'package:MedBuzz/ui/widget/scroll_calender_med.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicationScreen extends StatefulWidget {
   @override
@@ -117,8 +116,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         size: Config.xMargin(context, 7),
                       ),
                     ),
-                    backgroundColor: Theme.of(context).buttonColor,
-                    splashColor: Theme.of(context).buttonColor.withOpacity(.9),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    splashColor: Theme.of(context).primaryColor.withOpacity(.9),
                     //Navigate to fitness reminder creation screen
                     onPressed: () {
                       final medModel = Provider.of<MedicationData>(context);
@@ -245,7 +244,9 @@ class _MedicationScreenState extends State<MedicationScreen> {
                           SizedBox(height: Config.yMargin(context, 2)),
                           Text(
                             'Medications',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: Config.textSize(context, 5),
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -261,7 +262,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     padding: EdgeInsets.symmetric(
                         vertical: Config.yMargin(context, 20.0)),
                     child: Container(
-                      child: Text('No Medication Reminder Set for this Date'),
+                      child: Text('No medication reminder set for this date'),
                     ),
                   ),
                 ),

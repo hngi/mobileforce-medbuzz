@@ -1,15 +1,11 @@
-import 'dart:math';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:MedBuzz/core/models/fitness_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import '../../../core/database/fitness_reminder.dart';
-import '../../../core/models/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
 import '../../../core/notifications/fitness_notification_manager.dart';
 import '../../size_config/config.dart';
@@ -18,7 +14,7 @@ class FitnessEditScreen extends StatelessWidget {
   final FitnessReminder fitnessModel;
   final bool isEdit;
 
-  const FitnessEditScreen({Key key, this.fitnessModel, this.isEdit = false})
+  FitnessEditScreen({Key key, this.fitnessModel, this.isEdit = false})
       : super(key: key);
 
   @override
@@ -56,19 +52,15 @@ class FitnessEditScreen extends StatelessWidget {
     }
 
     void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
-      SnackBar snackBar = SnackBar(
-        backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
-        duration: Duration(seconds: 2),
-        content: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: Config.textSize(context, 5.3),
-              color: Theme.of(context).primaryColorLight),
+      Flushbar(
+        icon: Icon(
+          Icons.info_outline,
+          size: Config.xMargin(context, 7.777),
+          color: Colors.red,
         ),
-      );
-
-      Scaffold.of(context).showSnackBar(snackBar);
+        message: text,
+        duration: Duration(seconds: 3),
+      )..show(context);
     }
 
     Future<Null> selectTime(BuildContext context) async {
@@ -283,6 +275,7 @@ class FitnessEditScreen extends StatelessWidget {
                         ),
                       ),
 //
+
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: Config.xMargin(context, 0)),
@@ -298,6 +291,7 @@ class FitnessEditScreen extends StatelessWidget {
                             SizedBox(height: Config.yMargin(context, 1.5)),
                             TextFormField(
                               keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.done,
                               maxLines: 5,
                               initialValue: isEdit == true
                                   ? fitnessModel.description
@@ -557,29 +551,17 @@ class FitnessEditScreen extends StatelessWidget {
                                     DateTime.now().toString().substring(0, 16));
 
                                 if (model.startDate.isAfter(model.endDate)) {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message:
+                                  showSnackBar(
+                                    context,
+                                    text:
                                         "Start date cannot be after the end date",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  );
                                 } else if (timeSet.isBefore(now) &&
                                     model.startDate.day == DateTime.now().day &&
                                     model.endDate.day == DateTime.now().day) {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message:
-                                        "Cannot set time reminder in the past",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  showSnackBar(context,
+                                      text:
+                                          "Cannot set time reminder in the past");
                                 } else if (model.description.isNotEmpty) {
                                   if (isEdit == false) {
                                     print('${model.description}');
@@ -773,15 +755,8 @@ class FitnessEditScreen extends StatelessWidget {
                                     }
                                   }
                                 } else {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message: "Please enter a brief description",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  showSnackBar(context,
+                                      text: "Please enter a brief description");
                                 }
                               }),
                         ),
@@ -799,4 +774,140 @@ class FitnessEditScreen extends StatelessWidget {
       ),
     );
   }
+
+//   Future<Null> selectTime(BuildContext context) async {
+//     var model = Provider.of<FitnessReminderCRUD>(context);
+//     TimeOfDay currentTime = TimeOfDay.now();
+//     TimeOfDay selectedTime = await showTimePicker(
+//       context: context,
+//       initialTime: model.activityTime,
+//     );
+//     bool today = model.startDate.difference(DateTime.now()) == 0;
+//     if (today && selectedTime.hour < currentTime.hour) {
+//       showSnackBar(context, text: "Cannot set reminder in the past");
+//     } else {
+//       if (selectedTime != null && selectedTime != model.activityTime) {
+//           model.activityTime = selectedTime;
+//       }
+//     }
+//   }
+
+//   // void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
+//   //   SnackBar snackBar = SnackBar(
+//   //     backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+//   //     duration: Duration(seconds: 2),
+//   //     content: Text(
+//   //       text,
+//   //       textAlign: TextAlign.center,
+//   //       style: TextStyle(
+//   //           fontSize: Config.textSize(context, 5.3),
+//   //           color: Theme.of(context).primaryColorLight),
+//   //     ),
+//   //   );
+
+//   //   Scaffold.of(context).showSnackBar(snackBar);
+//   // }
+
+//   Future<Null> selectStartDate(BuildContext context) async {
+//     var model = Provider.of<FitnessReminderCRUD>(context);
+
+//     final DateTime selectedDate = await showDatePicker(
+//         context: context,
+//         initialDate: model.startDate,
+//         firstDate: DateTime(model.startDate.year),
+//         lastDate: DateTime(model.startDate.year + 1));
+//     if (selectedDate.difference(model.startDate).inDays < 0) {
+//       showSnackBar(context, text: "Cannot set start date in the past");
+//     } else {
+//       if (selectedDate != null && selectedDate != model.startDate) {
+//         setState(() {
+//           model.startDate = selectedDate;
+//         });
+
+//         print('${model.startDate}');
+//       }
+//     }
+//   }
+
+//   Future<Null> selectEndDate(BuildContext context) async {
+//     var model = Provider.of<FitnessReminderCRUD>(context);
+
+//     final DateTime selectedDate = await showDatePicker(
+//         context: context,
+//         initialDate: model.endDate,
+//         firstDate: DateTime(model.endDate.year),
+//         lastDate: DateTime(model.endDate.year + 1));
+//     if (selectedDate.difference(model.endDate).inDays < 0) {
+//       showSnackBar(context, text: "Cannot set end date in the past");
+//     } else {
+//       if (selectedDate != null && selectedDate != model.endDate) {
+//         setState(() {
+//           model.endDate = selectedDate;
+//         });
+
+//         print('${model.startDate}');
+//       }
+//     }
+//   }
+
+//   void _successDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         // return object of type Dialog
+//         return AlertDialog(
+//           shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(Config.xMargin(context, 8))),
+//           content: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               Image.asset('images/check.png'),
+//               SizedBox(
+//                 height: Config.yMargin(context, 5),
+//               ),
+//               Text("Reminder Successfully added!"),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+
+//   Widget buildImageContainer(int index) {
+//     var model = Provider.of<FitnessReminderCRUD>(context);
+
+//     return GestureDetector(
+//       onTap: () {
+//         model.onSelectedFitnessImage(index);
+//         print(model.updateSelectedIndex(index));
+//       },
+//       child: Column(
+//         children: <Widget>[
+//           Expanded(
+//             child: Container(
+//               padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
+//               margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
+//               height: Config.yMargin(context, 10),
+//               width: Config.xMargin(context, 18),
+//               decoration: BoxDecoration(
+//                 shape: BoxShape.circle,
+//                 color: model.selectedIndex == index
+//                     ? Theme.of(context).primaryColor
+//                     : Color(0xffFCEDB8),
+//               ),
+//               child: Image(
+//                 image: AssetImage(model.activityType[index]),
+//                 fit: BoxFit.contain,
+//               ),
+//             ),
+//           ),
+//           Expanded(
+//               child: Text(
+//             model.fitnessType[index],
+//             style: TextStyle(fontSize: 12),
+//           )),
+//         ],
+//       ),
+//     );
+//   }
 }

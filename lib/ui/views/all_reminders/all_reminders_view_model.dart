@@ -69,7 +69,7 @@ class AllRemindersViewModel extends ChangeNotifier {
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
-        ? Theme.of(context).buttonColor
+        ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColorDark.withOpacity(0.05);
   }
 
@@ -78,7 +78,7 @@ class AllRemindersViewModel extends ChangeNotifier {
       color: isActive(index)
           ? Theme.of(context).primaryColorLight
           : Theme.of(context).primaryColorDark,
-      fontSize: Config.textSize(context, 9),
+      fontSize: Config.textSize(context, 7.2),
       fontWeight: FontWeight.bold,
     );
   }

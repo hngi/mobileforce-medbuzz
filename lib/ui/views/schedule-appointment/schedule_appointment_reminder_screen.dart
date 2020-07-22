@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -376,31 +377,29 @@ class _MyScheduleAppointmentScreenState
                                     await appointmentReminderDB.addAppointment(
                                         appointmentReminder.createSchedule());
 
-                                    if (appointmentReminder.selectedDay ==
-                                            DateTime.now().day &&
-                                        appointmentReminder.selectedMonth ==
-                                            DateTime.now().month) {
-                                      String time =
-                                          appointmentReminder.selectedTime;
-                                      String hour = time.substring(0, 2);
-                                      String minutes = time.substring(3, 5);
-                                      DateTime now = DateTime.now();
-                                      String id =
-                                          '${now.year}${now.month}${now.day}$hour$minutes';
-                                      String notifId = id.length < 11
-                                          ? id
-                                          : id.substring(0, 10);
-                                      notificationManager
-                                          .showAppointmentNotificationOnce(
-                                              num.parse(notifId),
-                                              'Hey, you\'ve got somewhere to go',
-                                              ' ${_typeOfAppointmentController.text} ',
-                                              appointmentReminder
-                                                  .getDateTime());
+                                    // if (appointmentReminder.selectedDay ==
+                                    //         DateTime.now().day &&
+                                    //     appointmentReminder.selectedMonth ==
+                                    //         DateTime.now().month)
+                                    String time =
+                                        appointmentReminder.selectedTime;
+                                    String hour = time.substring(0, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    String id =
+                                        '${now.year}${now.month}${now.day}$hour$minutes';
+                                    String notifId = id.length < 11
+                                        ? id
+                                        : id.substring(0, 10);
+                                    notificationManager
+                                        .showAppointmentNotificationOnce(
+                                            num.parse(notifId),
+                                            'Hey, you\'ve got somewhere to go',
+                                            ' ${_typeOfAppointmentController.text} ',
+                                            appointmentReminder.getDateTime());
 
-                                      Navigator.popAndPushNamed(
-                                          context, RouteNames.homePage);
-                                    }
+                                    Navigator.popAndPushNamed(
+                                        context, RouteNames.homePage);
                                   } else {
                                     showSnackbar(context);
                                     return;
@@ -494,18 +493,15 @@ class _MyScheduleAppointmentScreenState
 
   void showSnackbar(BuildContext context,
       {String text: "Set what appointment you're going for"}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3), color: Colors.white),
+    Flushbar(
+      icon: Icon(
+        Icons.info_outline,
+        size: Config.xMargin(context, 7.777),
+        color: Colors.red,
       ),
-    );
-
-    Scaffold.of(context).showSnackBar(snackBar);
+      message: text,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }
 
