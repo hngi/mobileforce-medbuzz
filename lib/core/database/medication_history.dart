@@ -41,6 +41,16 @@ class MedicationHistoryData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteMedicationHistories() async {
+    try {
+      var box = await Hive.openBox<MedicationHistory>(_boxName);
+      box.deleteFromDisk();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void deleteScheduleHistory(key) async {
     var box = await Hive.openBox<MedicationHistory>(_boxName);
 

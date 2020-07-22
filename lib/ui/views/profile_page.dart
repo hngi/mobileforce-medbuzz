@@ -1,8 +1,15 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
+import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/core/database/medication_history.dart';
+import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 // TODO: In other to stop thunder from firing yolu change the routes before you push
 // TODO: Fix the orientation of this page to POTRAIT
@@ -53,7 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icons.arrow_forward_ios,
                         size: Config.xMargin(context, 4),
                       ),
-                      onPressed: () => {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RouteNames.signup);
+                      },
                     ),
                   ),
                   ListTile(
@@ -63,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icons.arrow_forward_ios,
                         size: Config.xMargin(context, 4),
                       ),
-                      onPressed: () => {},
+                      onPressed: () {},
                     ),
                   ),
                   ListTile(
@@ -101,7 +110,27 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icons.arrow_forward_ios,
                         size: Config.xMargin(context, 4),
                       ),
-                      onPressed: () => {},
+                      onPressed: () {
+                        try {
+                          Provider.of<AppointmentData>(context)
+                              .deleteAppointmentReminders();
+                          Provider.of<DietReminderDB>(context)
+                              .deleteDietReminders();
+                          Provider.of<FitnessReminderCRUD>(context)
+                              .deleteFitnessReminders();
+                          Provider.of<MedicationHistoryData>(context)
+                              .deleteMedicationHistories();
+                          Provider.of<MedicationData>(context)
+                              .deleteMedicationReminders();
+                          Provider.of<WaterReminderData>(context)
+                              .deleteWaterReminders();
+                          CustomSnackBar.showSnackBar(context,
+                              text: "Reminders succefully deleted",
+                              success: true);
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
                     ),
                   ),
                 ],
