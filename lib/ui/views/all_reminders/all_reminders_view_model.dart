@@ -191,8 +191,7 @@ class AllRemindersViewModel extends ChangeNotifier {
     // print(_availableFitnessReminders[0].startDate);
     return _availableDietReminders
         .where((element) =>
-            selectedDateTime.difference(element.startDate).inDays >= 0 &&
-            selectedDateTime.difference(element.endDate).inDays <= 0)
+            selectedDateTime.difference(element.startDate).inDays >= 0)
         .toList();
   }
 

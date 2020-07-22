@@ -208,7 +208,7 @@ class SingleFitnessScreen extends StatelessWidget {
           padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
           child: InkWell(
             onTap: () {
-              //updates the editing screen with default values
+              //updates the editing screen with default values before navigating to the screen
               model.updateSelectedIndex(
                   model.fitnessType.indexOf(rem.fitnesstype));
               model.updateMinDaily(rem.minsperday);
