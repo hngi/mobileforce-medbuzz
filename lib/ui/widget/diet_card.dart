@@ -1,7 +1,11 @@
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
+import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DietCard extends StatefulWidget {
   final double width;
@@ -21,6 +25,8 @@ class DietCard extends StatefulWidget {
 class _DietCardState extends State<DietCard> {
   @override
   Widget build(BuildContext context) {
+    var dietDB = Provider.of<DietReminderDB>(context);
+
     return Container(
       margin: EdgeInsets.only(bottom: Config.yMargin(context, 3)),
       padding: EdgeInsets.symmetric(
@@ -52,12 +58,71 @@ class _DietCardState extends State<DietCard> {
                   color: Theme.of(context).hintColor,
                 ),
               ),
-              GestureDetector(
-                child: Icon(
-                  Icons.more_vert,
-                  size: Config.textSize(context, 5),
-                ),
-                onTap: () {},
+              // GestureDetector(
+              //   child: Icon(
+              //     Icons.more_vert,
+              //     size: Config.textSize(context, 5),
+              //   ),
+              //   onTap: () {},
+              // ),
+              SizedBox.fromSize(
+                size: Size(
+                    Config.xMargin(context, 5), Config.yMargin(context, 2)),
+                child: PopupMenuButton(
+                    tooltip: 'Options',
+                    padding: EdgeInsets.only(right: 58),
+                    icon: Icon(Icons.more_vert,
+                        size: Config.textSize(context, 5)),
+                    // onSelected: (val) {
+                    //   GestureDetector(
+                    //     child: PopupMenuItem(
+                    //       child: Text('View'),
+                    //     ),
+                    //     onTap: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => SingleDiet(
+                    //                   diet: widget.diet,
+                    //                 )),
+                    //       );
+                    //     },
+                    //   );
+
+                    //   // GestureDetector(
+                    //   //     child: PopupMenuItem(
+                    //   //       child: Text('Delete'),
+                    //   //     ),
+                    //   //     onTap: () {});
+                    // },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                            value: 'view',
+                            child: GestureDetector(
+                              child: Text('View'),
+                              onTap: () {
+                                Navigator.pop(context, 'view');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SingleDiet(
+                                            diet: widget.diet,
+                                          )),
+                                );
+                              },
+                            )),
+                        PopupMenuItem(
+                            value: 'delete',
+                            child: GestureDetector(
+                              child: Text('Delete'),
+                              onTap: () {
+                                dietDB.deleteDiet(widget.diet.id);
+                                Navigator.pop(context, 'delete');
+                              },
+                            )),
+                      ];
+                    }),
               ),
             ],
           ),
@@ -115,7 +180,7 @@ class _DietCardState extends State<DietCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(widget.diet.description),
+                      Text(widget.diet.dietName),
                       SizedBox(
                         height: Config.yMargin(context, 1),
                         width: double.infinity,
