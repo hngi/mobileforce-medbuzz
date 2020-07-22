@@ -1,6 +1,8 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // TODO: In other to stop thunder from firing yolu change the routes before you push
 // TODO: Fix the orientation of this page to POTRAIT
@@ -18,6 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    var model = Provider.of<DarkModeModel>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -64,21 +67,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   ListTile(
-                    onTap: () {
-                      setState(() {
-                        darkSwitcher = !darkSwitcher;
-                      });
-                    },
+                    onTap: () {},
                     title: Text('Dark Mode'),
                     trailing: Switch(
                         activeColor: ThemeData().primaryColor,
                         activeTrackColor: Colors.blueAccent,
                         onChanged: (value) {
-                          setState(() {
-                            darkSwitcher = value;
-                          });
+                          model.toggleAppTheme();
                         },
-                        value: darkSwitcher),
+                        value: model.isDarkMode),
                   ),
                   ListTile(
                     onTap: () {

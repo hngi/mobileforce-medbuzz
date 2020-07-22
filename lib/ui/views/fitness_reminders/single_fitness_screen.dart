@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/notifications/fitness_notification_manager.dart';
+import 'package:MedBuzz/ui/views/fitness_reminders/add_fitness_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:provider/provider.dart';
@@ -7,69 +8,24 @@ import '../../../core/constants/route_names.dart';
 import '../../../core/database/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
 
-class SingleFitnessScreen extends StatefulWidget {
+class SingleFitnessScreen extends StatelessWidget {
   final FitnessReminder rem;
 
   const SingleFitnessScreen({Key key, this.rem}) : super(key: key);
   @override
-  _SingleFitnessScreenState createState() => _SingleFitnessScreenState();
-}
-
-class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
-  Color color;
-  @override
   Widget build(BuildContext context) {
     var model = Provider.of<FitnessReminderCRUD>(context);
-    int no_of_days = widget.rem.endDate.day - widget.rem.startDate.day;
-    int current_day = widget.rem.endDate.day - DateTime.now().day - 1;
-    String days_left = no_of_days == 0
+    int noOfDays = rem.endDate.day - rem.startDate.day;
+    int currentDay = rem.endDate.day - DateTime.now().day - 1;
+    String daysLeft = noOfDays == 0
         ? 'Today is the last day!'
-        : '$current_day day(s) left out of $no_of_days days';
-    FitnessNotificationManager fitnessNotificationManager =
-        FitnessNotificationManager();
+        : '$currentDay day(s) left out of $noOfDays days';
     // FitnessReminder rem = FitnessReminder();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
-        actions: <Widget>[
-          FlatButton.icon(
-              onPressed: () {
-                // String time = DateTime.now().toString();
-                // String hour = time.substring(0, 2);
-                // String minutes = time.substring(3, 5);
-                // DateTime now = DateTime.now();
-                // String id = '${now.year}${now.month}${now.day}$hour$minutes';
-                // String notifId = id.length < 11 ? id : id.substring(0, 10);
-
-                print(model.id);
-                print(model.selectedIndex);
-
-                // model.deleteReminder(widget.rem.id.toString());
-                // print("deleting");
-
-                showDialog(
-                    context: context,
-                    child: DeleteDialog(
-                      id: model.id,
-                      index: model.selectedIndex,
-                      rem: widget.rem,
-                    )
-                    //     //show Confirmation dialog
-                    );
-                //Do not write any code here
-                // Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
-              label: Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              )),
-        ],
         leading: IconButton(
             icon: Icon(Icons.keyboard_backspace,
                 color: Theme.of(context).primaryColorDark),
@@ -78,87 +34,117 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               Navigator.pushNamed(context, RouteNames.fitnessSchedulesScreen);
             }),
       ),
-      body: ListView(physics: BouncingScrollPhysics(), children: [
-        Container(
-          color: Theme.of(context).backgroundColor,
-          child: Column(
-            children: <Widget>[
-              // Padding(
-              //   padding: EdgeInsets.only(right: Config.yMargin(context, 2.6)),
-              //   child: Align(
-              //     alignment: Alignment.topRight,
-              //     child:
-              //   ),
-              // ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: Config.xMargin(context, 5.33)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      width: Config.xMargin(context, 44),
-                      child: Text(
-                        '${model.fitnessType[model.selectedIndex]}',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 5.3),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+      body: ListView(physics: ScrollPhysics(), children: [
+        Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: Config.yMargin(context, 2.6)),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: FlatButton.icon(
+                    onPressed: () {
+                      // String time = DateTime.now().toString();
+                      // String hour = time.substring(0, 2);
+                      // String minutes = time.substring(3, 5);
+                      // DateTime now = DateTime.now();
+                      // String id =
+                      //     '${now.year}${now.month}${now.day}$hour$minutes';
+                      // String notifId =
+                      //     id.length < 11 ? id : id.substring(0, 10);
+
+                      print(model.id);
+                      print(model.selectedIndex);
+
+                      // model.deleteReminder(widget.rem.id.toString());
+                      // print("deleting");
+
+                      showDialog(
+                          context: context,
+                          child: DeleteDialog(
+                            id: model.id,
+                            index: model.selectedIndex,
+                            rem: rem,
+                          )
+                          //     //show Confirmation dialog
+                          );
+                      //Do not write any code here
+                      // Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.only(right: Config.xMargin(context, 5)),
-                      child:
-                          Image.asset(model.activityType[model.selectedIndex]),
-                    ),
-                  ],
-                ),
+                    label: Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.red),
+                    )),
               ),
-              SizedBox(height: Config.yMargin(context, 3)),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Config.xMargin(context, 5.33),
-                ),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Description',
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Config.xMargin(context, 5.33)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    width: Config.xMargin(context, 44),
+                    child: Text(
+                      '${model.fitnessType[model.selectedIndex]}',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: Config.textSize(context, 5.3),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: Config.xMargin(context, 5)),
+                    child: Image.asset(model.activityType[model.selectedIndex]),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: Config.yMargin(context, 3)),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(
+                horizontal: Config.xMargin(context, 5.33),
+              ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Description',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: Config.textSize(context, 4.5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                      child: Text(
+                        model.description == null || model.description == ""
+                            ? 'No Description'
+                            : '${model.description}',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 4.5),
-                          fontWeight: FontWeight.bold,
+                          fontSize: Config.textSize(context, 4),
                         ),
+                        //\n
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
-                        child: Text(
-                          model.description == null || model.description == ""
-                              ? 'No Description'
-                              : '${model.description.trim()}',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.textSize(context, 4),
-                          ),
-                          //\n
-                        ),
+                    ),
+                    SizedBox(height: Config.yMargin(context, 10)),
+                    Text(
+                      'Frequency',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: Config.textSize(context, 4.5),
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(height: Config.yMargin(context, 10)),
-                      Text(
-                        'Frequency',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 4.5),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                    ),
+                    Container(
 //                          child: ListView.builder(
 //                            shrinkWrap: true,
 //                            itemCount: medModel.selectedFreq == 'Once'
@@ -169,62 +155,76 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
 //                                  context: context, index: index);
 //                            },
 //                          ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              model.minDaily.toString() +
-                                  ' Minutes ' +
-                                  model.selectedFreq,
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontWeight: FontWeight.normal,
-                                fontSize: Config.textSize(context, 4),
-                              ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            model.minDaily.toString() +
+                                ' Minutes ' +
+                                model.selectedFreq,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontWeight: FontWeight.normal,
+                              fontSize: Config.textSize(context, 4),
                             ),
-                            // Text(
-                            //   model.activityTime.toString(),
-                            //   style: TextStyle(
-                            //     color: Theme.of(context).primaryColor,
-                            //     fontWeight: FontWeight.normal,
-                            //     fontSize: Config.textSize(context, 3.6),
-                            //   ),
-                            // ),
-                          ],
-                        ),
+                          ),
+                          // Text(
+                          //   model.activityTime.toString(),
+                          //   style: TextStyle(
+                          //     color: Theme.of(context).primaryColor,
+                          //     fontWeight: FontWeight.normal,
+                          //     fontSize: Config.textSize(context, 3.6),
+                          //   ),
+                          // ),
+                        ],
                       ),
-                      SizedBox(height: Config.yMargin(context, 10)),
-                      Text(
-                        'Days Left',
+                    ),
+                    SizedBox(height: Config.yMargin(context, 10)),
+                    Text(
+                      'Days Left',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: Config.textSize(context, 4.5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                      child: Text(
+                        daysLeft,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 4.5),
-                          fontWeight: FontWeight.bold,
+                          fontSize: Config.textSize(context, 4),
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
-                        child: Text(
-                          days_left,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: Config.textSize(context, 4),
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-              SizedBox(height: Config.yMargin(context, 10)),
-            ],
-          ),
+                    ),
+                  ]),
+            ),
+            SizedBox(height: Config.yMargin(context, 10)),
+          ],
         ),
         Padding(
           padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
           child: InkWell(
             onTap: () {
-              model.isEditing = true;
-              Navigator.pushNamed(context, RouteNames.fitnessDescriptionScreen);
+              //updates the editing screen with default values
+              model.updateSelectedIndex(
+                  model.fitnessType.indexOf(rem.fitnesstype));
+              model.updateMinDaily(rem.minsperday);
+              model.updateFreq(rem.fitnessfreq);
+              model.updateActivityTime(TimeOfDay(
+                  hour: rem.activityTime[0], minute: rem.activityTime[1]));
+              model.updateDescription(rem.description);
+              model.updateStartDate(rem.startDate);
+              model.updateEndDate(rem.endDate);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FitnessEditScreen(
+                            isEdit: true,
+                            fitnessModel: rem,
+                          )));
             },
             child: Container(
               padding: EdgeInsets.all(Config.xMargin(context, 3.55)),
@@ -331,25 +331,21 @@ class DeleteDialog extends StatelessWidget {
                     child: FlatButton(
                       onPressed: () {
                         print("deleted $id $index");
-                        // deleting the reminder works
                         model.deleteReminder(rem.id);
-                        // TODO: Give feedback if this is not working
-                        // deleting the notification am not so sure
+
                         var diff = rem.endDate.difference(rem.startDate).inDays;
                         var selectedInterval = rem.fitnessfreq == 'Daily'
                             ? 1
-                            : model.selectedFreq == 'Every 2 days'
+                            : rem.fitnessfreq == 'Every 2 days'
                                 ? 2
-                                : model.selectedFreq == 'Every 3 days'
+                                : rem.fitnessfreq == 'Every 3 days'
                                     ? 3
-                                    : model.selectedFreq == 'Every 4 days'
-                                        ? 4
-                                        : 1;
+                                    : rem.fitnessfreq == 'Every 4 days' ? 4 : 1;
 
-                        double numb = diff / selectedInterval;
-                        for (var i = 1; i < numb + 1; i++) {
+                        int numb = (diff / selectedInterval).ceil();
+                        for (var i = 0; i < numb; i++) {
                           var timeValue = rem.startDate.add(
-                            Duration(days: i == 1 ? 0 : selectedInterval * i),
+                            Duration(days: selectedInterval * i),
                           );
                           fitnessNotificationManager.removeReminder(
                               rem.startDate.day + timeValue.day + 8000);

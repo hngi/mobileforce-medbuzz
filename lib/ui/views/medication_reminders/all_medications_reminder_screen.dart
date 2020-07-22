@@ -7,7 +7,6 @@ import 'package:MedBuzz/ui/widget/scroll_calender_med.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicationScreen extends StatefulWidget {
   @override

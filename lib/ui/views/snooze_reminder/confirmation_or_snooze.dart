@@ -1,4 +1,3 @@
-import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/snooze_reminder/confirmation_or_snooze_model.dart';
 import 'package:flutter/cupertino.dart';

@@ -48,6 +48,16 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'images/basketball.png'
   ];
 
+  void incrementMinDaily() {
+    minDaily >= 0 && minDaily < 60 ? minDaily++ : null;
+    notifyListeners();
+  }
+
+  void decrementMinDaily() {
+    minDaily > 0 ? minDaily-- : null;
+    notifyListeners();
+  }
+
   String updateSelectedActivityType(String activity) {
     this.selectedActivityType = activity == activityType[0]
         ? activityType[0]
@@ -97,19 +107,19 @@ class FitnessReminderCRUD extends ChangeNotifier {
   }
 
   String updateDescription(String value) {
-    this.description = value;
+    description = value;
     notifyListeners();
     return description;
   }
 
   int updateMinDaily(int value) {
-    this.minDaily = value;
+    minDaily = value;
     notifyListeners();
     return minDaily;
   }
 
 //  int updateIndex(int value) {
-//    this.index = value;
+//    index = value;
 //    notifyListeners();
 //    return index;
 //  }
@@ -120,23 +130,23 @@ class FitnessReminderCRUD extends ChangeNotifier {
   }
 
   void updateStartDate(DateTime selectedDate) {
-    this.startDate = selectedDate;
+    startDate = selectedDate;
     notifyListeners();
   }
 
   void updateEndDate(DateTime selectedDate) {
-    this.endDate = selectedDate;
+    endDate = selectedDate;
     notifyListeners();
   }
 
   TimeOfDay updateActivityTime(TimeOfDay selectedTime) {
-    this.activityTime = selectedTime;
+    activityTime = selectedTime;
     notifyListeners();
     return activityTime;
   }
 
   String updateID(String value) {
-    this.id = value;
+    id = value;
     notifyListeners();
     return id;
   }
@@ -153,9 +163,9 @@ class FitnessReminderCRUD extends ChangeNotifier {
   }
 
   int updateSelectedIndex(int index) {
-    this.selectedIndex = index;
+    selectedIndex = index;
     notifyListeners();
-    return this.selectedIndex;
+    return selectedIndex;
   }
 
   getOneReminder(index) {
@@ -171,9 +181,9 @@ class FitnessReminderCRUD extends ChangeNotifier {
   }
 
   void editReminder(FitnessReminder reminder) async {
-    int key = reminder.index;
+    var key = reminder.id;
     var box = Hive.box<FitnessReminder>(_boxName);
-    await box.putAt(key, reminder);
+    await box.put(key, reminder);
     _fitnessReminder = box.values.toList();
     box.close();
     notifyListeners();
@@ -182,8 +192,8 @@ class FitnessReminderCRUD extends ChangeNotifier {
   void deleteReminder(key) async {
     var box = await Hive.openBox<FitnessReminder>(_boxName);
 
-    _fitnessReminder = box.values.toList();
     box.delete(key);
+    _fitnessReminder = box.values.toList();
     box.close();
 
     notifyListeners();

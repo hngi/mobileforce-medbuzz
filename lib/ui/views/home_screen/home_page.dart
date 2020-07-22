@@ -1,4 +1,3 @@
-import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
@@ -40,13 +39,6 @@ class _HomePageState extends State<HomePage> {
   bool userPageDragging = false;
   Color color;
 
-  Auth authenticateSession = Auth();
-  void isBiometricAvailable() async {
-    if (await authenticateSession.isBiometricAvailable() == true) {
-      authenticateSession.authSession();
-    }
-  }
-
   @override
   void initState() {
     Provider.of<UserCrud>(context, listen: false).getuser();
@@ -57,7 +49,6 @@ class _HomePageState extends State<HomePage> {
       keepPage: false,
     );
     _pageController.addListener(handlePageChange);
-    isBiometricAvailable();
 
     super.initState();
   }

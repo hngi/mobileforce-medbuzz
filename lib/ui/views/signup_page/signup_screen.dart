@@ -7,9 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
 
 class Signup extends StatelessWidget {
   @override
