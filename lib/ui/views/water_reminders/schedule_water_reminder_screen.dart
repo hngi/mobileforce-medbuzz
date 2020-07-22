@@ -56,7 +56,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Theme.of(context).primaryColorDark),
+          leading: IconButton(
+              icon: Icon(Icons.keyboard_backspace,
+                  color: Theme.of(context).primaryColorDark),
+
+              //Function to navigate to previous screen or home screen (as the case maybe) goes here
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           title: Text(
             '${!isEdit ? 'Add a' : 'Edit'} water reminder',
             style: TextStyle(color: Theme.of(context).primaryColorDark),
@@ -65,6 +72,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Container(
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.center,
@@ -450,9 +458,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                     .difference(waterReminder.getDateTime())
                                     .inMinutes;
 
-                                double numb =
-                                    diff / waterReminder.selectedInterval;
-                                for (var i = 1; i < numb + 1; i++) {
+                                int numb =
+                                    (diff / waterReminder.selectedInterval)
+                                        .ceil();
+                                for (var i = 0; i < numb; i++) {
                                   if (waterReminder.selectedDay ==
                                           DateTime.now().day &&
                                       waterReminder.selectedMonth ==
@@ -460,11 +469,9 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                     var timeValue =
                                         waterReminder.getDateTime().add(
                                               Duration(
-                                                  minutes: i == 1
-                                                      ? 0
-                                                      : waterReminder
-                                                              .selectedInterval *
-                                                          i),
+                                                  minutes: waterReminder
+                                                          .selectedInterval *
+                                                      i),
                                             );
                                     if (isEdit) {
                                       // waterTakenDB.deleteAll();

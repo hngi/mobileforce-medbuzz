@@ -11,6 +11,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../size_config/config.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
 import 'schedule_appointment_screen_model.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 class ScheduleAppointmentScreen extends StatelessWidget {
   static const routeName = 'schedule-appointment-reminder';
@@ -360,7 +361,7 @@ class _MyScheduleAppointmentScreenState
                                       '${now.year}-$month-$day $hour:$minutes');
                                   print(_typeOfAppointmentController.text);
                                   if (currentTime.isBefore(now)) {
-                                    showSnackbar(context,
+                                    CustomSnackBar.showSnackBar(context,
                                         text:
                                             'Reminder cannot be set in the past');
                                     return;
@@ -376,33 +377,31 @@ class _MyScheduleAppointmentScreenState
                                     await appointmentReminderDB.addAppointment(
                                         appointmentReminder.createSchedule());
 
-                                    if (appointmentReminder.selectedDay ==
-                                            DateTime.now().day &&
-                                        appointmentReminder.selectedMonth ==
-                                            DateTime.now().month) {
-                                      String time =
-                                          appointmentReminder.selectedTime;
-                                      String hour = time.substring(0, 2);
-                                      String minutes = time.substring(3, 5);
-                                      DateTime now = DateTime.now();
-                                      String id =
-                                          '${now.year}${now.month}${now.day}$hour$minutes';
-                                      String notifId = id.length < 11
-                                          ? id
-                                          : id.substring(0, 10);
-                                      notificationManager
-                                          .showAppointmentNotificationOnce(
-                                              num.parse(notifId),
-                                              'Hey, you\'ve got somewhere to go',
-                                              ' ${_typeOfAppointmentController.text} ',
-                                              appointmentReminder
-                                                  .getDateTime());
+                                    // if (appointmentReminder.selectedDay ==
+                                    //         DateTime.now().day &&
+                                    //     appointmentReminder.selectedMonth ==
+                                    //         DateTime.now().month)
+                                    String time =
+                                        appointmentReminder.selectedTime;
+                                    String hour = time.substring(0, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    String id =
+                                        '${now.year}${now.month}${now.day}$hour$minutes';
+                                    String notifId = id.length < 11
+                                        ? id
+                                        : id.substring(0, 10);
+                                    notificationManager
+                                        .showAppointmentNotificationOnce(
+                                            num.parse(notifId),
+                                            'Hey, you\'ve got somewhere to go',
+                                            ' ${_typeOfAppointmentController.text} ',
+                                            appointmentReminder.getDateTime());
 
-                                      Navigator.popAndPushNamed(
-                                          context, RouteNames.homePage);
-                                    }
+                                    Navigator.popAndPushNamed(
+                                        context, RouteNames.homePage);
                                   } else {
-                                    showSnackbar(context);
+                                    CustomSnackBar.showSnackBar(context);
                                     return;
                                   }
                                 } catch (e) {
@@ -440,7 +439,7 @@ class _MyScheduleAppointmentScreenState
                                 DateTime currentTime = DateTime.parse(
                                     '${now.year}-$month-$day $hour:$minutes');
                                 if (currentTime.isBefore(now)) {
-                                  showSnackbar(context,
+                                  CustomSnackBar.showSnackBar(context,
                                       text:
                                           'Reminder cannot be set in the past');
                                   return;
@@ -490,22 +489,6 @@ class _MyScheduleAppointmentScreenState
         ),
       ),
     );
-  }
-
-  void showSnackbar(BuildContext context,
-      {String text: "Set what appointment you're going for"}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3), color: Colors.white),
-      ),
-    );
-
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 

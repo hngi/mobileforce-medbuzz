@@ -109,7 +109,7 @@ class MedicationsSchedulesModel extends ChangeNotifier {
 
   Color getButtonColor(BuildContext context, index) {
     return isActive(index)
-        ? Theme.of(context).buttonColor
+        ? Theme.of(context).primaryColor
         : Theme.of(context).primaryColorDark.withOpacity(0.05);
   }
 

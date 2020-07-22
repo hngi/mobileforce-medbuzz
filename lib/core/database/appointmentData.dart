@@ -90,6 +90,16 @@ class AppointmentData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteAppointmentReminders() async {
+    try {
+      var box = await Hive.openBox<Appointment>(_boxName);
+      box.deleteFromDisk();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Appointment getActiveAppointment() {
     return _activeAppointment;
   }

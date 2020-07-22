@@ -74,38 +74,38 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
 
     // print(model.upcomingDiets);
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        elevation: 0.5,
-        backgroundColor: Theme.of(context).primaryColorLight,
-        bottom: TabBar(
-          isScrollable: true,
-          unselectedLabelColor: Theme.of(context).primaryColorDark,
-          indicatorColor: Theme.of(context).primaryColor,
-          tabs: <Tab>[
-            Tab(
-              text: "Upcoming",
-            ),
-            Tab(
-              text: "Past",
-            ),
-          ],
-          controller: _tabController,
-          labelColor: Theme.of(context).primaryColor,
-        ),
-        title: Text(
-          'My Diet Plan',
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-        leading: IconButton(
-            icon: Icon(
-              Icons.keyboard_backspace,
-              color: Theme.of(context).primaryColorDark,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, RouteNames.homePage);
-            }),
-        /*   actions: <Widget>[
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          elevation: 0.5,
+          backgroundColor: Theme.of(context).backgroundColor,
+          bottom: TabBar(
+            isScrollable: true,
+            unselectedLabelColor: Theme.of(context).primaryColorDark,
+            indicatorColor: Theme.of(context).primaryColor,
+            tabs: <Tab>[
+              Tab(
+                text: "Upcoming",
+              ),
+              Tab(
+                text: "Past",
+              ),
+            ],
+            controller: _tabController,
+            labelColor: Theme.of(context).primaryColor,
+          ),
+          title: Text(
+            'My Diet Plan',
+            style: TextStyle(color: Theme.of(context).primaryColorDark),
+          ),
+          leading: IconButton(
+              icon: Icon(
+                Icons.keyboard_backspace,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, RouteNames.homePage);
+              }),
+          /*   actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(
@@ -126,90 +126,93 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             ),
           )
         ], */
-      ),
-      body: WillPopScope(
-        onWillPop: () {
-          Navigator.pushReplacementNamed(context, RouteNames.homePage);
-          return Future.value(false);
-        },
-        child: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            model.upcomingDiets.length > 0
-                ? ListView.builder(
-                    itemCount: model.upcomingDiets.length,
-                    itemBuilder: (context, index) =>
-                        // var diets = db.upcomingDiets;
-                        // var item = diets[index];
+        ),
+        body: WillPopScope(
+          onWillPop: () {
+            Navigator.pushReplacementNamed(context, RouteNames.homePage);
+            return Future.value(false);
+          },
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              model.upcomingDiets.length > 0
+                  ? ListView.builder(
+                      itemCount: model.upcomingDiets.length,
+                      itemBuilder: (context, index) =>
+                          // var diets = db.upcomingDiets;
+                          // var item = diets[index];
 
-                        DietReminderCard(diet: model.upcomingDiets[index]))
-                : Container(
-                    height: height,
-                    width: width,
-                    alignment: Alignment.center,
-                    child: Center(
-                      child: Text(
-                          'No diet reminder.\nClick the button to add one',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Config.xMargin(context, 5.55))),
-                    ),
-                  ),
-            model.pastDiets.length > 0
-                ? ListView.builder(
-                    itemCount: model.pastDiets.length,
-                    itemBuilder: (context, index) => model.pastDiets.length == 0
-                        ? Text('')
-                        : DietReminderCard(diet: model.pastDiets[index]),
-                  )
-                : Container(
-                    height: height,
-                    width: width,
-                    alignment: Alignment.center,
-                    child: Center(
-                        child: Text('NO PAST REMINDER',
+                          DietReminderCard(diet: model.upcomingDiets[index]))
+                  : Container(
+                      color: Theme.of(context).backgroundColor,
+                      height: height,
+                      width: width,
+                      alignment: Alignment.center,
+                      child: Center(
+                        child: Text(
+                            'No diet reminder.\nClick the button to add one',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: Config.xMargin(context, 5.55)))),
-                  )
-          ],
+                                fontSize: Config.xMargin(context, 5.55))),
+                      ),
+                    ),
+              model.pastDiets.length > 0
+                  ? ListView.builder(
+                      itemCount: model.pastDiets.length,
+                      itemBuilder: (context, index) =>
+                          model.pastDiets.length == 0
+                              ? Text('')
+                              : DietReminderCard(diet: model.pastDiets[index]),
+                    )
+                  : Container(
+                      color: Theme.of(context).backgroundColor,
+                      height: height,
+                      width: width,
+                      alignment: Alignment.center,
+                      child: Center(
+                          child: Text('No past reminder',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.xMargin(context, 5.55)))),
+                    )
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: AnimatedOpacity(
-        duration: Duration(milliseconds: 500),
-        opacity: model.isVisible ? 1 : 0,
-        child: AnimatedContainer(
+        floatingActionButton: AnimatedOpacity(
           duration: Duration(milliseconds: 500),
-          child: Visibility(
-            visible: model.isVisible,
-            child: Container(
-                  margin: EdgeInsets.only(
-                  bottom: Config.yMargin(context, 2),
-                  right: Config.xMargin(context, 4)),
-              child: SizedBox(
-                height: height * 0.08,
-                width: height * 0.08,
-                child: FloatingActionButton(
-                  child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColorLight,
-                  size: Config.xMargin(context, 5),
+          opacity: model.isVisible ? 1 : 0,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            child: Visibility(
+              visible: model.isVisible,
+              child: Container(
+                margin: EdgeInsets.only(
+                    bottom: Config.yMargin(context, 2),
+                    right: Config.xMargin(context, 4)),
+                child: SizedBox(
+                  height: height * 0.08,
+                  width: height * 0.08,
+                  child: FloatingActionButton(
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).primaryColorLight,
+                      size: Config.xMargin(context, 5),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    splashColor: Theme.of(context).primaryColor.withOpacity(.9),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.scheduleDietReminderScreen);
+                      // setState(() {
+                      //   _insertNewDiet();
+                      // });
+                    },
+                  ),
                 ),
-                backgroundColor: Theme.of(context).primaryColor,
-                splashColor: Theme.of(context).primaryColor.withOpacity(.9),
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, RouteNames.scheduleDietReminderScreen);
-                  // setState(() {
-                  //   _insertNewDiet();
-                  // });
-                },
               ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }
 

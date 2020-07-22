@@ -21,11 +21,11 @@ class ScheduledAppointmentsPage extends StatefulWidget {
 class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
   @override
   void initState() {
+    super.initState();
     Provider.of<AppointmentData>(context, listen: false).getAppointments();
     Provider.of<ScheduleAppointmentModel>(context, listen: false)
         .updateAvailableAppointmentReminder(
             Provider.of<AppointmentData>(context, listen: false).appointment);
-    super.initState();
   }
 
   @override

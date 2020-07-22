@@ -8,6 +8,7 @@ class DarkModeModel extends ChangeNotifier {
   ThemeData _appTheme = appThemeLight;
   bool _isDark = false;
   ThemeData get appTheme => _appTheme;
+  bool get isDarkMode => _isDark;
 
   void toggleAppTheme() async {
     _isDark = !_isDark;
@@ -28,6 +29,7 @@ class DarkModeModel extends ChangeNotifier {
     try {
       var box = await Hive.openBox('onboarding');
       bool isDark = box.get('isDark') ?? false;
+      _isDark = isDark;
       if (isDark) {
         _appTheme = appThemeDark;
         notifyListeners();

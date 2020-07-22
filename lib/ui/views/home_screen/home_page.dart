@@ -1,4 +1,3 @@
-import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
@@ -17,6 +16,7 @@ import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_remin
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:MedBuzz/ui/widget/custom_card.dart';
 import 'package:MedBuzz/ui/widget/progress_card.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Provider.of<UserCrud>(context, listen: false).getuser();
+    Provider.of<UserCrud>(context, listen: false).getHealthTip();
     _menuPositionController = MenuPositionController(initPosition: 0);
     _pageController = PageController(
       initialPage: 0,
@@ -71,7 +72,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var userDb = Provider.of<UserCrud>(context);
-    userDb.getuser();
     var model = Provider.of<HomeScreenModel>(context);
 
     var waterReminderDB = Provider.of<WaterReminderData>(context);
@@ -104,6 +104,46 @@ class _HomePageState extends State<HomePage> {
           NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               checkUserDragging(notification);
+              if (userDb.showHealthTip) {
+                //This displays the health tip once a day
+                BotToast.showAttachedWidget(
+                    attachedBuilder: (print()) => Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(
+                                      Config.xMargin(context, 5.55)),
+                                  bottomRight: Radius.circular(
+                                      Config.xMargin(context, 5.55)))),
+                          child: Padding(
+                            padding:
+                                EdgeInsets.all(Config.yMargin(context, 0.930)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Today's health tip!",
+                                  style: TextStyle(
+                                      color: Theme.of(context).highlightColor,
+                                      fontSize: Config.xMargin(context, 5.55)),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 1.5)),
+                                Text(
+                                  userDb.tip.tip,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Config.xMargin(context, 4.55)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    duration: Duration(seconds: 4),
+                    target: Offset(520, 520));
+                userDb.toggleShowTips();
+              }
             },
             child: PageView(
                 onPageChanged: (page) => model.updateCurrentIndex(page),
@@ -318,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      'No Medication Reminder Set for this Date'),
+                                      'No medication reminder set for this date'),
                                 ),
                               ),
                               Container(
@@ -435,7 +475,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                        'No Appointment Set for this Date'),
+                                        'No appointment set for this date'),
                                   )),
                               for (var appointment
                                   in model.appointmentReminderBasedOnDateTime)

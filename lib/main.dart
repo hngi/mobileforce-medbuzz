@@ -8,6 +8,7 @@ import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -52,6 +53,8 @@ class MaterialAPP extends StatelessWidget {
     return FeatureDiscovery(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         title: 'MedBuzz',
         theme: Provider.of<DarkModeModel>(context).appTheme,
         initialRoute: RouteNames.splashScreen,

@@ -55,7 +55,9 @@ class _TimeWheelState extends State<TimeWheel> {
     //final output is given in 24 hour format
     //hourValue gets the value of the currently initalised hour to a 24 hour format
     String hourValue = _selectedTimer == 'PM'
-        ? (int.parse(_selectedHour) + 12).toString().padLeft(2, '0')
+        ? int.parse(_selectedHour) == 12
+            ? (int.parse(_selectedHour)).toString().padLeft(2, '0')
+            : (int.parse(_selectedHour) + 12).toString().padLeft(2, '0')
         : _selectedHour;
     //then we give selectedTime the string value of the hourValue and selectedMins
     selectedTime = "$hourValue:$_selectedMin:00";
@@ -74,7 +76,9 @@ class _TimeWheelState extends State<TimeWheel> {
   void _getTime() {
     //adds 12 if the selected time of day is PM since we return 24 hour format
     String hourValue = _selectedTimer == 'PM'
-        ? (int.parse(_selectedHour) + 12).toString().padLeft(2, '0')
+        ? int.parse(_selectedHour) == 12
+            ? (int.parse(_selectedHour)).toString().padLeft(2, '0')
+            : (int.parse(_selectedHour) + 12).toString().padLeft(2, '0')
         : _selectedHour;
     //changes the value of selectedTime string
     setState(() {

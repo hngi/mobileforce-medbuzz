@@ -1,6 +1,5 @@
 import 'package:MedBuzz/core/database/medication_history.dart';
 import 'package:MedBuzz/core/models/medication_history_model/medication_history.dart';
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
