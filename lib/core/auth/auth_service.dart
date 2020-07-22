@@ -48,7 +48,7 @@ class Auth {
     return isAuthenticated;
   }
 
-  Future<void> authSession() async {
+  Future<bool> authSession() async {
     bool isAuthenticated = false;
     try {
       isAuthenticated = await _auth.authenticateWithBiometrics(
@@ -59,9 +59,10 @@ class Auth {
     } on PlatformException catch (e) {
       print(e);
     }
-
     isAuthenticated
         ? print('User is authenticated.')
         : print('User is not authenticated.');
+
+    return isAuthenticated;
   }
 }
