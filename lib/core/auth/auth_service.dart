@@ -15,7 +15,7 @@ class Auth {
       print(e.toString());
     }
 
-    isAvailable ? print('isAvailable') : print('not available');
+    isAvailable ? print('is Available') : print('not available');
     return isAvailable;
   }
 
