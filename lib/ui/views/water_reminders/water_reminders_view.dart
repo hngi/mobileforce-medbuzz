@@ -155,8 +155,10 @@ class WaterScheduleViewScreen extends StatelessWidget {
             }),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Container(
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             //container wrapping all the widgets
             child: Container(
               margin: EdgeInsets.only(

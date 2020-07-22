@@ -56,7 +56,14 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Theme.of(context).primaryColorDark),
+          leading: IconButton(
+              icon: Icon(Icons.keyboard_backspace,
+                  color: Theme.of(context).primaryColorDark),
+
+              //Function to navigate to previous screen or home screen (as the case maybe) goes here
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           title: Text(
             '${!isEdit ? 'Add a' : 'Edit'} water reminder',
             style: TextStyle(color: Theme.of(context).primaryColorDark),
@@ -65,6 +72,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Container(
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.center,

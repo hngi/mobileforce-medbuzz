@@ -177,6 +177,7 @@ class __AddFitnessState extends State<AddFitness> {
                           TextFormField(
                             keyboardType: TextInputType.multiline,
                             maxLines: 5,
+                            textInputAction: TextInputAction.done,
 
                             // controller: descriptionTextController,
                             controller: descController,
@@ -473,29 +474,17 @@ class __AddFitnessState extends State<AddFitness> {
                                     DateTime.now().toString().substring(0, 16));
 
                                 if (model.startDate.isAfter(model.endDate)) {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message:
+                                  showSnackBar(
+                                    context,
+                                    text:
                                         "Start date cannot be after the end date",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  );
                                 } else if (timeSet.isBefore(now) &&
                                     model.startDate.day == DateTime.now().day &&
                                     model.endDate.day == DateTime.now().day) {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message:
-                                        "Cannot set time reminder in the past",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  showSnackBar(context,
+                                      text:
+                                          "Cannot set time reminder in the past");
                                 } else if (descController.text.isNotEmpty) {
                                   switch (appBar) {
                                     case 'Add Fitness Reminder':
@@ -633,15 +622,8 @@ class __AddFitnessState extends State<AddFitness> {
                                       }
                                   }
                                 } else {
-                                  Flushbar(
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 28.0,
-                                      color: Colors.white,
-                                    ),
-                                    message: "Please enter a brief description",
-                                    duration: Duration(seconds: 3),
-                                  )..show(context);
+                                  showSnackBar(context,
+                                      text: "Please enter a brief description");
                                 }
                               })),
                     ),
@@ -656,6 +638,19 @@ class __AddFitnessState extends State<AddFitness> {
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context,
+      {String text: "Reminder can't be set in the past"}) {
+    Flushbar(
+      icon: Icon(
+        Icons.info_outline,
+        size: Config.xMargin(context, 7.777),
+        color: Colors.red,
+      ),
+      message: text,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 
   Future<Null> selectTime(BuildContext context) async {
@@ -677,21 +672,21 @@ class __AddFitnessState extends State<AddFitness> {
     }
   }
 
-  void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3),
-            color: Theme.of(context).primaryColorLight),
-      ),
-    );
+  // void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
+  //   SnackBar snackBar = SnackBar(
+  //     backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
+  //     duration: Duration(seconds: 2),
+  //     content: Text(
+  //       text,
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //           fontSize: Config.textSize(context, 5.3),
+  //           color: Theme.of(context).primaryColorLight),
+  //     ),
+  //   );
 
-    Scaffold.of(context).showSnackBar(snackBar);
-  }
+  //   Scaffold.of(context).showSnackBar(snackBar);
+  // }
 
   Future<Null> selectStartDate(BuildContext context) async {
     var model = Provider.of<FitnessReminderCRUD>(context);

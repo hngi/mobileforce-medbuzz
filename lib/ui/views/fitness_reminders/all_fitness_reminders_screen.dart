@@ -83,9 +83,9 @@ class _FitnessSchedulesScreenState extends State<FitnessSchedulesScreen> {
                 child: Icon(
                   Icons.add,
                   color: Theme.of(context).primaryColorLight,
-                  size: Config.xMargin(context, 9),
+                  size: Config.xMargin(context, 8),
                 ),
-                backgroundColor: Theme.of(context).buttonColor,
+                backgroundColor: Theme.of(context).primaryColor,
                 splashColor: Theme.of(context).buttonColor.withOpacity(.9),
                 //Navigate to fitness reminder creation screen
                 onPressed: () {

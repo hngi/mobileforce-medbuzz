@@ -7,6 +7,7 @@ import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
 import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -316,19 +317,15 @@ class AddDietReminderScreen extends StatelessWidget {
 
   void showSnackbar(BuildContext context,
       {String text: "Reminder can't be set in the past"}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3),
-            color: Theme.of(context).primaryColorLight),
+    Flushbar(
+      icon: Icon(
+        Icons.info_outline,
+        size: Config.xMargin(context, 7.777),
+        color: Colors.red,
       ),
-    );
-
-    Scaffold.of(context).showSnackBar(snackBar);
+      message: text,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 
   Text _title(BuildContext context, String text) =>

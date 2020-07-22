@@ -43,7 +43,7 @@ class _SingleWaterState extends State<SingleWater> {
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
       ),
-      body: ListView(children: [
+      body: ListView(physics: BouncingScrollPhysics(), children: [
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,

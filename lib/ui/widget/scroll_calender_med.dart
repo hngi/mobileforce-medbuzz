@@ -118,7 +118,7 @@ class ScrollableCalendar extends StatelessWidget {
                                         color:
                                             Theme.of(context).primaryColorDark,
                                         fontSize: Config.textSize(context, 7.2),
-                                        fontWeight: FontWeight.w500),
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(height: Config.yMargin(context, .5)),
                                   Text(model.getWeekDay(index),

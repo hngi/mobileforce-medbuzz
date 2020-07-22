@@ -113,46 +113,46 @@ class _HomePageState extends State<HomePage> {
           NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               checkUserDragging(notification);
-               if (userDb.showHealthTip) {
-              //This displays the health tip once a day
-              BotToast.showAttachedWidget(
-                  attachedBuilder: (print()) => Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(
-                                    Config.xMargin(context, 5.55)),
-                                bottomRight: Radius.circular(
-                                    Config.xMargin(context, 5.55)))),
-                        child: Padding(
-                          padding:
-                              EdgeInsets.all(Config.yMargin(context, 0.930)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                "Today's health tip!",
-                                style: TextStyle(
-                                    color: Theme.of(context).highlightColor,
-                                    fontSize: Config.xMargin(context, 5.55)),
-                              ),
-                              SizedBox(height: Config.yMargin(context, 1.5)),
-                              Text(
-                                userDb.tip.tip,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: Config.xMargin(context, 4.55)),
-                              ),
-                            ],
+              if (userDb.showHealthTip) {
+                //This displays the health tip once a day
+                BotToast.showAttachedWidget(
+                    attachedBuilder: (print()) => Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(
+                                      Config.xMargin(context, 5.55)),
+                                  bottomRight: Radius.circular(
+                                      Config.xMargin(context, 5.55)))),
+                          child: Padding(
+                            padding:
+                                EdgeInsets.all(Config.yMargin(context, 0.930)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Today's health tip!",
+                                  style: TextStyle(
+                                      color: Theme.of(context).highlightColor,
+                                      fontSize: Config.xMargin(context, 5.55)),
+                                ),
+                                SizedBox(height: Config.yMargin(context, 1.5)),
+                                Text(
+                                  userDb.tip.tip,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Config.xMargin(context, 4.55)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                  duration: Duration(seconds: 4),
-                  target: Offset(520, 520));
-              userDb.toggleShowTips();
-            }
+                    duration: Duration(seconds: 4),
+                    target: Offset(520, 520));
+                userDb.toggleShowTips();
+              }
             },
             child: PageView(
                 onPageChanged: (page) => model.updateCurrentIndex(page),
@@ -367,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      'No Medication Reminder Set for this Date'),
+                                      'No medication reminder set for this date'),
                                 ),
                               ),
                               Container(
@@ -484,7 +484,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                        'No Appointment Set for this Date'),
+                                        'No appointment set for this date'),
                                   )),
                               for (var appointment
                                   in model.appointmentReminderBasedOnDateTime)

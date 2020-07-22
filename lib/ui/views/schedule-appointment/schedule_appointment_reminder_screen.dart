@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -492,18 +493,15 @@ class _MyScheduleAppointmentScreenState
 
   void showSnackbar(BuildContext context,
       {String text: "Set what appointment you're going for"}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3), color: Colors.white),
+    Flushbar(
+      icon: Icon(
+        Icons.info_outline,
+        size: Config.xMargin(context, 7.777),
+        color: Colors.red,
       ),
-    );
-
-    Scaffold.of(context).showSnackBar(snackBar);
+      message: text,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }
 

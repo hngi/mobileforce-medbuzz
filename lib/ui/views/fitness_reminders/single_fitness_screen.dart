@@ -33,6 +33,43 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
+        actions: <Widget>[
+          FlatButton.icon(
+              onPressed: () {
+                // String time = DateTime.now().toString();
+                // String hour = time.substring(0, 2);
+                // String minutes = time.substring(3, 5);
+                // DateTime now = DateTime.now();
+                // String id = '${now.year}${now.month}${now.day}$hour$minutes';
+                // String notifId = id.length < 11 ? id : id.substring(0, 10);
+
+                print(model.id);
+                print(model.selectedIndex);
+
+                // model.deleteReminder(widget.rem.id.toString());
+                // print("deleting");
+
+                showDialog(
+                    context: context,
+                    child: DeleteDialog(
+                      id: model.id,
+                      index: model.selectedIndex,
+                      rem: widget.rem,
+                    )
+                    //     //show Confirmation dialog
+                    );
+                //Do not write any code here
+                // Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              label: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              )),
+        ],
         leading: IconButton(
             icon: Icon(Icons.keyboard_backspace,
                 color: Theme.of(context).primaryColorDark),
@@ -41,117 +78,87 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
               Navigator.pushNamed(context, RouteNames.fitnessSchedulesScreen);
             }),
       ),
-      body: ListView(physics: ScrollPhysics(), children: [
-        Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: Config.yMargin(context, 2.6)),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FlatButton.icon(
-                    onPressed: () {
-                      String time = DateTime.now().toString();
-                      String hour = time.substring(0, 2);
-                      String minutes = time.substring(3, 5);
-                      DateTime now = DateTime.now();
-                      String id =
-                          '${now.year}${now.month}${now.day}$hour$minutes';
-                      String notifId =
-                          id.length < 11 ? id : id.substring(0, 10);
-
-                      print(model.id);
-                      print(model.selectedIndex);
-
-                      // model.deleteReminder(widget.rem.id.toString());
-                      // print("deleting");
-
-                      showDialog(
-                          context: context,
-                          child: DeleteDialog(
-                            id: model.id,
-                            index: model.selectedIndex,
-                            rem: widget.rem,
-                          )
-                          //     //show Confirmation dialog
-                          );
-                      //Do not write any code here
-                      // Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                    label: Text(
-                      'Delete',
-                      style: TextStyle(color: Colors.red),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Config.xMargin(context, 5.33)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: Config.xMargin(context, 44),
-                    child: Text(
-                      '${model.fitnessType[model.selectedIndex]}',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.textSize(context, 5.3),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: Config.xMargin(context, 5)),
-                    child: Image.asset(model.activityType[model.selectedIndex]),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: Config.yMargin(context, 3)),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(
-                horizontal: Config.xMargin(context, 5.33),
-              ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(physics: BouncingScrollPhysics(), children: [
+        Container(
+          color: Theme.of(context).backgroundColor,
+          child: Column(
+            children: <Widget>[
+              // Padding(
+              //   padding: EdgeInsets.only(right: Config.yMargin(context, 2.6)),
+              //   child: Align(
+              //     alignment: Alignment.topRight,
+              //     child:
+              //   ),
+              // ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 5.33)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.textSize(context, 4.5),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                    Container(
+                      width: Config.xMargin(context, 44),
                       child: Text(
-                        model.description == null || model.description == ""
-                            ? 'No Description'
-                            : '${model.description}',
+                        '${model.fitnessType[model.selectedIndex]}',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 4),
+                          fontSize: Config.textSize(context, 5.3),
+                          fontWeight: FontWeight.bold,
                         ),
-                        //\n
-                      ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 10)),
-                    Text(
-                      'Frequency',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.textSize(context, 4.5),
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Container(
+                      padding:
+                          EdgeInsets.only(right: Config.xMargin(context, 5)),
+                      child:
+                          Image.asset(model.activityType[model.selectedIndex]),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: Config.yMargin(context, 3)),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Config.xMargin(context, 5.33),
+                ),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                        child: Text(
+                          model.description == null || model.description == ""
+                              ? 'No Description'
+                              : '${model.description.trim()}',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.textSize(context, 4),
+                          ),
+                          //\n
+                        ),
+                      ),
+                      SizedBox(height: Config.yMargin(context, 10)),
+                      Text(
+                        'Frequency',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
 //                          child: ListView.builder(
 //                            shrinkWrap: true,
 //                            itemCount: medModel.selectedFreq == 'Once'
@@ -162,54 +169,55 @@ class _SingleFitnessScreenState extends State<SingleFitnessScreen> {
 //                                  context: context, index: index);
 //                            },
 //                          ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            model.minDaily.toString() +
-                                ' Minutes ' +
-                                model.selectedFreq,
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.normal,
-                              fontSize: Config.textSize(context, 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              model.minDaily.toString() +
+                                  ' Minutes ' +
+                                  model.selectedFreq,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontWeight: FontWeight.normal,
+                                fontSize: Config.textSize(context, 4),
+                              ),
                             ),
-                          ),
-                          // Text(
-                          //   model.activityTime.toString(),
-                          //   style: TextStyle(
-                          //     color: Theme.of(context).primaryColor,
-                          //     fontWeight: FontWeight.normal,
-                          //     fontSize: Config.textSize(context, 3.6),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: Config.yMargin(context, 10)),
-                    Text(
-                      'Days Left',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: Config.textSize(context, 4.5),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: Config.yMargin(context, 1.0)),
-                      child: Text(
-                        days_left,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: Config.textSize(context, 4),
+                            // Text(
+                            //   model.activityTime.toString(),
+                            //   style: TextStyle(
+                            //     color: Theme.of(context).primaryColor,
+                            //     fontWeight: FontWeight.normal,
+                            //     fontSize: Config.textSize(context, 3.6),
+                            //   ),
+                            // ),
+                          ],
                         ),
                       ),
-                    ),
-                  ]),
-            ),
-            SizedBox(height: Config.yMargin(context, 10)),
-          ],
+                      SizedBox(height: Config.yMargin(context, 10)),
+                      Text(
+                        'Days Left',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Config.textSize(context, 4.5),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: Config.yMargin(context, 1.0)),
+                        child: Text(
+                          days_left,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: Config.textSize(context, 4),
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
+              SizedBox(height: Config.yMargin(context, 10)),
+            ],
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
