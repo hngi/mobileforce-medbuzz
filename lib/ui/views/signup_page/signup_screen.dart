@@ -111,7 +111,7 @@ class MySignUp extends StatelessWidget {
                         'feature_3'
                       });
 
-                      authenticateBiometric.availabeBioTypes();
+                      authenticateBiometric.availableBioTypes();
                       authenticateBiometric.authUser(context);
                     });
                   } else if (nameController.text.isNotEmpty) {

@@ -19,14 +19,14 @@ class Auth {
     return isAvailable;
   }
 
-  Future<void> availabeBioTypes() async {
-    List<BiometricType> listofBiometric = List<BiometricType>();
+  Future<void> availableBioTypes() async {
+    List<BiometricType> listOfBiometric = List<BiometricType>();
     try {
-      listofBiometric = await _auth.getAvailableBiometrics();
+      listOfBiometric = await _auth.getAvailableBiometrics();
     } catch (e) {
       print(e.toString());
     }
-    print(listofBiometric.toString());
+    print(listOfBiometric.toString());
   }
 
   Future<void> authUser(context) async {
