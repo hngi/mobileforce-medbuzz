@@ -85,12 +85,13 @@ class MySignUp extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () async {
-                  if (nameController.text.isNotEmpty) {
-                    print('${nameController.text}');
-                    var newuser = User(
+                  if (await authenticateBiometric.isBiometricAvailable() ==
+                      true) {
+                    authenticateBiometric.isBiometricAvailable();
+                    var newUser = User(
                         id: DateTime.now().toString(),
                         name: nameController.text);
-                    await userDb.adduser(newuser).then((value) async {
+                    await userDb.adduser(newUser).then((value) async {
                       await box.put('status', 'true');
                       FeatureDiscovery.discoverFeatures(
                         context,
@@ -110,19 +111,39 @@ class MySignUp extends StatelessWidget {
                         'feature_3'
                       });
 
-                      authenticateBiometric.isBiometricAvailable();
-                      authenticateBiometric.availabeBioTypes();
+                      authenticateBiometric.availableBioTypes();
                       authenticateBiometric.authUser(context);
-
-                      // Navigation comment
-//                      Navigator.pushReplacementNamed(
-//                          context, RouteNames.homePage);
                     });
-                    //delaying with a future might not be the best, but waiting to receive the value from the Future is better
-                    // Future.delayed(
-                    //     Duration(seconds: 2),
-                    //     () => Navigator.pushReplacementNamed(
-                    //         context, RouteNames.homePage));
+                  } else if (nameController.text.isNotEmpty) {
+                    print('${nameController.text}');
+                    var newUser = User(
+                        id: DateTime.now().toString(),
+                        name: nameController.text);
+                    await userDb.adduser(newUser).then((value) async {
+                      await box.put('status', 'true');
+                      FeatureDiscovery.discoverFeatures(
+                        context,
+                        const <String>{
+                          'feature7',
+                          'feature1',
+                          // feature2,
+                          // feature3,
+                          // feature4,
+                          // feature6,
+                          // feature5
+                        },
+                      );
+                      FeatureDiscovery.discoverFeatures(context, const <String>{
+                        'feature_1',
+                        'feature_2',
+                        'feature_3'
+                      });
+
+//
+
+                      Navigator.pushReplacementNamed(
+                          context, RouteNames.homePage);
+                    });
                   } else {
                     showSnackBar(context);
                   }
