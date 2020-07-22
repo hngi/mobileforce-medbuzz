@@ -7,13 +7,14 @@ class Auth {
   final LocalAuthentication _auth = LocalAuthentication();
 
 // ignore: unused_element
-  Future<void> isBiometricAvailable() async {
+  Future<bool> isBiometricAvailable() async {
     bool isAvailable = false;
     try {
       isAvailable = await _auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       print(e.toString());
     }
+
     isAvailable ? print('isAvailable') : print('not available');
     return isAvailable;
   }
