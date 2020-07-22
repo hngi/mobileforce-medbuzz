@@ -408,7 +408,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                               await medModel.addMedicationReminder(med);
                               switch (medModel.selectedFreq) {
                                 case 'Once':
-                                  setNotification(med, med.firstTime);
+                                  await setNotification(med, med.firstTime);
                                   break;
                                 case 'Twice':
                                   setNotification(med, med.firstTime);
@@ -593,7 +593,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   }
 
 //Function to set notification
-  void setNotification(MedicationReminder med, List<int> time) {
+  Future<void> setNotification(MedicationReminder med, List<int> time) {
     //notification id has to be unique
     //Small magic to get unique value
     DateTime date = DateTime.parse(med.id);
@@ -605,13 +605,16 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     String username = userDb.user.name;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
-    notificationManager.showDrugNotificationDaily(
-        hour: time[0],
-        minute: time[1],
-        id: id,
-        //username can be replaced with the actual name of the user
-        title: "Hey $username!",
-        body: "You need to take ${med.dosage} ${med.drugName} ${med.drugType}");
+    if (med.startAt.day == DateTime.now().day) {
+      notificationManager.showDrugNotificationDaily(
+          hour: time[0],
+          minute: time[1],
+          id: id,
+          //username can be replaced with the actual name of the user
+          title: "Hey $username!",
+          body:
+              "You need to take ${med.dosage} ${med.drugName} ${med.drugType}");
+    }
   }
 
   void deleteNotification(MedicationReminder med, List<int> time) {
@@ -621,7 +624,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     int id = temp - secondTemp;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
-    notificationManager.removeReminder(id);
+    if (med.endAt.day == DateTime.now().day) {
+      notificationManager.removeReminder(id);
+    }
     print("Deleted Notification of id $id");
   }
 
