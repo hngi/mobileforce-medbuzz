@@ -47,6 +47,7 @@ dependencies:
   shared_preferences:
   local_auth: ^0.6.2+3
   bot_toast: ^3.0.0
+  bottom_navy_bar: ^5.5.0
 
 dev_dependencies:
   flutter_test:
