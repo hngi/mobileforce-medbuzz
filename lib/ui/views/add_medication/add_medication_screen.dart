@@ -6,6 +6,7 @@ import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 import '../../size_config/config.dart';
 
@@ -354,7 +355,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             DateTime.now().toString().substring(0, 16));
 
                         if (medModel.startDate.isAfter(medModel.endDate)) {
-                          showSnackBar(context,
+                          CustomSnackBar.showSnackBar(context,
                               text: "Start date cannot be after the end date");
                         } else if (selecDate1.isBefore(now) &&
                                 medModel.startDate.day == DateTime.now().day &&
@@ -367,7 +368,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                                 selecDate3.isBefore(now) &&
                                 medModel.startDate.day ==
                                     medModel.endDate.day) {
-                          showSnackBar(context,
+                          CustomSnackBar.showSnackBar(context,
                               text: "Cannot set time reminder in the past");
                         } else if (textEditingController.text.isNotEmpty) {
                           switch (appBarTitle) {
@@ -546,7 +547,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             duration: Duration(seconds: 3),
                           )..show(context);
                         } else {
-                          showSnackBar(context,
+                          CustomSnackBar.showSnackBar(context,
                               text: "Please enter the name of the drug");
                         }
                       },
@@ -577,19 +578,6 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
         ),
       ),
     );
-  }
-
-  void showSnackBar(BuildContext context,
-      {String text: "Reminder can't be set in the past"}) {
-    Flushbar(
-      icon: Icon(
-        Icons.info_outline,
-        size: Config.xMargin(context, 7.777),
-        color: Colors.red,
-      ),
-      message: text,
-      duration: Duration(seconds: 3),
-    )..show(context);
   }
 
 //Function to set notification

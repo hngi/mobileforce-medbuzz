@@ -16,6 +16,16 @@ class DietReminderDB extends ChangeNotifier {
   // List<DietModel> _pastDiets = [];
   // List<DietModel> _upcomingDiets = [];
 
+  void deleteDietReminders() async {
+    try {
+      var box = await Hive.openBox<DietModel>(_boxname);
+      box.deleteFromDisk();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // get all diets
 
   void getAlldiets() async {

@@ -172,6 +172,16 @@ class FitnessReminderCRUD extends ChangeNotifier {
     return _fitnessReminder[index];
   }
 
+  void deleteFitnessReminders() async {
+    try {
+      var box = await Hive.openBox<FitnessReminder>(_boxName);
+      box.deleteFromDisk();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> addReminder(FitnessReminder reminder) async {
     var box = await Hive.openBox<FitnessReminder>(_boxName);
     await box.put(reminder.id, reminder);

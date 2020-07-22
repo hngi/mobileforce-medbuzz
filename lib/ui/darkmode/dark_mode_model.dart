@@ -29,6 +29,7 @@ class DarkModeModel extends ChangeNotifier {
     try {
       var box = await Hive.openBox('onboarding');
       bool isDark = box.get('isDark') ?? false;
+      _isDark = isDark;
       if (isDark) {
         _appTheme = appThemeDark;
         notifyListeners();

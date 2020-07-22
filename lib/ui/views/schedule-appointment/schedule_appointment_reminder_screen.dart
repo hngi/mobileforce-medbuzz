@@ -5,13 +5,13 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../size_config/config.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
 import 'schedule_appointment_screen_model.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 class ScheduleAppointmentScreen extends StatelessWidget {
   static const routeName = 'schedule-appointment-reminder';
@@ -361,7 +361,7 @@ class _MyScheduleAppointmentScreenState
                                       '${now.year}-$month-$day $hour:$minutes');
                                   print(_typeOfAppointmentController.text);
                                   if (currentTime.isBefore(now)) {
-                                    showSnackbar(context,
+                                    CustomSnackBar.showSnackBar(context,
                                         text:
                                             'Reminder cannot be set in the past');
                                     return;
@@ -401,7 +401,7 @@ class _MyScheduleAppointmentScreenState
                                     Navigator.popAndPushNamed(
                                         context, RouteNames.homePage);
                                   } else {
-                                    showSnackbar(context);
+                                    CustomSnackBar.showSnackBar(context);
                                     return;
                                   }
                                 } catch (e) {
@@ -439,7 +439,7 @@ class _MyScheduleAppointmentScreenState
                                 DateTime currentTime = DateTime.parse(
                                     '${now.year}-$month-$day $hour:$minutes');
                                 if (currentTime.isBefore(now)) {
-                                  showSnackbar(context,
+                                  CustomSnackBar.showSnackBar(context,
                                       text:
                                           'Reminder cannot be set in the past');
                                   return;
@@ -489,19 +489,6 @@ class _MyScheduleAppointmentScreenState
         ),
       ),
     );
-  }
-
-  void showSnackbar(BuildContext context,
-      {String text: "Set what appointment you're going for"}) {
-    Flushbar(
-      icon: Icon(
-        Icons.info_outline,
-        size: Config.xMargin(context, 7.777),
-        color: Colors.red,
-      ),
-      message: text,
-      duration: Duration(seconds: 3),
-    )..show(context);
   }
 }
 

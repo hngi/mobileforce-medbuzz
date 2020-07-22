@@ -1,5 +1,4 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import '../../../core/database/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
 import '../../../core/notifications/fitness_notification_manager.dart';
 import '../../size_config/config.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 class FitnessEditScreen extends StatelessWidget {
   final FitnessReminder fitnessModel;
@@ -51,18 +51,6 @@ class FitnessEditScreen extends StatelessWidget {
       ]);
     }
 
-    void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
-      Flushbar(
-        icon: Icon(
-          Icons.info_outline,
-          size: Config.xMargin(context, 7.777),
-          color: Colors.red,
-        ),
-        message: text,
-        duration: Duration(seconds: 3),
-      )..show(context);
-    }
-
     Future<Null> selectTime(BuildContext context) async {
       // var model = Provider.of<FitnessReminderCRUD>(context);
       isEdit == true
@@ -78,7 +66,8 @@ class FitnessEditScreen extends StatelessWidget {
           model.activityTime;
       bool today = model.startDate.difference(DateTime.now()).inDays == 0;
       if (today && selectedTime.hour < currentTime.hour && !isEdit) {
-        showSnackBar(context, text: "Cannot set reminder in the past");
+        CustomSnackBar.showSnackBar(context,
+            text: "Cannot set reminder in the past");
       } else {
         if (selectedTime != null && selectedTime != model.activityTime) {
           // setState(() {
@@ -98,7 +87,8 @@ class FitnessEditScreen extends StatelessWidget {
               lastDate: DateTime(model.startDate.year + 1)) ??
           model.startDate;
       if (selectedDate.difference(model.startDate).inDays < 0) {
-        showSnackBar(context, text: "Cannot set start date in the past");
+        CustomSnackBar.showSnackBar(context,
+            text: "Cannot set start date in the past");
       } else {
         if (selectedDate != null && selectedDate != model.startDate) {
           // setState(() {
@@ -121,7 +111,8 @@ class FitnessEditScreen extends StatelessWidget {
               lastDate: DateTime(model.endDate.year + 1)) ??
           model.endDate;
       if (selectedDate.difference(model.endDate).inDays < 0) {
-        showSnackBar(context, text: "Cannot set end date in the past");
+        CustomSnackBar.showSnackBar(context,
+            text: "Cannot set end date in the past");
       } else {
         if (selectedDate != null && selectedDate != model.endDate) {
           // setState(() {
@@ -551,7 +542,7 @@ class FitnessEditScreen extends StatelessWidget {
                                     DateTime.now().toString().substring(0, 16));
 
                                 if (model.startDate.isAfter(model.endDate)) {
-                                  showSnackBar(
+                                  CustomSnackBar.showSnackBar(
                                     context,
                                     text:
                                         "Start date cannot be after the end date",
@@ -559,7 +550,7 @@ class FitnessEditScreen extends StatelessWidget {
                                 } else if (timeSet.isBefore(now) &&
                                     model.startDate.day == DateTime.now().day &&
                                     model.endDate.day == DateTime.now().day) {
-                                  showSnackBar(context,
+                                  CustomSnackBar.showSnackBar(context,
                                       text:
                                           "Cannot set time reminder in the past");
                                 } else if (model.description.isNotEmpty) {
@@ -755,7 +746,7 @@ class FitnessEditScreen extends StatelessWidget {
                                     }
                                   }
                                 } else {
-                                  showSnackBar(context,
+                                  CustomSnackBar.showSnackBar(context,
                                       text: "Please enter a brief description");
                                 }
                               }),
