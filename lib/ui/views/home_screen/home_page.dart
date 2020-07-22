@@ -39,13 +39,6 @@ class _HomePageState extends State<HomePage> {
   bool userPageDragging = false;
   Color color;
 
-  Auth authenticateSession = Auth();
-  void isBiometricAvailable() async {
-    if (await authenticateSession.isBiometricAvailable() == true) {
-      authenticateSession.authSession();
-    }
-  }
-
   @override
   void initState() {
     Provider.of<UserCrud>(context, listen: false).getuser();
@@ -55,7 +48,6 @@ class _HomePageState extends State<HomePage> {
       keepPage: false,
     );
     _pageController.addListener(handlePageChange);
-    isBiometricAvailable();
 
     super.initState();
   }
