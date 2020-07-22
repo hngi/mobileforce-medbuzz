@@ -96,8 +96,6 @@ class __AddFitnessState extends State<AddFitness> {
       ]);
     }
 
-    ;
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(

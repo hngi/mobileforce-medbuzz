@@ -1,4 +1,3 @@
-import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +17,11 @@ class Indicator extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
               color: positionIndex == currentIndex
-                  ? appThemeLight.primaryColor
-                  : appThemeLight.hintColor),
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).hintColor),
           color: positionIndex == currentIndex
-              ? appThemeLight.primaryColor
-              : appThemeLight.hintColor,
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).hintColor,
           borderRadius: BorderRadius.circular(Config.xMargin(context, 30))),
     );
   }

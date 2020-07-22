@@ -8,11 +8,11 @@ import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -51,17 +51,17 @@ class MaterialAPP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FeatureDiscovery(
-      child: OverlaySupport(
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'MedBuzz',
-          theme: Provider.of<DarkModeModel>(context).appTheme,
-          initialRoute: RouteNames.splashScreen,
-          //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
-          //in the RouteGenerator class
-          //This update handles page transitions
-          onGenerateRoute: RouteGenerator.generateRoute,
-        ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        title: 'MedBuzz',
+        theme: Provider.of<DarkModeModel>(context).appTheme,
+        initialRoute: RouteNames.splashScreen,
+        //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
+        //in the RouteGenerator class
+        //This update handles page transitions
+        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

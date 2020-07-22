@@ -142,7 +142,7 @@ class MySignUp extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).primaryColorLight,
                       fontWeight: FontWeight.bold,
-                      fontSize: Config.textSize(context, 3.85),
+                      fontSize: Config.textSize(context, 5),
                     ),
                   ),
                 ),

@@ -14,17 +14,16 @@ class HealthTip {
 }
 
 class HealthTipsService {
-  Future<String> _loadAStudentAsset() async {
+  Future<String> _loadAsset() async {
     return await rootBundle.loadString('images/health_tips.json');
   }
 
   Future<HealthTip> fetchHealthTip() async {
     Random random = Random();
     int id = random.nextInt(45) + 1;
-    String jsonString = await _loadAStudentAsset();
+    String jsonString = await _loadAsset();
     final jsonResponse = json.decode(jsonString);
-    List<HealthTip> tips =
-        jsonResponse.map((i) => HealthTip.fromJson(i)).toList();
+    List tips = jsonResponse.map((i) => HealthTip.fromJson(i)).toList();
     print(tips[id].tip);
     return tips[id];
   }

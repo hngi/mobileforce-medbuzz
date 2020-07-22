@@ -36,6 +36,7 @@ class UserCrud extends ChangeNotifier {
     notifyListeners();
   }
 
+//this function retrieves a health tip after confirming a health tip hasn't been shown to user that day
   void getHealthTip() async {
     try {
       HealthTipsService healthTipsService = HealthTipsService();
@@ -46,6 +47,7 @@ class UserCrud extends ChangeNotifier {
         _showHealthTip = true;
         _tip = await healthTipsService.fetchHealthTip();
         _date = DateTime.now();
+        box.put('date', _date);
         notifyListeners();
         box.close();
         return;
@@ -54,6 +56,7 @@ class UserCrud extends ChangeNotifier {
         _showHealthTip = true;
         _tip = await healthTipsService.fetchHealthTip();
         _date = DateTime.now();
+        box.put('date', _date);
         notifyListeners();
         box.close();
         return;
@@ -66,6 +69,11 @@ class UserCrud extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  void toggleShowTips() {
+    _showHealthTip = !_showHealthTip;
+    notifyListeners();
   }
 
   User get newuser => _user;
