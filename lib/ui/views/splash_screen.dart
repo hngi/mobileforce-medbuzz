@@ -20,6 +20,13 @@ class StartState extends State<SplashScreen> {
     await Hive.openBox('onboarding');
   }
 
+  Auth authenticateSession = Auth();
+  void isBiometricAvailable() async {
+    if (await authenticateSession.isBiometricAvailable() == true) {
+      authenticateSession.authSession();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,8 +39,7 @@ class StartState extends State<SplashScreen> {
     var duration = Duration(seconds: 3);
 
     return new Timer(duration, () {
-//      Auth authenticateSession = Auth();
-//      authenticateSession.authSession();
+      isBiometricAvailable();
       box.get('status') == 'true'
           ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
           : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
