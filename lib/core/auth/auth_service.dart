@@ -7,25 +7,26 @@ class Auth {
   final LocalAuthentication _auth = LocalAuthentication();
 
 // ignore: unused_element
-  Future<void> isBiometricAvailable() async {
+  Future<bool> isBiometricAvailable() async {
     bool isAvailable = false;
     try {
       isAvailable = await _auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       print(e.toString());
     }
-    isAvailable ? print('isAvailable') : print('not available');
+
+    isAvailable ? print('is Available') : print('not available');
     return isAvailable;
   }
 
-  Future<void> availabeBioTypes() async {
-    List<BiometricType> listofBiometric = List<BiometricType>();
+  Future<void> availableBioTypes() async {
+    List<BiometricType> listOfBiometric = List<BiometricType>();
     try {
-      listofBiometric = await _auth.getAvailableBiometrics();
+      listOfBiometric = await _auth.getAvailableBiometrics();
     } catch (e) {
       print(e.toString());
     }
-    print(listofBiometric.toString());
+    print(listOfBiometric.toString());
   }
 
   Future<void> authUser(context) async {
