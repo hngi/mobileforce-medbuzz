@@ -208,10 +208,16 @@ class SingleFitnessScreen extends StatelessWidget {
           padding: EdgeInsets.only(bottom: Config.yMargin(context, 2.0)),
           child: InkWell(
             onTap: () {
-              // model.isEditing = true;
+              //updates the editing screen with default values
               model.updateSelectedIndex(
                   model.fitnessType.indexOf(rem.fitnesstype));
               model.updateMinDaily(rem.minsperday);
+              model.updateFreq(rem.fitnessfreq);
+              model.updateActivityTime(TimeOfDay(
+                  hour: rem.activityTime[0], minute: rem.activityTime[1]));
+              model.updateDescription(rem.description);
+              model.updateStartDate(rem.startDate);
+              model.updateEndDate(rem.endDate);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -330,18 +336,16 @@ class DeleteDialog extends StatelessWidget {
                         var diff = rem.endDate.difference(rem.startDate).inDays;
                         var selectedInterval = rem.fitnessfreq == 'Daily'
                             ? 1
-                            : model.selectedFreq == 'Every 2 days'
+                            : rem.fitnessfreq == 'Every 2 days'
                                 ? 2
-                                : model.selectedFreq == 'Every 3 days'
+                                : rem.fitnessfreq == 'Every 3 days'
                                     ? 3
-                                    : model.selectedFreq == 'Every 4 days'
-                                        ? 4
-                                        : 1;
+                                    : rem.fitnessfreq == 'Every 4 days' ? 4 : 1;
 
-                        double numb = diff / selectedInterval;
-                        for (var i = 1; i < numb + 1; i++) {
+                        int numb = (diff / selectedInterval).ceil();
+                        for (var i = 0; i < numb; i++) {
                           var timeValue = rem.startDate.add(
-                            Duration(days: i == 1 ? 0 : selectedInterval * i),
+                            Duration(days: selectedInterval * i),
                           );
                           fitnessNotificationManager.removeReminder(
                               rem.startDate.day + timeValue.day + 8000);

@@ -362,9 +362,7 @@ class FitnessEditScreen extends StatelessWidget {
                                 return DropdownMenuItem<String>(
                                     value: time, child: Text(time));
                               }).toList(),
-                              value: isEdit == true
-                                  ? fitnessModel.fitnessfreq
-                                  : model.selectedFreq,
+                              value: model.selectedFreq,
                               onChanged: (newFreq) {
                                 // setState(() {
                                 // model.selectedFreq = newFreq;
@@ -398,12 +396,8 @@ class FitnessEditScreen extends StatelessWidget {
                                       Theme.of(context).primaryColorLight,
                                   splashColor: Theme.of(context).primaryColor,
                                   child: Text(
-                                    localizations.formatTimeOfDay(isEdit == true
-                                        ? TimeOfDay(
-                                            hour: fitnessModel.activityTime[0],
-                                            minute:
-                                                fitnessModel.activityTime[1])
-                                        : model.activityTime),
+                                    localizations
+                                        .formatTimeOfDay(model.activityTime),
                                     style: TextStyle(
                                         fontSize: Config.xMargin(context, 4.2)),
                                   ),
@@ -479,7 +473,7 @@ class FitnessEditScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'Start - ${localizations.formatShortDate(isEdit == true ? fitnessModel.startDate : model.startDate)}',
+                                'Start - ${localizations.formatShortDate(model.startDate)}',
                                 style: TextStyle(
                                   fontSize: Config.xMargin(context, 4),
                                 ),
@@ -508,7 +502,7 @@ class FitnessEditScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'End  -  ${localizations.formatShortDate(isEdit == true ? fitnessModel.endDate : model.endDate)}',
+                                'End  -  ${localizations.formatShortDate(model.endDate)}',
                                 style: TextStyle(
                                     fontSize: Config.xMargin(context, 4)),
                               ),
@@ -632,7 +626,8 @@ class FitnessEditScreen extends StatelessWidget {
                                                     ? 4
                                                     : 1;
 
-                                    double numb = diff / selectedInterval;
+                                    int numb =
+                                        (diff / selectedInterval).floor();
                                     for (var i = 1; i < numb + 1; i++) {
                                       var timeValue = model.startDate.add(
                                         Duration(
@@ -663,7 +658,7 @@ class FitnessEditScreen extends StatelessWidget {
                                       print('${model.description}');
                                       FitnessReminder newReminder =
                                           FitnessReminder(
-                                              id: DateTime.now().toString(),
+                                              id: fitnessModel.id,
                                               activityTime: [
                                                 model.activityTime.hour,
                                                 model.activityTime.minute
@@ -705,14 +700,12 @@ class FitnessEditScreen extends StatelessWidget {
                                                       ? 4
                                                       : 1;
 
-                                      double numb = diff / selectedInterval;
-                                      for (var i = 1; i < numb + 1; i++) {
+                                      int numb =
+                                          (diff / selectedInterval).ceil();
+                                      for (var i = 0; i < numb; i++) {
                                         var oldTimeValue =
                                             fitnessModel.startDate.add(
-                                          Duration(
-                                              days: i == 1
-                                                  ? 0
-                                                  : selectedInterval * i),
+                                          Duration(days: selectedInterval * i),
                                         );
                                         fitnessNotificationManager
                                             .removeReminder(
@@ -738,14 +731,13 @@ class FitnessEditScreen extends StatelessWidget {
                                                           ? 4
                                                           : 1;
 
-                                      double newNumb =
-                                          newDiff / newSelectedInterval;
-                                      for (var i = 1; i < newNumb + 1; i++) {
+                                      int newNumb =
+                                          (newDiff / newSelectedInterval)
+                                              .ceil();
+                                      for (var i = 0; i < newNumb; i++) {
                                         var timeValue = model.startDate.add(
                                           Duration(
-                                              days: i == 1
-                                                  ? 0
-                                                  : selectedInterval * i),
+                                              days: newSelectedInterval * i),
                                         );
                                         fitnessNotificationManager
                                             .showFitnessNotificationDaily(
