@@ -22,6 +22,7 @@ class _DietCardState extends State<DietCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: Config.yMargin(context, 3)),
       padding: EdgeInsets.symmetric(
           horizontal: Config.xMargin(context, 3),
           vertical: Config.yMargin(context, 1)),
@@ -44,7 +45,7 @@ class _DietCardState extends State<DietCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '6:00PM',
+                DateFormat.jm().format(widget.diet.startDate) ?? '6:00PM',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: Config.textSize(context, 3),
@@ -69,7 +70,7 @@ class _DietCardState extends State<DietCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      DateFormat('MMMMM').format(widget.diet.startDate),
+                      DateFormat('MMMM').format(widget.diet.startDate),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: Config.textSize(context, 3),
@@ -112,7 +113,7 @@ class _DietCardState extends State<DietCard> {
               Expanded(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(widget.diet.description),
                       SizedBox(

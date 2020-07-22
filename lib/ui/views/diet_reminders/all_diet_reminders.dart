@@ -2,6 +2,7 @@ import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
+import 'package:MedBuzz/ui/widget/diet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:intl/intl.dart';
@@ -132,50 +133,63 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             Navigator.pushReplacementNamed(context, RouteNames.homePage);
             return Future.value(false);
           },
-          child: TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              model.upcomingDiets.length > 0
-                  ? ListView.builder(
-                      itemCount: model.upcomingDiets.length,
-                      itemBuilder: (context, index) =>
-                          // var diets = db.upcomingDiets;
-                          // var item = diets[index];
+          child: Container(
+            margin: EdgeInsets.only(top: Config.yMargin(context, 4)),
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                model.upcomingDiets.length > 0
+                    ? ListView.builder(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 7)),
+                        itemCount: model.upcomingDiets.length,
+                        itemBuilder: (context, index) =>
+                            // var diets = db.upcomingDiets;
+                            // var item = diets[index];
 
-                          DietReminderCard(diet: model.upcomingDiets[index]))
-                  : Container(
-                      color: Theme.of(context).backgroundColor,
-                      height: height,
-                      width: width,
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Text(
-                            'No diet reminder.\nClick the button to add one',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Config.xMargin(context, 5.55))),
-                      ),
-                    ),
-              model.pastDiets.length > 0
-                  ? ListView.builder(
-                      itemCount: model.pastDiets.length,
-                      itemBuilder: (context, index) =>
-                          model.pastDiets.length == 0
-                              ? Text('')
-                              : DietReminderCard(diet: model.pastDiets[index]),
-                    )
-                  : Container(
-                      color: Theme.of(context).backgroundColor,
-                      height: height,
-                      width: width,
-                      alignment: Alignment.center,
-                      child: Center(
-                          child: Text('No past reminder',
+                            DietCard(
+                                height: height,
+                                width: width,
+                                diet: model.upcomingDiets[index]))
+                    : Container(
+                        color: Theme.of(context).backgroundColor,
+                        height: height,
+                        width: width,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                              'No diet reminder.\nClick the button to add one',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: Config.xMargin(context, 5.55)))),
-                    )
-            ],
+                                  fontSize: Config.xMargin(context, 5.55))),
+                        ),
+                      ),
+                model.pastDiets.length > 0
+                    ? ListView.builder(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 7)),
+                        itemCount: model.pastDiets.length,
+                        itemBuilder: (context, index) =>
+                            model.pastDiets.length == 0
+                                ? Text('')
+                                : DietCard(
+                                    height: height,
+                                    width: width,
+                                    diet: model.pastDiets[index]),
+                      )
+                    : Container(
+                        color: Theme.of(context).backgroundColor,
+                        height: height,
+                        width: width,
+                        alignment: Alignment.center,
+                        child: Center(
+                            child: Text('No past reminder',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Config.xMargin(context, 5.55)))),
+                      )
+              ],
+            ),
           ),
         ),
         floatingActionButton: AnimatedOpacity(
@@ -235,8 +249,8 @@ class DietReminderCard extends StatelessWidget {
           Center(
             child: Container(
               padding: EdgeInsets.all(Config.xMargin(context, 2.22)),
-              height: Config.yMargin(context, 24.3),
-              width: Config.xMargin(context, 105.55),
+              // height: Config.yMargin(context, 24.3),
+              // width: Config.xMargin(context, 105.55),
               decoration: BoxDecoration(
                   color: Theme.of(context).primaryColorLight,
                   shape: BoxShape.rectangle,
