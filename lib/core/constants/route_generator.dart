@@ -94,8 +94,8 @@ class RouteGenerator {
       case RouteNames.forgotPasswordReset:
         return CustomSlideTransition(child: ForgotPasswordReset());
         break;
-      case RouteNames.forgotPasswordMail:
-        return CustomSlideTransition(child: ForgotPasswordMail());
+      case RouteNames.authenticationFailed:
+        return CustomSlideTransition(child: AuthenticationFailed());
         break;
       case RouteNames.singleDietScreen:
         return CustomSlideTransition(child: SingleDiet());

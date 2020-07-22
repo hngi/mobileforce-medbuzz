@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/core/constants/route_names.dart';
 
-class ForgotPasswordMail extends StatelessWidget {
+class AuthenticationFailed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(Config.xMargin(context, 1));
@@ -21,7 +22,7 @@ class ForgotPasswordMail extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(Config.xMargin(context, 7),
                   Config.yMargin(context, 25), 0, 0),
               child: Text(
-                'Reset Password',
+                'Authentication Failed',
                 style: TextStyle(
                   fontSize: Config.textSize(context, 7.8),
                   fontWeight: FontWeight.w500,
@@ -47,7 +48,8 @@ class ForgotPasswordMail extends StatelessWidget {
                 horizontal: Config.xMargin(context, 5.4),
               ),
               child: Text(
-                'A link has been sent to your mail, click to reset your password.',
+//                'A link has been sent to your mail, click to reset your password.',
+                'Authentication failed, please press the button below to return re-Authenticate user',
                 style: TextStyle(
                     fontFamily: 'Segoe UI',
                     fontSize: Config.textSize(context, 4),
@@ -71,7 +73,7 @@ class ForgotPasswordMail extends StatelessWidget {
                 ),
                 color: Theme.of(context).primaryColor,
                 child: Text(
-                  'Mail',
+                  'Back',
                   style: TextStyle(
                     color: Theme.of(context).primaryColorLight,
                     fontSize: Config.textSize(context, 3.9),
@@ -79,7 +81,9 @@ class ForgotPasswordMail extends StatelessWidget {
                   ),
                 ),
                 // When this button is pressed, it sends mail to user
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteNames.splashScreen);
+                },
               ),
             )
           ],
