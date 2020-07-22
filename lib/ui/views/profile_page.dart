@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //Code throws error with named routes
                 // Navigation().pushToAndReplace(context, LoginPage());
                 //this works
-                Navigator.of(context).pushReplacementNamed(RouteNames.login);
+                Navigator.of(context).pushReplacementNamed(RouteNames.signup);
               },
               child: Container(
                 //height: Config.yMargin(context, 0),
