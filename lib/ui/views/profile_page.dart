@@ -31,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         centerTitle: true,
@@ -54,6 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: <Widget>[
                   ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteNames.signup);
+                    },
                     title: Text('Change Username'),
                     trailing: IconButton(
                       icon: Icon(
@@ -76,7 +80,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      model.toggleAppTheme();
+                    },
                     title: Text('Dark Mode'),
                     trailing: Switch(
                         activeColor: ThemeData().primaryColor,
@@ -104,32 +110,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         value: switcher),
                   ),
                   ListTile(
-                    title: Text('Clear all Reminders'),
+                    onTap: () {
+                      deleteAllReminders();
+                    },
+                    title: Text('Clear all reminders'),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.arrow_forward_ios,
                         size: Config.xMargin(context, 4),
                       ),
                       onPressed: () {
-                        try {
-                          Provider.of<AppointmentData>(context)
-                              .deleteAppointmentReminders();
-                          Provider.of<DietReminderDB>(context)
-                              .deleteDietReminders();
-                          Provider.of<FitnessReminderCRUD>(context)
-                              .deleteFitnessReminders();
-                          Provider.of<MedicationHistoryData>(context)
-                              .deleteMedicationHistories();
-                          Provider.of<MedicationData>(context)
-                              .deleteMedicationReminders();
-                          Provider.of<WaterReminderData>(context)
-                              .deleteWaterReminders();
-                          CustomSnackBar.showSnackBar(context,
-                              text: "Reminders succefully deleted",
-                              success: true);
-                        } catch (e) {
-                          print(e);
-                        }
+                        deleteAllReminders();
                       },
                     ),
                   ),
@@ -137,40 +128,55 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          SizedBox(
-            height: Config.xMargin(context, 9),
-          ),
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                //Code throws error with named routes
-                // Navigation().pushToAndReplace(context, LoginPage());
-                //this works
-                Navigator.of(context).pushReplacementNamed(RouteNames.signup);
-              },
-              child: Container(
-                //height: Config.yMargin(context, 0),
-                width: Config.xMargin(context, 30),
-                child: Row(
-                  children: <Widget>[
-                    ImageIcon(
-                      AssetImage('images/logout.png'),
-                      color: Colors.red,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.red),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          )
+          // SizedBox(
+          //   height: Config.xMargin(context, 9),
+          // ),
+          // Center(
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       //Code throws error with named routes
+          //       // Navigation().pushToAndReplace(context, LoginPage());
+          //       //this works
+          //       Navigator.of(context).pushReplacementNamed(RouteNames.signup);
+          //     },
+          //     child: Container(
+          //       //height: Config.yMargin(context, 0),
+          //       width: Config.xMargin(context, 30),
+          //       child: Row(
+          //         children: <Widget>[
+          //           ImageIcon(
+          //             AssetImage('images/logout.png'),
+          //             color: Colors.red,
+          //           ),
+          //           SizedBox(
+          //             width: 20,
+          //           ),
+          //           Text(
+          //             'Logout',
+          //             style: TextStyle(color: Colors.red),
+          //           )
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
+  }
+
+  void deleteAllReminders() {
+    try {
+      Provider.of<AppointmentData>(context).deleteAppointmentReminders();
+      Provider.of<DietReminderDB>(context).deleteDietReminders();
+      Provider.of<FitnessReminderCRUD>(context).deleteFitnessReminders();
+      Provider.of<MedicationHistoryData>(context).deleteMedicationHistories();
+      Provider.of<MedicationData>(context).deleteMedicationReminders();
+      Provider.of<WaterReminderData>(context).deleteWaterReminders();
+      CustomSnackBar.showSnackBar(context,
+          text: "Reminders succefully deleted", success: true);
+    } catch (e) {
+      print(e);
+    }
   }
 }
