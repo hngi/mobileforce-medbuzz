@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 //import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/core/auth/auth_service.dart';
 import 'package:MedBuzz/core/constants/route_names.dart';
@@ -31,18 +32,22 @@ class StartState extends State<SplashScreen> {
   }
 
   void checkAuthentication() async {
-    if (await authenticateSession.isBiometricAvailable() == true &&
-        await authenticateSession.authSession() == false) {
-      Navigator.pushNamed(context, RouteNames.authenticationFailed);
-    } else if (await authenticateSession.isBiometricAvailable() == false) {
-      box.get('status') == 'true'
-          ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
-          : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
-    } else if (await authenticateSession.isBiometricAvailable() == true &&
-        await authenticateSession.authSession() == true) {
-      box.get('status') == 'true'
-          ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
-          : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
+    try {
+      if (await authenticateSession.isBiometricAvailable() == true &&
+          await authenticateSession.authSession() == false) {
+        Navigator.pushNamed(context, RouteNames.authenticationFailed);
+      } else if (await authenticateSession.isBiometricAvailable() == false) {
+        box.get('status') == 'true'
+            ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
+            : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
+      } else if (await authenticateSession.isBiometricAvailable() == true &&
+          await authenticateSession.authSession() == true) {
+        box.get('status') == 'true'
+            ? Navigator.pushReplacementNamed(context, RouteNames.homePage)
+            : Navigator.pushReplacementNamed(context, RouteNames.onboarding);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
