@@ -450,9 +450,10 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                     .difference(waterReminder.getDateTime())
                                     .inMinutes;
 
-                                double numb =
-                                    diff / waterReminder.selectedInterval;
-                                for (var i = 1; i < numb + 1; i++) {
+                                int numb =
+                                    (diff / waterReminder.selectedInterval)
+                                        .ceil();
+                                for (var i = 0; i < numb; i++) {
                                   if (waterReminder.selectedDay ==
                                           DateTime.now().day &&
                                       waterReminder.selectedMonth ==
@@ -460,11 +461,9 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                     var timeValue =
                                         waterReminder.getDateTime().add(
                                               Duration(
-                                                  minutes: i == 1
-                                                      ? 0
-                                                      : waterReminder
-                                                              .selectedInterval *
-                                                          i),
+                                                  minutes: waterReminder
+                                                          .selectedInterval *
+                                                      i),
                                             );
                                     if (isEdit) {
                                       // waterTakenDB.deleteAll();
