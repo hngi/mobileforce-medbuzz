@@ -38,6 +38,21 @@ class _ScheduledAppointmentsPageState extends State<ScheduledAppointmentsPage> {
     return DefaultTabController(
       length: 2,
       child: new Scaffold(
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(
+                  context, RouteNames.scheduleAppointmentScreen);
+            })
+
+        /* IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(
+                  context, RouteNames.scheduleAppointmentScreen);
+            }) */
+        ,
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).appBarTheme.color,
