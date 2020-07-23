@@ -1,6 +1,5 @@
 import 'package:MedBuzz/core/database/water_taken_data.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
-import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -155,8 +154,10 @@ class WaterScheduleViewScreen extends StatelessWidget {
             }),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Container(
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             //container wrapping all the widgets
             child: Container(
               margin: EdgeInsets.only(

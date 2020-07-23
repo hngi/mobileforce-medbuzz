@@ -1,4 +1,3 @@
-import 'package:MedBuzz/core/database/medication_history.dart';
 import 'package:MedBuzz/core/models/medication_history_model/medication_history.dart';
 import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
@@ -7,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:hive/hive.dart';
 import 'dart:math';
-
-import 'package:provider/provider.dart';
 
 class MedicationData extends ChangeNotifier {
   static const String _boxName = "medicationReminderBox";
@@ -512,6 +509,16 @@ class MedicationData extends ChangeNotifier {
     this.newHistory = null;
 
     notifyListeners();
+  }
+
+  void deleteMedicationReminders() async {
+    try {
+      var box = await Hive.openBox<MedicationReminder>(_boxName);
+      box.deleteFromDisk();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> addMedicationReminderHistory(MedicationHistory history) async {

@@ -1,6 +1,5 @@
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/core/database/water_taken_data.dart';
-import 'package:MedBuzz/core/notifications/water_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/single_water_screen.dart';
 import 'package:flutter/material.dart';

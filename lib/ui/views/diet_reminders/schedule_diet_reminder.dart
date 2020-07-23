@@ -7,6 +7,7 @@ import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
 import 'package:MedBuzz/ui/widget/scrollable_calendar.dart';
 import 'package:MedBuzz/ui/widget/time_wheel.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -268,12 +269,13 @@ class AddDietReminderScreen extends StatelessWidget {
                               //   return;
                               // }
                               if (mealNameController.text.isEmpty) {
-                                showSnackbar(context, text: 'Enter meal name');
+                                CustomSnackBar.showSnackBar(context,
+                                    text: 'Enter meal name');
                                 return;
                               }
 
                               if (model.selectedFoodClasses.length < 1) {
-                                showSnackbar(context,
+                                CustomSnackBar.showSnackBar(context,
                                     text: 'Select at least one meal category');
                                 return;
                               } else {
@@ -312,23 +314,6 @@ class AddDietReminderScreen extends StatelessWidget {
                 )),
           ),
         ));
-  }
-
-  void showSnackbar(BuildContext context,
-      {String text: "Reminder can't be set in the past"}) {
-    SnackBar snackBar = SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      duration: Duration(seconds: 2),
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: Config.textSize(context, 5.3),
-            color: Theme.of(context).primaryColorLight),
-      ),
-    );
-
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 
   Text _title(BuildContext context, String text) =>

@@ -141,7 +141,7 @@ class AllRemindersScreen extends StatelessWidget {
                       width: width * 0.2,
                       decoration: BoxDecoration(
                         color: allReminders.getButtonColor(context, index),
-                        borderRadius: BorderRadius.circular(height * 0.02),
+                        borderRadius: BorderRadius.circular(height * 0.04),
                       ),
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(left: Config.xMargin(context, 2)),
@@ -223,7 +223,7 @@ class AllRemindersScreen extends StatelessWidget {
                     visible:
                         allReminders.medicationReminderBasedOnDateTime.isEmpty,
                     child: Container(
-                      child: Text('No Medication Reminder Set for this Date'),
+                      child: Text('No medication reminder set for this date'),
                     ),
                   ),
                   for (var medicationReminder
@@ -261,7 +261,7 @@ class AllRemindersScreen extends StatelessWidget {
                       visible:
                           allReminders.waterRemindersBasedOnDateTime.isEmpty,
                       child: Container(
-                        child: Text('No Water Reminder Set for this Date'),
+                        child: Text('No water reminder set for this date'),
                       )),
                   for (var waterReminder
                       in allReminders.waterRemindersBasedOnDateTime)
@@ -291,7 +291,7 @@ class AllRemindersScreen extends StatelessWidget {
                   Visibility(
                       visible: allReminders.appointmentsBasedOnDateTime.isEmpty,
                       child: Container(
-                        child: Text('No Appointment Set for this Date'),
+                        child: Text('No appointment set for this date'),
                       )),
                   for (var appointment
                       in allReminders.appointmentsBasedOnDateTime)
@@ -320,9 +320,10 @@ class AllRemindersScreen extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.02),
                   Visibility(
-                      visible: allReminders.appointmentsBasedOnDateTime.isEmpty,
+                      visible:
+                          allReminders.dietRemindersBasedOnDateTime.isEmpty,
                       child: Container(
-                        child: Text('No Diet plan Set for this Date'),
+                        child: Text('No diet plan set for this date'),
                       )),
                   for (var diet in allReminders.dietRemindersBasedOnDateTime)
                     DietCard(

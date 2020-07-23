@@ -182,43 +182,43 @@ class DietReminderModel extends ChangeNotifier {
     this._selectedFoodClass = name;
     switch (name) {
       case 'Protein':
-        this._isProtein = true;
-        this._isCarb = false;
-        this._isDrink = false;
-        this._isFruit = false;
-        this._isVegetable = false;
+        _isProtein = true;
+        _isCarb = false;
+        _isDrink = false;
+        _isFruit = false;
+        _isVegetable = false;
         notifyListeners();
         break;
       case 'Fruit':
-        this._isProtein = false;
-        this._isCarb = false;
-        this._isDrink = false;
-        this._isFruit = true;
-        this._isVegetable = false;
+        _isProtein = false;
+        _isCarb = false;
+        _isDrink = false;
+        _isFruit = true;
+        _isVegetable = false;
         notifyListeners();
         break;
       case 'Carbohydrate':
-        this._isProtein = false;
-        this._isCarb = true;
-        this._isDrink = false;
-        this._isFruit = false;
-        this._isVegetable = false;
+        _isProtein = false;
+        _isCarb = true;
+        _isDrink = false;
+        _isFruit = false;
+        _isVegetable = false;
         notifyListeners();
         break;
       case 'Drink':
-        this._isProtein = false;
-        this._isCarb = false;
-        this._isDrink = true;
-        this._isFruit = false;
-        this._isVegetable = false;
+        _isProtein = false;
+        _isCarb = false;
+        _isDrink = true;
+        _isFruit = false;
+        _isVegetable = false;
         notifyListeners();
         break;
       case 'Vegetables':
-        this._isProtein = false;
-        this._isCarb = false;
-        this._isDrink = false;
-        this._isFruit = false;
-        this._isVegetable = true;
+        _isProtein = false;
+        _isCarb = false;
+        _isDrink = false;
+        _isFruit = false;
+        _isVegetable = true;
         notifyListeners();
         break;
     }
@@ -247,10 +247,10 @@ class DietReminderModel extends ChangeNotifier {
   }
 
   void updateSelectedTime(dynamic time) {
-    this._selectedTime = time;
+    _selectedTime = time;
     print(time);
-    print(time);
-    notifyListeners();
+    // print(time);
+    // notifyListeners();
   }
 
   void _getCurrentMonth() {
@@ -393,62 +393,62 @@ class DietReminderModel extends ChangeNotifier {
     this._selectedMonth = newMonth;
     switch (newMonth) {
       case 'January':
-        this._month = 1;
+        _month = 1;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'February':
-        this._month = 2;
+        _month = 2;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'March':
-        this._month = 3;
+        _month = 3;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'April':
-        this._month = 4;
+        _month = 4;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'May':
-        this._month = 5;
+        _month = 5;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'June':
-        this._month = 6;
+        _month = 6;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'July':
-        this._month = 7;
+        _month = 7;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'August':
-        this._month = 8;
+        _month = 8;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'September':
-        this._month = 9;
+        _month = 9;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'October':
-        this._month = 10;
+        _month = 10;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'November':
-        this._month = 11;
+        _month = 11;
         getDaysInMonth();
         notifyListeners();
         break;
       case 'December':
-        this._month = 12;
+        _month = 12;
         getDaysInMonth();
         notifyListeners();
         break;
@@ -474,13 +474,13 @@ class DietReminderModel extends ChangeNotifier {
 
   List<DietModel> get upcomingDiets {
     return _allDiets
-        .where((element) => element.startDate.isBefore(_today))
+        .where((element) => element.startDate.difference(_today).inMinutes >= 0)
         .toList();
   }
 
   List<DietModel> get pastDiets {
     return _allDiets
-        .where((element) => element.startDate.isAfter(_today))
+        .where((element) => element.startDate.difference(_today).inMinutes < 0)
         .toList();
   }
 

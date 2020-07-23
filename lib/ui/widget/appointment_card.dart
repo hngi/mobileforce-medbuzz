@@ -66,34 +66,34 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       padding: EdgeInsets.only(right: 58),
                       icon: Icon(Icons.more_vert,
                           size: Config.textSize(context, 5)),
-                      onSelected: (_) {
-                        GestureDetector(
-                          child: PopupMenuItem(
-                            child: Text('View'),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ViewAppointment(
-                                        appointment: widget.appointment,
-                                      )),
-                            );
-                            Navigator.pop(context);
-                          },
-                        );
+                      // onSelected: (_) {
+                      //   GestureDetector(
+                      //     child: PopupMenuItem(
+                      //       child: Text('View'),
+                      //     ),
+                      //     onTap: () {
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => ViewAppointment(
+                      //                   appointment: widget.appointment,
+                      //                 )),
+                      //       );
+                      //       Navigator.pop(context);
+                      //     },
+                      //   );
 
-                        GestureDetector(
-                            child: PopupMenuItem(
-                              child: Text('Delete'),
-                            ),
-                            onTap: () {
-                              notificationManager
-                                  .removeReminder(scheduleModel.selectedDay);
-                              db.deleteAppointment(widget.appointment.id);
-                              Navigator.pop(context);
-                            });
-                      },
+                      //   GestureDetector(
+                      //       child: PopupMenuItem(
+                      //         child: Text('Delete'),
+                      //       ),
+                      //       onTap: () {
+                      //         notificationManager
+                      //             .removeReminder(scheduleModel.selectedDay);
+                      //         db.deleteAppointment(widget.appointment.id);
+                      //         Navigator.pop(context);
+                      //       });
+                      // },
                       itemBuilder: (BuildContext context) {
                         return [
                           PopupMenuItem(

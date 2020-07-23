@@ -6,6 +6,7 @@ import 'package:MedBuzz/core/notifications/drug_notification_manager.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
 import '../../size_config/config.dart';
 
@@ -51,11 +52,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: medModel.isEditing
-            ? IconButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                icon: Icon(Icons.keyboard_backspace))
-            : null,
+        leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            icon: Icon(Icons.keyboard_backspace)),
         title: Text(
           appBarTitle,
           style: Theme.of(context)
@@ -72,6 +71,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
       body: Container(
         color: Theme.of(context).backgroundColor,
         child: ListView(
+          physics: BouncingScrollPhysics(),
           addRepaintBoundaries: false,
           children: <Widget>[
             SizedBox(height: Config.yMargin(context, 3)),
@@ -355,15 +355,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             DateTime.now().toString().substring(0, 16));
 
                         if (medModel.startDate.isAfter(medModel.endDate)) {
-                          Flushbar(
-                            icon: Icon(
-                              Icons.info_outline,
-                              size: 28.0,
-                              color: Colors.white,
-                            ),
-                            message: "Start date cannot be after the end date",
-                            duration: Duration(seconds: 3),
-                          )..show(context);
+                          CustomSnackBar.showSnackBar(context,
+                              text: "Start date cannot be after the end date");
                         } else if (selecDate1.isBefore(now) &&
                                 medModel.startDate.day == DateTime.now().day &&
                                 medModel.endDate.day == DateTime.now().day ||
@@ -375,15 +368,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                                 selecDate3.isBefore(now) &&
                                 medModel.startDate.day ==
                                     medModel.endDate.day) {
-                          Flushbar(
-                            icon: Icon(
-                              Icons.info_outline,
-                              size: 28.0,
-                              color: Colors.white,
-                            ),
-                            message: "Cannot set time reminder in the past",
-                            duration: Duration(seconds: 3),
-                          )..show(context);
+                          CustomSnackBar.showSnackBar(context,
+                              text: "Cannot set time reminder in the past");
                         } else if (textEditingController.text.isNotEmpty) {
                           switch (appBarTitle) {
                             case 'Add Medication':
@@ -423,7 +409,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                               await medModel.addMedicationReminder(med);
                               switch (medModel.selectedFreq) {
                                 case 'Once':
-                                  setNotification(med, med.firstTime);
+                                  await setNotification(med, med.firstTime);
                                   break;
                                 case 'Twice':
                                   setNotification(med, med.firstTime);
@@ -553,7 +539,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                           Flushbar(
                             icon: Icon(
                               Icons.check_circle,
-                              size: 28.0,
+                              size: Config.xMargin(context, 7.777),
                               color: Colors.white,
                             ),
                             backgroundColor: Colors.green,
@@ -561,15 +547,8 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
                             duration: Duration(seconds: 3),
                           )..show(context);
                         } else {
-                          Flushbar(
-                            icon: Icon(
-                              Icons.info_outline,
-                              size: 28.0,
-                              color: Colors.white,
-                            ),
-                            message: "Please enter the name of the drug",
-                            duration: Duration(seconds: 3),
-                          )..show(context);
+                          CustomSnackBar.showSnackBar(context,
+                              text: "Please enter the name of the drug");
                         }
                       },
                       child: Container(
@@ -602,7 +581,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
   }
 
 //Function to set notification
-  void setNotification(MedicationReminder med, List<int> time) {
+  Future<void> setNotification(MedicationReminder med, List<int> time) {
     //notification id has to be unique
     //Small magic to get unique value
     DateTime date = DateTime.parse(med.id);
@@ -614,13 +593,16 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     String username = userDb.user.name;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
-    notificationManager.showDrugNotificationDaily(
-        hour: time[0],
-        minute: time[1],
-        id: id,
-        //username can be replaced with the actual name of the user
-        title: "Hey $username!",
-        body: "You need to take ${med.dosage} ${med.drugName} ${med.drugType}");
+    if (med.startAt.day == DateTime.now().day) {
+      notificationManager.showDrugNotificationDaily(
+          hour: time[0],
+          minute: time[1],
+          id: id,
+          //username can be replaced with the actual name of the user
+          title: "Hey $username!",
+          body:
+              "You need to take ${med.dosage} ${med.drugName} ${med.drugType}");
+    }
   }
 
   void deleteNotification(MedicationReminder med, List<int> time) {
@@ -630,7 +612,9 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     int id = temp - secondTemp;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
-    notificationManager.removeReminder(id);
+    if (med.endAt.day == DateTime.now().day) {
+      notificationManager.removeReminder(id);
+    }
     print("Deleted Notification of id $id");
   }
 
