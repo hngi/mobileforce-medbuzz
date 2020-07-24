@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/reminders_description_card.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
 import 'package:MedBuzz/ui/widget/appointment_card.dart';
 import 'package:flutter/material.dart';

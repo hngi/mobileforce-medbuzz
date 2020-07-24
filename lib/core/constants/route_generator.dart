@@ -20,6 +20,7 @@ import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 
@@ -132,6 +133,9 @@ class RouteGenerator {
         break;
       case RouteNames.healthTips:
         return CustomSlideTransition(child: HealthTips());
+        break;
+      case RouteNames.newAllReminderScreen:
+        return CustomSlideTransition(child: NewAllReminderScreen());
         break;
 
       // case RouteNames.deleteDialog:

@@ -22,7 +22,7 @@ class ScheduleAppointmentScreen extends StatelessWidget {
     Key key,
     this.payload,
     this.appointment,
-    this.buttonText,
+    this.buttonText = "Save",
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {

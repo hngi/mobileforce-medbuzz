@@ -18,6 +18,7 @@ import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/authentication_failed_screen.dart';
@@ -72,6 +73,7 @@ class RouteNames {
   static const String healthTips = 'healthTips';
   static const String singleAppointment = 'singleAppointment';
   static const String authenticationFailed = 'authenticationFailed';
+  static const String newAllReminderScreen = 'newAllReminderScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -111,6 +113,7 @@ class RouteNames {
     RouteNames.dietScheduleScreen: (context) => DietScheduleScreen(),
     RouteNames.singleWater: (context) => SingleWater(),
     RouteNames.healthTips: (context) => HealthTips(),
+    RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
 //    RouteNames.authenticationFailed: (context) => AuthenticationFailedScreen(),
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
