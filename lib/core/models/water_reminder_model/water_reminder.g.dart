@@ -8,8 +8,8 @@ part of 'water_reminder.dart';
 
 class WaterReminderAdapter extends TypeAdapter<WaterReminder> {
   @override
-  int get typeId => 8;
-
+  // TODO: implement typeId
+  int get typeId => 9;
   @override
   WaterReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();

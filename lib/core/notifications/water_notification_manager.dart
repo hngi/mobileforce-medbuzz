@@ -1,8 +1,10 @@
+import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:MedBuzz/main.dart';
 import 'package:MedBuzz/ui/views/water_reminders/water_reminders_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../ui/views/water_reminders/water_reminders_view.dart';
 
@@ -13,6 +15,9 @@ class WaterNotificationManager {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     initNotifications();
   }
+
+  // NotificationData notificationDB =
+  //     Provider.of<NotificationData>(MyApp.navigatorKey.currentState.context);
 
   getNotificationInstance() {
     return flutterLocalNotificationsPlugin;
@@ -35,6 +40,7 @@ class WaterNotificationManager {
     var time = new Time(dateTime.hour, dateTime.minute, 0);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         id, title, body, time, getPlatformChannelSpecfics(id));
+
     print(
         'Notification Succesfully Scheduled at ${time.hour.toString()}:${time.minute.toString()}  with id of $id');
   }
@@ -47,6 +53,7 @@ class WaterNotificationManager {
       int id, String title, String body, DateTime time) async {
     await flutterLocalNotificationsPlugin.schedule(
         id, title, body, time, getPlatformChannelSpecfics(id));
+
     print(
         'Notification Succesfully Scheduled at ${time.toString()} with id of $id');
   }
@@ -63,6 +70,7 @@ class WaterNotificationManager {
 
   Future onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
+    // print(notificationDB.notificationCount);
     return Future.value(1);
   }
 

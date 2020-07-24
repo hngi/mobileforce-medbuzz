@@ -1,5 +1,7 @@
+import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/database/water_taken_data.dart';
+import 'package:MedBuzz/core/models/notification_model/notification_model.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/water_reminders/schedule_water_reminder_model.dart';
@@ -29,6 +31,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userDb = Provider.of<UserCrud>(context);
+    var notificationDB = Provider.of<NotificationData>(context);
     userDb.getuser();
     var waterReminder =
         Provider.of<ScheduleWaterReminderViewModel>(context, listen: true);
@@ -483,15 +486,26 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                               60);
                                       // }
                                     }
-                                    waterNotificationManager.showWaterNotificationDaily(
-                                        id: waterReminder.selectedDay +
-                                            timeValue.minute +
-                                            60,
-                                        title:
-                                            'Hi ${userDb.user?.name}, It\' s time to take some water',
-                                        body:
-                                            'Take ${waterReminder.selectedMl} ml of Water ',
-                                        dateTime: timeValue);
+                                    NotificationModel notificationModel =
+                                        NotificationModel(
+                                            id: (waterReminder.selectedDay +
+                                                    timeValue.minute +
+                                                    60)
+                                                .toString(),
+                                            dateTime: timeValue,
+                                            reminderType: 'water-reminder');
+                                    notificationDB
+                                        .addNotification(notificationModel)
+                                        .then((_) => waterNotificationManager
+                                            .showWaterNotificationDaily(
+                                                id: waterReminder.selectedDay +
+                                                    timeValue.minute +
+                                                    60,
+                                                title:
+                                                    'Hi ${userDb.user?.name}, It\' s time to take some water',
+                                                body:
+                                                    'Take ${waterReminder.selectedMl} ml of Water ',
+                                                dateTime: timeValue));
                                   }
                                 }
                                 isEdit

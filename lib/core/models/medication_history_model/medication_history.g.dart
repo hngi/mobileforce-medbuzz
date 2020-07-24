@@ -8,7 +8,8 @@ part of 'medication_history.dart';
 
 class MedicationHistoryAdapter extends TypeAdapter<MedicationHistory> {
   @override
-  int get typeId => 9;
+  // TODO: implement typeId
+  int get typeId => 4;
   @override
   MedicationHistory read(BinaryReader reader) {
     var numOfFields = reader.readByte();

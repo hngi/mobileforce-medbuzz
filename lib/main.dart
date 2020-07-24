@@ -4,6 +4,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/core/models/notification_model/notification_model.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:MedBuzz/core/models/water_reminder_model/water_drank.dart';
 import 'package:MedBuzz/core/providers/providers.dart';
@@ -32,6 +33,7 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(WaterDrankAdapter());
   Hive.registerAdapter(MedicationHistoryAdapter());
+  Hive.registerAdapter(NotificationModelAdapter());
   await Hive.openBox('onboarding');
   runApp(
     MyApp(),
