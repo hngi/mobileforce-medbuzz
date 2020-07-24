@@ -108,7 +108,8 @@ class _MyScheduleAppointmentScreenState
           context: context,
           title: 'Add your appointment',
           onPressed: () {
-            Navigator.pushReplacementNamed(context, RouteNames.homePage);
+            // Navigator.pushReplacementNamed(context, RouteNames.homePage);
+            Navigator.pop(context);
           }),
       backgroundColor: bgColor,
       body: SingleChildScrollView(
