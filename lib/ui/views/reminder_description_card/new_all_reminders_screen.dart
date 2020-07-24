@@ -75,6 +75,8 @@ class NewAllReminderScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
+                                  //this should be replaced with the design asset
+                                  //was just trying some things
                                   Container(
                                       width: width * .45,
                                       height: height * .18,
