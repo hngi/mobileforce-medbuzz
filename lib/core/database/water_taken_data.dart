@@ -6,14 +6,9 @@ class WaterTakenData extends ChangeNotifier {
   static const String _boxName = "waterTakenBox";
 
   List<WaterDrank> _waterTaken = [];
-  // List<WaterReminder> _sortedReminders = [];
 
   List<WaterDrank> get waterTaken => _waterTaken;
-  // List<WaterReminder> get sortedReminders => _sortedReminders;
 
-  // WaterReminder _activeWaterReminder;
-  // bool done = false;
-  // bool skip = false;
   void getWaterTaken() async {
     try {
       var box = await Hive.openBox<WaterDrank>(_boxName);
@@ -25,18 +20,6 @@ class WaterTakenData extends ChangeNotifier {
       print(e);
     }
   }
-
-  // WaterReminder getWaterReminder(index) {
-  //   return _waterTaken[index];
-  // }
-
-  // int get currentLevel => _waterTaken
-  //     .map((e) => e.ml)
-  //     .reduce((value, element) => value + element);
-
-  // int get totalLevel => _waterTaken
-  //     .map((e) => e.ml)
-  //     .reduce((value, element) => value + element);
 
   Future<void> addWaterTaken(int ml, DateTime dateTime) async {
     var box = await Hive.openBox<WaterDrank>(_boxName);
@@ -56,13 +39,6 @@ class WaterTakenData extends ChangeNotifier {
       await Hive.openBox<WaterDrank>(_boxName)
           .then((value) => value.delete(key));
 
-      //delete the water reminder
-      // print(box.get(key));
-      // box.close();
-      // getWaterTaken();
-      // then reinitialise the water reminders
-      // _waterTaken = box.values.toList();
-
       notifyListeners();
     } catch (e) {
       print(e);
@@ -76,13 +52,6 @@ class WaterTakenData extends ChangeNotifier {
           await deleteWaterTaken(item.dateTime.toString());
         }
       });
-
-      //delete the water reminder
-      // print(box.get(key));
-      // box.close();
-      // getWaterTaken();
-      // then reinitialise the water reminders
-      // _waterTaken = box.values.toList();
 
       notifyListeners();
     } catch (e) {
@@ -102,20 +71,6 @@ class WaterTakenData extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  // void setActiveWaterReminder(key) async {
-  //   var box = await Hive.openBox<WaterReminder>(_boxName);
-
-  //   _activeWaterReminder = box.get(key);
-
-  //   notifyListeners();
-  // }
-
-  // List<WaterReminder> getActiveReminders() {
-  //   // var today = DateTime.now().add(Duration(days: 5));
-
-  //   return _waterTaken;
-  // }
 
   int get waterTakenCount {
     return _waterTaken.length;
@@ -146,14 +101,3 @@ class WaterTakenData extends ChangeNotifier {
     return value.isNaN ? 0.0 : value;
   }
 }
-//  return currentLevel <= 100
-//         ? 0
-//         : currentLevel <= 500
-//             ? 0.2
-//             : currentLevel < 1500
-//                 ? 0.3
-//                 : currentLevel == 1500
-//                     ? 0.5
-//                     : currentLevel <= 2000
-//                         ? 0.6
-//                         : currentLevel < 3000 ? 0.8 : 1;
