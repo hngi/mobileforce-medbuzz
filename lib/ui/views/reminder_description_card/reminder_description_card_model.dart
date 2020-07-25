@@ -5,6 +5,7 @@ import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminde
 import 'package:flutter/material.dart';
 
 class ReminderDescriptionCardModel extends ChangeNotifier {
+  //gets name of notification depending on the type
   String getReminderName(dynamic model) {
     // return model is Appointment
     //     ? model.appointmentType
@@ -37,6 +38,7 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
     }
   }
 
+  //gets image of notification depending on the type
   String getImage(dynamic model) {
     // return model is Appointment
     //     ? "images/calender.png"
@@ -72,6 +74,7 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
 
   void getDate() {}
 
+//checks the total points depending on the notification type
   int getTotalPoints(model, db) {
     switch (model.reminderType) {
       case 'water-model':
