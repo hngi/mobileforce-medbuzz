@@ -1,6 +1,7 @@
 import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/badge/badge_screen.dart';
+import 'package:MedBuzz/ui/views/badge/badges.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/reminders_description_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -145,7 +146,7 @@ class NewAllReminderScreen extends StatelessWidget {
                 ),
               ),
             ),
-            BadgesScreen()
+            Badges()
           ])),
     );
   }
