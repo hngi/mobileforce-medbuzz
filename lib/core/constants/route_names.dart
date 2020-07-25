@@ -2,6 +2,7 @@ import 'package:MedBuzz/core/models/Badge/badge.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/badges/badges.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -76,6 +77,7 @@ class RouteNames {
   static const String authenticationFailed = 'authenticationFailed';
   static const String newAllReminderScreen = 'newAllReminderScreen';
   static const String badgesScreen = 'badgesScreen';
+  static const String badgeCollection = 'badgeCollection';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -117,6 +119,7 @@ class RouteNames {
     RouteNames.healthTips: (context) => HealthTips(),
     RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
     RouteNames.badgesScreen: (context) => BadgesScreen(),
+    RouteNames.badgeCollection: (context) => Badges()
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
