@@ -14,6 +14,8 @@ class MedicationsSchedulesModel extends ChangeNotifier {
   bool isExpanded = false;
   DateTime _selectedDay = DateTime.now();
   List<MedicationReminder> _availableMedicationReminders = [];
+  List<MedicationReminder> get availableMedicationReminders =>
+      _availableMedicationReminders;
 
   static List<String> months = [
     'JANUARY',

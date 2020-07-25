@@ -13,6 +13,8 @@ import 'package:MedBuzz/ui/views/diet_reminders/diet_reminders_model.dart';
 import 'package:MedBuzz/ui/views/home_screen/home_screen_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_model.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_model.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/new_fitness_card/fitness_card_model.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/new_medication_card/medication_card_model.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_card_model.dart';
 
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_screen_model.dart';
@@ -44,6 +46,8 @@ final providers = <SingleChildCloneableWidget>[
   ChangeNotifierProvider(create: (_) => UserCrud()),
   ChangeNotifierProvider(create: (_) => MedicationHistoryData()),
   ChangeNotifierProvider(create: (_) => NotificationData()),
+  ChangeNotifierProvider(create: (_) => NewMedicationCardModel()),
+  ChangeNotifierProvider(create: (_) => NewFitnessCardModel()),
   ChangeNotifierProvider(create: (_) => ReminderDescriptionCardModel()),
   ChangeNotifierProvider(create: (_) => NewAllReminderModel()),
 ];
