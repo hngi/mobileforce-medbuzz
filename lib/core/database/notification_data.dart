@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/models/notification_model/notification_model.dart';
+import 'package:MedBuzz/core/models/user_model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -97,6 +98,26 @@ class NotificationData extends ChangeNotifier {
     _notifications = box.values.toList();
     box.close();
 
+    // to get the user points
+    var userBox = await Hive.openBox<User>('userBoxName');
+    User user = userBox.values.toList()[0];
+    // userBox.close();
+
+//add 5 points if they are completing the notification and add nothing if they skip it
+    var addedPoints = action == true
+        ? (user.pointsGained ?? 0) + 5
+        : (user.pointsGained ?? 0) + 0;
+    var updatedUser = User(
+      name: user.name,
+      id: user.id,
+      pointsGained: addedPoints,
+    );
+
+    userBox.put('userName', updatedUser);
+    userBox.close();
+
+    //logic to match user points with badge points should go here
+
     notifyListeners();
   }
 
@@ -106,9 +127,9 @@ class NotificationData extends ChangeNotifier {
       //check if notification has start and end date or is just one time i.e only has startDate
       //then check if the notification has a daily recurrence, returns all for the present day
       if (element.recurrence == 'Daily') {
-        if (element.dateTime.hour >= DateTime.now().hour) {
-          result.add(element);
-        }
+        // if (element.dateTime.hour >= DateTime.now().hour) {
+        result.add(element);
+        // }
       } else {
         if (element.dateTime.difference(DateTime.now()).inDays >= 0) {
           result.add(element);
@@ -124,9 +145,9 @@ class NotificationData extends ChangeNotifier {
       //check if notification has start and end date or is just one time i.e only has startDate
       //then check if the notification has a daily recurrence, returns all for the present day
       if (element.recurrence == 'Daily') {
-        if (element.dateTime.hour >= DateTime.now().hour) {
-          result.add(element);
-        }
+        // if (element.dateTime.hour >= DateTime.now().hour) {
+        result.add(element);
+        // }
       } else {
         //checks across 7 days for weekly
         if (element.dateTime.difference(DateTime.now()).inDays >= 7) {
@@ -143,9 +164,9 @@ class NotificationData extends ChangeNotifier {
       //check if notification has start and end date or is just one time i.e only has startDate
       //then check if the notification has a daily recurrence, returns all for the present day
       if (element.recurrence == 'Daily') {
-        if (element.dateTime.hour >= DateTime.now().hour) {
-          result.add(element);
-        }
+        // if (element.dateTime.hour >= DateTime.now().hour) {
+        result.add(element);
+        // }
       } else {
         //check if the same month and year
         if (element.dateTime.month == DateTime.now().month &&
