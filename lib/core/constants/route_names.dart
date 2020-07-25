@@ -1,7 +1,7 @@
-import 'package:MedBuzz/core/models/Badge/badge.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
+import 'package:MedBuzz/ui/views/badge/badge_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
