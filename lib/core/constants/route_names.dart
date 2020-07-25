@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/models/Badge/badge.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
@@ -74,6 +75,7 @@ class RouteNames {
   static const String singleAppointment = 'singleAppointment';
   static const String authenticationFailed = 'authenticationFailed';
   static const String newAllReminderScreen = 'newAllReminderScreen';
+  static const String badgesScreen = 'badgesScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -114,7 +116,7 @@ class RouteNames {
     RouteNames.singleWater: (context) => SingleWater(),
     RouteNames.healthTips: (context) => HealthTips(),
     RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
-//    RouteNames.authenticationFailed: (context) => AuthenticationFailedScreen(),
+    RouteNames.badgesScreen: (context) => BadgesScreen(),
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };

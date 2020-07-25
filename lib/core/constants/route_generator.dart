@@ -1,4 +1,5 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/models/Badge/badge.dart';
 import 'package:MedBuzz/ui/navigation/page_transition/page_transition.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
@@ -136,6 +137,9 @@ class RouteGenerator {
         break;
       case RouteNames.newAllReminderScreen:
         return CustomSlideTransition(child: NewAllReminderScreen());
+        break;
+      case RouteNames.badgesScreen:
+        return CustomSlideTransition(child: BadgesScreen());
         break;
 
       // case RouteNames.deleteDialog:
