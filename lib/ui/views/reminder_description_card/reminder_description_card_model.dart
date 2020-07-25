@@ -3,6 +3,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReminderDescriptionCardModel extends ChangeNotifier {
   String getReminderName(dynamic model) {
@@ -29,7 +30,27 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
                     : 'images/dropoutline.png';
   }
 
-  void getTime() {}
+  String getTime(dynamic model) {
+    //  return model is Appointment
+    //     ? _formatDate(model.date)
+    //     : model is DietModel
+    //         ? _formatDate(model.startDate)
+    //         : model is FitnessReminder
+    //             ? _formatDate(model.startDate)
+    //             : _formatDate(model.startAt);
+  }
 
-  void getDate() {}
+  String getDate(dynamic model) {
+    return model is Appointment
+        ? _formatDate(model.date)
+        : model is DietModel
+            ? _formatDate(model.startDate)
+            : model is FitnessReminder
+                ? _formatDate(model.startDate)
+                : _formatDate(model.startAt);
+  }
+}
+
+String _formatDate(DateTime date) {
+  return DateFormat.yMMMMd().format(date);
 }
