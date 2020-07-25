@@ -437,6 +437,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                               waterReminder.selectedStartTime != null
                           ? () async {
                               //here the function to save the schedule can be executed, by formatting the selected date as _today.year-selectedMonth-selectedDay i.e YYYY-MM-DD
+                              var today = DateTime.now();
                               await waterReminderDB
                                   .addWaterReminder(!isEdit
                                       ? waterReminder.createSchedule()
@@ -448,7 +449,7 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                           startTime: waterReminder
                                                   ?.getDateTime() ??
                                               selectedWaterReminder.startTime,
-                                          id: DateTime.now().toString(),
+                                          id: today.toString(),
                                           endTime:
                                               waterReminder?.getEndDateTime() ??
                                                   selectedWaterReminder.endTime,
@@ -493,7 +494,12 @@ class ScheduleWaterReminderScreen extends StatelessWidget {
                                                     60)
                                                 .toString(),
                                             dateTime: timeValue,
-                                            reminderType: 'water-reminder');
+                                            recurrence: 'Daily',
+                                            reminderId: today.toString(),
+                                            endTime: waterReminder
+                                                    ?.getEndDateTime() ??
+                                                selectedWaterReminder.endTime,
+                                            reminderType: 'water-model');
                                     notificationDB
                                         .addNotification(notificationModel)
                                         .then((_) => waterNotificationManager

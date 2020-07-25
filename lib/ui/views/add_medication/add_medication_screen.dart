@@ -593,6 +593,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     String username = userDb.user.name;
 
     DrugNotificationManager notificationManager = DrugNotificationManager();
+
     if (med.startAt.day == DateTime.now().day) {
       notificationManager.showDrugNotificationDaily(
           hour: time[0],
