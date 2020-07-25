@@ -16,7 +16,7 @@ import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_re
 import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
-import 'package:MedBuzz/ui/views/badges/badges.dart';
+import 'package:MedBuzz/ui/views/badge/badges.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';

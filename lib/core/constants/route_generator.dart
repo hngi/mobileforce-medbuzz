@@ -24,7 +24,7 @@ import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/badges/badges.dart';
+import 'package:MedBuzz/ui/views/badge/badges.dart';
 
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
