@@ -61,31 +61,30 @@ class AuthenticationFailed extends StatelessWidget {
               height: Config.yMargin(context, 8.19),
             ),
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: Config.xMargin(context, 7.3),
-              ),
-              height: Config.yMargin(context, 7.2),
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(Config.yMargin(context, 1.28)),
-                  ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Config.xMargin(context, 7.3),
                 ),
-                color: Theme.of(context).primaryColor,
-                child: Text(
-                  'Back',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColorLight,
-                    fontSize: Config.textSize(context, 3.9),
-                    fontWeight: FontWeight.bold,
+                height: Config.yMargin(context, 7.2),
+                child: FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(Config.yMargin(context, 1.28)),
+                    ),
                   ),
-                ),
-                // When this button is pressed, it sends mail to user
-                onPressed: () {
-                  Navigator.pushNamed(context, RouteNames.splashScreen);
-                },
-              ),
-            )
+                  color: Theme.of(context).primaryColor,
+                  child: Text(
+                    'Back',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorLight,
+                      fontSize: Config.textSize(context, 3.9),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  // When this button is pressed, it sends mail to user
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.splashScreen);
+                  },
+                )),
           ],
         ),
       )),
