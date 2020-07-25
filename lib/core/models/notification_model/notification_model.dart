@@ -7,7 +7,7 @@ class NotificationModel {
   @HiveField(0)
   final String reminderType;
 
-  @HiveField(0)
+  @HiveField(7)
   final String reminderId;
 
   @HiveField(1)
@@ -17,15 +17,25 @@ class NotificationModel {
   final DateTime dateTime;
 
   @HiveField(3)
-  final bool isClicked;
+  final DateTime endTime;
+
+  @HiveField(4)
+  final bool isDone;
+
+  @HiveField(5)
+  final bool isSkipped;
+
+  @HiveField(6)
+  final String recurrence;
 
   NotificationModel(
       //other fields can be marked required depending on requirements
-      {
-    this.isClicked = false,
-    this.reminderType,
-    this.reminderId,
-    this.dateTime,
-    this.id,
-  });
+      {this.isSkipped = false,
+      this.isDone = false,
+      this.endTime,
+      this.reminderType,
+      this.reminderId,
+      this.dateTime,
+      this.id,
+      this.recurrence});
 }

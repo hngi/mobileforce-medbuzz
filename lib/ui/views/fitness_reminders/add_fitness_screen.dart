@@ -1,4 +1,6 @@
 import 'package:MedBuzz/core/constants/route_names.dart';
+import 'package:MedBuzz/core/database/notification_data.dart';
+import 'package:MedBuzz/core/models/notification_model/notification_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class FitnessEditScreen extends StatelessWidget {
         FitnessNotificationManager();
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     var model = Provider.of<FitnessReminderCRUD>(context);
+    var notificationDB = Provider.of<NotificationData>(context);
 
     void printStatements() {
       print([
@@ -556,9 +559,10 @@ class FitnessEditScreen extends StatelessWidget {
                                 } else if (model.description.isNotEmpty) {
                                   if (isEdit == false) {
                                     print('${model.description}');
+                                    var today = DateTime.now().toString();
                                     FitnessReminder newReminder =
                                         FitnessReminder(
-                                            id: DateTime.now().toString(),
+                                            id: today,
                                             activityTime: [
                                               model.activityTime.hour,
                                               model.activityTime.minute
@@ -608,20 +612,36 @@ class FitnessEditScreen extends StatelessWidget {
                                                 ? 0
                                                 : selectedInterval * i),
                                       );
-                                      fitnessNotificationManager
-                                          .showFitnessNotificationDaily(
-                                              id: model.startDate.day +
-                                                  timeValue.day +
-                                                  8000,
-                                              title:
-                                                  "Hey It's Time to Go For ${newReminder.fitnesstype}",
-                                              body:
-                                                  "For ${model.minDaily} minutes",
-                                              dateTime: timeValue.add(Duration(
-                                                hours: model.activityTime.hour,
-                                                minutes:
-                                                    model.activityTime.minute,
-                                              )));
+                                      NotificationModel notificationModel =
+                                          NotificationModel(
+                                        id: (model.startDate.day +
+                                                timeValue.day +
+                                                300000)
+                                            .toString(),
+                                        dateTime: timeValue,
+                                        recurrence: 'Once',
+                                        reminderId: today,
+                                        endTime: model.endDate,
+                                        reminderType: 'fitness-model',
+                                      );
+                                      notificationDB
+                                          .addNotification(notificationModel)
+                                          .then((_) => fitnessNotificationManager
+                                              .showFitnessNotificationDaily(
+                                                  id: model.startDate.day +
+                                                      timeValue.day +
+                                                      300000,
+                                                  title:
+                                                      "Hey It's Time to Go For ${newReminder.fitnesstype}",
+                                                  body:
+                                                      "For ${model.minDaily} minutes",
+                                                  dateTime:
+                                                      timeValue.add(Duration(
+                                                    hours:
+                                                        model.activityTime.hour,
+                                                    minutes: model
+                                                        .activityTime.minute,
+                                                  ))));
                                     }
 
                                     Navigator.popAndPushNamed(context,

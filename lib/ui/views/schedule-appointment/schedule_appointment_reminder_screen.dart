@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:MedBuzz/core/database/appointmentData.dart';
+import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
+import 'package:MedBuzz/core/models/notification_model/notification_model.dart';
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
@@ -88,6 +90,7 @@ class _MyScheduleAppointmentScreenState
 
     var appointmentReminderDB =
         Provider.of<AppointmentData>(context, listen: true);
+    var notificationDB = Provider.of<NotificationData>(context);
 
     // appointmentReminderDB.getAppointments();
     AppointmentNotificationManager notificationManager =
@@ -374,9 +377,10 @@ class _MyScheduleAppointmentScreenState
                                     appointmentReminder
                                         .setSelectedTypeOfAppointment(
                                             _typeOfAppointmentController.text);
-
-                                    await appointmentReminderDB.addAppointment(
-                                        appointmentReminder.createSchedule());
+                                    var newAppointment =
+                                        appointmentReminder.createSchedule();
+                                    await appointmentReminderDB
+                                        .addAppointment(newAppointment);
 
                                     // if (appointmentReminder.selectedDay ==
                                     //         DateTime.now().day &&
@@ -392,12 +396,28 @@ class _MyScheduleAppointmentScreenState
                                     String notifId = id.length < 11
                                         ? id
                                         : id.substring(0, 10);
-                                    notificationManager
-                                        .showAppointmentNotificationOnce(
-                                            num.parse(notifId),
-                                            'Hey, you\'ve got somewhere to go',
-                                            ' ${_typeOfAppointmentController.text} ',
-                                            appointmentReminder.getDateTime());
+
+                                    //create notification to have same id of scheduled notificiation
+                                    NotificationModel notificationModel =
+                                        NotificationModel(
+                                      id: num.parse(notifId).toString(),
+                                      //dateTime should always be the time the notification would go off
+                                      dateTime:
+                                          appointmentReminder.getDateTime(),
+                                      recurrence: 'Once',
+                                      reminderId: newAppointment.id,
+                                      reminderType: 'appointment-model',
+                                    );
+                                    notificationDB
+                                        .addNotification(notificationModel)
+                                        .then((_) => notificationManager
+                                            .showAppointmentNotificationOnce(
+                                                //same id of notification model
+                                                num.parse(notifId),
+                                                'Hey, you\'ve got somewhere to go',
+                                                ' ${_typeOfAppointmentController.text} ',
+                                                appointmentReminder
+                                                    .getDateTime()));
 
                                     Navigator.popAndPushNamed(
                                         context, RouteNames.homePage);
