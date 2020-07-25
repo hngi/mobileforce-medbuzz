@@ -547,6 +547,11 @@ class FitnessEditScreen extends StatelessWidget {
                                     text:
                                         "Start date cannot be after the end date",
                                   );
+                                } else if (model.description.isEmpty) {
+                                  CustomSnackBar.showSnackBar(
+                                    context,
+                                    text: "Please enter a description",
+                                  );
                                 } else if (timeSet.isBefore(now) &&
                                     model.startDate.day == DateTime.now().day &&
                                     model.endDate.day == DateTime.now().day) {
