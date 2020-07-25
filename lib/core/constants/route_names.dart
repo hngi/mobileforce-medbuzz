@@ -16,6 +16,7 @@ import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_re
 import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
+import 'package:MedBuzz/ui/views/badge/badges.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
@@ -76,6 +77,7 @@ class RouteNames {
   static const String authenticationFailed = 'authenticationFailed';
   static const String newAllReminderScreen = 'newAllReminderScreen';
   static const String badgesScreen = 'badgesScreen';
+  static const String badgeCollection = 'badgeCollection';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -117,6 +119,7 @@ class RouteNames {
     RouteNames.healthTips: (context) => HealthTips(),
     RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
     RouteNames.badgesScreen: (context) => BadgesScreen(),
+    RouteNames.badgeCollection: (context) => Badges()
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
