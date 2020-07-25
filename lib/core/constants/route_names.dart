@@ -1,8 +1,7 @@
-import 'package:MedBuzz/core/models/Badge/badge.dart';
 import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
-import 'package:MedBuzz/ui/views/badges/badges.dart';
+import 'package:MedBuzz/ui/views/badge/badge_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -17,6 +16,7 @@ import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_re
 import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
+import 'package:MedBuzz/ui/views/badges/badges.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
