@@ -230,8 +230,8 @@ class FitnessReminderCRUD extends ChangeNotifier {
         now.year, now.month, now.day, activityTime.hour, activityTime.minute);
   }
 
-  DateTime get selectedDateTime =>
-      DateTime(_today.year, _selectedMonth, _selectedDay);
+  DateTime get selectedDateTime => DateTime.now();
+  //DateTime(_today.year, _selectedMonth, _selectedDay);
 
   void updateAvailableFitnessReminders(List<FitnessReminder> fitnessReminders) {
     _availableFitnessReminders = fitnessReminders;
