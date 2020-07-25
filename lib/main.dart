@@ -59,8 +59,7 @@ class MaterialAPP extends StatelessWidget {
         navigatorObservers: [BotToastNavigatorObserver()],
         title: 'MedBuzz',
         theme: Provider.of<DarkModeModel>(context).appTheme,
-//        initialRoute: RouteNames.splashScreen,
-        initialRoute: RouteNames.badgeCollection,
+        initialRoute: RouteNames.splashScreen,
         //Routes now need to be named in the RoutesName class and returned from the generatedRoute function
         //in the RouteGenerator class
         //This update handles page transitions
