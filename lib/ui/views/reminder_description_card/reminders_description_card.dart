@@ -1,10 +1,7 @@
-import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_card_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 
 class RemindersDescriptionCard extends StatefulWidget {
   final double height;
@@ -27,12 +24,8 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
   @override
   Widget build(BuildContext context) {
     var model = Provider.of<ReminderDescriptionCardModel>(context);
-    var notificationDB = Provider.of<NotificationData>(context);
-    notificationDB.getNotifications();
     // final double boxHeight = MediaQuery.of(context).size.height;
     // initializeDateFormatting();
-    int progress = model.getCompletedPoints(widget.model, notificationDB);
-    int total = model.getTotalPoints(widget.model, notificationDB);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Config.yMargin(context, 1.5)),
       child: Container(
@@ -106,7 +99,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                             ),
                             SizedBox(width: Config.xMargin(context, 1.5)),
                             Text(
-                              '$progress/$total',
+                              '25/50',
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -118,12 +111,10 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                         Row(
                           children: <Widget>[
                             //text widget for time
-                            Text(
-                                DateFormat('jm').format(widget.model.dateTime)),
+                            Text('6:30 AM'),
                             SizedBox(width: Config.xMargin(context, 1)),
                             //Text widget for date
-                            Text(DateFormat('E d MMMM, y')
-                                .format(widget.model.dateTime))
+                            Text('15th July, 2020')
                           ],
                         )
                       ],
@@ -131,11 +122,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                     SizedBox(width: Config.xMargin(context, 10)),
                     //share button
                     GestureDetector(
-                      onTap: () {
-                        Share.share(
-                            'I successfully gained $progress/$total points for ${model.getReminderName(widget.model)} this week',
-                            subject: 'Medbuzz Progress Report');
-                      },
+                      onTap: () {},
                       child: Container(
                           child: Column(children: <Widget>[
                         Icon(
@@ -165,29 +152,14 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                   children: <Widget>[
                     RowButton(
                         iconColor: Colors.red,
-                        text:
-                            widget.model.isSkipped == true ? 'Skipped' : "Skip",
+                        text: "Skip",
                         icon: Icons.clear,
-                        onPressed: () {
-                          //only skip if not already skipped
-                          // print('jj');
-                          widget.model.isSkipped == false
-                              ? notificationDB.handleNotification(
-                                  widget.model, false)
-                              : null;
-                        }),
+                        onPressed: () {}),
                     RowButton(
                         iconColor: Colors.green,
-                        text:
-                            widget.model.isDone == true ? 'Completed' : "Done",
+                        text: "Done",
                         icon: Icons.check,
-                        onPressed: () {
-                          //only complete when not completed
-                          widget.model.isDone == false
-                              ? notificationDB.handleNotification(
-                                  widget.model, true)
-                              : null;
-                        }),
+                        onPressed: () {}),
                   ],
                 )
               ])),
@@ -213,7 +185,7 @@ class RowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () => onPressed,
       child: Container(
           child: isColumn
               ? Column(

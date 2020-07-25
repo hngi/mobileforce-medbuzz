@@ -14,18 +14,18 @@ class _BadgesScreenState extends State<BadgesScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: Theme.of(context).backgroundColor,
-        // appBar: AppBar(
-        //   backgroundColor: Theme.of(context).backgroundColor,
-        //   elevation: 0,
-        //   centerTitle: true,
-        //   title: Text(
-        //     'Badge',
-        //     style: TextStyle(
-        //         color: Theme.of(context).primaryColorDark,
-        //         fontWeight: FontWeight.w600),
-        //   ),
-        // ),
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).backgroundColor,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'Badge',
+            style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
           child: ListView(
