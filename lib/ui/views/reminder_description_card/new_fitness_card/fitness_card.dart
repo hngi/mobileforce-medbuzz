@@ -1,37 +1,36 @@
-import 'package:MedBuzz/core/database/medication_data.dart';
-import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
-import 'package:MedBuzz/ui/views/reminder_description_card/new_medication_card/medication_card_model.dart';
+import 'package:MedBuzz/core/database/fitness_reminder.dart';
+import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/new_fitness_card/fitness_card_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class NewMedicationCard extends StatefulWidget {
+class NewFitnessCard extends StatefulWidget {
   final double height;
   final double width;
-  final String time;
-  final MedicationReminder medRem;
+  final FitnessReminder fitnessReminder;
 
-  NewMedicationCard({
-    this.medRem,
-    this.time,
+  NewFitnessCard({
+    this.fitnessReminder,
     Key key,
     this.height,
     this.width,
   }) : super(key: key);
 
   @override
-  _NewMedicationCardState createState() => _NewMedicationCardState();
+  _NewFitnessCardState createState() => _NewFitnessCardState();
 }
 
-class _NewMedicationCardState extends State<NewMedicationCard> {
+class _NewFitnessCardState extends State<NewFitnessCard> {
   bool visibilty = true;
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<NewMedicationCardModel>(context);
-    var dbModel = Provider.of<MedicationData>(context);
-    dbModel.getMedicationReminder();
+    //Provider.of<FitnessReminderCRUD>(context).getReminders();
+    var model = Provider.of<NewFitnessCardModel>(context);
+    var fitnessModel = Provider.of<FitnessReminderCRUD>(context);
+    fitnessModel.getReminders();
     // final double boxHeight = MediaQuery.of(context).size.height;
     // initializeDateFormatting();
     return Padding(
@@ -41,7 +40,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
         child: Container(
             padding:
                 EdgeInsets.symmetric(horizontal: Config.xMargin(context, 2)),
-            width: MediaQuery.of(context).size.width,
+            width: widget.width,
             //height: widget.height * .2,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Config.xMargin(context, 6)),
@@ -64,7 +63,8 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                       //circle avatar for reminder image
                       CircleAvatar(
                         child: Image.asset(
-                          dbModel.images[int.parse(widget.medRem.index)],
+                          fitnessModel
+                              .activityType[widget.fitnessReminder.index],
                           fit: BoxFit.cover,
                         ),
                         radius: Config.xMargin(context, 5.55),
@@ -76,12 +76,8 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                       Container(
                         color:
                             Theme.of(context).primaryColorDark.withOpacity(.5),
-                        height:
-                            //Config.yMargin(context, 7),
-                            widget.height * 0.07,
-                        width:
-                            //MediaQuery.of(context).size.width,
-                            widget.width * 0.001,
+                        height: widget.height * 0.07,
+                        width: widget.width * 0.001,
                         child: VerticalDivider(),
                       ),
                       SizedBox(width: Config.xMargin(context, 4)),
@@ -92,7 +88,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                           Container(
                             width: MediaQuery.of(context).size.width * .4,
                             child: Text(
-                              model.getReminderName(widget.medRem),
+                              model.getReminderName(widget.fitnessReminder),
                               softWrap: true,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -115,7 +111,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                               ),
                               SizedBox(width: Config.xMargin(context, 1.5)),
                               Text(
-                                '25/50',
+                                '0/50',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.bold,
@@ -129,7 +125,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                             children: <Widget>[
                               //text widget for time
                               Text(
-                                widget.time,
+                                'For ${widget.fitnessReminder.minsperday} minutes',
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 3)),
                               ),
@@ -139,7 +135,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                                 DateFormat.yMMMMd().format(DateTime.now()),
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 3)),
-                              ),
+                              )
                             ],
                           )
                         ],
@@ -190,7 +186,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                                 color: Colors.black,
                               ),
                               //backgroundColor: Colors.red[400],
-                              message: "You don fuck up. Why you no take am?",
+                              message: "You don fuck up. Why you no train?",
                               duration: Duration(seconds: 3),
                             )..show(context);
                             setState(() {
@@ -209,7 +205,7 @@ class _NewMedicationCardState extends State<NewMedicationCard> {
                                 color: Colors.black,
                               ),
                               backgroundColor: Colors.green,
-                              message: "We wish you a speedy recovery",
+                              message: "We wish you a healthy life",
                               duration: Duration(seconds: 3),
                             )..show(context);
                             setState(() {
