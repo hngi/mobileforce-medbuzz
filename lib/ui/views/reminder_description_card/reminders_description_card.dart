@@ -1,5 +1,6 @@
 import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_card_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +54,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                     //circle avatar for reminder image
                     CircleAvatar(
                       child: Image.asset(
-                        model.getImage(widget.model),
+                        model.getImage(widget.model, context),
                         fit: BoxFit.cover,
                       ),
                       radius: Config.xMargin(context, 5.55),
@@ -99,7 +100,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                             ),
                             SizedBox(width: Config.xMargin(context, 1.5)),
                             Text(
-                              '25/50',
+                              model.getPoints(widget.model),
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -111,10 +112,14 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                         Row(
                           children: <Widget>[
                             //text widget for time
-                            Text('6:30 AM'),
+                            Text(model.getTime(widget.model, context),
+                                style: TextStyle(
+                                    fontSize: Config.textSize(context, 3))),
                             SizedBox(width: Config.xMargin(context, 1)),
                             //Text widget for date
-                            Text('15th July, 2020')
+                            Text(model.getDate(widget.model),
+                                style: TextStyle(
+                                    fontSize: Config.textSize(context, 3)))
                           ],
                         )
                       ],
@@ -150,16 +155,42 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    RowButton(
-                        iconColor: Colors.red,
-                        text: "Skip",
-                        icon: Icons.clear,
-                        onPressed: () {}),
-                    RowButton(
-                        iconColor: Colors.green,
-                        text: "Done",
-                        icon: Icons.check,
-                        onPressed: () {}),
+                    FlatButton.icon(
+                        //iconColor: Colors.green,
+                        label: Text("Skip"),
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          Flushbar(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 28.0,
+                              color: Colors.black,
+                            ),
+                            //backgroundColor: Colors.red[400],
+                            message: "You don fuck up. Why you no train?",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
+                        }),
+                    FlatButton.icon(
+                        //iconColor: Colors.green,
+                        label: Text("Done"),
+                        icon: Icon(Icons.check, color: Colors.green),
+                        onPressed: () {
+                          model.onDoneTap(widget.model, context);
+                          Flushbar(
+                            icon: Icon(
+                              Icons.info_outline,
+                              size: 28.0,
+                              color: Colors.black,
+                            ),
+                            backgroundColor: Colors.green,
+                            message: "We wish you a healthy life",
+                            duration: Duration(seconds: 3),
+                          )..show(context);
+                        }),
                   ],
                 )
               ])),

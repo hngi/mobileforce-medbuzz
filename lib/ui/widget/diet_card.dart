@@ -38,7 +38,7 @@ class _DietCardState extends State<DietCard> {
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.white,
+            color: Theme.of(context).primaryColorLight,
             spreadRadius: 5,
 //blurRadius: 2,
 //offset: Offset(0, 3), // changes position of shadow
