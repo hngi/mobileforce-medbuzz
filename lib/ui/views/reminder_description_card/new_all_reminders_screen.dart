@@ -23,6 +23,7 @@ class NewAllReminderScreen extends StatelessWidget {
     var model = Provider.of<NewAllReminderModel>(context);
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           leading: null,
           elevation: 0.0,
           title: Text(
