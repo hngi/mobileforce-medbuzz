@@ -215,9 +215,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
 
   List<FitnessReminder> get fitnessRemindersBasedOnDateTime {
     return _availableFitnessReminders
-        .where((reminder) =>
-            selectedDateTime.day == reminder.startDate.day &&
-            (reminder.isDone || reminder.isSkipped))
+        .where((reminder) => selectedDateTime.day == reminder.startDate.day)
         .toList();
   }
 

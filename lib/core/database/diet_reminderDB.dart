@@ -57,8 +57,7 @@ class DietReminderDB extends ChangeNotifier {
   List<DietModel> get dietRemindersBasedOnDateTime {
     return _allDiets
         .where((reminder) =>
-            DateTime.now().day == reminder.startDate.day &&
-            (!reminder.isDone || !reminder.isSkipped))
+            DateTime.now().day == reminder.startDate.day)
         .toList();
   }
 

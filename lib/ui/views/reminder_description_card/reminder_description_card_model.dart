@@ -12,54 +12,66 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+
 class ReminderDescriptionCardModel extends ChangeNotifier {
   final String _key = 'points';
 
-  void editReminder(
-      dynamic model, BuildContext context, bool isSkipped, bool isDone) {
-    var fitModel = Provider.of<FitnessReminderCRUD>(context);
-    var dietModel = Provider.of<DietReminderDB>(context);
+  // void editReminder(
+  //     dynamic model, BuildContext context, bool isSkipped, bool isDone) {
+  //   var fitModel = Provider.of<FitnessReminderCRUD>(context);
+  //   var dietModel = Provider.of<DietReminderDB>(context);
 
-    if (model is DietModel) {
-      dietModel.editDiet(
-          diet: DietModel(
-              id: model.id,
-              endDate: model.endDate,
-              secondDietName: model.secondDietName,
-              secondTime: model.secondTime,
-              thirdDietName: model.thirdDietName,
-              thirdTime: model.thirdTime,
-              foodClasses: model.foodClasses,
-              dietName: model.dietName,
-              time: model.time,
-              startDate: model.startDate,
-              description: model.description,
-              isDone: isDone,
-              isSkipped: isSkipped));
-      dietModel.getAlldiets();
+  //   if (model is DietModel) {
+  //     dietModel.editDiet(
+  //         diet: DietModel(
+  //             id: model.id,
+  //             endDate: model.endDate,
+  //             secondDietName: model.secondDietName,
+  //             secondTime: model.secondTime,
+  //             thirdDietName: model.thirdDietName,
+  //             thirdTime: model.thirdTime,
+  //             foodClasses: model.foodClasses,
+  //             dietName: model.dietName,
+  //             time: model.time,
+  //             startDate: model.startDate,
+  //             description: model.description,
+  //             isDone: isDone,
+  //             isSkipped: isSkipped));
+  //     dietModel.getAlldiets();
 
-      return;
-    }
-    if (model is FitnessReminder) {
-      fitModel.editReminder(FitnessReminder(
-          activityTime: model.activityTime,
-          index: model.index,
-          id: model.id,
-          minsperday: model.minsperday,
-          isDone: isDone,
-          isSkipped: isSkipped,
-          fitnessfreq: model.fitnessfreq,
-          fitnesstype: model.fitnesstype,
-          startDate: model.startDate,
-          endDate: model.endDate));
-      fitModel.getReminders();
-    }
-  }
+  //     return;
+  //   }
+  //   if (model is FitnessReminder) {
+  //     fitModel.editReminder(FitnessReminder(
+  //         activityTime: model.activityTime,
+  //         index: model.index,
+  //         id: model.id,
+  //         minsperday: model.minsperday,
+  //         isDone: isDone,
+  //         isSkipped: isSkipped,
+  //         fitnessfreq: model.fitnessfreq,
+  //         fitnesstype: model.fitnesstype,
+  //         startDate: model.startDate,
+  //         endDate: model.endDate));
+  //     fitModel.getReminders();
+  //   }
+  // }
 
   void onDoneTap(dynamic model, BuildContext context) {
     return model is DietModel
-        ? onDoneTapDiet(context)
-        : onDoneTapFitness(context);
+        ? onDoneTapDiet(context, model)
+        : onDoneTapFitness(context, model);
+  }
+
+  void onSkipTap(dynamic model, BuildContext context) {
+    return model is DietModel
+        ? onSkipTapDiet(context, model)
+        : onSkipTapFitness(context, model);
   }
 
   String getPoints(dynamic model) {
@@ -139,13 +151,51 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
   int get nextBenchMarkFitness => _nextBenchMarkFitness;
   final String _boxNameFitness = 'fitnessPoints';
 
-  void onDoneTapFitness(BuildContext context) async {
+  void onSkipTapFitness(
+      BuildContext context, FitnessReminder fitnessReminder) async {
+    try {
+      var updatedFitnessReminder = FitnessReminder(
+        activityTime: fitnessReminder.activityTime,
+        description: fitnessReminder.description,
+        endDate: fitnessReminder.endDate,
+        fitnessfreq: fitnessReminder.fitnessfreq,
+        fitnesstype: fitnessReminder.fitnesstype,
+        id: fitnessReminder.id,
+        index: fitnessReminder.index,
+        isDone: false,
+        isSkipped: true,
+        minsperday: fitnessReminder.minsperday,
+        startDate: fitnessReminder.startDate,
+      );
+      var box = await Hive.openBox(_boxNameFitness);
+      await box.put(fitnessReminder.id, updatedFitnessReminder);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onDoneTapFitness(
+      BuildContext context, FitnessReminder fitnessReminder) async {
     var model = Provider.of<UserCrud>(context);
     try {
       var _userBox = await Hive.openBox<User>("userBoxName");
       var _user = _userBox.values.toList()[0];
+      var updatedFitnessReminder = FitnessReminder(
+        activityTime: fitnessReminder.activityTime,
+        description: fitnessReminder.description,
+        endDate: fitnessReminder.endDate,
+        fitnessfreq: fitnessReminder.fitnessfreq,
+        fitnesstype: fitnessReminder.fitnesstype,
+        id: fitnessReminder.id,
+        index: fitnessReminder.index,
+        isDone: true,
+        isSkipped: false,
+        minsperday: fitnessReminder.minsperday,
+        startDate: fitnessReminder.startDate,
+      );
       var box = await Hive.openBox(_boxNameFitness);
       int points = box.get(_key);
+      await box.put(fitnessReminder.id, updatedFitnessReminder);
       if (points == null) {
         box.put(_key, 5);
         _totalPointsFitness = 5;
@@ -177,12 +227,52 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
   int get nextBenchMarkDiet => _nextBenchMarkDiet;
   final String _boxNameDiet = 'dietPoints';
 
-  void onDoneTapDiet(BuildContext context) async {
+  void onSkipTapDiet(BuildContext context, DietModel dietModel) async {
+    try {
+      var updatedDietModel = DietModel(
+        dietName: dietModel.dietName,
+        time: dietModel.time,
+        startDate: dietModel.startDate,
+        isDone: false,
+        isSkipped: true,
+        description: dietModel.description,
+        endDate: dietModel.endDate,
+        foodClasses: dietModel.foodClasses,
+        id: dietModel.id,
+        secondDietName: dietModel.secondDietName,
+        secondTime: dietModel.secondTime,
+        thirdDietName: dietModel.thirdDietName,
+        thirdTime: dietModel.thirdTime,
+      );
+      var box = await Hive.openBox(_boxNameDiet);
+      await box.put(dietModel.id, updatedDietModel);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onDoneTapDiet(BuildContext context, DietModel dietModel) async {
     var model = Provider.of<UserCrud>(context);
     try {
       var _userBox = await Hive.openBox<User>("userBoxName");
       var _user = _userBox.values.toList()[0];
+      var updatedDietModel = DietModel(
+        dietName: dietModel.dietName,
+        time: dietModel.time,
+        startDate: dietModel.startDate,
+        isDone: true,
+        isSkipped: false,
+        description: dietModel.description,
+        endDate: dietModel.endDate,
+        foodClasses: dietModel.foodClasses,
+        id: dietModel.id,
+        secondDietName: dietModel.secondDietName,
+        secondTime: dietModel.secondTime,
+        thirdDietName: dietModel.thirdDietName,
+        thirdTime: dietModel.thirdTime,
+      );
       var box = await Hive.openBox(_boxNameDiet);
+      await box.put(dietModel.id, updatedDietModel);
       int points = box.get(_key);
       if (points == null) {
         box.put(_key, 5);
