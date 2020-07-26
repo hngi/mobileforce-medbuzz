@@ -90,4 +90,29 @@ class UserCrud extends ChangeNotifier {
   }
 
   User get newuser => _user;
+
+  // Future<void> updateUserPoints(bool action) async {
+  //action indicates whether they are skipping or completing it
+  //if they are skipping then -5 else +5
+  // to get the user points
+
+  //add 5 points if they are completing the notification and add nothing if they skip it
+  // int addedPoints = 0;
+  // if (action == true) {
+  //   addedPoints = user.pointsGained + 5;
+  // } else {
+  //   if (user.pointsGained > 0) {
+  //     addedPoints = user.pointsGained - 5;
+  //   }
+  // }
+  // var updatedUser = User(
+  //   name: user.name,
+  //   id: user.id,
+  //   pointsGained: addedPoints,
+  // );
+
+  // edituser(updatedUser);
+
+  //logic to match user points with badge points should go here
+  // }
 }

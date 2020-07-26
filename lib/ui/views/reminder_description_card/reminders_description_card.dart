@@ -3,6 +3,15 @@ import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
+
+import '../../../core/database/user_db.dart';
+import '../../../core/models/appointment_reminder_model/appointment_reminder.dart';
+import '../../../core/models/appointment_reminder_model/appointment_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+import '../../../core/models/medication_reminder_model/medication_reminder.dart';
 
 class RemindersDescriptionCard extends StatefulWidget {
   final double height;
@@ -27,6 +36,8 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
     var model = Provider.of<ReminderDescriptionCardModel>(context);
     // final double boxHeight = MediaQuery.of(context).size.height;
     // initializeDateFormatting();
+    var userDB = Provider.of<UserCrud>(context);
+    userDB.getuser();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Config.yMargin(context, 1.5)),
       child: Container(
@@ -127,7 +138,11 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                     SizedBox(width: Config.xMargin(context, 6.5)),
                     //share button
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Share.share(
+                            'I successfully gained ${model.getPoints(widget.model)} points on the Medbuzz App',
+                            subject: 'Medbuzz Progress Report');
+                      },
                       child: Container(
                           child: Column(children: <Widget>[
                         Icon(
