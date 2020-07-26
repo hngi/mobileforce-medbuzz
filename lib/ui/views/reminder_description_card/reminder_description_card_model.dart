@@ -121,6 +121,16 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
                 : _formatDate(model.startAt);
   }
 
+  DateTime getTimeField(model) {
+    return model is Appointment
+        ? model.date
+        : model is DietModel
+            ? model.startDate
+            : model is FitnessReminder
+                ? model.startDate
+                : model is MedicationReminder ? model.startAt : model.dateTime;
+  }
+
   int _totalPointsFitness = 0;
   int get totalPointsFitness => _totalPointsFitness;
   List _benchmarks = badges;
