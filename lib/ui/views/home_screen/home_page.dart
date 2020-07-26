@@ -26,6 +26,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -201,12 +202,11 @@ class _HomePageState extends State<HomePage> {
                                   IconButton(
                                     padding: EdgeInsets.only(
                                         bottom: Config.xMargin(context, 8.33)),
-                                    icon: Icon(Icons.invert_colors),
+                                    icon: FaIcon(FontAwesomeIcons.medal),
                                     iconSize: Config.xMargin(context, 8.33),
-                                    color: Theme.of(context).primaryColorDark,
                                     onPressed: () {
-                                      Provider.of<DarkModeModel>(context)
-                                          .toggleAppTheme();
+                                      Navigator.pushNamed(
+                                          context, RouteNames.badgeCollection);
                                     },
                                   ),
                                 ],
