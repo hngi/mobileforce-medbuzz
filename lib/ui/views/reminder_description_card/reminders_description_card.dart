@@ -163,6 +163,8 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                           color: Colors.red,
                         ),
                         onPressed: () {
+                          model.editReminder(
+                              widget.model, context, true, false);
                           Flushbar(
                             icon: Icon(
                               Icons.info_outline,
@@ -180,6 +182,8 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                         icon: Icon(Icons.check, color: Colors.green),
                         onPressed: () {
                           model.onDoneTap(widget.model, context);
+                          model.editReminder(
+                              widget.model, context, false, true);
                           Flushbar(
                             icon: Icon(
                               Icons.info_outline,
