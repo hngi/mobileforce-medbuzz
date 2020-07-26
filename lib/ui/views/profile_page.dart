@@ -11,6 +11,7 @@ import 'package:MedBuzz/ui/widget/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/widget/snack_bar.dart';
+import 'package:app_settings/app_settings.dart';
 
 // TODO: In other to stop thunder from firing yolu change the routes before you push
 // TODO: Fix the orientation of this page to POTRAIT
