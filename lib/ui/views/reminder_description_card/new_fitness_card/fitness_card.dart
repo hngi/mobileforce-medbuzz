@@ -142,20 +142,22 @@ class _NewFitnessCardState extends State<NewFitnessCard> {
                       ),
                       SizedBox(width: Config.xMargin(context, 10)),
                       //share button
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            child: Column(children: <Widget>[
-                          Icon(
-                            Icons.share,
-                            color: Theme.of(context).primaryColor,
-                            size: Config.xMargin(context, 8.33),
-                          ),
-                          Text('Share',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: Config.textSize(context, 3.4)))
-                        ])),
+                      Expanded(
+                                              child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              child: Column(children: <Widget>[
+                            Icon(
+                              Icons.share,
+                              color: Theme.of(context).primaryColor,
+                              size: Config.xMargin(context, 8.33),
+                            ),
+                            Text('Share',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Config.textSize(context, 3.4)))
+                          ])),
+                        ),
                       ),
 
                       //share section
