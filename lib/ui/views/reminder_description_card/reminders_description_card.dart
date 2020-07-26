@@ -32,7 +32,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: Config.xMargin(context, 2)),
           width: widget.width,
-          height: widget.height * .24,
+          height: widget.height * .23,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Config.xMargin(context, 6)),
             boxShadow: [
