@@ -17,24 +17,27 @@ class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return NotificationModel(
-      isClicked: fields[3] as bool,
+      isClicked: fields[4] as bool,
       reminderType: fields[0] as String,
-      dateTime: fields[2] as DateTime,
-      id: fields[1] as String,
+      reminderId: fields[1] as String,
+      dateTime: fields[3] as DateTime,
+      id: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, NotificationModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.reminderType)
       ..writeByte(1)
-      ..write(obj.id)
+      ..write(obj.reminderId)
       ..writeByte(2)
-      ..write(obj.dateTime)
+      ..write(obj.id)
       ..writeByte(3)
+      ..write(obj.dateTime)
+      ..writeByte(4)
       ..write(obj.isClicked);
   }
 }
