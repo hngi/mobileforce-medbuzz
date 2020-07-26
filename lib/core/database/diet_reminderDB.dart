@@ -89,11 +89,11 @@ class DietReminderDB extends ChangeNotifier {
   void editDiet({DietModel diet}) async {
     var box = await Hive.openBox<DietModel>(_boxname);
 
-    box.put(diet.id, diet);
+    await box.put(diet.id, diet);
 
     _allDiets = box.values.toList();
-    box.close();
     // getAlldiets();
+    box.close();
     notifyListeners();
   }
 

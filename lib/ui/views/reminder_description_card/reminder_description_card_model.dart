@@ -1,3 +1,4 @@
+import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/user_db.dart';
 import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_reminder.dart';
@@ -11,13 +12,66 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+
 class ReminderDescriptionCardModel extends ChangeNotifier {
   final String _key = 'points';
 
+  // void editReminder(
+  //     dynamic model, BuildContext context, bool isSkipped, bool isDone) {
+  //   var fitModel = Provider.of<FitnessReminderCRUD>(context);
+  //   var dietModel = Provider.of<DietReminderDB>(context);
+
+  //   if (model is DietModel) {
+  //     dietModel.editDiet(
+  //         diet: DietModel(
+  //             id: model.id,
+  //             endDate: model.endDate,
+  //             secondDietName: model.secondDietName,
+  //             secondTime: model.secondTime,
+  //             thirdDietName: model.thirdDietName,
+  //             thirdTime: model.thirdTime,
+  //             foodClasses: model.foodClasses,
+  //             dietName: model.dietName,
+  //             time: model.time,
+  //             startDate: model.startDate,
+  //             description: model.description,
+  //             isDone: isDone,
+  //             isSkipped: isSkipped));
+  //     dietModel.getAlldiets();
+
+  //     return;
+  //   }
+  //   if (model is FitnessReminder) {
+  //     fitModel.editReminder(FitnessReminder(
+  //         activityTime: model.activityTime,
+  //         index: model.index,
+  //         id: model.id,
+  //         minsperday: model.minsperday,
+  //         isDone: isDone,
+  //         isSkipped: isSkipped,
+  //         fitnessfreq: model.fitnessfreq,
+  //         fitnesstype: model.fitnesstype,
+  //         startDate: model.startDate,
+  //         endDate: model.endDate));
+  //     fitModel.getReminders();
+  //   }
+  // }
+
   void onDoneTap(dynamic model, BuildContext context) {
     return model is DietModel
-        ? onDoneTapDiet(context)
-        : onDoneTapFitness(context);
+        ? onDoneTapDiet(context, model)
+        : onDoneTapFitness(context, model);
+  }
+
+  void onSkipTap(dynamic model, BuildContext context) {
+    return model is DietModel
+        ? onSkipTapDiet(context, model)
+        : onSkipTapFitness(context, model);
   }
 
   String getPoints(dynamic model) {
@@ -97,66 +151,69 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
   int get nextBenchMarkFitness => _nextBenchMarkFitness;
   final String _boxNameFitness = 'fitnessPoints';
 
-  void onDoneTapFitness(BuildContext context) async {
+  void onSkipTapFitness(
+      BuildContext context, FitnessReminder fitnessReminder) async {
+    try {
+      var updatedFitnessReminder = FitnessReminder(
+        activityTime: fitnessReminder.activityTime,
+        description: fitnessReminder.description,
+        endDate: fitnessReminder.endDate,
+        fitnessfreq: fitnessReminder.fitnessfreq,
+        fitnesstype: fitnessReminder.fitnesstype,
+        id: fitnessReminder.id,
+        index: fitnessReminder.index,
+        isDone: false,
+        isSkipped: true,
+        minsperday: fitnessReminder.minsperday,
+        startDate: fitnessReminder.startDate,
+      );
+      var box = await Hive.openBox(_boxNameFitness);
+      await box.put(fitnessReminder.id, updatedFitnessReminder);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onDoneTapFitness(
+      BuildContext context, FitnessReminder fitnessReminder) async {
     var model = Provider.of<UserCrud>(context);
     try {
       var _userBox = await Hive.openBox<User>("userBoxName");
       var _user = _userBox.values.toList()[0];
+      var updatedFitnessReminder = FitnessReminder(
+        activityTime: fitnessReminder.activityTime,
+        description: fitnessReminder.description,
+        endDate: fitnessReminder.endDate,
+        fitnessfreq: fitnessReminder.fitnessfreq,
+        fitnesstype: fitnessReminder.fitnesstype,
+        id: fitnessReminder.id,
+        index: fitnessReminder.index,
+        isDone: true,
+        isSkipped: false,
+        minsperday: fitnessReminder.minsperday,
+        startDate: fitnessReminder.startDate,
+      );
       var box = await Hive.openBox(_boxNameFitness);
       int points = box.get(_key);
+      await box.put(fitnessReminder.id, updatedFitnessReminder);
       if (points == null) {
         box.put(_key, 5);
         _totalPointsFitness = 5;
         _nextBenchMarkFitness = _benchmarks[0].points;
         model.adduser(User(
             name: _user.name,
+            pointsGainedDiet: _user.pointsGainedDiet,
+            pointsGainedMed: _user.pointsGainedMed,
             id: _user.id,
             pointsGainedFitness: _totalPointsFitness));
         notifyListeners();
-        box.close();
         return;
       } else {
         box.put(_key, points + 5);
         _totalPointsFitness = points + 5;
+        _nextBenchMarkFitness = _getNextBenchmark(_totalPointsFitness);
         notifyListeners();
-        if (_totalPointsFitness < 50) {
-          _nextBenchMarkFitness = _benchmarks[0].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 50 && _totalPointsFitness < 100) {
-          _nextBenchMarkFitness = _benchmarks[1].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 100 && _totalPointsFitness < 150) {
-          _nextBenchMarkFitness = _benchmarks[2].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 150 && _totalPointsFitness < 200) {
-          _nextBenchMarkFitness = _benchmarks[3].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 200 && _totalPointsFitness < 250) {
-          _nextBenchMarkFitness = _benchmarks[4].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 250 && _totalPointsFitness < 300) {
-          _nextBenchMarkFitness = _benchmarks[5].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 300 && _totalPointsFitness < 350) {
-          _nextBenchMarkFitness = _benchmarks[6].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 350 && _totalPointsFitness < 400) {
-          _nextBenchMarkFitness = _benchmarks[7].points;
-          notifyListeners();
-        }
-        if (_totalPointsFitness > 400 && _totalPointsFitness <= 450) {
-          _nextBenchMarkFitness = _benchmarks[8].points;
-          notifyListeners();
-        }
       }
-      print('$_totalPointsFitness/$_nextBenchMarkFitness');
       box.close();
     } catch (e) {
       print(e);
@@ -170,12 +227,52 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
   int get nextBenchMarkDiet => _nextBenchMarkDiet;
   final String _boxNameDiet = 'dietPoints';
 
-  void onDoneTapDiet(BuildContext context) async {
+  void onSkipTapDiet(BuildContext context, DietModel dietModel) async {
+    try {
+      var updatedDietModel = DietModel(
+        dietName: dietModel.dietName,
+        time: dietModel.time,
+        startDate: dietModel.startDate,
+        isDone: false,
+        isSkipped: true,
+        description: dietModel.description,
+        endDate: dietModel.endDate,
+        foodClasses: dietModel.foodClasses,
+        id: dietModel.id,
+        secondDietName: dietModel.secondDietName,
+        secondTime: dietModel.secondTime,
+        thirdDietName: dietModel.thirdDietName,
+        thirdTime: dietModel.thirdTime,
+      );
+      var box = await Hive.openBox(_boxNameDiet);
+      await box.put(dietModel.id, updatedDietModel);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onDoneTapDiet(BuildContext context, DietModel dietModel) async {
     var model = Provider.of<UserCrud>(context);
     try {
       var _userBox = await Hive.openBox<User>("userBoxName");
       var _user = _userBox.values.toList()[0];
+      var updatedDietModel = DietModel(
+        dietName: dietModel.dietName,
+        time: dietModel.time,
+        startDate: dietModel.startDate,
+        isDone: true,
+        isSkipped: false,
+        description: dietModel.description,
+        endDate: dietModel.endDate,
+        foodClasses: dietModel.foodClasses,
+        id: dietModel.id,
+        secondDietName: dietModel.secondDietName,
+        secondTime: dietModel.secondTime,
+        thirdDietName: dietModel.thirdDietName,
+        thirdTime: dietModel.thirdTime,
+      );
       var box = await Hive.openBox(_boxNameDiet);
+      await box.put(dietModel.id, updatedDietModel);
       int points = box.get(_key);
       if (points == null) {
         box.put(_key, 5);
@@ -183,56 +280,72 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
         _nextBenchMarkDiet = _benchmarks[0].points;
         model.adduser(User(
             name: _user.name,
+            pointsGainedMed: _user.pointsGainedMed,
+            pointsGainedFitness: _user.pointsGainedFitness,
             id: _user.id,
             pointsGainedDiet: _totalPointsDiet));
         notifyListeners();
-        box.close();
         return;
       } else {
         box.put(_key, points + 5);
         _totalPointsDiet = points + 5;
+        _nextBenchMarkDiet = _getNextBenchmark(_totalPointsDiet);
         notifyListeners();
-        if (_totalPointsDiet < 50) {
-          _nextBenchMarkDiet = _benchmarks[0].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 50 && _totalPointsDiet < 100) {
-          _nextBenchMarkDiet = _benchmarks[1].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 100 && _totalPointsDiet < 150) {
-          _nextBenchMarkDiet = _benchmarks[2].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 150 && _totalPointsDiet < 200) {
-          _nextBenchMarkDiet = _benchmarks[3].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 200 && _totalPointsDiet < 250) {
-          _nextBenchMarkDiet = _benchmarks[4].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 250 && _totalPointsDiet < 300) {
-          _nextBenchMarkDiet = _benchmarks[5].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 300 && _totalPointsDiet < 350) {
-          _nextBenchMarkDiet = _benchmarks[6].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 350 && _totalPointsDiet < 400) {
-          _nextBenchMarkDiet = _benchmarks[7].points;
-          notifyListeners();
-        }
-        if (_totalPointsDiet > 400 && _totalPointsDiet <= 450) {
-          _nextBenchMarkDiet = _benchmarks[8].points;
-          notifyListeners();
-        }
       }
       print('$_totalPointsDiet/$_nextBenchMarkDiet');
       box.close();
     } catch (e) {
       print(e);
     }
+  }
+
+  //this should be executed once when the app's lifecycle is destroyed and relaunched
+//so as to update fields in this model with persistent data
+  void loadPointsFromDb() async {
+    try {
+      var _fitnessBox = await Hive.openBox(_boxNameFitness);
+      _totalPointsFitness = _fitnessBox.get(_key) ?? 0;
+      var _dietBox = await Hive.openBox(_boxNameDiet);
+      _totalPointsDiet = _dietBox.get(_key) ?? 0;
+      _nextBenchMarkFitness = _getNextBenchmark(_totalPointsFitness);
+      _nextBenchMarkDiet = _getNextBenchmark(_totalPointsDiet);
+
+      _fitnessBox.close();
+      _dietBox.close();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  int _getNextBenchmark(int points) {
+    if (points < 50) {
+      return _nextBenchMarkDiet = _benchmarks[0].points;
+    }
+    if (points > 50 && points < 100) {
+      return _benchmarks[1].points;
+    }
+    if (points > 100 && points < 150) {
+      return _benchmarks[2].points;
+    }
+    if (points > 150 && points < 200) {
+      return _benchmarks[3].points;
+    }
+    if (points > 200 && points < 250) {
+      return _benchmarks[4].points;
+    }
+    if (points > 250 && points < 300) {
+      return _benchmarks[5].points;
+    }
+    if (points > 300 && points < 350) {
+      return _benchmarks[6].points;
+    }
+    if (points > 350 && points < 400) {
+      return _benchmarks[7].points;
+    }
+    if (points > 400 && points <= 450) {
+      return _benchmarks[8].points;
+    }
+    return _benchmarks[8].points;
   }
 }
