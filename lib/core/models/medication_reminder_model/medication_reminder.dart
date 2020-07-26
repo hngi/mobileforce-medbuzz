@@ -40,6 +40,12 @@ class MedicationReminder {
   @HiveField(11)
   String description;
 
+  @HiveField(12)
+  final bool isDone;
+
+  @HiveField(13)
+  final bool isSkipped;
+
   MedicationReminder(
       {this.drugName,
       this.drugType,
@@ -50,6 +56,8 @@ class MedicationReminder {
       this.dosage,
       this.startAt,
       this.endAt,
+      this.isDone = false,
+      this.isSkipped = false,
       this.index,
       this.id,
       this.description});

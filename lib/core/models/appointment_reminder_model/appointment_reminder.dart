@@ -15,9 +15,16 @@ class Appointment {
   final DateTime date;
   @HiveField(4)
   final List<int> time;
+  @HiveField(5)
+  final bool isDone;
+  @HiveField(6)
+  final bool isSkipped;
 
-  Appointment( 
-      {this.id,this.time,
+  Appointment(
+      {this.id,
+      this.time,
+      this.isDone = false,
+      this.isSkipped = false,
       @required this.appointmentType,
       this.note,
       @required this.date});

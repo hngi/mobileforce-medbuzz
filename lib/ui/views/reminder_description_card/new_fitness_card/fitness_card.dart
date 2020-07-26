@@ -111,7 +111,7 @@ class _NewFitnessCardState extends State<NewFitnessCard> {
                               ),
                               SizedBox(width: Config.xMargin(context, 1.5)),
                               Text(
-                                '0/50',
+                                model.getPoints(),
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.bold,
@@ -132,7 +132,7 @@ class _NewFitnessCardState extends State<NewFitnessCard> {
                               SizedBox(width: Config.xMargin(context, 2)),
                               //Text widget for date
                               Text(
-                                DateFormat.yMMMMd().format(DateTime.now()),
+                                model.getDate(widget.fitnessReminder),
                                 style: TextStyle(
                                     fontSize: Config.textSize(context, 3)),
                               )
@@ -198,6 +198,7 @@ class _NewFitnessCardState extends State<NewFitnessCard> {
                           label: Text("Done"),
                           icon: Icon(Icons.check, color: Colors.green),
                           onPressed: () {
+                            model.onDoneTap();
                             Flushbar(
                               icon: Icon(
                                 Icons.info_outline,

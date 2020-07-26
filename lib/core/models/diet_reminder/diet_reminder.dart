@@ -32,12 +32,18 @@ class DietModel {
   final String description;
   @HiveField(10)
   final List<String> foodClasses;
+  @HiveField(11)
+  final bool isDone;
+  @HiveField(12)
+  final bool isSkipped;
 
   DietModel(
       {@required this.dietName,
       @required this.time,
       @required this.startDate,
       this.secondDietName,
+      this.isDone = false,
+      this.isSkipped = false,
       this.thirdDietName,
       this.secondTime,
       this.thirdTime,

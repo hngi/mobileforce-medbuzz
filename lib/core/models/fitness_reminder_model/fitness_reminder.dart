@@ -31,6 +31,10 @@ class FitnessReminder {
   @HiveField(8)
   final String id;
 
+  @HiveField(9)
+  final bool isDone;
+  @HiveField(10)
+  final bool isSkipped;
 
   FitnessReminder(
       {this.index,
@@ -39,6 +43,8 @@ class FitnessReminder {
       this.fitnessfreq,
       this.activityTime,
       this.minsperday,
+      this.isDone = false,
+      this.isSkipped = false,
       this.startDate,
       this.endDate,
       this.id});
