@@ -152,7 +152,7 @@ class NewAllReminderScreen extends StatelessWidget {
                         medRem: medicationReminder,
                         time: medData.firstTime.format(context),
                         height: 700,
-                        width: MediaQuery.of(context).size.width,
+                        width: width,
                       ),
                     if (medData.secondTime != null)
                       for (var medicationReminder in medsModel
@@ -164,7 +164,7 @@ class NewAllReminderScreen extends StatelessWidget {
                           medRem: medicationReminder,
                           time: medData.secondTime.format(context),
                           height: 700,
-                          width: MediaQuery.of(context).size.width,
+                          width: width,
                         ),
                     if (medData.thirdTime != null)
                       for (var medicationReminder in medsModel
@@ -176,7 +176,7 @@ class NewAllReminderScreen extends StatelessWidget {
                           medRem: medicationReminder,
                           time: medData.thirdTime.format(context),
                           height: 700,
-                          width: MediaQuery.of(context).size.width,
+                          width: width,
                         ),
 
                     for (var fitnessReminder in fitModel
@@ -184,10 +184,10 @@ class NewAllReminderScreen extends StatelessWidget {
                         .where((element) =>
                             element.activityTime[1] <= TimeOfDay.now().minute)
                         .toList())
-                      NewFitnessCard(
-                        fitnessReminder: fitnessReminder,
-                        height: 700,
-                        width: MediaQuery.of(context).size.width,
+                      RemindersDescriptionCard(
+                        model: fitnessReminder,
+                        height: height,
+                        width: width,
                       ),
                     for (var dietReminder in dietModel
                         .dietRemindersBasedOnDateTime
