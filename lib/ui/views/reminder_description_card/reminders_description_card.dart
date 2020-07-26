@@ -2,6 +2,15 @@ import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
+
+import '../../../core/database/user_db.dart';
+import '../../../core/models/appointment_reminder_model/appointment_reminder.dart';
+import '../../../core/models/appointment_reminder_model/appointment_reminder.dart';
+import '../../../core/models/diet_reminder/diet_reminder.dart';
+import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
+import '../../../core/models/medication_reminder_model/medication_reminder.dart';
 
 class RemindersDescriptionCard extends StatefulWidget {
   final double height;
@@ -26,6 +35,8 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
     var model = Provider.of<ReminderDescriptionCardModel>(context);
     // final double boxHeight = MediaQuery.of(context).size.height;
     // initializeDateFormatting();
+    var userDB = Provider.of<UserCrud>(context);
+    userDB.getuser();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Config.yMargin(context, 1.5)),
       child: Container(
@@ -99,7 +110,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                             ),
                             SizedBox(width: Config.xMargin(context, 1.5)),
                             Text(
-                              '25/50',
+                              '${userDB.user.pointsGained ?? 0}',
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -111,10 +122,12 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                         Row(
                           children: <Widget>[
                             //text widget for time
-                            Text('6:30 AM'),
+                            Text(DateFormat('jm')
+                                .format(model.getTimeField(widget.model))),
                             SizedBox(width: Config.xMargin(context, 1)),
                             //Text widget for date
-                            Text('15th July, 2020')
+                            Text(DateFormat('E d MMMM, y')
+                                .format(model.getTimeField(widget.model)))
                           ],
                         )
                       ],
@@ -122,7 +135,11 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                     SizedBox(width: Config.xMargin(context, 10)),
                     //share button
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Share.share(
+                            'I successfully gained ${userDB.user.pointsGained} points on the Medbuzz App',
+                            subject: 'Medbuzz Progress Report');
+                      },
                       child: Container(
                           child: Column(children: <Widget>[
                         Icon(
@@ -152,14 +169,44 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                   children: <Widget>[
                     RowButton(
                         iconColor: Colors.red,
-                        text: "Skip",
+                        text:
+                            widget.model.isSkipped == true ? 'Skipped' : "Skip",
                         icon: Icons.clear,
-                        onPressed: () {}),
+                        onPressed: () async {
+                          widget.model.isSkipped == false
+                              ? await userDB.updateUserPoints(false)
+                              : null;
+                        }),
                     RowButton(
                         iconColor: Colors.green,
-                        text: "Done",
+                        text:
+                            widget.model.isDone == true ? 'Completed' : "Done",
                         icon: Icons.check,
-                        onPressed: () {}),
+                        onPressed: () async {
+                          widget.model.isDone == false
+                              ? await userDB.updateUserPoints(true).then(
+                                  (value) => widget.model is Appointment
+                                      ? () {
+                                          var newModel = Appointment(
+                                              id: widget.model.id,
+                                              time: widget.model.time,
+                                              isDone: true,
+                                              isSkipped: false,
+                                              appointmentType:
+                                                  widget.model.appointmentType,
+                                              note: widget.model.note,
+                                              date: widget.model.date);
+                                        }
+                                      : widget.model is DietModel
+                                          ? () {}
+                                          : widget.model is FitnessReminder
+                                              ? () {}
+                                              : widget.model
+                                                      is MedicationReminder
+                                                  ? () {}
+                                                  : null)
+                              : null;
+                        }),
                   ],
                 )
               ])),

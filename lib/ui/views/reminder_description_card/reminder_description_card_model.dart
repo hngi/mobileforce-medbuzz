@@ -49,6 +49,16 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
                 ? _formatDate(model.startDate)
                 : _formatDate(model.startAt);
   }
+
+  DateTime getTimeField(model) {
+    return model is Appointment
+        ? model.date
+        : model is DietModel
+            ? model.startDate
+            : model is FitnessReminder
+                ? model.startDate
+                : model is MedicationReminder ? model.startAt : model.dateTime;
+  }
 }
 
 String _formatDate(DateTime date) {
