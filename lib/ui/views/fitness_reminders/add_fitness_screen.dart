@@ -547,6 +547,11 @@ class FitnessEditScreen extends StatelessWidget {
                                     text:
                                         "Start date cannot be after the end date",
                                   );
+                                } else if (model.description.isEmpty) {
+                                  CustomSnackBar.showSnackBar(
+                                    context,
+                                    text: "Please enter a description",
+                                  );
                                 } else if (timeSet.isBefore(now) &&
                                     model.startDate.day == DateTime.now().day &&
                                     model.endDate.day == DateTime.now().day) {
@@ -599,14 +604,10 @@ class FitnessEditScreen extends StatelessWidget {
                                                     ? 4
                                                     : 1;
 
-                                    int numb =
-                                        (diff / selectedInterval).floor();
-                                    for (var i = 1; i < numb + 1; i++) {
+                                    int numb = (diff / selectedInterval).ceil();
+                                    for (var i = 0; i < numb; i++) {
                                       var timeValue = model.startDate.add(
-                                        Duration(
-                                            days: i == 1
-                                                ? 0
-                                                : selectedInterval * i),
+                                        Duration(days: selectedInterval * i),
                                       );
                                       fitnessNotificationManager
                                           .showFitnessNotificationDaily(
@@ -617,11 +618,8 @@ class FitnessEditScreen extends StatelessWidget {
                                                   "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                               body:
                                                   "For ${model.minDaily} minutes",
-                                              dateTime: timeValue.add(Duration(
-                                                hours: model.activityTime.hour,
-                                                minutes:
-                                                    model.activityTime.minute,
-                                              )));
+                                              dateTime: DateTime.parse(
+                                                  '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
                                     }
 
                                     Navigator.popAndPushNamed(context,
@@ -721,13 +719,8 @@ class FitnessEditScreen extends StatelessWidget {
                                                     "Hey It's Time to Go For ${newReminder.fitnesstype}",
                                                 body:
                                                     "For ${model.minDaily} minutes",
-                                                dateTime:
-                                                    timeValue.add(Duration(
-                                                  hours:
-                                                      model.activityTime.hour,
-                                                  minutes:
-                                                      model.activityTime.minute,
-                                                )));
+                                                dateTime: DateTime.parse(
+                                                    '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
                                       }
 
                                       print([

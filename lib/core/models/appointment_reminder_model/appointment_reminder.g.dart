@@ -19,6 +19,8 @@ class AppointmentAdapter extends TypeAdapter<Appointment> {
     return Appointment(
       id: fields[0] as String,
       time: (fields[4] as List)?.cast<int>(),
+      isDone: fields[5] as bool,
+      isSkipped: fields[6] as bool,
       appointmentType: fields[1] as String,
       note: fields[2] as String,
       date: fields[3] as DateTime,
@@ -28,7 +30,7 @@ class AppointmentAdapter extends TypeAdapter<Appointment> {
   @override
   void write(BinaryWriter writer, Appointment obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,6 +40,10 @@ class AppointmentAdapter extends TypeAdapter<Appointment> {
       ..writeByte(3)
       ..write(obj.date)
       ..writeByte(4)
-      ..write(obj.time);
+      ..write(obj.time)
+      ..writeByte(5)
+      ..write(obj.isDone)
+      ..writeByte(6)
+      ..write(obj.isSkipped);
   }
 }
