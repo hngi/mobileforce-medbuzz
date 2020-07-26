@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app_settings/app_settings.dart';
 
 class PopupDialog extends StatelessWidget {
   @override
@@ -31,13 +32,15 @@ class PopupDialog extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(top: 50.0)),
             FlatButton(
+                color: Theme.of(context).buttonColor,
                 onPressed: () {
-                  Navigator.of(context).pop();
+//                  Navigator.of(context).pop();
+                  AppSettings.openSecuritySettings();
                 },
                 child: Text(
                   'Got It!',
                   style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
+                      color: Theme.of(context).primaryColorLight,
                       fontSize: 18.0),
                 ))
           ],
