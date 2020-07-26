@@ -11,12 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/database/diet_reminderDB.dart';
+import 'reminders_description_card.dart';
+
 class NewAllReminderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var fitModel = Provider.of<FitnessReminderCRUD>(context);
+    var dietModel = Provider.of<DietReminderDB>(context);
 
     var medsModel = Provider.of<MedicationsSchedulesModel>(context);
     var medData = Provider.of<MedicationData>(context);
@@ -184,6 +188,16 @@ class NewAllReminderScreen extends StatelessWidget {
                         fitnessReminder: fitnessReminder,
                         height: 700,
                         width: MediaQuery.of(context).size.width,
+                      ),
+                    for (var dietReminder in dietModel
+                        .dietRemindersBasedOnDateTime
+                        .where((element) =>
+                            element.startDate.minute <= TimeOfDay.now().minute)
+                        .toList())
+                      RemindersDescriptionCard(
+                        model: dietReminder,
+                        height: height,
+                        width: width,
                       ),
                   ],
                 ),

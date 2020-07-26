@@ -2,6 +2,8 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
+import '../models/diet_reminder/diet_reminder.dart';
+
 //Crazelu renamed this as DietReminderDB for better disctinction
 class DietReminderDB extends ChangeNotifier {
   // Hive box name
@@ -50,6 +52,12 @@ class DietReminderDB extends ChangeNotifier {
 
   DietModel getDiet(index) {
     return _allDiets[index];
+  }
+
+  List<DietModel> get dietRemindersBasedOnDateTime {
+    return _allDiets
+        .where((reminder) => DateTime.now().day == reminder.startDate.day)
+        .toList();
   }
 
   // add a  diet

@@ -21,6 +21,8 @@ class DietModelAdapter extends TypeAdapter<DietModel> {
       time: (fields[1] as List)?.cast<int>(),
       startDate: fields[2] as DateTime,
       secondDietName: fields[3] as String,
+      isDone: fields[11] as bool,
+      isSkipped: fields[12] as bool,
       thirdDietName: fields[4] as String,
       secondTime: (fields[5] as List)?.cast<int>(),
       thirdTime: (fields[6] as List)?.cast<int>(),
@@ -34,7 +36,7 @@ class DietModelAdapter extends TypeAdapter<DietModel> {
   @override
   void write(BinaryWriter writer, DietModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.dietName)
       ..writeByte(1)
@@ -56,6 +58,10 @@ class DietModelAdapter extends TypeAdapter<DietModel> {
       ..writeByte(9)
       ..write(obj.description)
       ..writeByte(10)
-      ..write(obj.foodClasses);
+      ..write(obj.foodClasses)
+      ..writeByte(11)
+      ..write(obj.isDone)
+      ..writeByte(12)
+      ..write(obj.isSkipped);
   }
 }

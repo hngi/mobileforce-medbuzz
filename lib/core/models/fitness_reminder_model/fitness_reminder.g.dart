@@ -23,6 +23,8 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
       fitnessfreq: fields[3] as String,
       activityTime: (fields[4] as List)?.cast<int>(),
       minsperday: fields[5] as int,
+      isDone: fields[9] as bool,
+      isSkipped: fields[10] as bool,
       startDate: fields[6] as DateTime,
       endDate: fields[7] as DateTime,
       id: fields[8] as String,
@@ -32,7 +34,7 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
   @override
   void write(BinaryWriter writer, FitnessReminder obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
@@ -50,6 +52,10 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
       ..writeByte(7)
       ..write(obj.endDate)
       ..writeByte(8)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(9)
+      ..write(obj.isDone)
+      ..writeByte(10)
+      ..write(obj.isSkipped);
   }
 }

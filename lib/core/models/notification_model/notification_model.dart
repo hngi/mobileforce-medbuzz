@@ -7,16 +7,16 @@ class NotificationModel {
   @HiveField(0)
   final String reminderType;
 
-  @HiveField(0)
+  @HiveField(1)
   final String reminderId;
 
-  @HiveField(1)
+  @HiveField(2)
   final String id;
 
-  @HiveField(2)
+  @HiveField(3)
   final DateTime dateTime;
 
-  @HiveField(3)
+  @HiveField(4)
   final bool isClicked;
 
   NotificationModel(
