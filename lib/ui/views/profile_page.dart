@@ -7,6 +7,7 @@ import 'package:MedBuzz/core/database/medication_history.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/widget/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:MedBuzz/ui/widget/snack_bar.dart';
@@ -76,7 +77,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icons.arrow_forward_ios,
                         size: Config.xMargin(context, 4),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => PopupDialog());
+                      },
                     ),
                   ),
                   ListTile(
