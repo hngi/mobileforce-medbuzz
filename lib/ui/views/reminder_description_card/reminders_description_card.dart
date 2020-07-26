@@ -209,7 +209,7 @@ class _RemindersDescriptionCardState extends State<RemindersDescriptionCard> {
                                 color: Colors.black,
                               ),
                               backgroundColor: Colors.green,
-                              message: "We wish you a healthy life",
+                              message: "Great! Let's do more.",
                               duration: Duration(seconds: 3),
                             )..show(context);
                           }),

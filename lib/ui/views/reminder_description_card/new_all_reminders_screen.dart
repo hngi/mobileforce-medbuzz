@@ -1,20 +1,31 @@
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
-import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
-import 'package:MedBuzz/ui/views/fitness_reminders/all_fitness_reminders_model.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_model.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_model.dart';
-import 'package:MedBuzz/ui/views/reminder_description_card/new_fitness_card/fitness_card.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_medication_card/medication_card.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_card_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/database/diet_reminderDB.dart';
 import 'reminders_description_card.dart';
 
-class NewAllReminderScreen extends StatelessWidget {
+class NewAllReminderScreen extends StatefulWidget {
+  @override
+  _NewAllReminderScreenState createState() => _NewAllReminderScreenState();
+}
+
+class _NewAllReminderScreenState extends State<NewAllReminderScreen> {
+  @override
+  void initState() {
+    Provider.of<ReminderDescriptionCardModel>(context, listen: false)
+        .loadPointsFromDb();
+    // Provider.of<DietReminderDB>(context, listen: false).getAlldiets();
+    // Provider.of<FitnessReminderCRUD>(context, listen: false).getReminders();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -22,9 +33,12 @@ class NewAllReminderScreen extends StatelessWidget {
     var fitModel = Provider.of<FitnessReminderCRUD>(context);
     var dietModel = Provider.of<DietReminderDB>(context);
 
+    dietModel.getAlldiets();
+    fitModel.getReminders();
+
     var medsModel = Provider.of<MedicationsSchedulesModel>(context);
     var medData = Provider.of<MedicationData>(context);
-    var model = Provider.of<NewAllReminderModel>(context);
+    // var model = Provider.of<NewAllReminderModel>(context);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -151,7 +165,7 @@ class NewAllReminderScreen extends StatelessWidget {
                       NewMedicationCard(
                         medRem: medicationReminder,
                         time: medData.firstTime.format(context),
-                        height: 700,
+                        height: height * .23,
                         width: width,
                       ),
                     if (medData.secondTime != null)
@@ -163,7 +177,7 @@ class NewAllReminderScreen extends StatelessWidget {
                         NewMedicationCard(
                           medRem: medicationReminder,
                           time: medData.secondTime.format(context),
-                          height: 700,
+                          height: height * .23,
                           width: width,
                         ),
                     if (medData.thirdTime != null)
@@ -175,7 +189,7 @@ class NewAllReminderScreen extends StatelessWidget {
                         NewMedicationCard(
                           medRem: medicationReminder,
                           time: medData.thirdTime.format(context),
-                          height: 700,
+                          height: height * .23,
                           width: width,
                         ),
 
