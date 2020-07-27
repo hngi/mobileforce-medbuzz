@@ -625,11 +625,10 @@ class _HomePageState extends State<HomePage> {
             ),
       bottomNavigationBar: isPressed == true
           ? null
-          : BottomNavyBar(
+          : BottomNavigationBar(
               backgroundColor: Theme.of(context).backgroundColor,
-              selectedIndex: model.currentIndex,
-              showElevation: true, // use this to remove appBar's elevation
-              onItemSelected: (index) {
+              currentIndex: model.currentIndex,
+              onTap: (index) {
                 setState(() {
                   model.updateCurrentIndex(index);
                   _pageController.animateToPage(index,
@@ -638,27 +637,29 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               items: [
-                BottomNavyBarItem(
+                BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   title: Text('Home'),
-                  inactiveColor: Theme.of(context).primaryColorDark,
-                  activeColor: Theme.of(context).primaryColor,
+                  /* inactiveColor: Theme.of(context).primaryColorDark,
+                  activeColor: Theme.of(context).primaryColor, */
                 ),
-                BottomNavyBarItem(
-                    icon: Icon(Icons.notifications),
-                    title: Text('Reminders'),
-                    inactiveColor: Theme.of(context).primaryColorDark,
-                    activeColor: Theme.of(context).buttonColor),
-                BottomNavyBarItem(
-                    icon: Icon(Icons.notifications),
-                    title: Text('New Reminders'),
-                    inactiveColor: Theme.of(context).primaryColorDark,
-                    activeColor: Theme.of(context).highlightColor),
-                BottomNavyBarItem(
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications),
+                  title: Text('Reminders'),
+                  /*  inactiveColor: Theme.of(context).primaryColorDark,
+                    activeColor: Theme.of(context).buttonColor*/
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications),
+                  title: Text('New Reminders'),
+                  /*  inactiveColor: Theme.of(context).primaryColorDark,
+                    activeColor: Theme.of(context).highlightColor */
+                ),
+                BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
                   title: Text('Settings'),
-                  inactiveColor: Theme.of(context).primaryColorDark,
-                  activeColor: Theme.of(context).accentColor,
+                  /*   inactiveColor: Theme.of(context).primaryColorDark,
+                  activeColor: Theme.of(context).accentColor, */
                 ),
               ],
             ),
