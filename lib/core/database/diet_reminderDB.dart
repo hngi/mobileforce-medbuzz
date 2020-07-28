@@ -100,4 +100,14 @@ class DietReminderDB extends ChangeNotifier {
   int getdietcount() {
     return _allDiets.length;
   }
+
+  double getNumberOfDietsWithFoodClass(String className) {
+    var result = _allDiets
+        .where((element) =>
+            element.isDone == true && element.foodClasses.contains(className))
+        .toList()
+        .length;
+    // return 10.0;
+    return result.isNaN || result == 0 ? 10.0 : result.toDouble();
+  }
 }
