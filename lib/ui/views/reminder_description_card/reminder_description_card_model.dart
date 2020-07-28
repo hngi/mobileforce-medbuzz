@@ -7,6 +7,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/core/models/fitness_reminder_model/fitness_reminder.dart';
 import 'package:MedBuzz/core/models/medication_reminder_model/medication_reminder.dart';
 import 'package:MedBuzz/core/models/user_model/user_model.dart';
+import 'package:MedBuzz/ui/widget/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -294,6 +295,41 @@ class ReminderDescriptionCardModel extends ChangeNotifier {
       }
       print('$_totalPointsDiet/$_nextBenchMarkDiet');
       box.close();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // This is to reset the point progress of users to zero
+
+  void resetUsersProgress(BuildContext context) async {
+    var model = Provider.of<UserCrud>(context);
+    try {
+      var _userBox = await Hive.openBox<User>("userBoxName");
+      var _user = _userBox.values.toList()[0];
+
+      var _dietBox = await Hive.openBox(_boxNameDiet);
+      var _fitnessBox = await Hive.openBox(_boxNameFitness);
+
+      _dietBox.put(_key, 0);
+      _fitnessBox.put(_key, 0);
+      _totalPointsDiet = 0;
+      _totalPointsFitness = 0;
+      _nextBenchMarkDiet = _benchmarks[0].points;
+      _nextBenchMarkFitness = _benchmarks[0].points;
+      model.adduser(User(
+          name: _user.name,
+          pointsGainedMed: _user.pointsGainedMed,
+          pointsGainedFitness: _totalPointsFitness,
+          id: _user.id,
+          pointsGainedDiet: _totalPointsDiet));
+      notifyListeners();
+      print('$_totalPointsDiet/$_nextBenchMarkDiet');
+      print('$_totalPointsFitness/$_nextBenchMarkFitness');
+      _dietBox.close();
+      _fitnessBox.close();
+      CustomSnackBar.showSnackBar(context,
+          text: "Your point progress has been reset", success: true);
     } catch (e) {
       print(e);
     }
