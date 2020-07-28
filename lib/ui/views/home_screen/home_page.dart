@@ -626,7 +626,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: isPressed == true
           ? null
           : BottomNavigationBar(
-              backgroundColor: Theme.of(context).backgroundColor,
               currentIndex: model.currentIndex,
               onTap: (index) {
                 setState(() {
@@ -638,6 +637,7 @@ class _HomePageState extends State<HomePage> {
               },
               items: [
                 BottomNavigationBarItem(
+                  backgroundColor: Theme.of(context).primaryColorLight,
                   icon: Icon(Icons.home),
                   title: Text('Home'),
                   /* inactiveColor: Theme.of(context).primaryColorDark,
