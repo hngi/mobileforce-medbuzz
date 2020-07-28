@@ -206,23 +206,33 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
                             sections: [
                               PieChartSectionData(
                                 value: db.getNumberOfDietsWithFoodClass(
-                                        'Vegetables') ??
-                                    1,
-                                title: 'Veg',
+                                            'Vegetables') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass(
+                                        'Vegetables'),
+                                title:
+                                    'Veg (${db.getNumberOfDietsWithFoodClass('Vegetables')})',
                                 color: Theme.of(context).accentColor,
                               ),
                               PieChartSectionData(
-                                title: 'Fruits',
-                                value:
-                                    db.getNumberOfDietsWithFoodClass('Fruit') ??
-                                        1,
+                                title:
+                                    'Fruits (${db.getNumberOfDietsWithFoodClass('Fruit')})',
+                                value: db.getNumberOfDietsWithFoodClass(
+                                            'Fruit') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass('Fruit'),
                                 color: Theme.of(context).highlightColor,
                               ),
                               PieChartSectionData(
-                                title: 'Drinks',
-                                value:
-                                    db.getNumberOfDietsWithFoodClass('Drink') ??
-                                        1,
+                                title:
+                                    'Drinks (${db.getNumberOfDietsWithFoodClass('Drink')})',
+                                value: db.getNumberOfDietsWithFoodClass(
+                                            'Drink') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass('Drink'),
                                 color: Theme.of(context).primaryColor,
                               ),
                             ],

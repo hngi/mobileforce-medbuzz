@@ -108,6 +108,6 @@ class DietReminderDB extends ChangeNotifier {
         .toList()
         .length;
     // return 10.0;
-    return result.isNaN || result == 0 ? 10.0 : result.toDouble();
+    return result.toDouble();
   }
 }
