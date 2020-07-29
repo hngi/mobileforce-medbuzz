@@ -641,7 +641,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Theme.of(context).primaryColorLight,
                   icon: Icon(Icons.home,
                       color: Theme.of(context).primaryColorDark),
-                  title: Text('Home'),
+                  title: Text('Home',
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark)),
                   /* inactiveColor: Theme.of(context).primaryColorDark,
                   activeColor: Theme.of(context).primaryColor, */
                 ),
@@ -649,7 +651,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Theme.of(context).primaryColorLight,
                   icon: Icon(Icons.alarm,
                       color: Theme.of(context).primaryColorDark),
-                  title: Text('Reminders'),
+                  title: Text('Reminders',
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark)),
                   /*  inactiveColor: Theme.of(context).primaryColorDark,
                     activeColor: Theme.of(context).buttonColor*/
                 ),
@@ -657,7 +661,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Theme.of(context).primaryColorLight,
                   icon: Icon(Icons.notifications,
                       color: Theme.of(context).primaryColorDark),
-                  title: Text('Notifications'),
+                  title: Text('Notifications',
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark)),
                   /*  inactiveColor: Theme.of(context).primaryColorDark,
                     activeColor: Theme.of(context).highlightColor */
                 ),
@@ -665,7 +671,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Theme.of(context).primaryColorLight,
                   icon: Icon(Icons.settings,
                       color: Theme.of(context).primaryColorDark),
-                  title: Text('Settings'),
+                  title: Text('Settings',
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark)),
                   /*   inactiveColor: Theme.of(context).primaryColorDark,
                   activeColor: Theme.of(context).accentColor, */
                 ),
