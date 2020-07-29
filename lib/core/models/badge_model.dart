@@ -1,9 +1,11 @@
 class BadgeModel {
   final String name;
   final int points;
+  bool isDone;
   final String image;
 
   BadgeModel({
+    this.isDone,
     this.name,
     this.points,
     this.image,
