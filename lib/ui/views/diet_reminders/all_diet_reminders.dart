@@ -3,6 +3,7 @@ import 'package:MedBuzz/core/database/diet_reminderDB.dart';
 import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:MedBuzz/ui/app_theme/app_theme.dart';
 import 'package:MedBuzz/ui/widget/diet_card.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 2);
+    _tabController = new TabController(vsync: this, length: 3);
   }
 
   // final GlobalKey<AnimatedListState> _listKey = GlobalKey();
@@ -53,6 +54,9 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   TabController _tabController;
 
   bool isVisible = true;
+  PieChartData _chartData = PieChartData(
+    sections: [PieChartSectionData(value: 76)],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +93,9 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
               ),
               Tab(
                 text: "Past",
+              ),
+              Tab(
+                text: "Report",
               ),
             ],
             controller: _tabController,
@@ -187,7 +194,52 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: Config.xMargin(context, 5.55)))),
-                      )
+                      ),
+                Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Config.xMargin(context, 5)),
+                    child: PageView(
+                      children: <Widget>[
+                        PieChart(
+                          PieChartData(
+                            centerSpaceRadius: width * 0.3,
+                            sections: [
+                              PieChartSectionData(
+                                value: db.getNumberOfDietsWithFoodClass(
+                                            'Vegetables') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass(
+                                        'Vegetables'),
+                                title:
+                                    'Veg (${db.getNumberOfDietsWithFoodClass('Vegetables')})',
+                                color: Theme.of(context).accentColor,
+                              ),
+                              PieChartSectionData(
+                                title:
+                                    'Fruits (${db.getNumberOfDietsWithFoodClass('Fruit')})',
+                                value: db.getNumberOfDietsWithFoodClass(
+                                            'Fruit') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass('Fruit'),
+                                color: Theme.of(context).highlightColor,
+                              ),
+                              PieChartSectionData(
+                                title:
+                                    'Drinks (${db.getNumberOfDietsWithFoodClass('Drink')})',
+                                value: db.getNumberOfDietsWithFoodClass(
+                                            'Drink') ==
+                                        0
+                                    ? 10
+                                    : db.getNumberOfDietsWithFoodClass('Drink'),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
               ],
             ),
           ),
