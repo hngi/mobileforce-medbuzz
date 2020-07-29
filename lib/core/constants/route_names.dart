@@ -15,6 +15,7 @@ import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_s
 import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
+import 'package:MedBuzz/ui/views/notification_tone/notification_tone_screen.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/badge/badges.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
@@ -78,6 +79,7 @@ class RouteNames {
   static const String newAllReminderScreen = 'newAllReminderScreen';
   static const String badgesScreen = 'badgesScreen';
   static const String badgeCollection = 'badgeCollection';
+  static const String notificationToneScreen = 'notificationToneScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -119,7 +121,8 @@ class RouteNames {
     RouteNames.healthTips: (context) => HealthTips(),
     RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
     RouteNames.badgesScreen: (context) => BadgesScreen(),
-    RouteNames.badgeCollection: (context) => Badges()
+    RouteNames.badgeCollection: (context) => Badges(),
+    RouteNames.notificationToneScreen: (context) => NotificationToneScreen()
 
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
