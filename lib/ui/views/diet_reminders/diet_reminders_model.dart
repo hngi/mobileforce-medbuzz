@@ -158,6 +158,13 @@ class DietReminderModel extends ChangeNotifier {
   bool get isProtein => _isProtein;
   bool get isDrink => _isDrink;
   String get selectedFoodClass => _selectedFoodClass;
+  final List<String> frequency = [
+    'Daily',
+    'Every 2 days',
+    'Every 3 days',
+    'Every 4 days'
+  ];
+  String selectedFreq = "Daily";
 
   bool isFoodClassActive(String name) {
     switch (name) {
@@ -190,6 +197,11 @@ class DietReminderModel extends ChangeNotifier {
   //       .length
   //       .toDouble();
   // }
+
+  void updateFreq(val) {
+    selectedFreq = val;
+    notifyListeners();
+  }
 
   void updateSelectedFoodClass(String name) {
     this._selectedFoodClass = name;

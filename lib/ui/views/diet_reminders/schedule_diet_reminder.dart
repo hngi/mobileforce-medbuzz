@@ -245,6 +245,43 @@ class AddDietReminderScreen extends StatelessWidget {
                             _verticalSpace(context),
                             _textField(context, mealDescFocusNode, 6, 100,
                                 'Optional description...', mealDescController),
+                            SizedBox(height: Config.yMargin(context, 4.5)),
+                            // Text(
+                            //   'Reminder Frequency',
+                            //   style: TextStyle(
+                            //       color: Theme.of(context).primaryColorDark,
+                            //       fontWeight: FontWeight.bold,
+                            //       fontSize: Config.xMargin(context, 5.5)),
+                            // ),
+                            // SizedBox(height: Config.yMargin(context, 1.0)),
+                            // Container(
+                            //   width: double.infinity,
+                            //   decoration: ShapeDecoration(
+                            //     shape: RoundedRectangleBorder(
+                            //       side: BorderSide(
+                            //           width: 1.0, style: BorderStyle.solid),
+                            //       borderRadius:
+                            //           BorderRadius.all((Radius.circular(6.0))),
+                            //     ),
+                            //   ),
+                            //   child: Center(
+                            //     child: DropdownButton<String>(
+                            //         underline: Text(''),
+                            //         items: model.frequency.map((String time) {
+                            //           return DropdownMenuItem<String>(
+                            //               value: time, child: Text(time));
+                            //         }).toList(),
+                            //         value: model.selectedFreq,
+                            //         onChanged: (newFreq) {
+                            //           print(newFreq);
+                            //           // setState(() {
+                            //           // model.selectedFreq = newFreq;
+                            //           // });
+                            //           model.updateFreq(newFreq);
+                            //         }),
+                            //   ),
+                            // ),
+                            // SizedBox(height: Config.xMargin(context, 4.5)),
                           ],
                         ),
                       ),
