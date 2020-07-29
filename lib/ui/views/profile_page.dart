@@ -73,6 +73,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.notificationToneScreen);
+                    },
+                    title: Text('Set notification tone'),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios,
+                        size: Config.xMargin(context, 4),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.notificationToneScreen);
+                      },
+                    ),
+                  ),
+                  ListTile(
                     title: Text('Change Fingerprint'),
                     trailing: IconButton(
                       icon: Icon(
