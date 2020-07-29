@@ -7,6 +7,7 @@ import 'package:MedBuzz/core/database/medication_history.dart';
 import 'package:MedBuzz/core/database/waterReminderData.dart';
 import 'package:MedBuzz/ui/darkmode/dark_mode_model.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:MedBuzz/ui/views/reminder_description_card/reminder_description_card_model.dart';
 import 'package:MedBuzz/ui/widget/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteNames.notificationToneScreen);
+                    },
+                    title: Text('Set notification tone'),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios,
+                        size: Config.xMargin(context, 4),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.notificationToneScreen);
+                      },
+                    ),
+                  ),
+                  ListTile(
                     title: Text('Change Fingerprint'),
                     trailing: IconButton(
                       icon: Icon(
@@ -114,6 +132,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           });
                         },
                         value: switcher),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      deleteAllReminders();
+                    },
+                    title: Text('Reset Points Progress'),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios,
+                        size: Config.xMargin(context, 4),
+                      ),
+                      onPressed: () {
+                        Provider.of<ReminderDescriptionCardModel>(context)
+                            .resetUsersProgress(context);
+                      },
+                    ),
                   ),
                   ListTile(
                     onTap: () {
