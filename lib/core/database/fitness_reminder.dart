@@ -46,7 +46,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'images/football.png',
     'images/badminton.png',
     'images/basketball.png',
-    'images/workout.png'
+    'images/golf.png',
+    'images/benchpress.png',
+    'images/pushups.png',
+    'images/situps.png',
+    'images/squats.png',
+    'images/weightlifting.png'
   ];
 
   void incrementMinDaily() {
@@ -76,7 +81,18 @@ class FitnessReminderCRUD extends ChangeNotifier {
                                 ? activityType[6]
                                 : activity == activityType[7]
                                     ? activityType[7]
-                                    : activityType[8];
+                                    : activity == activityType[8]
+                                        ? activityType[8]
+                                        : activity == activityType[9]
+                                            ? activityType[9]
+                                            : activity == activityType[10]
+                                                ? activityType[10]
+                                                : activity == activityType[11]
+                                                    ? activityType[11]
+                                                    : activity ==
+                                                            activityType[12]
+                                                        ? activityType[12]
+                                                        : activityType[13];
 
     return selectedActivityType;
   }
@@ -90,7 +106,12 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'Football',
     'Badminton',
     'Basketball',
-    'Workout'
+    'Golf',
+    'Bench Press',
+    'Push Ups',
+    'Sit Ups',
+    'Squats',
+    'Weightlifting'
   ];
 
   String updateFrequency(String freq) {
