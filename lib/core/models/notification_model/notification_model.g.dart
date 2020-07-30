@@ -9,7 +9,7 @@ part of 'notification_model.dart';
 class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
   @override
   // TODO: implement typeId
-  int get typeId => 6;
+  int get typeId => 5;
   @override
   NotificationModel read(BinaryReader reader) {
     var numOfFields = reader.readByte();

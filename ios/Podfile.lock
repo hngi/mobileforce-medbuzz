@@ -1,6 +1,10 @@
 PODS:
   - "app_settings (3.0.0+1)":
     - Flutter
+  - assets_audio_player (0.0.1):
+    - Flutter
+  - assets_audio_player_web (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -29,6 +33,8 @@ PODS:
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
+  - assets_audio_player (from `.symlinks/plugins/assets_audio_player/ios`)
+  - assets_audio_player_web (from `.symlinks/plugins/assets_audio_player_web/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
@@ -46,6 +52,10 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
+  assets_audio_player:
+    :path: ".symlinks/plugins/assets_audio_player/ios"
+  assets_audio_player_web:
+    :path: ".symlinks/plugins/assets_audio_player_web/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -75,6 +85,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
+  assets_audio_player: edee322b9cb625571b830b35872ead1a295fd917
+  assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
