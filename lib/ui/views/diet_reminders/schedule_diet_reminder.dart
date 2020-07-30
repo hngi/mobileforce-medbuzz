@@ -1163,7 +1163,10 @@ class _AddDietReminderScreenState extends State<AddDietReminderScreen> {
                                     description: mealDescController.text ?? '',
                                     startDate: model.startDate,
                                     frequency: model.selectedFreq,
-                                    activityTime: model.selectedTime,
+                                    activityTime: [
+                                      model.activityTime.hour,
+                                      model.activityTime.minute
+                                    ],
                                     minsperday: model.minDaily,
                                     time: [
                                       num.parse(
