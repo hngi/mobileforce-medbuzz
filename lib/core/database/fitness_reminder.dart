@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import '../models/fitness_reminder_model/fitness_reminder.dart';
 
@@ -26,10 +27,17 @@ class FitnessReminderCRUD extends ChangeNotifier {
   String id;
   final List<String> frequency = [
     'Daily',
-    'Every 2 days',
-    'Every 3 days',
-    'Every 4 days'
+    'Once Every Week',
+    'Twice Every Week',
+    'Thrice Every Week',
+    'Four Time Weekly'
   ];
+
+  final List<String> days = ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+  String selectedDay = 'Mon';
+  String selectedDay2 = 'Mon';
+  String selectedDay3 = 'Mon';
+  String selectedDay4 = 'Mon';
   String selectedFreq = "Daily";
 
   dynamic get selectedTime => _selectedTime;
@@ -168,6 +176,42 @@ class FitnessReminderCRUD extends ChangeNotifier {
     activityTime = selectedTime;
     notifyListeners();
     return activityTime;
+  }
+
+  int updateDay(String selectedDay) {
+    int day;
+    day = selectedDay == 'Mon'
+        ? 1
+        : selectedDay == 'Tues'
+            ? 2
+            : selectedDay == 'Wed'
+                ? 3
+                : selectedDay == 'Thur'
+                    ? 4
+                    : selectedDay == 'Fri' ? 5 : selectedDay == 'Sat' ? 6 : 7;
+//    selectedTime == 'Monday' ? day = 1 : 2;
+    notifyListeners();
+    print(day);
+    return day;
+  }
+
+  Day updateNameDay(String selectedDay) {
+    Day day;
+    day = selectedDay == 'Mon'
+        ? Day.Monday
+        : selectedDay == 'Tues'
+            ? Day.Tuesday
+            : selectedDay == 'Wed'
+                ? Day.Wednesday
+                : selectedDay == 'Thur'
+                    ? Day.Thursday
+                    : selectedDay == 'Fri'
+                        ? Day.Friday
+                        : selectedDay == 'Sat' ? Day.Saturday : Day.Sunday;
+//    selectedTime == 'Monday' ? day = 1 : 2;
+    notifyListeners();
+    print(day);
+    return day;
   }
 
   String updateID(String value) {

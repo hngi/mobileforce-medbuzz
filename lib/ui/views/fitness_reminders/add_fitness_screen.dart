@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:MedBuzz/core/constants/route_names.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import '../../../core/database/fitness_reminder.dart';
 import '../../../core/models/fitness_reminder_model/fitness_reminder.dart';
@@ -10,7 +13,7 @@ import '../../../core/notifications/fitness_notification_manager.dart';
 import '../../size_config/config.dart';
 import 'package:MedBuzz/ui/widget/snack_bar.dart';
 
-class FitnessEditScreen extends StatelessWidget {
+class FitnessEditScreen extends StatefulWidget {
   final FitnessReminder fitnessModel;
   final bool isEdit;
 
@@ -18,13 +21,18 @@ class FitnessEditScreen extends StatelessWidget {
       : super(key: key);
 
   @override
+  _FitnessEditScreenState createState() => _FitnessEditScreenState();
+}
+
+class _FitnessEditScreenState extends State<FitnessEditScreen> {
+  @override
   Widget build(BuildContext context) {
     // bool _changedName = false;
     final fitnessDB = Provider.of<FitnessReminderCRUD>(context);
     fitnessDB.getReminders();
     // var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
 
-    String appBar = isEdit == true ? fitnessDB.edit : fitnessDB.add;
+    String appBar = widget.isEdit == true ? fitnessDB.edit : fitnessDB.add;
     // TextEditingController descController = TextEditingController();
     // FocusNode focusNode = FocusNode();
 
@@ -53,10 +61,10 @@ class FitnessEditScreen extends StatelessWidget {
 
     Future<Null> selectTime(BuildContext context) async {
       // var model = Provider.of<FitnessReminderCRUD>(context);
-      isEdit == true
+      widget.isEdit == true
           ? model.updateActivityTime(TimeOfDay(
-              hour: fitnessModel.activityTime[0],
-              minute: fitnessModel.activityTime[1]))
+              hour: widget.fitnessModel.activityTime[0],
+              minute: widget.fitnessModel.activityTime[1]))
           : null;
       TimeOfDay currentTime = TimeOfDay.now();
       TimeOfDay selectedTime = await showTimePicker(
@@ -65,7 +73,7 @@ class FitnessEditScreen extends StatelessWidget {
           ) ??
           model.activityTime;
       bool today = model.startDate.difference(DateTime.now()).inDays == 0;
-      if (today && selectedTime.hour < currentTime.hour && !isEdit) {
+      if (today && selectedTime.hour < currentTime.hour && !widget.isEdit) {
         CustomSnackBar.showSnackBar(context,
             text: "Cannot set reminder in the past");
       } else {
@@ -79,7 +87,9 @@ class FitnessEditScreen extends StatelessWidget {
 
     Future<Null> selectStartDate(BuildContext context) async {
       // var model = Provider.of<FitnessReminderCRUD>(context);
-      isEdit == true ? model.updateStartDate(fitnessModel.startDate) : null;
+      widget.isEdit == true
+          ? model.updateStartDate(widget.fitnessModel.startDate)
+          : null;
       final DateTime selectedDate = await showDatePicker(
               context: context,
               initialDate: model.startDate,
@@ -102,7 +112,9 @@ class FitnessEditScreen extends StatelessWidget {
 
     Future<Null> selectEndDate(BuildContext context) async {
       // var model = Provider.of<FitnessReminderCRUD>(context);
-      isEdit == true ? model.updateEndDate(fitnessModel.endDate) : null;
+      widget.isEdit == true
+          ? model.updateEndDate(widget.fitnessModel.endDate)
+          : null;
 
       final DateTime selectedDate = await showDatePicker(
               context: context,
@@ -148,6 +160,524 @@ class FitnessEditScreen extends StatelessWidget {
       );
     }
 
+    Widget oneDay() {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget twoDays() {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay2}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay2,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay2 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      );
+    }
+
+    Widget threeDays() {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay2}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay2,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay2 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay3}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 8),
+                      ),
+                      value: model.selectedDay3,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay3 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget fourDays() {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 3),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 5),
+                      ),
+                      value: model.selectedDay,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay2}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 3),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 5),
+                      ),
+                      value: model.selectedDay2,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay2 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay3}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 3),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 5),
+                      ),
+                      value: model.selectedDay3,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay3 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FormField<String>(
+              builder: (FormFieldState<String> state) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).primaryColorLight,
+                    hintText: '${model.selectedDay4}',
+                    hintStyle: TextStyle(
+                      color: Colors.black38,
+                      fontSize: Config.xMargin(context, 3),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Config.xMargin(context, 5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  isEmpty: false,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: Config.xMargin(context, 5),
+                      ),
+                      value: model.selectedDay4,
+                      isDense: true,
+                      onChanged: (String newValue) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          model.selectedDay4 = newValue;
+                          state.didChange(newValue);
+                        });
+                        model.updateDay(newValue);
+                      },
+                      items: model.days.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
+
     Widget buildImageContainer(int index) {
       // var model = Provider.of<FitnessReminderCRUD>(context);
       // isEdit == true
@@ -186,6 +716,28 @@ class FitnessEditScreen extends StatelessWidget {
             )),
           ],
         ),
+      );
+    }
+
+    void setWeeklyNotification(
+        FitnessReminder newReminder, String selectedDay) {
+      int num = model.updateDay(selectedDay);
+      Day dayNum = model.updateNameDay(selectedDay);
+      String time = model.getDateTime().toString();
+      DateTime now = DateTime.now();
+      int randomId = Random().nextInt(999);
+      String nId = '$num${now.year}${now.month}$randomId';
+
+//      ${now.day}$hour$minutes
+
+      String notifId = nId.length < 11 ? nId : nId.substring(0, 10);
+
+      fitnessNotificationManager.showFitnessNotificationWeekly(
+        id: int.parse(notifId),
+        title: "Hey It's Time to Go For ${newReminder.fitnesstype}",
+        body: "For ${model.minDaily} minutes",
+        dy: dayNum,
+        dateTime: model.getDateTime(),
       );
     }
 
@@ -284,8 +836,8 @@ class FitnessEditScreen extends StatelessWidget {
                               keyboardType: TextInputType.multiline,
                               textInputAction: TextInputAction.done,
                               maxLines: 5,
-                              initialValue: isEdit == true
-                                  ? fitnessModel.description
+                              initialValue: widget.isEdit == true
+                                  ? widget.fitnessModel.description
                                   : null,
                               onChanged: (val) => model.updateDescription(val),
                               // controller: descriptionTextController,
@@ -356,6 +908,17 @@ class FitnessEditScreen extends StatelessWidget {
                               }),
                         ),
                       ),
+                      SizedBox(height: Config.xMargin(context, 4.5)),
+                      model.selectedFreq == 'Daily'
+                          ? Visibility(visible: false, child: oneDay())
+                          : model.selectedFreq == 'Once Every Week'
+                              ? oneDay()
+                              : model.selectedFreq == 'Twice Every Week'
+                                  ? twoDays()
+                                  : model.selectedFreq == 'Thrice Every Week'
+                                      ? threeDays()
+                                      : fourDays(),
+
                       SizedBox(height: Config.xMargin(context, 4.5)),
                       Text(
                         'Set time For Fitness Activity',
@@ -559,7 +1122,7 @@ class FitnessEditScreen extends StatelessWidget {
                                       text:
                                           "Cannot set time reminder in the past");
                                 } else if (model.description.isNotEmpty) {
-                                  if (isEdit == false) {
+                                  if (widget.isEdit == false) {
                                     print('${model.description}');
                                     FitnessReminder newReminder =
                                         FitnessReminder(
@@ -577,49 +1140,91 @@ class FitnessEditScreen extends StatelessWidget {
                                             fitnesstype: model.fitnessType[
                                                 model.selectedIndex]);
                                     await fitnessDB.addReminder(newReminder);
-                                    // String time = DateTime.now().toString();
-                                    // String hour = time.substring(0, 2);
-                                    // String minutes = time.substring(3, 5);
-                                    // DateTime now = DateTime.now();
-                                    // String id =
-                                    //     '${now.year}${now.month}${now.day}$hour$minutes';
-                                    // String notifId = id.length < 11
-                                    //     ? id
-                                    //     : id.substring(0, 10);
+                                    String time =
+                                        model.getDateTime().toString();
+                                    String hour = time.substring(0, 2);
+                                    String minutes = time.substring(3, 5);
+                                    DateTime now = DateTime.now();
+                                    String id =
+                                        '${now.year}${now.month}${now.day}$hour$minutes';
+                                    String notifId = id.length < 11
+                                        ? id
+                                        : id.substring(0, 10);
 
                                     printStatements();
-                                    var diff = model.endDate
-                                        .difference(model.startDate)
-                                        .inDays;
-                                    var selectedInterval = model.selectedFreq ==
-                                            'Daily'
-                                        ? 1
-                                        : model.selectedFreq == 'Every 2 days'
-                                            ? 2
-                                            : model.selectedFreq ==
-                                                    'Every 3 days'
-                                                ? 3
-                                                : model.selectedFreq ==
-                                                        'Every 4 days'
-                                                    ? 4
-                                                    : 1;
-
-                                    int numb = (diff / selectedInterval).ceil();
-                                    for (var i = 0; i < numb; i++) {
-                                      var timeValue = model.startDate.add(
-                                        Duration(days: selectedInterval * i),
-                                      );
-                                      fitnessNotificationManager
-                                          .showFitnessNotificationDaily(
-                                              id: model.startDate.day +
-                                                  timeValue.day +
-                                                  8000,
-                                              title:
-                                                  "Hey It's Time to Go For ${newReminder.fitnesstype}",
-                                              body:
-                                                  "For ${model.minDaily} minutes",
-                                              dateTime: DateTime.parse(
-                                                  '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
+//                                    var diff = model.endDate
+//                                        .difference(model.startDate)
+//                                        .inDays;
+//                                    print(diff);
+//                                    var selectedInterval = model.selectedFreq ==
+//                                            'Daily'
+//                                        ? 1
+//                                        : model.selectedFreq == 'Every 2 days'
+//                                            ? 2
+//                                            : model.selectedFreq ==
+//                                                    'Every 3 days'
+//                                                ? 3
+//                                                : model.selectedFreq ==
+//                                                        'Every 4 days'
+//                                                    ? 4
+//                                                    : 1;
+//
+//                                    int numb = (diff / selectedInterval).ceil();
+//                                    for (var i = 0; i < numb; i++) {
+//                                      var timeValue = model.startDate.add(
+//                                        Duration(days: selectedInterval * i),
+//                                      );
+//                                      fitnessNotificationManager
+//                                          .showFitnessNotificationDaily(
+//                                              id: model.startDate.day +
+//                                                  timeValue.day +
+//                                                  8000,
+//                                              title:
+//                                                  "Hey It's Time to Go For ${newReminder.fitnesstype}",
+//                                              body:
+//                                                  "For ${model.minDaily} minutes",
+//                                              dateTime: DateTime.parse(
+//                                                  '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
+//                                    }
+                                    switch (model.selectedFreq) {
+                                      case 'Daily':
+                                        fitnessNotificationManager
+                                            .showFitnessNotificationDaily(
+                                                id: num.parse(notifId),
+                                                title:
+                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
+                                                body:
+                                                    "For ${model.minDaily} minutes",
+                                                dateTime: model.getDateTime());
+                                        break;
+                                      case 'Once Every Week':
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay);
+                                        break;
+                                      case 'Twice Every Week':
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay2);
+                                        break;
+                                      case 'Thrice Every Week':
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay2);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay3);
+                                        break;
+                                      case 'Four Times Weekly':
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay2);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay3);
+                                        setWeeklyNotification(
+                                            newReminder, model.selectedDay4);
+                                        break;
                                     }
 
                                     Navigator.popAndPushNamed(context,
@@ -629,7 +1234,7 @@ class FitnessEditScreen extends StatelessWidget {
                                       print('${model.description}');
                                       FitnessReminder newReminder =
                                           FitnessReminder(
-                                              id: fitnessModel.id,
+                                              id: widget.fitnessModel.id,
                                               activityTime: [
                                                 model.activityTime.hour,
                                                 model.activityTime.minute
@@ -642,85 +1247,134 @@ class FitnessEditScreen extends StatelessWidget {
                                               fitnessfreq: model.selectedFreq,
                                               fitnesstype: model.fitnessType[
                                                   model.selectedIndex]);
-                                      // String time = DateTime.now().toString();
-                                      // String hour = time.substring(0, 2);
-                                      // String minutes = time.substring(3, 5);
-                                      // DateTime now = DateTime.now();
-                                      // String id =
-                                      //     '${now.year}${now.month}${now.day}$hour$minutes';
-                                      // String notifId = id.length < 11
-                                      //     ? id
-                                      //     : id.substring(0, 10);
+
                                       fitnessDB.editReminder(newReminder);
+//
+//                                      var diff = widget.fitnessModel.endDate
+//                                          .difference(
+//                                              widget.fitnessModel.startDate)
+//                                          .inDays;
+//                                      var selectedInterval = widget
+//                                                  .fitnessModel.fitnessfreq ==
+//                                              'Daily'
+//                                          ? 1
+//                                          : widget.fitnessModel.fitnessfreq ==
+//                                                  'Every 2 days'
+//                                              ? 2
+//                                              : widget.fitnessModel
+//                                                          .fitnessfreq ==
+//                                                      'Every 3 days'
+//                                                  ? 3
+//                                                  : widget.fitnessModel
+//                                                              .fitnessfreq ==
+//                                                          'Every 4 days'
+//                                                      ? 4
+//                                                      : 1;
+//
+//                                      int numb =
+//                                          (diff / selectedInterval).ceil();
+//                                      for (var i = 0; i < numb; i++) {
+//                                        var oldTimeValue =
+//                                            widget.fitnessModel.startDate.add(
+//                                          Duration(days: selectedInterval * i),
+//                                        );
+//                                        fitnessNotificationManager
+//                                            .removeReminder(widget.fitnessModel
+//                                                    .startDate.day +
+//                                                oldTimeValue.day +
+//                                                8000);
+//                                      }
+//
+//                                      var newDiff = model.endDate
+//                                          .difference(model.startDate)
+//                                          .inDays;
+//                                      var newSelectedInterval =
+//                                          model.selectedFreq == 'Daily'
+//                                              ? 1
+//                                              : model.selectedFreq ==
+//                                                      'Every 2 days'
+//                                                  ? 2
+//                                                  : model.selectedFreq ==
+//                                                          'Every 3 days'
+//                                                      ? 3
+//                                                      : model.selectedFreq ==
+//                                                              'Every 4 days'
+//                                                          ? 4
+//                                                          : 1;
+//
+//                                      int newNumb =
+//                                          (newDiff / newSelectedInterval)
+//                                              .ceil();
+//                                      for (var i = 0; i < newNumb; i++) {
+//                                        var timeValue = model.startDate.add(
+//                                          Duration(
+//                                              days: newSelectedInterval * i),
+//                                        );
+//                                        fitnessNotificationManager
+//                                            .showFitnessNotificationDaily(
+//                                                id: model.startDate.day +
+//                                                    timeValue.day +
+//                                                    8000,
+//                                                title:
+//                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
+//                                                body:
+//                                                    "For ${model.minDaily} minutes",
+//                                                dateTime: DateTime.parse(
+//                                                    '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
+//                                      }
+                                      String time =
+                                          model.getDateTime().toString();
+                                      String hour = time.substring(0, 2);
+                                      String minutes = time.substring(3, 5);
+                                      DateTime now = DateTime.now();
+                                      String id =
+                                          '${now.year}${now.month}${now.day}$hour$minutes';
+                                      String notifId = id.length < 11
+                                          ? id
+                                          : id.substring(0, 10);
 
-                                      var diff = fitnessModel.endDate
-                                          .difference(fitnessModel.startDate)
-                                          .inDays;
-                                      var selectedInterval = fitnessModel
-                                                  .fitnessfreq ==
-                                              'Daily'
-                                          ? 1
-                                          : fitnessModel.fitnessfreq ==
-                                                  'Every 2 days'
-                                              ? 2
-                                              : fitnessModel.fitnessfreq ==
-                                                      'Every 3 days'
-                                                  ? 3
-                                                  : fitnessModel.fitnessfreq ==
-                                                          'Every 4 days'
-                                                      ? 4
-                                                      : 1;
+                                      printStatements();
 
-                                      int numb =
-                                          (diff / selectedInterval).ceil();
-                                      for (var i = 0; i < numb; i++) {
-                                        var oldTimeValue =
-                                            fitnessModel.startDate.add(
-                                          Duration(days: selectedInterval * i),
-                                        );
-                                        fitnessNotificationManager
-                                            .removeReminder(
-                                                fitnessModel.startDate.day +
-                                                    oldTimeValue.day +
-                                                    8000);
-                                      }
-
-                                      var newDiff = model.endDate
-                                          .difference(model.startDate)
-                                          .inDays;
-                                      var newSelectedInterval =
-                                          model.selectedFreq == 'Daily'
-                                              ? 1
-                                              : model.selectedFreq ==
-                                                      'Every 2 days'
-                                                  ? 2
-                                                  : model.selectedFreq ==
-                                                          'Every 3 days'
-                                                      ? 3
-                                                      : model.selectedFreq ==
-                                                              'Every 4 days'
-                                                          ? 4
-                                                          : 1;
-
-                                      int newNumb =
-                                          (newDiff / newSelectedInterval)
-                                              .ceil();
-                                      for (var i = 0; i < newNumb; i++) {
-                                        var timeValue = model.startDate.add(
-                                          Duration(
-                                              days: newSelectedInterval * i),
-                                        );
-                                        fitnessNotificationManager
-                                            .showFitnessNotificationDaily(
-                                                id: model.startDate.day +
-                                                    timeValue.day +
-                                                    8000,
-                                                title:
-                                                    "Hey It's Time to Go For ${newReminder.fitnesstype}",
-                                                body:
-                                                    "For ${model.minDaily} minutes",
-                                                dateTime: DateTime.parse(
-                                                    '${timeValue.year}-${timeValue.month.toString().padLeft(2, '0')}-${timeValue.day.toString().padLeft(2, '0')} ${model.activityTime.hour.toString().padLeft(2, '0')}:${model.activityTime.minute.toString().padLeft(2, '0')}'));
+                                      switch (model.selectedFreq) {
+                                        case 'Daily':
+                                          fitnessNotificationManager
+                                              .showFitnessNotificationDaily(
+                                                  id: num.parse(notifId),
+                                                  title:
+                                                      "Hey It's Time to Go For ${newReminder.fitnesstype}",
+                                                  body:
+                                                      "For ${model.minDaily} minutes",
+                                                  dateTime:
+                                                      model.getDateTime());
+                                          break;
+                                        case 'Once Every Week':
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay);
+                                          break;
+                                        case 'Twice Every Week':
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay2);
+                                          break;
+                                        case 'Thrice Every Week':
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay2);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay3);
+                                          break;
+                                        case 'Four Times Weekly':
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay2);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay3);
+                                          setWeeklyNotification(
+                                              newReminder, model.selectedDay4);
+                                          break;
                                       }
 
                                       print([
@@ -758,140 +1412,4 @@ class FitnessEditScreen extends StatelessWidget {
       ),
     );
   }
-
-//   Future<Null> selectTime(BuildContext context) async {
-//     var model = Provider.of<FitnessReminderCRUD>(context);
-//     TimeOfDay currentTime = TimeOfDay.now();
-//     TimeOfDay selectedTime = await showTimePicker(
-//       context: context,
-//       initialTime: model.activityTime,
-//     );
-//     bool today = model.startDate.difference(DateTime.now()) == 0;
-//     if (today && selectedTime.hour < currentTime.hour) {
-//       showSnackBar(context, text: "Cannot set reminder in the past");
-//     } else {
-//       if (selectedTime != null && selectedTime != model.activityTime) {
-//           model.activityTime = selectedTime;
-//       }
-//     }
-//   }
-
-//   // void showSnackBar(BuildContext context, {String text: 'Enter Valid Time'}) {
-//   //   SnackBar snackBar = SnackBar(
-//   //     backgroundColor: Theme.of(context).buttonColor.withOpacity(.9),
-//   //     duration: Duration(seconds: 2),
-//   //     content: Text(
-//   //       text,
-//   //       textAlign: TextAlign.center,
-//   //       style: TextStyle(
-//   //           fontSize: Config.textSize(context, 5.3),
-//   //           color: Theme.of(context).primaryColorLight),
-//   //     ),
-//   //   );
-
-//   //   Scaffold.of(context).showSnackBar(snackBar);
-//   // }
-
-//   Future<Null> selectStartDate(BuildContext context) async {
-//     var model = Provider.of<FitnessReminderCRUD>(context);
-
-//     final DateTime selectedDate = await showDatePicker(
-//         context: context,
-//         initialDate: model.startDate,
-//         firstDate: DateTime(model.startDate.year),
-//         lastDate: DateTime(model.startDate.year + 1));
-//     if (selectedDate.difference(model.startDate).inDays < 0) {
-//       showSnackBar(context, text: "Cannot set start date in the past");
-//     } else {
-//       if (selectedDate != null && selectedDate != model.startDate) {
-//         setState(() {
-//           model.startDate = selectedDate;
-//         });
-
-//         print('${model.startDate}');
-//       }
-//     }
-//   }
-
-//   Future<Null> selectEndDate(BuildContext context) async {
-//     var model = Provider.of<FitnessReminderCRUD>(context);
-
-//     final DateTime selectedDate = await showDatePicker(
-//         context: context,
-//         initialDate: model.endDate,
-//         firstDate: DateTime(model.endDate.year),
-//         lastDate: DateTime(model.endDate.year + 1));
-//     if (selectedDate.difference(model.endDate).inDays < 0) {
-//       showSnackBar(context, text: "Cannot set end date in the past");
-//     } else {
-//       if (selectedDate != null && selectedDate != model.endDate) {
-//         setState(() {
-//           model.endDate = selectedDate;
-//         });
-
-//         print('${model.startDate}');
-//       }
-//     }
-//   }
-
-//   void _successDialog() {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         // return object of type Dialog
-//         return AlertDialog(
-//           shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(Config.xMargin(context, 8))),
-//           content: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-//               Image.asset('images/check.png'),
-//               SizedBox(
-//                 height: Config.yMargin(context, 5),
-//               ),
-//               Text("Reminder Successfully added!"),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   Widget buildImageContainer(int index) {
-//     var model = Provider.of<FitnessReminderCRUD>(context);
-
-//     return GestureDetector(
-//       onTap: () {
-//         model.onSelectedFitnessImage(index);
-//         print(model.updateSelectedIndex(index));
-//       },
-//       child: Column(
-//         children: <Widget>[
-//           Expanded(
-//             child: Container(
-//               padding: EdgeInsets.all(Config.xMargin(context, 1.5)),
-//               margin: EdgeInsets.only(right: Config.xMargin(context, 3)),
-//               height: Config.yMargin(context, 10),
-//               width: Config.xMargin(context, 18),
-//               decoration: BoxDecoration(
-//                 shape: BoxShape.circle,
-//                 color: model.selectedIndex == index
-//                     ? Theme.of(context).primaryColor
-//                     : Color(0xffFCEDB8),
-//               ),
-//               child: Image(
-//                 image: AssetImage(model.activityType[index]),
-//                 fit: BoxFit.contain,
-//               ),
-//             ),
-//           ),
-//           Expanded(
-//               child: Text(
-//             model.fitnessType[index],
-//             style: TextStyle(fontSize: 12),
-//           )),
-//         ],
-//       ),
-//     );
-//   }
 }

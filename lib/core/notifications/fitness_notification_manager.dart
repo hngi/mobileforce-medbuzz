@@ -37,6 +37,24 @@ class FitnessNotificationManager {
         'Notification Succesfully Scheduled at ${dateTime.toString()} with id of $id');
   }
 
+  Day nf = Day(1);
+
+  void showFitnessNotificationWeekly({
+    int id,
+    String title,
+    String body,
+//    int dy,
+    Day dy,
+    DateTime dateTime,
+  }) async {
+    var time = Time(dateTime.hour, dateTime.minute, 0);
+    // the value passed as an argument in Day is an example for monday
+    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        id, title, body, dy, time, getPlatformChannelSpecfics(id));
+    print(
+        'Notification Succesfully scheduled weekly on ${dy.toString()}s at ${dateTime.toString()} with id of $id');
+  }
+
   void showFitnessNotificationOnce(
       {int id, String title, String body, DateTime time}) async {
     await flutterLocalNotificationsPlugin.schedule(
