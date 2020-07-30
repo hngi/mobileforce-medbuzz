@@ -4,6 +4,7 @@ import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/badge/badge_screen.dart';
+import 'package:MedBuzz/ui/views/badge/congrats_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -17,6 +18,7 @@ import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_s
 import 'package:MedBuzz/ui/views/medication_reminders/all_sheduled_medication_reminder_screen.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_history.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/medication_reminder_view.dart';
+import 'package:MedBuzz/ui/views/notification_tone/notification_tone_screen.dart';
 import 'package:MedBuzz/ui/views/onboarding.dart';
 import 'package:MedBuzz/ui/views/password_recovery/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/password_recovery/forgot_password_reset.dart';
@@ -143,6 +145,12 @@ class RouteGenerator {
         return CustomSlideTransition(child: BadgesScreen());
       case RouteNames.badgeCollection:
         return CustomSlideTransition(child: Badges());
+        break;
+      case RouteNames.notificationToneScreen:
+        return CustomSlideTransition(child: NotificationToneScreen());
+        break;
+      case RouteNames.congratsScreen:
+        return CustomSlideTransition(child: CongratsScreen());
         break;
 
       // case RouteNames.deleteDialog:

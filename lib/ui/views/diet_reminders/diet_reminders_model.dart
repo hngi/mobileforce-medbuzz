@@ -2,6 +2,7 @@ import 'package:MedBuzz/core/models/diet_reminder/diet_reminder.dart';
 import 'package:date_util/date_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 //El oh El A lot of magic happened here that I did not document
@@ -177,6 +178,18 @@ class DietReminderModel extends ChangeNotifier {
         break;
     }
   }
+//initial logic for this
+  // Future<double> getNumberOfDietsWithFoodClass(String className) async {
+  //   var box = await Hive.openBox('dietReminderBox');
+  //   var diets = box.values.toList();
+  //   box.close();
+  //   return diets
+  //       .where((element) =>
+  //           element.isDone == true && element.foodClasses.contains(className))
+  //       .toList()
+  //       .length
+  //       .toDouble();
+  // }
 
   void updateSelectedFoodClass(String name) {
     this._selectedFoodClass = name;

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'medication_history.g.dart';
@@ -41,19 +40,17 @@ class MedicationHistory {
   @HiveField(11)
   String description;
 
-  MedicationHistory({
-    this.drugName,
-    this.drugType,
-    this.frequency,
-    this.firstTime,
-    this.secondTime,
-    this.thirdTime,
-    this.dosage,
-    this.startAt,
-    this.endAt,
-    this.index,
-    this.id,
-    this.description
-});
-
+  MedicationHistory(
+      {this.drugName,
+      this.drugType,
+      this.frequency,
+      this.firstTime,
+      this.secondTime,
+      this.thirdTime,
+      this.dosage,
+      this.startAt,
+      this.endAt,
+      this.index,
+      this.id,
+      this.description});
 }

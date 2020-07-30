@@ -1,10 +1,8 @@
-import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:MedBuzz/main.dart';
 import 'package:MedBuzz/ui/views/water_reminders/water_reminders_view.dart';
-import 'package:provider/provider.dart';
 
 import '../../ui/views/water_reminders/water_reminders_view.dart';
 
