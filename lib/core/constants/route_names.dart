@@ -2,6 +2,7 @@ import 'package:MedBuzz/ui/views/Home.dart';
 import 'package:MedBuzz/ui/views/add_medication/add_medication_screen.dart';
 import 'package:MedBuzz/ui/views/all_reminders/all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/badge/badge_screen.dart';
+import 'package:MedBuzz/ui/views/badge/congrats_screen.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/all_diet_reminders.dart';
 import 'package:MedBuzz/ui/views/diet_reminders/schedule_diet_reminder.dart';
 import 'package:MedBuzz/ui/views/drug_description/drug_description.dart';
@@ -24,7 +25,6 @@ import 'package:MedBuzz/ui/views/password_recovery/forgot_password_submit.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/all_scheduled_appointment_reminders.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/schedule_appointment_reminder_screen.dart';
-import 'package:MedBuzz/ui/views/authentication_failed_screen.dart';
 import 'package:MedBuzz/ui/views/schedule-appointment/view_appointment_screen.dart';
 import 'package:MedBuzz/ui/views/signup_page/signup_screen.dart';
 import 'package:MedBuzz/ui/views/single_diet_screen/single_diet_screen.dart';
@@ -80,6 +80,7 @@ class RouteNames {
   static const String badgesScreen = 'badgesScreen';
   static const String badgeCollection = 'badgeCollection';
   static const String notificationToneScreen = 'notificationToneScreen';
+  static const String congratsScreen = 'congratsScreen';
 
 //Brought routes here to  clean things up in the main.dart file
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -122,8 +123,8 @@ class RouteNames {
     RouteNames.newAllReminderScreen: (context) => NewAllReminderScreen(),
     RouteNames.badgesScreen: (context) => BadgesScreen(),
     RouteNames.badgeCollection: (context) => Badges(),
-    RouteNames.notificationToneScreen: (context) => NotificationToneScreen()
-
+    RouteNames.notificationToneScreen: (context) => NotificationToneScreen(),
+    RouteNames.congratsScreen: (context) => CongratsScreen(),
     // RouteNames.deleteDialog: (context) => DeleteDialog(),
   };
 }
