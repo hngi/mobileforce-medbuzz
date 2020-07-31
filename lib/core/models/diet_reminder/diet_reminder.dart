@@ -37,6 +37,15 @@ class DietModel {
   @HiveField(12)
   final bool isSkipped;
 
+  @HiveField(13)
+  String frequency;
+
+  @HiveField(14)
+  List<int> activityTime;
+
+  @HiveField(15)
+  int minsperday;
+
   DietModel(
       {@required this.dietName,
       @required this.time,
@@ -45,6 +54,9 @@ class DietModel {
       this.isDone = false,
       this.isSkipped = false,
       this.thirdDietName,
+      this.frequency,
+      this.activityTime,
+      this.minsperday,
       this.secondTime,
       this.thirdTime,
       this.endDate,

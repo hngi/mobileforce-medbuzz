@@ -9,7 +9,7 @@ part of 'water_drank.dart';
 class WaterDrankAdapter extends TypeAdapter<WaterDrank> {
   @override
   // TODO: implement typeId
-  int get typeId => 8;
+  int get typeId => 7;
   @override
   WaterDrank read(BinaryReader reader) {
     var numOfFields = reader.readByte();

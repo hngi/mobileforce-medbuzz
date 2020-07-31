@@ -33,13 +33,6 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
     // var fitnessDB = Provider.of<FitnessReminderCRUD>(context);
 
     String appBar = widget.isEdit == true ? fitnessDB.edit : fitnessDB.add;
-    // TextEditingController descController = TextEditingController();
-    // FocusNode focusNode = FocusNode();
-
-    // if (fitnessDB.isEditing && _changedName == false) {
-    //   descController.text = fitnessDB.description;
-    //   _changedName = true;
-    // }
 
     FitnessNotificationManager fitnessNotificationManager =
         FitnessNotificationManager();
