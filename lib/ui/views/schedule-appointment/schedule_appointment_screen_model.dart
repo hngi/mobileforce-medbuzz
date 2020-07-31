@@ -35,7 +35,11 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   String _selectedTime;
   String _typeOfAppointment;
   String _note;
+  String selectedFreq = 'Weekly';
   List<Appointment> _availableAppointments = [];
+  List<String> alertType = ['Once', 'Hourly', 'Daily', 'Weekly', 'Monthly'];
+
+  List<DateTime> reminderDates = [];
 
   ScheduleAppointmentModel() {
     this._selectedMonth = _today.month;
@@ -43,6 +47,30 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     this._selectedTime = null;
     this._typeOfAppointment = '';
     this._note = '';
+  }
+
+  String updateFrequency(String freq) {
+    this.selectedFreq = freq;
+    switch (freq) {
+      case 'Once':
+        //logic
+        break;
+      case 'Hourly':
+        //logic
+        break;
+      case 'Daily':
+        //logic
+        break;
+      case 'Weekly':
+        //logic
+        break;
+      case 'Monthly':
+        //logic
+        break;
+    }
+
+    notifyListeners();
+    return selectedFreq;
   }
 
   DateTime get today => _today;

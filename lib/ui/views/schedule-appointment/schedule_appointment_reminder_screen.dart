@@ -5,7 +5,10 @@ import 'package:MedBuzz/core/models/appointment_reminder_model/appointment_remin
 import 'package:MedBuzz/core/notifications/appointment_notification_manager.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/widget/appBar.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../size_config/config.dart';
@@ -115,40 +118,45 @@ class _MyScheduleAppointmentScreenState
       body: SingleChildScrollView(
         child: Container(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DropdownButtonHideUnderline(
-                child: DropdownButton(
-                    isExpanded: false,
-                    icon: Icon(Icons.expand_more),
-                    //set the value to the selected month and if null,  it defaults to the present date month from DateTime.now()
-                    value: _updateMonth,
-                    hint: Text(
-                      'Month',
-                      textAlign: TextAlign.center,
-                    ),
-                    items: monthValues
-                        .map(
-                          (month) => DropdownMenuItem(
-                            child: Container(
-                              child: Text(
-                                month.month,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColorDark),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 35.0)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                      isExpanded: false,
+                      icon: Icon(Icons.expand_more),
+                      //set the value to the selected month and if null,  it defaults to the present date month from DateTime.now()
+                      value: _updateMonth,
+                      hint: Text(
+                        'Month',
+                        textAlign: TextAlign.center,
+                      ),
+                      items: monthValues
+                          .map(
+                            (month) => DropdownMenuItem(
+                              child: Container(
+                                child: Text(
+                                  month.month,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                                ),
                               ),
+                              value: month.month,
                             ),
-                            value: month.month,
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (val) {
-                      appointmentReminder.updateSelectedMonth(val);
+                          )
+                          .toList(),
+                      onChanged: (val) {
+                        appointmentReminder.updateSelectedMonth(val);
 
-                      setState(() {
-                        _updateMonth = val;
-                      });
-                    }),
+                        setState(() {
+                          _updateMonth = val;
+                        });
+                      }),
+                ),
               ),
               Container(
                 // height helps to stop overflowing of this widget into divider
@@ -205,13 +213,155 @@ class _MyScheduleAppointmentScreenState
               SizedBox(
                 height: Config.yMargin(context, 2),
               ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Config.xMargin(context, 6.0)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Alert Type',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        //fontSize: Config.textSize(context, 4),
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      height: Config.yMargin(context, 1),
+                    ),
+                    FormField<String>(
+                      builder: (FormFieldState<String> state) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Theme.of(context).primaryColorLight,
+                            hintText: '${appointmentModel.alertType}',
+                            hintStyle: TextStyle(
+                              color: Colors.black38,
+                              fontSize: Config.xMargin(context, 4),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  Config.xMargin(context, 5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          isEmpty: false,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                size: Config.xMargin(context, 8),
+                              ),
+                              value: appointmentModel.selectedFreq,
+                              isDense: true,
+                              onChanged: (String newValue) {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                setState(() {
+                                  appointmentModel.selectedFreq = newValue;
+                                  state.didChange(newValue);
+                                });
+                                appointmentModel.updateFrequency(newValue);
+                              },
+                              items: appointmentModel.alertType
+                                  .map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                        fontSize: Config.textSize(context, 4)),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: Config.yMargin(context, 2),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Add Reminder Dates',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            //fontSize: Config.textSize(context, 4.8),
+                            color: Theme.of(context).primaryColorDark,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () async {
+                            final DateTime selectedDate = await showDatePicker(
+                              firstDate: DateTime(DateTime.now().year),
+                              lastDate: DateTime(DateTime.now().year + 1),
+                              context: context,
+                              initialDate: DateTime.now(),
+                            );
+                            if (selectedDate != null)
+                              appointmentModel.reminderDates.add(selectedDate);
+                          },
+                        ),
+                      ],
+                    ),
+                    if (appointmentReminder.reminderDates != null)
+                      for (var appointment in appointmentModel.reminderDates)
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom: Config.yMargin(context, 1)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Config.xMargin(context, 5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                DateFormat.yMMMMd().format(appointment),
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () => appointmentModel.reminderDates
+                                    .remove(appointment),
+                              )
+                            ],
+                          ),
+                          height: Config.yMargin(context, 7),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  Config.xMargin(context, 5),
+                                ),
+                              ),
+                              color: Theme.of(context).primaryColorLight),
+                        ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: Config.yMargin(context, 3),
+              ),
               Column(
                 children: <Widget>[
                   Text(
-                    'Time',
+                    'Appointment Time',
                     style: TextStyle(
-                        fontSize: Config.textSize(context, 4.8),
-                        color: Theme.of(context).primaryColorDark),
+                        fontSize: Config.textSize(context, 4.0),
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
                     height: Config.yMargin(context, 1),
@@ -329,6 +479,48 @@ class _MyScheduleAppointmentScreenState
                             appointmentReminder.typeOfAppointment != null &&
                             appointmentReminder.note != null
                         ? () async {
+                            for (var appointment
+                                in appointmentModel.reminderDates)
+                              notificationManager.showAppointmentNotificationOnce(
+                                  appointment.millisecond,
+                                  'Your Appointment Reminder',
+                                  'Just wanted to remind you about your appointment: ${_typeOfAppointmentController.text}',
+                                  appointment);
+                            switch (appointmentModel.selectedFreq) {
+                              case 'Hourly':
+                                notificationManager
+                                    .showAppointmentAtSpecifiedInterval(
+                                        id: DateTime.now().millisecond,
+                                        title: 'Appointment Reminder',
+                                        body:
+                                            'Just a reminder for your upcoming appointment: ${_typeOfAppointmentController.text}',
+                                        interval: RepeatInterval.Hourly);
+                                break;
+                            }
+                            switch (appointmentModel.selectedFreq) {
+                              case 'Daily':
+                                notificationManager
+                                    .showAppointmentAtSpecifiedInterval(
+                                  id: DateTime.now().millisecond,
+                                  title: 'Appointment Reminder',
+                                  body:
+                                      'Just a reminder for your upcoming appointment: ${_typeOfAppointmentController.text}',
+                                  interval: RepeatInterval.Daily,
+                                );
+                                break;
+                            }
+                            switch (appointmentModel.selectedFreq) {
+                              case 'Weekly':
+                                notificationManager
+                                    .showAppointmentAtSpecifiedInterval(
+                                  id: DateTime.now().millisecond,
+                                  title: 'Appointment Reminder',
+                                  body:
+                                      'Just a reminder for your upcoming appointment: ${_typeOfAppointmentController.text}',
+                                  interval: RepeatInterval.Weekly,
+                                );
+                                break;
+                            }
                             switch (widget.buttonText) {
                               case 'Save':
                                 try {
