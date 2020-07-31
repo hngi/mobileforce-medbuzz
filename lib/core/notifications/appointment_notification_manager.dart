@@ -36,6 +36,21 @@ class AppointmentNotificationManager {
         'Notification Succesfully Scheduled at ${time.toString()} with id of $id');
   }
 
+  void showAppointmentAtSpecifiedInterval(
+      {int id, String title, String body, RepeatInterval interval}) async {
+    await flutterLocalNotificationsPlugin.periodicallyShow(
+        id, title, body, interval, getPlatformChannelSpecfics(id));
+    print('Notification Succesfully Scheduled at an interval with id of $id');
+  }
+
+  void showAppointmentWeekdayAtTime(
+      {int id, String title, String body, Day day, Time time}) async {
+    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        id, title, body, day, time, getPlatformChannelSpecfics(id));
+    print(
+        'Notification Succesfully Scheduled at an Weekday and Time with id of $id');
+  }
+
   void showAppointmentNotificationOnce(
       int id, String title, String body, DateTime time) async {
     await flutterLocalNotificationsPlugin.schedule(
