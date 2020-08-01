@@ -23,7 +23,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 3);
+    _tabController = new TabController(vsync: this, length: 4);
   }
 
   // final GlobalKey<AnimatedListState> _listKey = GlobalKey();
@@ -89,6 +89,9 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             indicatorColor: Theme.of(context).primaryColor,
             tabs: <Tab>[
               Tab(
+                text: "Ongoing",
+              ),
+              Tab(
                 text: "Upcoming",
               ),
               Tab(
@@ -145,6 +148,32 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
+                model.ongoingDiets.length > 0
+                    ? ListView.builder(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Config.xMargin(context, 7)),
+                        itemCount: model.ongoingDiets.length,
+                        itemBuilder: (context, index) =>
+                            // var diets = db.upcomingDiets;
+                            // var item = diets[index];
+
+                            DietCard(
+                                height: height,
+                                width: width,
+                                diet: model.ongoingDiets[index]))
+                    : Container(
+                        color: Theme.of(context).backgroundColor,
+                        height: height,
+                        width: width,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                              'No ongoing diet reminder.\nClick the button to add one',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.xMargin(context, 5.55))),
+                        ),
+                      ),
                 model.upcomingDiets.length > 0
                     ? ListView.builder(
                         padding: EdgeInsets.symmetric(
@@ -165,7 +194,7 @@ class _DietScheduleScreenState extends State<DietScheduleScreen>
                         alignment: Alignment.center,
                         child: Center(
                           child: Text(
-                              'No diet reminder.\nClick the button to add one',
+                              'No upcoming diet reminder.\nClick the button to add one',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: Config.xMargin(context, 5.55))),

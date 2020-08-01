@@ -73,6 +73,18 @@ class DietReminderDB extends ChangeNotifier {
     notifyListeners();
   }
 
+  // void addMany(List<DietModel> diets) async {
+  //   var box = await Hive.openBox<DietModel>(_boxname);
+  //   diets.map((e) => null);
+
+  //   await box.putAll(diet.id, diet);
+
+  //   _allDiets = box.values.toList();
+  //   // print('here ${this._diet}');
+  //   box.close();
+  //   notifyListeners();
+  // }
+
   // delete a diet
   void deleteDiet(key) async {
     var box = await Hive.openBox<DietModel>(_boxname);
