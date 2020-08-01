@@ -78,12 +78,14 @@ class AppointmentNotificationManager {
     //     'Notification Succesfully Scheduled at ${time.toString()} with id of $id');
   }
 
-  getPlatformChannelSpecfics(int id, {String toneName = 'default_tone'}) {
+  getPlatformChannelSpecfics(int id, {String toneName}) {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         '$id', 'your channel name', 'your channel description',
         importance: Importance.Max,
         priority: Priority.High,
-        sound: RawResourceAndroidNotificationSound(toneName),
+        sound: toneName.isNotEmpty
+            ? RawResourceAndroidNotificationSound(toneName)
+            : null,
         ticker: 'Fitness Reminder');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

@@ -1194,8 +1194,8 @@ class _AddDietReminderScreenState extends State<AddDietReminderScreen> {
                                 //     break;
                                 // }
 
-                                // Navigator.popAndPushNamed(
-                                //     context, RouteNames.dietScheduleScreen);
+                                Navigator.popAndPushNamed(
+                                    context, RouteNames.dietScheduleScreen);
                               }
                             }),
                       )
