@@ -30,7 +30,7 @@ class FitnessReminderCRUD extends ChangeNotifier {
     'Once Every Week',
     'Twice Every Week',
     'Thrice Every Week',
-    'Four Time Weekly'
+    'Four Times Weekly'
   ];
 
   final List<String> days = ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
