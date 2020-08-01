@@ -9,7 +9,7 @@ part of 'user_model.dart';
 class UserAdapter extends TypeAdapter<User> {
   @override
   // TODO: implement typeId
-  int get typeId => 6;
+  int get typeId => 7;
   @override
   User read(BinaryReader reader) {
     var numOfFields = reader.readByte();

@@ -91,10 +91,15 @@ class DietReminderModel extends ChangeNotifier {
   }
 
   DateTime getStartDate() {
-    String month = _month.toString().padLeft(2, '0');
-    String weekday =
-        _selectedDay.toString().length < 2 ? '0$_selectedDay' : '$_selectedDay';
-    return DateTime.parse('${__today.year}-$month-$weekday $_selectedTime');
+    String month = startDate.month.toString().padLeft(2, '0');
+    String weekday = startDate.day.toString().padLeft(2, '0');
+    return DateTime.parse('${_today.year}-$month-$weekday $_selectedTime');
+  }
+
+  DateTime getEndDate() {
+    String month = endDate.month.toString().padLeft(2, '0');
+    String weekday = endDate.day.toString().padLeft(2, '0');
+    return DateTime.parse('${_today.year}-$month-$weekday $_selectedTime');
   }
 
   int updateDay(String selectedDay) {
@@ -343,6 +348,42 @@ class DietReminderModel extends ChangeNotifier {
     'Four Time Weekly'
   ];
 
+  final List<String> daysOfWeek = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thur',
+    'Fri',
+    'Sat',
+    'Sun',
+  ];
+
+  final List<int> selectedDaysOfWeek = [];
+
+  void updateSelectedDaysOfWeek(int weekday) {
+    //DateTime weekday starts at 1 as Monday and 7 as Sunday
+    if (selectedDaysOfWeek.contains(weekday)) {
+      //remove the day from selected if it is already there
+      selectedDaysOfWeek.removeWhere((item) => item == weekday);
+    } else {
+      //add it to the selected if it is not
+      selectedDaysOfWeek.add(weekday);
+    }
+    notifyListeners();
+  }
+
+  Color selectDayColor(context, weekday) {
+    return selectedDaysOfWeek.contains(weekday)
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).primaryColorLight;
+  }
+
+  Color selectDayTextColor(context, weekday) {
+    return selectedDaysOfWeek.contains(weekday)
+        ? Theme.of(context).primaryColorLight
+        : Theme.of(context).primaryColorDark;
+  }
+
   getDateTime() {
     final now = new DateTime.now();
     return DateTime(
@@ -384,13 +425,21 @@ class DietReminderModel extends ChangeNotifier {
 
   List<DietModel> get upcomingDiets {
     return _allDiets
-        .where((element) => element.startDate.difference(_today).inMinutes >= 0)
+        .where((element) => _today.difference(element.startDate).inDays > 0)
+        .toList();
+  }
+
+  List<DietModel> get ongoingDiets {
+    return _allDiets
+        .where((element) =>
+            _today.difference(element.startDate).inDays >= 0 &&
+            element.endDate.difference(_today).inDays >= 0)
         .toList();
   }
 
   List<DietModel> get pastDiets {
     return _allDiets
-        .where((element) => element.startDate.difference(_today).inMinutes < 0)
+        .where((element) => _today.difference(element.endDate).inDays > 0)
         .toList();
   }
 

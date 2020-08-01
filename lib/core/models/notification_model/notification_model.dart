@@ -17,12 +17,16 @@ class NotificationModel {
   final DateTime dateTime;
 
   @HiveField(4)
-  final bool isClicked;
+  final bool isDone;
+
+  @HiveField(5)
+  final bool isSkipped;
 
   NotificationModel(
       //other fields can be marked required depending on requirements
       {
-    this.isClicked = false,
+    this.isDone = false,
+    this.isSkipped = false,
     this.reminderType,
     this.reminderId,
     this.dateTime,
