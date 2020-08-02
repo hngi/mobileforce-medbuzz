@@ -8,9 +8,6 @@ part of 'medication_history.dart';
 
 class MedicationHistoryAdapter extends TypeAdapter<MedicationHistory> {
   @override
-  // TODO: implement typeId
-  int get typeId => 4;
-  @override
   MedicationHistory read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
@@ -61,4 +58,8 @@ class MedicationHistoryAdapter extends TypeAdapter<MedicationHistory> {
       ..writeByte(11)
       ..write(obj.description);
   }
+
+  @override
+  // TODO: implement typeId
+  int get typeId => 4;
 }

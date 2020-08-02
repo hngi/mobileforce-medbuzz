@@ -35,7 +35,7 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   String _selectedTime;
   String _typeOfAppointment;
   String _note;
-  String selectedFreq = 'Weekly';
+  String selectedFreq = 'Once';
   List<Appointment> _availableAppointments = [];
   List<String> alertType = ['Once', 'Hourly', 'Daily', 'Weekly', 'Monthly'];
 
@@ -51,23 +51,23 @@ class ScheduleAppointmentModel extends ChangeNotifier {
 
   String updateFrequency(String freq) {
     this.selectedFreq = freq;
-    switch (freq) {
-      case 'Once':
-        //logic
-        break;
-      case 'Hourly':
-        //logic
-        break;
-      case 'Daily':
-        //logic
-        break;
-      case 'Weekly':
-        //logic
-        break;
-      case 'Monthly':
-        //logic
-        break;
-    }
+    // switch (freq) {
+    //   case 'Once':
+    //     //logic
+    //     break;
+    //   case 'Hourly':
+    //     //logic
+    //     break;
+    //   case 'Daily':
+    //     //logic
+    //     break;
+    //   case 'Weekly':
+    //     //logic
+    //     break;
+    //   case 'Monthly':
+    //     //logic
+    //     break;
+    // }
 
     notifyListeners();
     return selectedFreq;
@@ -139,7 +139,9 @@ class ScheduleAppointmentModel extends ChangeNotifier {
         time: [
           num.parse(_selectedTime.substring(0, 2)),
           num.parse(_selectedTime.substring(3, 5))
-        ]);
+        ],
+        alertType: selectedFreq,
+        reminderDates: reminderDates);
     return newAppointment;
   }
 
@@ -158,14 +160,17 @@ class ScheduleAppointmentModel extends ChangeNotifier {
     var noteValue = _note.toString().length < 1 ? '' : '$note';
 
     Appointment newAppointment = Appointment(
-        id: DateTime.now().toString(),
-        date: DateTime.parse(selectedDateTime),
-        appointmentType: appointmentType,
-        note: noteValue,
-        time: [
-          num.parse(_selectedTime.substring(1, 3)),
-          num.parse(_selectedTime.substring(3, 5))
-        ]);
+      id: DateTime.now().toString(),
+      date: DateTime.parse(selectedDateTime),
+      appointmentType: appointmentType,
+      note: noteValue,
+      time: [
+        num.parse(_selectedTime.substring(1, 3)),
+        num.parse(_selectedTime.substring(3, 5))
+      ],
+      alertType: selectedFreq,
+      reminderDates: reminderDates,
+    );
     return newAppointment;
   }
 
@@ -177,6 +182,11 @@ class ScheduleAppointmentModel extends ChangeNotifier {
   void updateSelectedTime(String time) {
     _selectedTime = time;
     //notifyListeners();
+  }
+
+  void updateReminderDates(reminderDatess) {
+    reminderDates = reminderDatess;
+    notifyListeners();
   }
 
   void updateAvailableAppointmentReminder(appointmentReminder) {

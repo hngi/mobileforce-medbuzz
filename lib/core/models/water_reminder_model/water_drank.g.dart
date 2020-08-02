@@ -8,9 +8,6 @@ part of 'water_drank.dart';
 
 class WaterDrankAdapter extends TypeAdapter<WaterDrank> {
   @override
-  // TODO: implement typeId
-  int get typeId => 8;
-  @override
   WaterDrank read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
@@ -31,4 +28,8 @@ class WaterDrankAdapter extends TypeAdapter<WaterDrank> {
       ..writeByte(1)
       ..write(obj.dateTime);
   }
+
+  @override
+  // TODO: implement typeId
+  int get typeId => 7;
 }

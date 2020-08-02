@@ -19,9 +19,15 @@ class Appointment {
   final bool isDone;
   @HiveField(6)
   final bool isSkipped;
+  @HiveField(7)
+  final String alertType;
+  @HiveField(8)
+  final List<DateTime> reminderDates;
 
   Appointment(
       {this.id,
+      this.reminderDates,
+      this.alertType,
       this.time,
       this.isDone = false,
       this.isSkipped = false,
