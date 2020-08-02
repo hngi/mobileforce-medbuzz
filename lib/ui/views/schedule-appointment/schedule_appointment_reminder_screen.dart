@@ -61,6 +61,9 @@ class _MyScheduleAppointmentScreenState
 
   TextEditingController _noteController = TextEditingController();
 
+  List<DateTime> reminderDates = [];
+  String alertType;
+
   ScheduleAppointmentModel appointmentModel = ScheduleAppointmentModel();
 
   String _updateMonth;
@@ -69,8 +72,11 @@ class _MyScheduleAppointmentScreenState
   @override
   void initState() {
     _updateMonth = appointmentModel.currentMonth;
+
     myFocusNode = FocusNode();
     if (widget.buttonText == 'Update') {
+      alertType = widget.appointment.alertType;
+      reminderDates = widget.appointment.reminderDates ?? [];
       _typeOfAppointmentController.text =
           widget.appointment.appointmentType ?? '';
       _noteController.text = widget.appointment.note ?? '';
@@ -257,13 +263,14 @@ class _MyScheduleAppointmentScreenState
                                 Icons.keyboard_arrow_down,
                                 size: Config.xMargin(context, 8),
                               ),
-                              value: appointmentModel.selectedFreq,
+                              value: alertType,
+                              //appointmentModel.selectedFreq,
                               isDense: true,
                               onChanged: (String newValue) {
                                 FocusScope.of(context)
                                     .requestFocus(new FocusNode());
                                 setState(() {
-                                  appointmentModel.selectedFreq = newValue;
+                                  alertType = newValue;
                                   state.didChange(newValue);
                                 });
                                 appointmentModel.updateFrequency(newValue);
@@ -309,13 +316,13 @@ class _MyScheduleAppointmentScreenState
                               initialDate: DateTime.now(),
                             );
                             if (selectedDate != null)
-                              appointmentModel.reminderDates.add(selectedDate);
+                              reminderDates.add(selectedDate);
                           },
                         ),
                       ],
                     ),
-                    if (appointmentReminder.reminderDates != null)
-                      for (var appointment in appointmentModel.reminderDates)
+                    if (reminderDates != null)
+                      for (var appointment in reminderDates)
                         Container(
                           margin: EdgeInsets.only(
                               bottom: Config.yMargin(context, 1)),
@@ -333,8 +340,8 @@ class _MyScheduleAppointmentScreenState
                                   Icons.remove,
                                   color: Colors.red,
                                 ),
-                                onPressed: () => appointmentModel.reminderDates
-                                    .remove(appointment),
+                                onPressed: () =>
+                                    reminderDates.remove(appointment),
                               )
                             ],
                           ),
@@ -479,8 +486,7 @@ class _MyScheduleAppointmentScreenState
                             appointmentReminder.typeOfAppointment != null &&
                             appointmentReminder.note != null
                         ? () async {
-                            for (var appointment
-                                in appointmentModel.reminderDates)
+                            for (var appointment in reminderDates)
                               notificationManager.showAppointmentNotificationOnce(
                                   appointment.millisecond,
                                   'Your Appointment Reminder',
@@ -564,11 +570,17 @@ class _MyScheduleAppointmentScreenState
                                     appointmentReminder.setSelectedNote(
                                         _noteController.text ?? '');
                                     appointmentReminder
+                                        .updateFrequency(alertType);
+                                    appointmentReminder
+                                        .updateReminderDates(reminderDates);
+                                    appointmentReminder
                                         .setSelectedTypeOfAppointment(
                                             _typeOfAppointmentController.text);
 
                                     await appointmentReminderDB.addAppointment(
                                         appointmentReminder.createSchedule());
+                                    print(appointmentReminder.reminderDates
+                                        .toList());
 
                                     // if (appointmentReminder.selectedDay ==
                                     //         DateTime.now().day &&
@@ -642,6 +654,10 @@ class _MyScheduleAppointmentScreenState
                                   appointmentReminder.setSelectedNote(
                                       _noteController.text ?? '');
                                   appointmentReminder
+                                      .updateReminderDates(reminderDates);
+                                  appointmentReminder
+                                      .updateFrequency(alertType);
+                                  appointmentReminder
                                       .setSelectedTypeOfAppointment(
                                           _typeOfAppointmentController.text);
 
@@ -659,12 +675,13 @@ class _MyScheduleAppointmentScreenState
                                     String minutes = time.substring(3, 5);
                                     DateTime now = DateTime.now();
                                     print(now);
-                                    notificationManager.showAppointmentNotificationOnce(
-                                        num.parse(
-                                            '${now.year}${now.month}${now.day}$hour$minutes'),
-                                        'Hey, you\'ve got somewhere to go',
-                                        ' ${_typeOfAppointmentController.text} ',
-                                        appointmentReminder.getDateTime());
+                                    notificationManager
+                                        .showAppointmentNotificationOnce(
+                                            num.parse(
+                                                '${now.year}${now.month}${now.day}$hour$minutes'),
+                                            'Hey, you\'ve got somewhere to go',
+                                            '${_typeOfAppointmentController.text}',
+                                            appointmentReminder.getDateTime());
                                   }
                                 }
                                 break;

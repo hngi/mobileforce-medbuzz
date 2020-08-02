@@ -8,9 +8,6 @@ part of 'diet_reminder.dart';
 
 class DietModelAdapter extends TypeAdapter<DietModel> {
   @override
-  // TODO: implement typeId
-  int get typeId => 2;
-  @override
   DietModel read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
@@ -73,4 +70,8 @@ class DietModelAdapter extends TypeAdapter<DietModel> {
       ..writeByte(15)
       ..write(obj.minsperday);
   }
+
+  @override
+  // TODO: implement typeId
+  int get typeId => 2;
 }

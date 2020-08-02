@@ -8,9 +8,6 @@ part of 'fitness_reminder.dart';
 
 class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
   @override
-  // TODO: implement typeId
-  int get typeId => 3;
-  @override
   FitnessReminder read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
@@ -58,4 +55,8 @@ class FitnessReminderAdapter extends TypeAdapter<FitnessReminder> {
       ..writeByte(10)
       ..write(obj.isSkipped);
   }
+
+  @override
+  // TODO: implement typeId
+  int get typeId => 3;
 }
