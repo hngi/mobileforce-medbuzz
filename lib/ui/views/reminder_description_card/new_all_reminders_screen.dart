@@ -1,5 +1,6 @@
 import 'package:MedBuzz/core/database/fitness_reminder.dart';
 import 'package:MedBuzz/core/database/medication_data.dart';
+import 'package:MedBuzz/core/database/notification_data.dart';
 import 'package:MedBuzz/ui/size_config/config.dart';
 import 'package:MedBuzz/ui/views/medication_reminders/all_medications_reminder_model.dart';
 import 'package:MedBuzz/ui/views/reminder_description_card/new_all_reminders_model.dart';
@@ -32,6 +33,8 @@ class _NewAllReminderScreenState extends State<NewAllReminderScreen> {
     double width = MediaQuery.of(context).size.width;
     var fitModel = Provider.of<FitnessReminderCRUD>(context);
     var dietModel = Provider.of<DietReminderDB>(context);
+    var notificationDB = Provider.of<NotificationData>(context);
+    notificationDB.getNotifications();
 
     dietModel.getAlldiets();
     fitModel.getReminders();
@@ -157,6 +160,9 @@ class _NewAllReminderScreenState extends State<NewAllReminderScreen> {
                         ),
                       ),
                     ),
+                    // for (var notification in notificationDB.notifications)
+                    //   Text(notification.dateTime.toString()),
+
                     for (var medicationReminder in medsModel
                         .medicationReminderBasedOnDateTime
                         .where((element) =>

@@ -38,7 +38,8 @@ class DietNotificationManager {
   }
 
   void showDietNotificationOnce(
-      int id, String title, String body, DateTime time) async {
+      int id, String title, String body, DateTime time,
+      {String toneName}) async {
     await flutterLocalNotificationsPlugin.schedule(
         id, title, body, time, getPlatformChannelSpecfics(id));
     print(

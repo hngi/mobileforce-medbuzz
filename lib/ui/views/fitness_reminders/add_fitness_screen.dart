@@ -162,7 +162,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -211,6 +211,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
 
     Widget twoDays() {
       return Row(
+//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
             child: FormField<String>(
@@ -218,7 +219,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -261,13 +262,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay2}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -323,7 +327,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -366,13 +370,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay2}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -415,13 +422,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay3}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -477,7 +487,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -520,13 +530,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay2}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -569,13 +582,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay3}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -618,13 +634,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
               },
             ),
           ),
+          SizedBox(
+            width: Config.xMargin(context, 1.5),
+          ),
           Expanded(
             child: FormField<String>(
               builder: (FormFieldState<String> state) {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).backgroundColor,
                     hintText: '${model.selectedDay4}',
                     hintStyle: TextStyle(
                       color: Colors.black38,
@@ -672,11 +691,6 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
     }
 
     Widget buildImageContainer(int index) {
-      // var model = Provider.of<FitnessReminderCRUD>(context);
-      // isEdit == true
-      //     ? model.updateSelectedIndex(
-      //         model.fitnessType.indexOf(fitnessModel.fitnesstype))
-      //     : null;
       return GestureDetector(
         onTap: () {
           model.onSelectedFitnessImage(index);
@@ -734,15 +748,6 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
       );
     }
 
-    // isEdit == true
-    //     ? model.updateSelectedIndex(
-    //         model.fitnessType.indexOf(fitnessModel.fitnesstype))
-    //     : null;
-    // WidgetsBinding.instance.allowFirstFrame(x);
-
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   model.updateSelectedIndex();
-    // });
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -824,7 +829,9 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                                   fontSize: Config.textSize(context, 5),
                                   fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(height: Config.yMargin(context, 1.5)),
+                            SizedBox(
+                              height: Config.yMargin(context, 1.5),
+                            ),
                             TextFormField(
                               keyboardType: TextInputType.multiline,
                               textInputAction: TextInputAction.done,
@@ -914,7 +921,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
 
                       SizedBox(height: Config.xMargin(context, 4.5)),
                       Text(
-                        'Set time For Fitness Activity',
+                        'Set Time for Fitness Activity',
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark,
                             fontWeight: FontWeight.w600,
@@ -965,7 +972,16 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                           )
                         ],
                       ),
-                      SizedBox(height: Config.xMargin(context, 4.5)),
+                      SizedBox(
+                        height: Config.xMargin(context, 4.5),
+                      ),
+                      Text(
+                        'Duration of Fitness Activity',
+                        style: TextStyle(
+                            fontSize: Config.textSize(context, 5),
+                            fontWeight: FontWeight.bold),
+                      ),
+//                      SizedBox(height: Config.yMargin(context, 1.5),),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -981,7 +997,7 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                                 // });
                               }),
                           Text(
-                            '${(model.minDaily).toString().padLeft(2, '0')}',
+                            '${(model.minDaily).toString().padLeft(2, '0')} Minutes',
                             style: TextStyle(
                               fontSize: Config.textSize(context, 4),
                             ),
@@ -1133,10 +1149,11 @@ class _FitnessEditScreenState extends State<FitnessEditScreen> {
                                             fitnesstype: model.fitnessType[
                                                 model.selectedIndex]);
                                     await fitnessDB.addReminder(newReminder);
-                                    String time =
-                                        model.getDateTime().toString();
-                                    String hour = time.substring(0, 2);
-                                    String minutes = time.substring(3, 5);
+                                    DateTime time = model.startDate;
+                                    String hour =
+                                        time.hour.toString().padLeft(2, '0');
+                                    String minutes =
+                                        time.minute.toString().padLeft(2, '0');
                                     DateTime now = DateTime.now();
                                     String id =
                                         '${now.year}${now.month}${now.day}$hour$minutes';
